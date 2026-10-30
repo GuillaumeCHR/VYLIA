@@ -22,7 +22,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vylia.privacy.ui.detail.AppDetailScreen
 import com.vylia.privacy.ui.home.HomeScreen
+import com.vylia.privacy.ui.home.HomeViewModel
 
 enum class AppTab(val title: String, val icon: ImageVector) {
     SCAN("Scan", Icons.Default.Search),
@@ -33,8 +38,12 @@ enum class AppTab(val title: String, val icon: ImageVector) {
 }
 
 @Composable
-fun MainScreen() {
+fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)) {
     var currentTab by remember { mutableStateOf(AppTab.SCAN) }
+    var detailPackage by rememberSaveable { mutableStateOf<String?>(null) }
+    val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    // Toujours la version la plus récente de l'app (le score évolue pendant l'analyse des traqueurs).
+    val detailApp = detailPackage?.let { pkg -> homeState.apps.find { it.app.packageName == pkg } }
 
     Scaffold(
         bottomBar = {
@@ -42,7 +51,10 @@ fun MainScreen() {
                 AppTab.entries.forEach { tab ->
                     NavigationBarItem(
                         selected = currentTab == tab,
-                        onClick = { currentTab = tab },
+                        onClick = {
+                            currentTab = tab
+                            detailPackage = null
+                        },
                         icon = { Icon(tab.icon, contentDescription = tab.title) },
                         label = { Text(tab.title) }
                     )
@@ -51,8 +63,17 @@ fun MainScreen() {
         }
     ) { innerPadding ->
         val modifier = Modifier.padding(innerPadding)
+        if (detailApp != null) {
+            AppDetailScreen(
+                auditedApp = detailApp,
+                categoryName = homeViewModel.categoryName(detailApp.result.categoryId),
+                onBack = { detailPackage = null },
+                modifier = modifier,
+            )
+            return@Scaffold
+        }
         when (currentTab) {
-            AppTab.SCAN -> HomeScreen(modifier)
+            AppTab.SCAN -> HomeScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
             AppTab.ANALYZE -> AnalyseScreen(modifier)
             AppTab.AGIR -> AgirScreen(modifier)
             AppTab.LEARN -> ApprendreScreen(modifier)

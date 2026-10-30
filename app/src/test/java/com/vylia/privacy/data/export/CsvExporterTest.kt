@@ -46,7 +46,7 @@ class CsvExporterTest {
         val row = rows(CsvExporter.export(listOf(audited("App", TrackerAnalysis.Analyzed(trackers)))))[1]
 
         assertEquals(
-            "\"App\",\"com.example.app\",\"Utilisateur\",\"42\",\"3\",\"Tracker 0 | Tracker 1 | Tracker 2\",\"\"",
+            "\"App\",\"com.example.app\",\"Utilisateur\",\"42\",\"C\",\"FULL\",\"3\",\"Tracker 0 | Tracker 1 | Tracker 2\",\"\"",
             row,
         )
     }

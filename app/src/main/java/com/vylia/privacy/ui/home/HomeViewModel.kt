@@ -35,7 +35,7 @@ class HomeViewModel(
     private val auditApps: AuditAppsUseCase,
     private val analyzeTrackers: AnalyzeTrackersUseCase,
     private val settingsRepository: SettingsRepository,
-    ruleMatrixRepository: RuleMatrixRepository,
+    private val ruleMatrixRepository: RuleMatrixRepository,
     private val badgesManager: BadgesManager,
     packageRemovalMonitor: PackageRemovalMonitor,
 ) : ViewModel() {
@@ -107,6 +107,8 @@ class HomeViewModel(
             badgesManager.onScanCompleted(currentApps().filter { AppFilter.USER.matches(it.app) }.toSnapshots())
         }
     }
+
+    fun categoryName(categoryId: String): String = ruleMatrixRepository.current.value.scorer.categoryDisplayName(categoryId)
 
     /** Toutes les apps du dernier scan (les deux onglets), pour l'export. */
     fun exportCsv(): String = CsvExporter.export(currentApps())

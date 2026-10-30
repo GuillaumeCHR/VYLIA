@@ -35,9 +35,9 @@ private val IconSize = 44.dp
 
 /** Carte d'une application : icône, nom, badge de score et permissions critiques. */
 @Composable
-fun AppCard(auditedApp: AuditedApp, modifier: Modifier = Modifier) {
+fun AppCard(auditedApp: AuditedApp, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     val app = auditedApp.app
-    Card(modifier = modifier.fillMaxWidth()) {
+    Card(onClick = onClick, modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.padding(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp),

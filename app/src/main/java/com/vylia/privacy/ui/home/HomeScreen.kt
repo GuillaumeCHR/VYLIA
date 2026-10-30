@@ -50,13 +50,18 @@ import com.vylia.privacy.ui.theme.VyliaTheme
 private val Tabs = listOf(AppFilter.USER, AppFilter.SYSTEM)
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier, viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onAppClick: (AuditedApp) -> Unit = {},
+    viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
+) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     HomeContent(
         modifier = modifier,
         state = state,
         onFilterSelected = viewModel::selectFilter,
         onRefresh = viewModel::refresh,
+        onAppClick = onAppClick,
     )
 }
 
@@ -68,6 +73,7 @@ fun HomeContent(
     state: HomeUiState,
     onFilterSelected: (AppFilter) -> Unit,
     onRefresh: () -> Unit,
+    onAppClick: (AuditedApp) -> Unit = {},
 ) {
     Scaffold(
         modifier = Modifier,
@@ -128,19 +134,19 @@ fun HomeContent(
                     onAction = onRefresh,
                 )
                 state.apps.isEmpty() -> CenteredMessage(stringResource(R.string.home_empty))
-                else -> AppList(state.apps, PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = bottomPadding + 16.dp))
+                else -> AppList(state.apps, onAppClick, PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = bottomPadding + 16.dp))
             }
         }
     }
 }
 
 @Composable
-private fun AppList(apps: List<AuditedApp>, contentPadding: PaddingValues) {
+private fun AppList(apps: List<AuditedApp>, onAppClick: (AuditedApp) -> Unit, contentPadding: PaddingValues) {
     LazyColumn(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        items(apps, key = { it.app.packageName }) { AppCard(it) }
+        items(apps, key = { it.app.packageName }) { AppCard(it, onClick = { onAppClick(it) }) }
     }
 }
 

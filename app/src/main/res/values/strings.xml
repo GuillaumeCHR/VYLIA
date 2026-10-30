@@ -9,6 +9,9 @@
     <string name="home_retry">Réessayer</string>
     <string name="home_empty">Aucune application dans cette catégorie.</string>
 
+    <string name="mode_badge_basic">Analyse 100 % locale · Mode Basique (apps utilisateur)</string>
+    <string name="mode_badge_advanced">Analyse 100 % locale · Mode Avancé (toutes les apps)</string>
+
     <string name="tab_user_apps">Applications Utilisateur (%1$d)</string>
     <string name="tab_system_apps">Applications Système (%1$d)</string>
 

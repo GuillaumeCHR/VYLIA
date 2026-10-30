@@ -21,12 +21,22 @@ class SettingsRepository(context: Context) {
         }
     }
 
+    /** Mode Avancé : apps système incluses. Mode Basique (défaut) : seules les apps utilisateur sont notées. */
+    private val _advancedMode = MutableStateFlow(prefs.getBoolean(KEY_ADVANCED_MODE, false))
+    val advancedMode: StateFlow<Boolean> = _advancedMode.asStateFlow()
+
     fun updateTimestamp(timestamp: Long) {
         prefs.edit().putLong(KEY_LAST_UPDATE, timestamp).apply()
         _lastUpdateTimestamp.value = timestamp
     }
 
+    fun setAdvancedMode(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_ADVANCED_MODE, enabled).apply()
+        _advancedMode.value = enabled
+    }
+
     companion object {
         private const val KEY_LAST_UPDATE = "last_exodus_update_timestamp"
+        private const val KEY_ADVANCED_MODE = "advanced_mode"
     }
 }

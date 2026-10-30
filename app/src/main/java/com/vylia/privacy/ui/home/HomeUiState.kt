@@ -6,6 +6,8 @@ import com.vylia.privacy.domain.model.PrivacyScore
 
 data class HomeUiState(
     val isLoading: Boolean = true,
+    /** Mode Basique (`false`) : seules les apps utilisateur sont scannées et l'onglet Système est masqué. */
+    val advancedMode: Boolean = false,
     val selectedFilter: AppFilter = AppFilter.USER,
     /** Apps de l'onglet sélectionné, de la plus à risque à la moins à risque. */
     val apps: List<AuditedApp> = emptyList(),
@@ -13,5 +15,7 @@ data class HomeUiState(
     val averageScore: PrivacyScore? = null,
     val userAppCount: Int = 0,
     val systemAppCount: Int = 0,
+    /** Analyse DEX des traqueurs encore en cours (les scores peuvent encore baisser). */
+    val isAnalyzingTrackers: Boolean = false,
     val errorMessage: String? = null,
 )

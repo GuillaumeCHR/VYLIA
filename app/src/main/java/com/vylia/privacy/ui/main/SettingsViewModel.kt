@@ -1,5 +1,6 @@
 package com.vylia.privacy.ui.main
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -8,19 +9,15 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vylia.privacy.VyliaApplication
 import com.vylia.privacy.data.preferences.SettingsRepository
+import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
 import com.vylia.privacy.data.trackers.TrackerUpdater
-import com.vylia.privacy.domain.model.AppFilter
-import com.vylia.privacy.domain.model.TrackerAnalysis
-import com.vylia.privacy.domain.usecase.AuditAppsUseCase
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -29,39 +26,54 @@ data class SettingsUiState(
     val lastUpdateDate: String = "",
     val isObsolete: Boolean = false,
     val isUpdating: Boolean = false,
-    val isExporting: Boolean = false,
     val updateError: String? = null,
-    val updateSuccess: Boolean = false
+    val updateSuccess: Boolean = false,
+    val advancedMode: Boolean = false,
+    val rulesImported: Boolean = false,
+    val ruleCategoryCount: Int = 0,
+    /** Résultat du dernier import de matrice, affiché sous le bouton. */
+    val rulesMessage: String? = null,
 )
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
     private val trackerUpdater: TrackerUpdater,
     private val trackerSignatureRepository: AssetTrackerSignatureRepository,
-    private val auditApps: AuditAppsUseCase,
-    private val analyzeTrackers: com.vylia.privacy.domain.usecase.AnalyzeTrackersUseCase
+    private val ruleMatrixRepository: RuleMatrixRepository,
 ) : ViewModel() {
 
     private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val _isUpdating = MutableStateFlow(false)
-    private val _isExporting = MutableStateFlow(false)
     private val _updateError = MutableStateFlow<String?>(null)
     private val _updateSuccess = MutableStateFlow(false)
+    private val _rulesMessage = MutableStateFlow<String?>(null)
 
-    val uiState: StateFlow<SettingsUiState> = combine(
+    private val updateState = combine(
         settingsRepository.lastUpdateTimestamp,
         _isUpdating,
-        _isExporting,
         _updateError,
         _updateSuccess
-    ) { timestamp, isUpdating, isExporting, updateError, updateSuccess ->
+    ) { timestamp, isUpdating, updateError, updateSuccess ->
         SettingsUiState(
             lastUpdateDate = dateFormatter.format(Date(timestamp)),
             isObsolete = trackerUpdater.isDatabaseObsolete(timestamp),
             isUpdating = isUpdating,
-            isExporting = isExporting,
             updateError = updateError,
             updateSuccess = updateSuccess
+        )
+    }
+
+    val uiState: StateFlow<SettingsUiState> = combine(
+        updateState,
+        settingsRepository.advancedMode,
+        ruleMatrixRepository.current,
+        _rulesMessage
+    ) { state, advancedMode, rules, rulesMessage ->
+        state.copy(
+            advancedMode = advancedMode,
+            rulesImported = rules.source == RuleMatrixRepository.Source.IMPORTED,
+            ruleCategoryCount = rules.matrix.rules.size,
+            rulesMessage = rulesMessage
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsUiState())
 
@@ -84,43 +96,27 @@ class SettingsViewModel(
         }
     }
 
-    suspend fun generateExportData(): String = withContext(Dispatchers.IO) {
-        _isExporting.value = true
-        try {
-            val initialApps = auditApps(AppFilter.ALL)
-            val userApps = initialApps.filter { AppFilter.USER.matches(it.app) }
-            val systemApps = initialApps.filter { AppFilter.SYSTEM.matches(it.app) }
-            val analyzedUserApps = mutableListOf<com.vylia.privacy.domain.model.AuditedApp>()
-            
-            analyzeTrackers(userApps).collect { app ->
-                analyzedUserApps.add(app)
-            }
-            val apps = if (analyzedUserApps.isNotEmpty()) analyzedUserApps + systemApps else initialApps
+    fun resetSuccessState() {
+        _updateSuccess.value = false
+    }
 
-            val sb = java.lang.StringBuilder()
-            sb.append("Nom de l'application,Package,Type,Score,Nombre de traqueurs,Permissions a risque\n")
-            for (auditedApp in apps) {
-                val type = if (auditedApp.app.isSystemApp) "Systeme" else "Utilisateur"
-                val trackerCount = (auditedApp.trackerAnalysis as? TrackerAnalysis.Analyzed)?.trackers?.size ?: 0
-                val riskyPerms = auditedApp.app.permissions
-                    .filter { it.isGranted }
-                    .joinToString(" | ") { it.risk.title }
-                
-                sb.append("\"").append(auditedApp.app.label).append("\",")
-                sb.append("\"").append(auditedApp.app.packageName).append("\",")
-                sb.append("\"").append(type).append("\",")
-                sb.append(auditedApp.score.value.toString()).append(",")
-                sb.append(trackerCount.toString()).append(",")
-                sb.append("\"").append(riskyPerms).append("\"\n")
-            }
-            sb.toString()
-        } finally {
-            _isExporting.value = false
+    /** Le changement de mode relance automatiquement le scan (observé par HomeViewModel). */
+    fun setAdvancedMode(enabled: Boolean) {
+        settingsRepository.setAdvancedMode(enabled)
+    }
+
+    fun importRules(uri: Uri) {
+        viewModelScope.launch {
+            _rulesMessage.value = ruleMatrixRepository.import(uri).fold(
+                onSuccess = { count -> "Matrice importée ($count catégories). Les scores ont été recalculés." },
+                onFailure = { error -> "Import refusé : ${error.localizedMessage ?: "fichier invalide"}. La matrice actuelle est conservée." }
+            )
         }
     }
 
-    fun resetSuccessState() {
-        _updateSuccess.value = false
+    fun resetRules() {
+        ruleMatrixRepository.resetToBundled()
+        _rulesMessage.value = "Matrice intégrée rétablie."
     }
 
     companion object {
@@ -132,8 +128,7 @@ class SettingsViewModel(
                     container.settingsRepository,
                     container.trackerUpdater,
                     container.trackerSignatureRepository,
-                    container.auditAppsUseCase,
-                    container.analyzeTrackersUseCase
+                    container.ruleMatrixRepository
                 )
             }
         }

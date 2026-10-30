@@ -174,11 +174,14 @@ object PermissionRegistry {
     )
 }
 
-class PrivacyScorer(private val ruleMatrix: RuleMatrix? = null) {
+/** [ruleMatrix] est lu à chaque calcul : une matrice importée s'applique dès le scan suivant. */
+class PrivacyScorer(private val ruleMatrix: () -> RuleMatrix? = { null }) {
+
+    constructor(ruleMatrix: RuleMatrix?) : this({ ruleMatrix })
 
     fun calculateScore(permissions: List<String>, trackerCount: Int, category: Int? = null, packageName: String = "", isSystemApp: Boolean = false): Int {
         val categoryString = getCategoryString(category, packageName)
-        val rule = ruleMatrix?.rules?.find { it.category == categoryString }
+        val rule = ruleMatrix()?.rules?.find { it.category == categoryString }
 
         // 1. Neutraliser les permissions justifiées contextuellement
         val activePermissions = if (rule != null) {

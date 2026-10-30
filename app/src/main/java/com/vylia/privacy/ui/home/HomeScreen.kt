@@ -41,6 +41,7 @@ import com.vylia.privacy.domain.model.InstalledApp
 import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.domain.scoring.PermissionRegistry
 import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.ui.components.TransparencyBadge
 import com.vylia.privacy.ui.home.components.AppCard
 import com.vylia.privacy.ui.home.components.ScoreHeader
 import com.vylia.privacy.ui.theme.VyliaTheme
@@ -91,21 +92,29 @@ fun HomeContent(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
 
-            PrimaryTabRow(selectedTabIndex = Tabs.indexOf(state.selectedFilter)) {
-                Tabs.forEach { filter ->
-                    Tab(
-                        selected = filter == state.selectedFilter,
-                        onClick = { onFilterSelected(filter) },
-                        text = {
-                            Text(
-                                text = when (filter) {
-                                    AppFilter.SYSTEM -> stringResource(R.string.tab_system_apps, state.systemAppCount)
-                                    else -> stringResource(R.string.tab_user_apps, state.userAppCount)
-                                },
-                                textAlign = TextAlign.Center,
-                            )
-                        },
-                    )
+            TransparencyBadge(
+                text = stringResource(if (state.advancedMode) R.string.mode_badge_advanced else R.string.mode_badge_basic),
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+
+            // Mode Basique : apps utilisateur uniquement, pas d'onglet Système.
+            if (state.advancedMode) {
+                PrimaryTabRow(selectedTabIndex = Tabs.indexOf(state.selectedFilter)) {
+                    Tabs.forEach { filter ->
+                        Tab(
+                            selected = filter == state.selectedFilter,
+                            onClick = { onFilterSelected(filter) },
+                            text = {
+                                Text(
+                                    text = when (filter) {
+                                        AppFilter.SYSTEM -> stringResource(R.string.tab_system_apps, state.systemAppCount)
+                                        else -> stringResource(R.string.tab_user_apps, state.userAppCount)
+                                    },
+                                    textAlign = TextAlign.Center,
+                                )
+                            },
+                        )
+                    }
                 }
             }
 
@@ -195,6 +204,7 @@ private fun HomeContentPreview() {
         modifier = Modifier,
             state = HomeUiState(
                 isLoading = false,
+                advancedMode = true,
                 apps = apps,
                 averageScore = PrivacyScore.average(apps.map { it.score }),
                 userAppCount = apps.size,

@@ -13,20 +13,40 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.compose.rememberLauncherForActivityResult
+import android.content.Context
+import android.content.Intent
+import android.provider.DocumentsContract
 import android.widget.Toast
 import android.net.Uri
+import com.vylia.privacy.ui.home.HomeViewModel
+
+/** Sélecteur de fichiers ouvert d'emblée sur le dossier Téléchargements (ignoré si le fournisseur ne le gère pas). */
+private class OpenFromDownloads : ActivityResultContracts.OpenDocument() {
+    override fun createIntent(context: Context, input: Array<String>): Intent =
+        super.createIntent(context, input).putExtra(
+            DocumentsContract.EXTRA_INITIAL_URI,
+            DocumentsContract.buildDocumentUri("com.android.providers.downloads.documents", "downloads")
+        )
+}
+
+// Les fichiers .json de Téléchargements sont souvent typés application/octet-stream.
+private val RuleFileMimeTypes = arrayOf("application/json", "text/plain", "application/octet-stream")
 
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    viewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory)
+    viewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
+    homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
@@ -37,9 +57,11 @@ fun SettingsScreen(
         uri?.let {
             coroutineScope.launch {
                 try {
-                    val csvData = viewModel.generateExportData()
-                    context.contentResolver.openOutputStream(it)?.use { outputStream ->
-                        outputStream.write(csvData.toByteArray())
+                    val csvData = homeViewModel.exportCsv()
+                    withContext(Dispatchers.IO) {
+                        context.contentResolver.openOutputStream(it)?.use { outputStream ->
+                            outputStream.write(csvData.toByteArray())
+                        }
                     }
                     Toast.makeText(context, "Export réussi", Toast.LENGTH_SHORT).show()
                 } catch (e: Exception) {
@@ -47,6 +69,10 @@ fun SettingsScreen(
                 }
             }
         }
+    }
+
+    val rulesLauncher = rememberLauncherForActivityResult(OpenFromDownloads()) { uri: Uri? ->
+        uri?.let(viewModel::importRules)
     }
 
     Column(
@@ -57,21 +83,83 @@ fun SettingsScreen(
     ) {
         Text(text = "Paramètres", style = MaterialTheme.typography.headlineMedium)
         Spacer(modifier = Modifier.height(24.dp))
-        
+
+        Text(text = "Mode d'analyse", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = if (state.advancedMode) "Mode Avancé" else "Mode Basique",
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = if (state.advancedMode) {
+                        "Toutes les applications sont notées, y compris les applications système."
+                    } else {
+                        "Seules vos applications sont notées ; les applications système sont masquées."
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Switch(checked = state.advancedMode, onCheckedChange = viewModel::setAdvancedMode)
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Text(text = "Matrice de règles contextuelles", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(
+            text = (if (state.rulesImported) "Matrice importée" else "Matrice intégrée à l'application") +
+                " · ${state.ruleCategoryCount} catégories",
+            style = MaterialTheme.typography.bodyMedium
+        )
+        Text(
+            text = "Importez votre propre privacy_rules_matrix_advanced.json (dossier Téléchargements). " +
+                "Le fichier est copié dans l'application ; en cas de problème, la matrice intégrée est utilisée.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(onClick = { rulesLauncher.launch(RuleFileMimeTypes) }) {
+                Text("Importer une matrice")
+            }
+            if (state.rulesImported) {
+                OutlinedButton(onClick = viewModel::resetRules) {
+                    Text("Matrice intégrée")
+                }
+            }
+        }
+        state.rulesMessage?.let {
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(top = 8.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         Text(text = "Gestion des données", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         Button(
             onClick = { exportLauncher.launch("vylia_audit_report.csv") },
-            enabled = !state.isExporting,
+            enabled = !homeState.isLoading,
             modifier = Modifier.align(Alignment.Start)
         ) {
-            if (state.isExporting) {
-                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text("Génération en cours...")
-            } else {
-                Text("Exporter le rapport d'audit (CSV)")
-            }
+            Text("Exporter le rapport d'audit (CSV)")
+        }
+        if (homeState.isAnalyzingTrackers) {
+            Text(
+                text = "Analyse des traqueurs en cours : les applications pas encore analysées seront marquées « Non analysé ».",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(top = 4.dp)
+            )
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -79,7 +167,7 @@ fun SettingsScreen(
         Text(text = "Base de données Exodus Privacy", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         Text(text = "Dernière mise à jour : ${state.lastUpdateDate}", style = MaterialTheme.typography.bodyMedium)
-        
+
         if (state.isObsolete) {
             Text(
                 text = "Attention : La base de données a plus de 90 jours. Une mise à jour est recommandée.",

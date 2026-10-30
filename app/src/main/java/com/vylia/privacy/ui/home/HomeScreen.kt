@@ -40,7 +40,8 @@ import com.vylia.privacy.domain.model.DetectedPermission
 import com.vylia.privacy.domain.model.InstalledApp
 import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.domain.scoring.PermissionRegistry
-import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.domain.scoring.Confidence
+import com.vylia.privacy.domain.scoring.ScoreResult
 import com.vylia.privacy.ui.components.TransparencyBadge
 import com.vylia.privacy.ui.home.components.AppCard
 import com.vylia.privacy.ui.home.components.ScoreHeader
@@ -171,8 +172,7 @@ private fun CenteredMessage(
 @Preview(showBackground = true)
 @Composable
 private fun HomeContentPreview() {
-    val scorer = PrivacyScorer()
-    fun fakeApp(label: String, color: Int, vararg permissions: Pair<String, Boolean>): AuditedApp {
+    fun fakeApp(label: String, color: Int, score: Int, vararg permissions: Pair<String, Boolean>): AuditedApp {
         val app = InstalledApp(
             label = label,
             packageName = "com.example.${label.lowercase()}",
@@ -186,17 +186,18 @@ private fun HomeContentPreview() {
                 DetectedPermission(risk, isGranted = permissions.any { (name, granted) -> granted && name == risk.permission })
             },
         )
-        return AuditedApp(app, PrivacyScore(scorer.calculateScore(app.requestedPermissions, trackerCount = 0)))
+        val result = ScoreResult(score, "?", Confidence.PARTIAL, "DEFAULT", 0.0, 0, emptyList(), emptyList())
+        return AuditedApp(app, PrivacyScore(score), result = result)
     }
     val apps = listOf(
         fakeApp(
-            "Messagerie", AndroidColor.BLUE,
+            "Messagerie", AndroidColor.BLUE, 41,
             Manifest.permission.ACCESS_BACKGROUND_LOCATION to true,
             Manifest.permission.READ_SMS to false,
             Manifest.permission.READ_CONTACTS to true,
         ),
-        fakeApp("Photo", AndroidColor.MAGENTA, Manifest.permission.CAMERA to true, Manifest.permission.ACCESS_FINE_LOCATION to false),
-        fakeApp("Calculatrice", AndroidColor.GRAY),
+        fakeApp("Photo", AndroidColor.MAGENTA, 74, Manifest.permission.CAMERA to true, Manifest.permission.ACCESS_FINE_LOCATION to false),
+        fakeApp("Calculatrice", AndroidColor.GRAY, 88),
     ).sortedBy { it.score.value }
 
     VyliaTheme(dynamicColor = false) {

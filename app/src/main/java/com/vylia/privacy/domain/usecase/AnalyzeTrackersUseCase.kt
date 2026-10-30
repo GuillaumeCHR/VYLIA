@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.flow
  */
 class AnalyzeTrackersUseCase(
     private val analyzer: TrackerAnalyzer,
-    private val scorer: PrivacyScorer,
+    private val scorer: () -> PrivacyScorer,
 ) {
     operator fun invoke(apps: List<AuditedApp>): Flow<AuditedApp> = flow {
         if (!analyzer.isAvailable()) return@flow
@@ -26,7 +26,7 @@ class AnalyzeTrackersUseCase(
             } catch (_: Exception) {
                 TrackerAnalysis.Failed
             }
-            emit(scorer.scoreApp(audited.app, analysis))
+            emit(scorer().scoreApp(audited.app, analysis))
         }
     }
 }

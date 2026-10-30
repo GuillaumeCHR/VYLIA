@@ -1,0 +1,353 @@
+{
+  "version": "2.0",
+  "last_update": "2026-10-30",
+  "scoring": {
+    "base": 100,
+    "permission_cap": 50,
+    "tracker_cap": 60,
+    "context_multipliers": {
+      "allowed": 0.0,
+      "tolerated": 0.4,
+      "unexpected": 1.0,
+      "forbidden": 1.6
+    },
+    "declared_only_factor": 0.25,
+    "unanalyzed_policy": {
+      "assumed_tracker_penalty": 12,
+      "confidence": "PARTIAL",
+      "grade_suffix": "?"
+    },
+    "grades": [
+      { "min": 85, "grade": "A" },
+      { "min": 70, "grade": "B" },
+      { "min": 50, "grade": "C" },
+      { "min": 30, "grade": "D" },
+      { "min": 0, "grade": "E" }
+    ]
+  },
+
+  "permission_weights": {
+    "ACCESS_BACKGROUND_LOCATION": 15,
+    "ACCESS_FINE_LOCATION": 8,
+    "ACCESS_COARSE_LOCATION": 3,
+    "ACCESS_MEDIA_LOCATION": 5,
+    "READ_SMS": 15,
+    "RECEIVE_SMS": 10,
+    "SEND_SMS": 10,
+    "RECEIVE_MMS": 8,
+    "READ_CALL_LOG": 15,
+    "WRITE_CALL_LOG": 6,
+    "PROCESS_OUTGOING_CALLS": 12,
+    "CALL_PHONE": 5,
+    "ANSWER_PHONE_CALLS": 6,
+    "READ_PHONE_STATE": 6,
+    "READ_PHONE_NUMBERS": 6,
+    "READ_CONTACTS": 10,
+    "WRITE_CONTACTS": 4,
+    "GET_ACCOUNTS": 4,
+    "RECORD_AUDIO": 10,
+    "CAMERA": 4,
+    "READ_CALENDAR": 6,
+    "WRITE_CALENDAR": 3,
+    "BODY_SENSORS": 8,
+    "BODY_SENSORS_BACKGROUND": 12,
+    "ACTIVITY_RECOGNITION": 4,
+    "READ_EXTERNAL_STORAGE": 5,
+    "MANAGE_EXTERNAL_STORAGE": 12,
+    "READ_MEDIA_IMAGES": 3,
+    "READ_MEDIA_VIDEO": 3,
+    "READ_MEDIA_AUDIO": 2,
+    "BLUETOOTH_SCAN": 3,
+    "NEARBY_WIFI_DEVICES": 3,
+    "SYSTEM_ALERT_WINDOW": 5,
+    "QUERY_ALL_PACKAGES": 5,
+    "REQUEST_INSTALL_PACKAGES": 5,
+    "PACKAGE_USAGE_STATS": 8,
+    "BIND_ACCESSIBILITY_SERVICE": 15,
+    "BIND_NOTIFICATION_LISTENER_SERVICE": 12,
+    "BIND_DEVICE_ADMIN": 10
+  },
+
+  "permission_rules": {
+    "ignore_unlisted": true,
+    "read_external_storage_max_target_sdk": 32,
+    "groups": [
+      { "id": "location_foreground", "mode": "max", "members": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"] },
+      { "id": "sms", "mode": "max_plus_half", "members": ["READ_SMS", "RECEIVE_SMS", "SEND_SMS", "RECEIVE_MMS"] },
+      { "id": "media", "mode": "max", "members": ["READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "READ_MEDIA_AUDIO"] }
+    ]
+  },
+
+  "tracker_rules": {
+    "category_weights": {
+      "Advertisement": 12,
+      "Profiling": 10,
+      "Location": 10,
+      "Identification": 6,
+      "Analytics": 5,
+      "Crash reporting": 2
+    },
+    "default_weight": 5,
+    "overrides": {
+      "Didomi": 1
+    }
+  },
+
+  "category_resolution": {
+    "order": ["excluded_packages", "package_overrides", "app_info_category", "DEFAULT"],
+    "app_info_category_map": {
+      "CATEGORY_GAME": "GAME",
+      "CATEGORY_AUDIO": "MEDIA_PLAYER",
+      "CATEGORY_VIDEO": "MEDIA_PLAYER",
+      "CATEGORY_IMAGE": "PHOTO_VIDEO",
+      "CATEGORY_SOCIAL": "SOCIAL",
+      "CATEGORY_NEWS": "NEWS_READING",
+      "CATEGORY_MAPS": "NAVIGATION",
+      "CATEGORY_PRODUCTIVITY": "PRODUCTIVITY_CLOUD",
+      "CATEGORY_ACCESSIBILITY": "ACCESSIBILITY",
+      "CATEGORY_UNDEFINED": "DEFAULT"
+    }
+  },
+
+  "categories": {
+    "DEFAULT": {
+      "display_name": "Non catégorisée",
+      "description": "Aucune hypothèse : toute permission sensible est « inattendue » (×1.0).",
+      "allowed": [], "tolerated": [], "forbidden": []
+    },
+    "NAVIGATION": {
+      "display_name": "Navigation & Cartographie",
+      "allowed": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "tolerated": ["ACCESS_BACKGROUND_LOCATION", "RECORD_AUDIO", "READ_CONTACTS", "BLUETOOTH_SCAN"],
+      "forbidden": ["READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "BODY_SENSORS"]
+    },
+    "TRANSPORT": {
+      "display_name": "Transports & Mobilité",
+      "allowed": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "tolerated": ["CAMERA", "READ_CALENDAR", "WRITE_CALENDAR", "READ_MEDIA_IMAGES"],
+      "forbidden": ["ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "RECORD_AUDIO"]
+    },
+    "VEHICLE": {
+      "display_name": "Véhicule connecté",
+      "allowed": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "BLUETOOTH_SCAN"],
+      "tolerated": ["ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "READ_CALENDAR", "RECORD_AUDIO", "CAMERA"],
+      "forbidden": ["READ_SMS", "READ_CALL_LOG"]
+    },
+    "WEATHER": {
+      "display_name": "Météo",
+      "allowed": ["ACCESS_COARSE_LOCATION"],
+      "tolerated": ["ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION"],
+      "forbidden": ["READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "RECORD_AUDIO", "CAMERA", "READ_CALENDAR", "READ_CALL_LOG", "READ_PHONE_STATE", "GET_ACCOUNTS"]
+    },
+    "UTILITY": {
+      "display_name": "Outils simples",
+      "description": "Lampe, calculatrice, boussole. setTorchMode() ne requiert pas CAMERA depuis Android 6.",
+      "allowed": [],
+      "tolerated": ["CAMERA"],
+      "forbidden": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "RECORD_AUDIO", "READ_CALL_LOG", "READ_PHONE_STATE", "GET_ACCOUNTS", "READ_CALENDAR"]
+    },
+    "MESSAGING": {
+      "display_name": "Messagerie & Appels",
+      "allowed": ["READ_CONTACTS", "WRITE_CONTACTS", "RECORD_AUDIO", "CAMERA", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "READ_MEDIA_AUDIO", "READ_PHONE_NUMBERS", "GET_ACCOUNTS"],
+      "tolerated": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "RECEIVE_SMS", "READ_PHONE_STATE", "CALL_PHONE", "ANSWER_PHONE_CALLS"],
+      "forbidden": ["READ_SMS", "SEND_SMS", "READ_CALL_LOG", "PROCESS_OUTGOING_CALLS", "ACCESS_BACKGROUND_LOCATION", "BODY_SENSORS"]
+    },
+    "EMAIL": {
+      "display_name": "E-mail",
+      "allowed": ["READ_CONTACTS", "GET_ACCOUNTS", "CAMERA", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "READ_MEDIA_AUDIO"],
+      "tolerated": ["READ_CALENDAR", "WRITE_CALENDAR", "WRITE_CONTACTS", "RECORD_AUDIO"],
+      "forbidden": ["READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION"]
+    },
+    "SOCIAL": {
+      "display_name": "Réseaux sociaux",
+      "allowed": ["CAMERA", "RECORD_AUDIO", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "READ_MEDIA_AUDIO"],
+      "tolerated": ["READ_CONTACTS", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "GET_ACCOUNTS"],
+      "forbidden": ["READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION", "READ_CALENDAR", "BODY_SENSORS"]
+    },
+    "MEDIA_PLAYER": {
+      "display_name": "Audio, vidéo & streaming",
+      "allowed": ["READ_EXTERNAL_STORAGE", "READ_MEDIA_AUDIO", "READ_MEDIA_VIDEO"],
+      "tolerated": ["RECORD_AUDIO", "BLUETOOTH_SCAN", "READ_MEDIA_IMAGES", "ACCESS_COARSE_LOCATION"],
+      "forbidden": ["ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "CAMERA", "READ_CALL_LOG", "READ_CALENDAR"]
+    },
+    "NEWS_READING": {
+      "display_name": "Presse & Lecture",
+      "allowed": [],
+      "tolerated": ["ACCESS_COARSE_LOCATION", "READ_MEDIA_IMAGES"],
+      "forbidden": ["ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "RECORD_AUDIO", "CAMERA", "READ_CALENDAR", "READ_CALL_LOG", "GET_ACCOUNTS"]
+    },
+    "ECOMMERCE": {
+      "display_name": "E-commerce & Achats",
+      "allowed": ["CAMERA", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES"],
+      "tolerated": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "forbidden": ["READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "RECORD_AUDIO", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION", "READ_PHONE_STATE", "GET_ACCOUNTS"]
+    },
+    "FINANCE_ACCOUNTS": {
+      "display_name": "Banque, paiement & comptes clients",
+      "description": "OTP par SMS : la SMS Retriever API rend READ_SMS inutile.",
+      "allowed": ["CAMERA", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES"],
+      "tolerated": ["READ_CONTACTS", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "READ_PHONE_STATE", "RECEIVE_SMS"],
+      "forbidden": ["READ_SMS", "SEND_SMS", "READ_CALL_LOG", "RECORD_AUDIO", "ACCESS_BACKGROUND_LOCATION", "READ_CALENDAR"]
+    },
+    "HEALTH_ADMIN": {
+      "display_name": "Santé (administratif, RDV, assurance)",
+      "allowed": ["CAMERA", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES"],
+      "tolerated": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "READ_CALENDAR", "WRITE_CALENDAR", "RECORD_AUDIO"],
+      "forbidden": ["READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION"]
+    },
+    "WEARABLE_COMPANION": {
+      "display_name": "Compagnon de montre / objet connecté",
+      "description": "Google Play prévoit une exception SMS/journal d'appels pour les apps compagnon d'objets connectés : toléré, pas autorisé.",
+      "allowed": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "BLUETOOTH_SCAN", "NEARBY_WIFI_DEVICES", "ACTIVITY_RECOGNITION", "BODY_SENSORS"],
+      "tolerated": ["ACCESS_BACKGROUND_LOCATION", "BODY_SENSORS_BACKGROUND", "READ_CONTACTS", "READ_CALENDAR", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_PHONE_STATE", "READ_CALL_LOG", "ANSWER_PHONE_CALLS", "CAMERA", "BIND_NOTIFICATION_LISTENER_SERVICE"],
+      "forbidden": ["RECORD_AUDIO"]
+    },
+    "FITNESS": {
+      "display_name": "Sport & Fitness",
+      "allowed": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACTIVITY_RECOGNITION", "BODY_SENSORS", "BLUETOOTH_SCAN"],
+      "tolerated": ["ACCESS_BACKGROUND_LOCATION", "CAMERA", "READ_MEDIA_IMAGES", "READ_CONTACTS"],
+      "forbidden": ["READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "RECORD_AUDIO"]
+    },
+    "SECURITY_AUTH": {
+      "display_name": "Sécurité, authentification & identité",
+      "allowed": ["CAMERA"],
+      "tolerated": ["READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "BIND_ACCESSIBILITY_SERVICE"],
+      "forbidden": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "RECORD_AUDIO", "READ_CALL_LOG", "READ_CALENDAR"]
+    },
+    "BROWSER": {
+      "display_name": "Navigateur web",
+      "allowed": [],
+      "tolerated": ["CAMERA", "RECORD_AUDIO", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO"],
+      "forbidden": ["READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION", "READ_CALENDAR"]
+    },
+    "AI_ASSISTANT": {
+      "display_name": "Assistants IA",
+      "allowed": ["RECORD_AUDIO", "CAMERA", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES"],
+      "tolerated": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "READ_CALENDAR", "WRITE_CALENDAR", "READ_CONTACTS"],
+      "forbidden": ["READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION"]
+    },
+    "PRODUCTIVITY_CLOUD": {
+      "display_name": "Bureautique, cloud & dev",
+      "allowed": ["CAMERA", "GET_ACCOUNTS", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "READ_MEDIA_AUDIO"],
+      "tolerated": ["READ_CONTACTS", "RECORD_AUDIO", "READ_CALENDAR", "MANAGE_EXTERNAL_STORAGE"],
+      "forbidden": ["READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION"]
+    },
+    "PHOTO_VIDEO": {
+      "display_name": "Photo, vidéo & galeries",
+      "allowed": ["CAMERA", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "BLUETOOTH_SCAN", "NEARBY_WIFI_DEVICES"],
+      "tolerated": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACCESS_MEDIA_LOCATION", "RECORD_AUDIO", "MANAGE_EXTERNAL_STORAGE"],
+      "forbidden": ["READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION", "READ_CALENDAR"]
+    },
+    "TRAVEL_LEISURE": {
+      "display_name": "Voyage, sorties & événements",
+      "allowed": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "tolerated": ["CAMERA", "READ_CALENDAR", "WRITE_CALENDAR", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES"],
+      "forbidden": ["READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "RECORD_AUDIO", "ACCESS_BACKGROUND_LOCATION"]
+    },
+    "GAME": {
+      "display_name": "Jeux",
+      "allowed": [],
+      "tolerated": ["RECORD_AUDIO", "BLUETOOTH_SCAN", "READ_EXTERNAL_STORAGE", "MANAGE_EXTERNAL_STORAGE"],
+      "forbidden": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "CAMERA", "READ_CALL_LOG", "READ_CALENDAR", "READ_PHONE_STATE", "GET_ACCOUNTS"]
+    },
+    "ACCESSIBILITY": {
+      "display_name": "Accessibilité",
+      "allowed": ["RECORD_AUDIO", "BIND_ACCESSIBILITY_SERVICE"],
+      "tolerated": ["CAMERA", "SYSTEM_ALERT_WINDOW", "READ_CONTACTS", "CALL_PHONE"],
+      "forbidden": ["READ_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION"]
+    },
+    "EDUCATION_FAMILY": {
+      "display_name": "Scolarité, famille & découverte",
+      "allowed": ["CAMERA", "READ_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES"],
+      "tolerated": ["ACCESS_COARSE_LOCATION", "READ_CALENDAR", "WRITE_CALENDAR"],
+      "forbidden": ["READ_CONTACTS", "READ_SMS", "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "ACCESS_BACKGROUND_LOCATION", "RECORD_AUDIO"]
+    }
+  },
+
+  "excluded_packages": ["com.vylia.privacy"],
+
+  "package_exceptions": {
+    "com.shazam.android": { "allowed_extra": ["RECORD_AUDIO"] }
+  },
+
+  "package_overrides": {
+    "fr.ign.geoportail": "NAVIGATION",
+    "com.vsct.vsc.mobile.horaireetresa.android": "TRANSPORT",
+    "com.sncf.digitalfactory.AppliGares": "TRANSPORT",
+    "com.applidium.vianavigo": "TRANSPORT",
+    "com.ubercab": "TRANSPORT",
+    "fr.meteo": "WEATHER",
+    "com.weather.Weather": "WEATHER",
+    "com.lachainemeteo.androidapp": "WEATHER",
+    "com.whatsapp": "MESSAGING",
+    "org.thoughtcrime.securesms": "MESSAGING",
+    "org.telegram.messenger": "MESSAGING",
+    "com.viber.voip": "MESSAGING",
+    "com.facebook.orca": "MESSAGING",
+    "com.google.android.apps.dynamite": "MESSAGING",
+    "com.microsoft.office.outlook": "EMAIL",
+    "com.infomaniak.mail": "EMAIL",
+    "com.facebook.katana": "SOCIAL",
+    "com.instagram.android": "SOCIAL",
+    "com.instagram.barcelona": "SOCIAL",
+    "com.twitter.android": "SOCIAL",
+    "xyz.blueskyweb.app": "SOCIAL",
+    "com.linkedin.android": "SOCIAL",
+    "com.substack.app": "SOCIAL",
+    "org.videolan.vlc": "MEDIA_PLAYER",
+    "com.soundcloud.android": "MEDIA_PLAYER",
+    "com.radiofrance.radio.radiofrance.android": "MEDIA_PLAYER",
+    "fr.francetv.pluzz": "MEDIA_PLAYER",
+    "tv.arte.plus7": "MEDIA_PLAYER",
+    "com.shazam.android": "MEDIA_PLAYER",
+    "com.lemonde.androidapp": "NEWS_READING",
+    "com.lemonde.morning": "NEWS_READING",
+    "com.visuamobile.liberation": "NEWS_READING",
+    "com.mediapart.app": "NEWS_READING",
+    "fr.francetv.apps.info": "NEWS_READING",
+    "fr.leboncoin": "ECOMMERCE",
+    "com.venteprivee": "ECOMMERCE",
+    "com.decathlon.app": "ECOMMERCE",
+    "io.yuka.android": "ECOMMERCE",
+    "com.paypal.android.p2pmobile": "FINANCE_ACCOUNTS",
+    "com.tribab.tricount.android": "FINANCE_ACCOUNTS",
+    "com.google.android.apps.walletnfcrel": "FINANCE_ACCOUNTS",
+    "fr.doctolib.www": "HEALTH_ADMIN",
+    "fr.cnamts.it.activity": "HEALTH_ADMIN",
+    "com.garmin.android.apps.connectmobile": "WEARABLE_COMPANION",
+    "com.strava": "FITNESS",
+    "com.popularapp.thirtydayfitnesschallenge": "FITNESS",
+    "com.azure.authenticator": "SECURITY_AUTH",
+    "com.google.android.apps.authenticator2": "SECURITY_AUTH",
+    "com.infomaniak.auth": "SECURITY_AUTH",
+    "com.beemdevelopment.aegis": "SECURITY_AUTH",
+    "com.x8bit.bitwarden": "SECURITY_AUTH",
+    "fr.gouv.franceidentite": "SECURITY_AUTH",
+    "com.duckduckgo.mobile.android": "BROWSER",
+    "com.anthropic.claude": "AI_ASSISTANT",
+    "com.openai.chatgpt": "AI_ASSISTANT",
+    "com.google.android.apps.googleassistant": "AI_ASSISTANT",
+    "com.google.ar.lens": "AI_ASSISTANT",
+    "com.microsoft.office.word": "PRODUCTIVITY_CLOUD",
+    "com.google.android.apps.docs.editors.sheets": "PRODUCTIVITY_CLOUD",
+    "com.microsoft.skydrive": "PRODUCTIVITY_CLOUD",
+    "com.nextcloud.client": "PRODUCTIVITY_CLOUD",
+    "com.adobe.reader": "PRODUCTIVITY_CLOUD",
+    "com.github.android": "PRODUCTIVITY_CLOUD",
+    "com.google.android.apps.playconsole": "PRODUCTIVITY_CLOUD",
+    "com.gopro.smarty": "PHOTO_VIDEO",
+    "com.airbnb.android": "TRAVEL_LEISURE",
+    "com.tripadvisor.tripadvisor": "TRAVEL_LEISURE",
+    "com.bandsintown": "TRAVEL_LEISURE",
+    "com.block.juggle": "GAME",
+    "games.lightheart.mrautofire": "GAME",
+    "io.state.fight": "GAME",
+    "com.n3twork.tetris": "GAME",
+    "org.lichess.mobileV2": "GAME",
+    "com.swordfish.lemuroid": "GAME",
+    "com.yogistudio.molkkyboard": "GAME",
+    "com.yogistudio.molkkyboard.debug": "GAME",
+    "com.google.android.apps.accessibility.voiceaccess": "ACCESSIBILITY",
+    "com.google.audio.hearing.visualization.accessibility.scribe": "ACCESSIBILITY"
+  }
+}

@@ -12,10 +12,14 @@ import com.vylia.privacy.domain.scoring.PrivacyScorer
  */
 class AuditAppsUseCase(
     private val repository: AppRepository,
-    private val scorer: PrivacyScorer,
+    /** Lu à chaque scan : des règles importées s'appliquent sans redémarrage. */
+    private val scorer: () -> PrivacyScorer,
 ) {
-    suspend operator fun invoke(filter: AppFilter = AppFilter.ALL): List<AuditedApp> =
-        repository.getInstalledApps(filter)
+    suspend operator fun invoke(filter: AppFilter = AppFilter.ALL): List<AuditedApp> {
+        val scorer = scorer()
+        return repository.getInstalledApps(filter)
+            .filterNot { scorer.isExcluded(it.packageName) }
             .map { scorer.scoreApp(it, TrackerAnalysis.NotAnalyzed) }
             .sortedWith(RiskFirstOrder)
+    }
 }

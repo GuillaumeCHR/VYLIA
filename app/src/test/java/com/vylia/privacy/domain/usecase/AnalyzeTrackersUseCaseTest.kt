@@ -7,6 +7,7 @@ import com.vylia.privacy.domain.model.Tracker
 import com.vylia.privacy.domain.model.TrackerAnalysis
 import com.vylia.privacy.domain.repository.TrackerAnalyzer
 import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.domain.scoring.TestFixtures
 import java.io.IOException
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
@@ -16,7 +17,7 @@ import org.junit.Test
 
 class AnalyzeTrackersUseCaseTest {
 
-    private val scorer = PrivacyScorer()
+    private val scorer = PrivacyScorer(TestFixtures.rules)
 
     private class FakeAnalyzer(
         private val available: Boolean = true,
@@ -42,6 +43,8 @@ class AnalyzeTrackersUseCaseTest {
         apkPaths = emptyList(),
         lastUpdateTime = 0L,
         requestedPermissions = permissions.toList(),
+        declaredPermissions = permissions.mapTo(HashSet()) { it.removePrefix("android.permission.") },
+        grantedPermissions = permissions.mapTo(HashSet()) { it.removePrefix("android.permission.") },
         permissions = emptyList(),
     )
 
@@ -56,18 +59,19 @@ class AnalyzeTrackersUseCaseTest {
         )
         val initial = listOf(camera, broken).map { scorer.scoreApp(it, TrackerAnalysis.NotAnalyzed) }
 
-        val results = AnalyzeTrackersUseCase(analyzer, scorer)(initial).toList()
+        val results = AnalyzeTrackersUseCase(analyzer) { scorer }(initial).toList()
 
-        // 100 - 25 (caméra) - 20 (4 traqueurs)
-        assertEquals(55, results[0].score.value)
+        // Règle v2, catégorie DEFAULT : 100 - 4 (caméra inattendue) - 4 × 5 (traqueurs sans catégorie)
+        assertEquals(76, results[0].score.value)
         assertEquals(4, (results[0].trackerAnalysis as TrackerAnalysis.Analyzed).trackers.size)
         assertEquals(TrackerAnalysis.Failed, results[1].trackerAnalysis)
-        assertEquals(100, results[1].score.value)
+        // Analyse en échec : pénalité forfaitaire "non analysé" (12), confiance partielle.
+        assertEquals(88, results[1].score.value)
     }
 
     @Test
     fun `n emet rien sans base de signatures`() = runTest {
         val initial = listOf(scorer.scoreApp(app("a"), TrackerAnalysis.NotAnalyzed))
-        assertTrue(AnalyzeTrackersUseCase(FakeAnalyzer(available = false), scorer)(initial).toList().isEmpty())
+        assertTrue(AnalyzeTrackersUseCase(FakeAnalyzer(available = false)) { scorer }(initial).toList().isEmpty())
     }
 }

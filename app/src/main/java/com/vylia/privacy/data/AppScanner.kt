@@ -1,8 +1,10 @@
 package com.vylia.privacy.data
 
 import android.Manifest
+import android.app.AppOpsManager
+import android.app.admin.DevicePolicyManager
 import android.content.ComponentName
-import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
@@ -10,6 +12,8 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.Build
 import android.provider.Settings
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.pm.PackageInfoCompat
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.DetectedPermission
 import com.vylia.privacy.domain.model.InstalledApp
@@ -27,19 +31,30 @@ import kotlinx.coroutines.withContext
  *   (services et bloatware constructeur), hormis les paquets purement techniques sans code
  *   (overlays de ressources, thèmes…).
  *
+ * Permissions accordées = permissions runtime accordées (`REQUESTED_PERMISSION_GRANTED`), plus les
+ * permissions spéciales effectivement actives : superposition et accès aux statistiques d'usage
+ * (AppOps), service d'accessibilité, écoute des notifications, administrateur de l'appareil.
+ *
  * Tout le travail (requêtes IPC + chargement des icônes) est fait sur [ioDispatcher]
  * pour ne jamais bloquer le thread UI. Requiert `QUERY_ALL_PACKAGES` sur Android 11+.
  */
 class AppScanner(
-    private val packageManager: PackageManager,
-    private val contentResolver: ContentResolver,
+    private val context: Context,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : AppRepository {
+
+    private val packageManager = context.packageManager
+    private val contentResolver = context.contentResolver
+    private val appOps = context.getSystemService(AppOpsManager::class.java)
 
     override suspend fun getInstalledApps(filter: AppFilter): List<InstalledApp> =
         withContext(ioDispatcher) {
             val launcherPackages = queryLauncherActivities().mapTo(HashSet()) { it.activityInfo.packageName }
-            val enabledAccessibilityPackages = enabledAccessibilityPackages()
+            val specialAccess = SpecialAccess(
+                accessibility = enabledAccessibilityPackages(),
+                notificationListeners = NotificationManagerCompat.getEnabledListenerPackages(context),
+                deviceAdmins = activeDeviceAdminPackages(),
+            )
             getInstalledPackages().mapNotNull { packageInfo ->
                 ensureActive()
                 val appInfo = packageInfo.applicationInfo ?: return@mapNotNull null
@@ -47,7 +62,7 @@ class AppScanner(
                 val isListed = if (isSystemApp) appInfo.hasCode() else packageInfo.packageName in launcherPackages
                 // Filtrage avant loadApp() : on ne charge pas d'icône pour un paquet écarté.
                 if (isListed && filter.matches(isSystemApp)) {
-                    loadApp(packageInfo, appInfo, isSystemApp, enabledAccessibilityPackages)
+                    loadApp(packageInfo, appInfo, isSystemApp, specialAccess)
                 } else {
                     null
                 }
@@ -82,27 +97,51 @@ class AppScanner(
             .split(':')
             .mapNotNullTo(HashSet()) { ComponentName.unflattenFromString(it)?.packageName }
 
+    /** Paquets disposant d'un accès spécial activé par l'utilisateur, lus une seule fois par scan. */
+    private class SpecialAccess(
+        val accessibility: Set<String>,
+        val notificationListeners: Set<String>,
+        val deviceAdmins: Set<String>,
+    )
+
     private fun loadApp(
         packageInfo: PackageInfo,
         appInfo: ApplicationInfo,
         isSystemApp: Boolean,
-        enabledAccessibilityPackages: Set<String>,
+        specialAccess: SpecialAccess,
     ): InstalledApp {
+        val packageName = packageInfo.packageName
         val requested = packageInfo.requestedPermissions.orEmpty()
         val flags = packageInfo.requestedPermissionsFlags ?: IntArray(0)
         val granted = requested.filterIndexedTo(HashSet()) { index, _ ->
             flags.getOrElse(index) { 0 } and PackageInfo.REQUESTED_PERMISSION_GRANTED != 0
         }
 
-        val declaresAccessibilityService = packageInfo.services.orEmpty()
-            .any { it.permission == Manifest.permission.BIND_ACCESSIBILITY_SERVICE }
-        if (declaresAccessibilityService && packageInfo.packageName in enabledAccessibilityPackages) {
+        // Ces permissions protègent un service de l'app : elles ne sont jamais "demandées", seulement déclarées.
+        val services = packageInfo.services.orEmpty()
+        val declaresAccessibilityService = services.any { it.permission == Manifest.permission.BIND_ACCESSIBILITY_SERVICE }
+        val declaresNotificationListener =
+            services.any { it.permission == Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE }
+        // Récepteur d'admin non listé (GET_RECEIVERS alourdirait trop la requête groupée) : seul l'admin actif est vu.
+        val isDeviceAdmin = packageName in specialAccess.deviceAdmins
+
+        if (declaresAccessibilityService && packageName in specialAccess.accessibility) {
             granted += Manifest.permission.BIND_ACCESSIBILITY_SERVICE
         }
+        if (declaresNotificationListener && packageName in specialAccess.notificationListeners) {
+            granted += Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE
+        }
+        if (isDeviceAdmin) granted += Manifest.permission.BIND_DEVICE_ADMIN
+        applyAppOp(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Manifest.permission.SYSTEM_ALERT_WINDOW, appInfo, requested, granted)
+        applyAppOp(AppOpsManager.OPSTR_GET_USAGE_STATS, Manifest.permission.PACKAGE_USAGE_STATS, appInfo, requested, granted)
+        // Permissions d'installation : déclarée = accordée.
+        INSTALL_TIME_PERMISSIONS.filterTo(granted) { it in requested }
 
         val permissions = buildList {
             addAll(requested)
             if (declaresAccessibilityService) add(Manifest.permission.BIND_ACCESSIBILITY_SERVICE)
+            if (declaresNotificationListener) add(Manifest.permission.BIND_NOTIFICATION_LISTENER_SERVICE)
+            if (isDeviceAdmin) add(Manifest.permission.BIND_DEVICE_ADMIN)
         }.distinct()
 
         return InstalledApp(
@@ -113,6 +152,11 @@ class AppScanner(
             category = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) appInfo.category else null,
             apkPaths = listOf(appInfo.sourceDir) + appInfo.splitSourceDirs.orEmpty(),
             lastUpdateTime = packageInfo.lastUpdateTime,
+            versionCode = PackageInfoCompat.getLongVersionCode(packageInfo),
+            targetSdk = appInfo.targetSdkVersion,
+            appInfoCategory = categoryKey(appInfo),
+            declaredPermissions = permissions.mapTo(HashSet(), ::shortName),
+            grantedPermissions = granted.mapTo(HashSet(), ::shortName),
             requestedPermissions = permissions,
             permissions = PermissionRegistry.strongestByFamily(permissions).map { strongest ->
                 val familyGranted = permissions.any { permission ->
@@ -123,10 +167,66 @@ class AppScanner(
         )
     }
 
+    /**
+     * Permission spéciale gérée par AppOps : `MODE_ALLOWED` = accordée par l'utilisateur ; `MODE_DEFAULT`
+     * renvoie à l'état de la permission elle-même. Ne s'applique qu'aux apps qui la déclarent.
+     */
+    private fun applyAppOp(
+        op: String,
+        permission: String,
+        appInfo: ApplicationInfo,
+        requested: Array<out String>,
+        granted: MutableSet<String>,
+    ) {
+        if (permission !in requested) return
+        val mode = try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                appOps.unsafeCheckOpNoThrow(op, appInfo.uid, appInfo.packageName)
+            } else {
+                @Suppress("DEPRECATION")
+                appOps.checkOpNoThrow(op, appInfo.uid, appInfo.packageName)
+            }
+        } catch (_: SecurityException) {
+            return
+        }
+        when (mode) {
+            AppOpsManager.MODE_ALLOWED -> granted += permission
+            AppOpsManager.MODE_DEFAULT -> Unit
+            else -> granted -= permission
+        }
+    }
+
+    private fun activeDeviceAdminPackages(): Set<String> =
+        context.getSystemService(DevicePolicyManager::class.java)?.activeAdmins.orEmpty()
+            .mapTo(HashSet()) { it.packageName }
+
     /** Une app système mise à jour via le Play Store reste une app système. */
     private fun ApplicationInfo.isSystemApp(): Boolean =
         flags and (ApplicationInfo.FLAG_SYSTEM or ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
 
     /** Les overlays et paquets de ressources n'ont pas de code : rien à auditer. */
     private fun ApplicationInfo.hasCode(): Boolean = flags and ApplicationInfo.FLAG_HAS_CODE != 0
+
+    private companion object {
+        val INSTALL_TIME_PERMISSIONS = listOf(Manifest.permission.QUERY_ALL_PACKAGES, Manifest.permission.REQUEST_INSTALL_PACKAGES)
+
+        fun shortName(permission: String) = permission.removePrefix("android.permission.")
+
+        /** `ApplicationInfo.category` → clé attendue par les règles ("CATEGORY_GAME", …). */
+        fun categoryKey(appInfo: ApplicationInfo): String {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return "CATEGORY_UNDEFINED"
+            return when (appInfo.category) {
+                ApplicationInfo.CATEGORY_GAME -> "CATEGORY_GAME"
+                ApplicationInfo.CATEGORY_AUDIO -> "CATEGORY_AUDIO"
+                ApplicationInfo.CATEGORY_VIDEO -> "CATEGORY_VIDEO"
+                ApplicationInfo.CATEGORY_IMAGE -> "CATEGORY_IMAGE"
+                ApplicationInfo.CATEGORY_SOCIAL -> "CATEGORY_SOCIAL"
+                ApplicationInfo.CATEGORY_NEWS -> "CATEGORY_NEWS"
+                ApplicationInfo.CATEGORY_MAPS -> "CATEGORY_MAPS"
+                ApplicationInfo.CATEGORY_PRODUCTIVITY -> "CATEGORY_PRODUCTIVITY"
+                ApplicationInfo.CATEGORY_ACCESSIBILITY -> "CATEGORY_ACCESSIBILITY"
+                else -> "CATEGORY_UNDEFINED"
+            }
+        }
+    }
 }

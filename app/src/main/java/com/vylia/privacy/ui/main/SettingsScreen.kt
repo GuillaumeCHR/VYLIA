@@ -109,27 +109,27 @@ fun SettingsScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
-        Text(text = "Matrice de règles contextuelles", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text(text = "Règles de score (v2)", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = (if (state.rulesImported) "Matrice importée" else "Matrice intégrée à l'application") +
+            text = (if (state.rulesImported) "Règles importées" else "Règles intégrées à l'application") +
                 " · ${state.ruleCategoryCount} catégories",
             style = MaterialTheme.typography.bodyMedium
         )
         Text(
-            text = "Importez votre propre privacy_rules_matrix_advanced.json (dossier Téléchargements). " +
-                "Le fichier est copié dans l'application ; en cas de problème, la matrice intégrée est utilisée.",
+            text = "Importez votre propre vylia_rules_v2.json (dossier Téléchargements). " +
+                "Le fichier est copié dans l'application ; en cas de problème, les règles intégrées sont utilisées.",
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(8.dp))
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             Button(onClick = { rulesLauncher.launch(RuleFileMimeTypes) }) {
-                Text("Importer une matrice")
+                Text("Importer des règles")
             }
             if (state.rulesImported) {
                 OutlinedButton(onClick = viewModel::resetRules) {
-                    Text("Matrice intégrée")
+                    Text("Règles intégrées")
                 }
             }
         }

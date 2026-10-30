@@ -31,7 +31,7 @@ data class SettingsUiState(
     val advancedMode: Boolean = false,
     val rulesImported: Boolean = false,
     val ruleCategoryCount: Int = 0,
-    /** Résultat du dernier import de matrice, affiché sous le bouton. */
+    /** Résultat du dernier import de règles, affiché sous le bouton. */
     val rulesMessage: String? = null,
 )
 
@@ -72,7 +72,7 @@ class SettingsViewModel(
         state.copy(
             advancedMode = advancedMode,
             rulesImported = rules.source == RuleMatrixRepository.Source.IMPORTED,
-            ruleCategoryCount = rules.matrix.rules.size,
+            ruleCategoryCount = rules.rules.categories.size,
             rulesMessage = rulesMessage
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsUiState())
@@ -108,15 +108,15 @@ class SettingsViewModel(
     fun importRules(uri: Uri) {
         viewModelScope.launch {
             _rulesMessage.value = ruleMatrixRepository.import(uri).fold(
-                onSuccess = { count -> "Matrice importée ($count catégories). Les scores ont été recalculés." },
-                onFailure = { error -> "Import refusé : ${error.localizedMessage ?: "fichier invalide"}. La matrice actuelle est conservée." }
+                onSuccess = { count -> "Règles importées ($count catégories). Les scores ont été recalculés." },
+                onFailure = { error -> "Import refusé : ${error.localizedMessage ?: "fichier invalide"}. Les règles actuelles sont conservées." }
             )
         }
     }
 
     fun resetRules() {
         ruleMatrixRepository.resetToBundled()
-        _rulesMessage.value = "Matrice intégrée rétablie."
+        _rulesMessage.value = "Règles intégrées rétablies."
     }
 
     companion object {

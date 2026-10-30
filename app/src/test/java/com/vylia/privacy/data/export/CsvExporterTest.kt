@@ -6,6 +6,8 @@ import com.vylia.privacy.domain.model.InstalledApp
 import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.domain.model.Tracker
 import com.vylia.privacy.domain.model.TrackerAnalysis
+import com.vylia.privacy.domain.scoring.Confidence
+import com.vylia.privacy.domain.scoring.ScoreResult
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -33,6 +35,7 @@ class CsvExporterTest {
         ),
         score = PrivacyScore(42),
         trackerAnalysis = analysis,
+        result = ScoreResult(42, "C", Confidence.FULL, "DEFAULT", 0.0, 0, emptyList(), emptyList()),
     )
 
     private fun rows(csv: String) = csv.removePrefix("﻿").trimEnd().split("\r\n")

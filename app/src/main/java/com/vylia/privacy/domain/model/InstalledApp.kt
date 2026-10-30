@@ -13,6 +13,15 @@ data class InstalledApp(
     val apkPaths: List<String>,
     /** Date de dernière installation/mise à jour, utilisée comme clé du cache d'analyse. */
     val lastUpdateTime: Long,
+    /** Avec [lastUpdateTime], clé du cache persistant d'analyse des traqueurs. */
+    val versionCode: Long = 0L,
+    val targetSdk: Int = 0,
+    /** Clé de `ApplicationInfo.category` ("CATEGORY_GAME", …), ou "CATEGORY_UNDEFINED". */
+    val appInfoCategory: String = "CATEGORY_UNDEFINED",
+    /** Noms courts (sans "android.permission."), entrée du moteur de score v2. */
+    val declaredPermissions: Set<String> = emptySet(),
+    /** Permissions runtime accordées + permissions spéciales actives (AppOps, accessibilité, notifications, admin). */
+    val grantedPermissions: Set<String> = emptySet(),
     /**
      * Permissions du manifeste, plus `BIND_ACCESSIBILITY_SERVICE` si l'app déclare un service
      * d'accessibilité (cette permission protège le service, elle n'est jamais "demandée").

@@ -4,13 +4,27 @@ import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.InstalledApp
 import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.domain.model.TrackerAnalysis
+import com.vylia.privacy.domain.scoring.AppScan
 import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.domain.scoring.Tracker as ScoredTracker
 
-/** Point unique de calcul du score : permissions + traqueurs (0 tant que l'analyse DEX n'est pas faite). */
+/**
+ * Point unique de calcul du score (règle v2). Traqueurs `null` (non analysés ou analyse en échec) :
+ * pénalité forfaitaire et confiance PARTIAL ; liste vide : analysée, aucun traqueur.
+ */
 internal fun PrivacyScorer.scoreApp(app: InstalledApp, analysis: TrackerAnalysis): AuditedApp {
-    val trackerCount = (analysis as? TrackerAnalysis.Analyzed)?.trackers?.size ?: 0
-    val score = calculateScore(app.requestedPermissions, trackerCount, app.category, app.packageName, app.isSystemApp)
-    return AuditedApp(app = app, score = PrivacyScore(score), trackerAnalysis = analysis)
+    val trackers = (analysis as? TrackerAnalysis.Analyzed)?.trackers?.map { ScoredTracker(it.name, it.categories.toSet()) }
+    val result = score(
+        AppScan(
+            packageName = app.packageName,
+            targetSdk = app.targetSdk,
+            appInfoCategory = app.appInfoCategory,
+            declaredPermissions = app.declaredPermissions,
+            grantedPermissions = app.grantedPermissions,
+            trackers = trackers,
+        )
+    )
+    return AuditedApp(app = app, score = PrivacyScore(result.score), trackerAnalysis = analysis, result = result)
 }
 
 /** Ordre d'affichage : les plus à risque d'abord, puis par nom. */

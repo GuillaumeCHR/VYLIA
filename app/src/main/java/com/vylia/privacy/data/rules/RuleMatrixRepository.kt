@@ -3,18 +3,20 @@ package com.vylia.privacy.data.rules
 import android.content.Context
 import android.net.Uri
 import android.util.Log
-import com.vylia.privacy.domain.scoring.RuleMatrix
+import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.domain.scoring.Rules
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.json.Json
 import java.io.File
 
 /**
- * Matrice de règles contextuelles, 100 % locale :
+ * Règles de score v2 (`vylia_rules_v2.json`), 100 % locales :
  * 1. copie importée par l'utilisateur (sélecteur de fichiers, typiquement depuis Téléchargements),
- * 2. sinon, ou si la copie est illisible, matrice intégrée dans `assets/`.
+ * 2. sinon, ou si la copie est illisible, règles intégrées dans `assets/`.
  *
  * L'import passe par le Storage Access Framework : aucune permission de stockage n'est requise.
  */
@@ -22,23 +24,25 @@ class RuleMatrixRepository(private val context: Context) {
 
     enum class Source { IMPORTED, BUNDLED }
 
-    data class LoadedMatrix(val matrix: RuleMatrix, val source: Source)
+    data class LoadedRules(val rules: Rules, val source: Source) {
+        val scorer = PrivacyScorer(rules)
+    }
 
     private val importedFile = File(context.filesDir, IMPORTED_FILE_NAME)
 
     private val _current = MutableStateFlow(load())
-    val current: StateFlow<LoadedMatrix> = _current.asStateFlow()
+    val current: StateFlow<LoadedRules> = _current.asStateFlow()
 
     /** Valide le fichier choisi avant de remplacer la copie importée ; renvoie le nombre de catégories. */
     suspend fun import(uri: Uri): Result<Int> = withContext(Dispatchers.IO) {
         runCatching {
-            val json = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+            val content = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
                 ?: error("Fichier illisible")
-            val matrix = RuleMatrix.fromJson(json)
-            require(matrix.rules.isNotEmpty()) { "Aucune règle dans ce fichier" }
-            importedFile.writeText(json)
-            _current.value = LoadedMatrix(matrix, Source.IMPORTED)
-            matrix.rules.size
+            val rules = parse(content)
+            require("DEFAULT" in rules.categories) { "Catégorie DEFAULT absente" }
+            importedFile.writeText(content)
+            _current.value = LoadedRules(rules, Source.IMPORTED)
+            rules.categories.size
         }
     }
 
@@ -47,28 +51,27 @@ class RuleMatrixRepository(private val context: Context) {
         _current.value = loadBundled()
     }
 
-    private fun load(): LoadedMatrix {
+    private fun load(): LoadedRules {
         if (importedFile.exists()) {
             try {
-                return LoadedMatrix(RuleMatrix.fromJson(importedFile.readText()), Source.IMPORTED)
+                return LoadedRules(parse(importedFile.readText()), Source.IMPORTED)
             } catch (e: Exception) {
-                Log.w(TAG, "Matrice importée invalide, retour à la matrice intégrée", e)
+                Log.w(TAG, "Règles importées invalides, retour aux règles intégrées", e)
             }
         }
         return loadBundled()
     }
 
-    private fun loadBundled(): LoadedMatrix = try {
-        val json = context.assets.open(BUNDLED_ASSET).bufferedReader().use { it.readText() }
-        LoadedMatrix(RuleMatrix.fromJson(json), Source.BUNDLED)
-    } catch (e: Exception) {
-        Log.e(TAG, "Matrice intégrée illisible : règles contextuelles désactivées", e)
-        LoadedMatrix(RuleMatrix(emptyList()), Source.BUNDLED)
-    }
+    /** Les règles intégrées font partie de l'app : illisibles, c'est un bug de build, pas un cas à masquer. */
+    private fun loadBundled(): LoadedRules =
+        LoadedRules(parse(context.assets.open(BUNDLED_ASSET).bufferedReader().use { it.readText() }), Source.BUNDLED)
 
-    private companion object {
-        const val TAG = "RuleMatrixRepository"
-        const val BUNDLED_ASSET = "privacy_rules_matrix_advanced.json"
-        const val IMPORTED_FILE_NAME = "imported_privacy_rules_matrix.json"
+    companion object {
+        private const val TAG = "RuleMatrixRepository"
+        const val BUNDLED_ASSET = "vylia_rules_v2.json"
+        private const val IMPORTED_FILE_NAME = "imported_vylia_rules_v2.json"
+        private val json = Json { ignoreUnknownKeys = true }
+
+        fun parse(content: String): Rules = json.decodeFromString(content)
     }
 }

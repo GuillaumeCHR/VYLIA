@@ -1,5 +1,7 @@
 package com.vylia.privacy.ui.home
 
+import android.os.SystemClock
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
@@ -85,6 +87,7 @@ class HomeViewModel(
             scanState.value = ScanState.Loading
             isAnalyzingTrackers.value = false
             val scope = if (settingsRepository.advancedMode.value) AppFilter.ALL else AppFilter.USER
+            val startedAt = SystemClock.elapsedRealtime()
             val apps = try {
                 auditApps(scope)
             } catch (e: CancellationException) {
@@ -102,8 +105,15 @@ class HomeViewModel(
             // volumineux) seront analysés à la demande dans une prochaine version.
             // Pas de finally : un scan annulé ne doit pas écraser l'indicateur du scan qui le remplace.
             isAnalyzingTrackers.value = true
+            val listedAt = SystemClock.elapsedRealtime()
             analyzeTrackers(userApps).collect(::replaceApp)
             isAnalyzingTrackers.value = false
+            val unanalyzed = currentApps().count { AppFilter.USER.matches(it.app) && it.trackerAnalysis !is TrackerAnalysis.Analyzed }
+            Log.i(
+                TAG,
+                "Scan : ${apps.size} apps listées en ${listedAt - startedAt} ms, traqueurs de ${userApps.size} apps " +
+                    "en ${SystemClock.elapsedRealtime() - listedAt} ms ($unanalyzed non analysées)",
+            )
             badgesManager.onScanCompleted(currentApps().filter { AppFilter.USER.matches(it.app) }.toSnapshots())
         }
     }
@@ -173,6 +183,8 @@ class HomeViewModel(
     }
 
     companion object {
+        private const val TAG = "VyliaScan"
+
         val Factory = viewModelFactory {
             initializer {
                 val container = (this[APPLICATION_KEY] as VyliaApplication).container

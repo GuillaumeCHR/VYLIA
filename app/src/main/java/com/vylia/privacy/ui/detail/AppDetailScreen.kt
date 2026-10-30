@@ -35,7 +35,13 @@ import com.vylia.privacy.domain.model.TrackerAnalysis
 import com.vylia.privacy.domain.scoring.Confidence
 import com.vylia.privacy.domain.scoring.Context
 import com.vylia.privacy.domain.scoring.PermissionFinding
-import com.vylia.privacy.domain.scoring.PermissionRegistry
+import androidx.compose.foundation.clickable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.vylia.privacy.domain.learn.PermissionGlossary
+import com.vylia.privacy.ui.main.PermissionExplanation
 import com.vylia.privacy.domain.scoring.TrackerFinding
 import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.TransparencyBadge
@@ -121,7 +127,7 @@ fun AppDetailScreen(
             }
         }
 
-        SectionCard(title = "Permissions (${result.permissionFindings.size})") {
+        SectionCard(title = "Permissions (${result.permissionFindings.size}) · touchez pour comprendre") {
             if (result.permissionFindings.isEmpty()) {
                 EmptyLine("Aucune permission sensible.")
             } else {
@@ -163,24 +169,40 @@ private fun SectionCard(title: String, content: @Composable () -> Unit) {
     }
 }
 
+/** Touchez une permission pour lire son explication (lexique de l'onglet Apprendre). */
 @Composable
 private fun PermissionLine(finding: PermissionFinding) {
-    val title = PermissionRegistry.risks["android.permission.${finding.permission}"]?.title ?: finding.permission
-    Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Column(modifier = Modifier.weight(1f)) {
-            Text(title, fontWeight = FontWeight.Bold)
-            Text(
-                text = "${finding.permission} · ${if (finding.granted) "accordée" else "déclarée seulement"}",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
-            Text(
-                text = finding.context.label,
-                style = MaterialTheme.typography.labelMedium,
-                color = finding.context.tint,
-            )
+    val info = PermissionGlossary.find(finding.permission)
+    var expanded by rememberSaveable(finding.permission) { mutableStateOf(false) }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = info != null) { expanded = !expanded }
+            .padding(vertical = 8.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = (info?.title ?: finding.permission) + if (info == null) "" else if (expanded) "  ▲" else "  ▼",
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = "${finding.permission} · ${if (finding.granted) "accordée" else "déclarée seulement"}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
+                    text = finding.context.label,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = finding.context.tint,
+                )
+            }
+            PenaltyText(finding.penalty)
         }
-        PenaltyText(finding.penalty)
+        if (expanded && info != null) {
+            Spacer(Modifier.height(8.dp))
+            PermissionExplanation(info)
+        }
     }
 }
 

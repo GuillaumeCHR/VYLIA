@@ -25,6 +25,15 @@ class SettingsRepository(context: Context) {
     private val _advancedMode = MutableStateFlow(prefs.getBoolean(KEY_ADVANCED_MODE, false))
     val advancedMode: StateFlow<Boolean> = _advancedMode.asStateFlow()
 
+    /** Fin du dernier scan complet (traqueurs compris) ; `null` avant le tout premier. */
+    private val _lastScanTimestamp = MutableStateFlow(prefs.getLong(KEY_LAST_SCAN, 0L).takeIf { it > 0 })
+    val lastScanTimestamp: StateFlow<Long?> = _lastScanTimestamp.asStateFlow()
+
+    fun setLastScan(timestamp: Long) {
+        prefs.edit().putLong(KEY_LAST_SCAN, timestamp).apply()
+        _lastScanTimestamp.value = timestamp
+    }
+
     fun updateTimestamp(timestamp: Long) {
         prefs.edit().putLong(KEY_LAST_UPDATE, timestamp).apply()
         _lastUpdateTimestamp.value = timestamp
@@ -38,5 +47,6 @@ class SettingsRepository(context: Context) {
     companion object {
         private const val KEY_LAST_UPDATE = "last_exodus_update_timestamp"
         private const val KEY_ADVANCED_MODE = "advanced_mode"
+        private const val KEY_LAST_SCAN = "last_scan_timestamp"
     }
 }

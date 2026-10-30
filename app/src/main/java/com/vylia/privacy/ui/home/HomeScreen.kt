@@ -58,7 +58,17 @@ import com.vylia.privacy.domain.scoring.PermissionRegistry
 import com.vylia.privacy.domain.scoring.Confidence
 import com.vylia.privacy.domain.scoring.ScoreResult
 import com.vylia.privacy.ui.components.TransparencyBadge
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.TextButton
+import com.vylia.privacy.domain.learn.GradeBands
+import com.vylia.privacy.domain.scoring.Rules
 import com.vylia.privacy.ui.home.components.AppCard
+import com.vylia.privacy.ui.home.components.CategoryExpectationsCard
+import com.vylia.privacy.ui.home.components.CategoryFilter
+import com.vylia.privacy.ui.home.components.GradeFilterRow
+import com.vylia.privacy.ui.home.components.GradeFilterSummary
+import com.vylia.privacy.ui.home.components.LastScanLine
 import com.vylia.privacy.ui.theme.VyliaTheme
 
 private val Tabs = listOf(AppFilter.USER, AppFilter.SYSTEM)
@@ -70,12 +80,20 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val loadedRules by viewModel.rules.collectAsStateWithLifecycle()
     var query by rememberSaveable { mutableStateOf("") }
+    var gradeFilter by rememberSaveable { mutableStateOf<String?>(null) }
+    var categoryFilter by rememberSaveable { mutableStateOf<String?>(null) }
     HomeContent(
         modifier = modifier,
         state = state,
+        rules = loadedRules.rules,
         query = query,
         onQueryChange = { query = it },
+        gradeFilter = gradeFilter,
+        onGradeFilter = { gradeFilter = it },
+        categoryFilter = categoryFilter,
+        onCategoryFilter = { categoryFilter = it },
         onFilterSelected = viewModel::selectFilter,
         onRefresh = viewModel::refresh,
         onAppClick = onAppClick,
@@ -88,8 +106,13 @@ fun HomeScreen(
 fun HomeContent(
     modifier: Modifier = Modifier,
     state: HomeUiState,
+    rules: Rules? = null,
     query: String = "",
     onQueryChange: (String) -> Unit = {},
+    gradeFilter: String? = null,
+    onGradeFilter: (String?) -> Unit = {},
+    categoryFilter: String? = null,
+    onCategoryFilter: (String?) -> Unit = {},
     onFilterSelected: (AppFilter) -> Unit,
     onRefresh: () -> Unit,
     onAppClick: (AuditedApp) -> Unit = {},
@@ -117,10 +140,45 @@ fun HomeContent(
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
 
+            LastScanLine(
+                lastScanAt = state.lastScanAt,
+                scanning = state.isLoading || state.isAnalyzingTrackers,
+                modifier = Modifier.padding(horizontal = 16.dp),
+            )
+            Spacer(Modifier.height(4.dp))
             TransparencyBadge(
                 text = stringResource(if (state.advancedMode) R.string.mode_badge_advanced else R.string.mode_badge_basic),
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
+
+            // Filtres croisés : chaque compteur tient compte des autres filtres actifs.
+            val gradeSuffix = rules?.scoring?.unanalyzedPolicy?.gradeSuffix ?: "?"
+            val bands = remember(rules) { rules?.let { GradeBands.from(it.scoring) }.orEmpty() }
+            val searched = remember(state.apps, query) { state.apps.filter { it.matches(query) } }
+            fun AuditedApp.letter() = result.grade.removeSuffix(gradeSuffix)
+            val inCategory = searched.filter { categoryFilter == null || it.result.categoryId == categoryFilter }
+            val inGrade = searched.filter { gradeFilter == null || it.letter() == gradeFilter }
+            val results = inCategory.filter { gradeFilter == null || it.letter() == gradeFilter }
+            if (rules != null) {
+                GradeFilterRow(
+                    bands = bands,
+                    scoreBase = rules.scoring.base,
+                    counts = inCategory.groupingBy { it.letter() }.eachCount(),
+                    selected = gradeFilter,
+                    onSelect = onGradeFilter,
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp),
+                )
+                val categoryOptions = inGrade.groupingBy { it.result.categoryId }.eachCount()
+                    .let { counts -> if (categoryFilter != null && categoryFilter !in counts) counts + (categoryFilter to 0) else counts }
+                    .map { (id, count) -> Triple(id, rules.categories[id]?.displayName ?: id, count) }
+                    .sortedBy { it.second }
+                CategoryFilter(
+                    options = categoryOptions,
+                    selected = categoryFilter,
+                    onSelect = onCategoryFilter,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            }
 
             // Mode Basique : apps utilisateur uniquement, pas d'onglet Système.
             if (state.advancedMode) {
@@ -144,7 +202,7 @@ fun HomeContent(
             }
 
             val bottomPadding = innerPadding.calculateBottomPadding()
-            val results = remember(state.apps, query) { state.apps.filter { it.matches(query) } }
+            val filtered = gradeFilter != null || categoryFilter != null
             when {
                 state.isLoading -> CenteredMessage(stringResource(R.string.home_scanning), showProgress = true)
                 state.errorMessage != null -> CenteredMessage(
@@ -153,8 +211,27 @@ fun HomeContent(
                     onAction = onRefresh,
                 )
                 state.apps.isEmpty() -> CenteredMessage(stringResource(R.string.home_empty))
-                results.isEmpty() -> CenteredMessage(stringResource(R.string.home_search_empty, query.trim()))
-                else -> AppList(results, onAppClick, PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = bottomPadding + 16.dp))
+                searched.isEmpty() -> CenteredMessage(stringResource(R.string.home_search_empty, query.trim()))
+                else -> AppList(
+                    apps = results,
+                    onAppClick = onAppClick,
+                    contentPadding = PaddingValues(start = 16.dp, top = 8.dp, end = 16.dp, bottom = bottomPadding + 16.dp),
+                    header = {
+                        val category = categoryFilter?.let { rules?.categories?.get(it) }
+                        if (category != null) CategoryExpectationsCard(categoryFilter, category)
+                        bands.find { it.grade == gradeFilter }?.let { band ->
+                            GradeFilterSummary(band, rules?.scoring?.base ?: 100, results.size)
+                        }
+                    },
+                    emptyContent = if (filtered) {
+                        {
+                            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth().padding(24.dp)) {
+                                Text("Aucune application ne correspond à ces filtres.", textAlign = TextAlign.Center)
+                                TextButton(onClick = { onGradeFilter(null); onCategoryFilter(null) }) { Text("Réinitialiser les filtres") }
+                            }
+                        }
+                    } else null,
+                )
             }
         }
     }
@@ -195,11 +272,19 @@ private fun String.normalizedForSearch(): String =
 private val DiacriticalMarks = Regex("\\p{Mn}+")
 
 @Composable
-private fun AppList(apps: List<AuditedApp>, onAppClick: (AuditedApp) -> Unit, contentPadding: PaddingValues) {
+private fun AppList(
+    apps: List<AuditedApp>,
+    onAppClick: (AuditedApp) -> Unit,
+    contentPadding: PaddingValues,
+    header: @Composable () -> Unit = {},
+    emptyContent: (@Composable () -> Unit)? = null,
+) {
     LazyColumn(
         contentPadding = contentPadding,
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        item(key = "header") { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) { header() } }
+        if (apps.isEmpty() && emptyContent != null) item(key = "empty") { emptyContent() }
         items(apps, key = { it.app.packageName }) { AppCard(it, onClick = { onAppClick(it) }) }
     }
 }

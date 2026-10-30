@@ -22,5 +22,7 @@ data class HomeUiState(
     val systemAppCount: Int = 0,
     /** Analyse DEX des traqueurs encore en cours (les scores peuvent encore baisser). */
     val isAnalyzingTrackers: Boolean = false,
+    /** Fin du dernier scan complet, conservée entre deux lancements ; `null` avant le premier. */
+    val lastScanAt: Long? = null,
     val errorMessage: String? = null,
 )

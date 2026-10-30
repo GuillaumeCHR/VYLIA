@@ -58,7 +58,7 @@ class HomeViewModel(
      * le résultat en mémoire, sans relancer de requête au PackageManager.
      */
     val uiState: StateFlow<HomeUiState> =
-        combine(scanState, selectedFilter, settingsRepository.advancedMode, isAnalyzingTrackers, ::reduce)
+        combine(scanState, selectedFilter, settingsRepository.advancedMode, isAnalyzingTrackers, settingsRepository.lastScanTimestamp, ::reduce)
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())
 
     val rewards: StateFlow<RewardsState> = badgesManager.state
@@ -108,6 +108,7 @@ class HomeViewModel(
             val listedAt = SystemClock.elapsedRealtime()
             analyzeTrackers(userApps).collect(::replaceApp)
             isAnalyzingTrackers.value = false
+            settingsRepository.setLastScan(System.currentTimeMillis())
             val unanalyzed = currentApps().count { AppFilter.USER.matches(it.app) && it.trackerAnalysis !is TrackerAnalysis.Analyzed }
             Log.i(
                 TAG,
@@ -153,15 +154,16 @@ class HomeViewModel(
         scanState.value = ScanState.Success(apps)
     }
 
-    private fun reduce(scan: ScanState, selected: AppFilter, advanced: Boolean, analyzing: Boolean): HomeUiState {
+    private fun reduce(scan: ScanState, selected: AppFilter, advanced: Boolean, analyzing: Boolean, lastScanAt: Long?): HomeUiState {
         val filter = if (advanced) selected else AppFilter.USER
         return when (scan) {
-            ScanState.Loading -> HomeUiState(isLoading = true, advancedMode = advanced, selectedFilter = filter)
+            ScanState.Loading -> HomeUiState(isLoading = true, advancedMode = advanced, selectedFilter = filter, lastScanAt = lastScanAt)
             is ScanState.Failure -> HomeUiState(
                 isLoading = false,
                 advancedMode = advanced,
                 selectedFilter = filter,
                 errorMessage = scan.message,
+                lastScanAt = lastScanAt,
             )
             is ScanState.Success -> {
                 // Le tri par risque croissant est préservé par filter().
@@ -178,6 +180,7 @@ class HomeViewModel(
                     userAppCount = scan.apps.count { AppFilter.USER.matches(it.app) },
                     systemAppCount = scan.apps.count { AppFilter.SYSTEM.matches(it.app) },
                     isAnalyzingTrackers = analyzing,
+                    lastScanAt = lastScanAt,
                 )
             }
         }

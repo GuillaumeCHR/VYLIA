@@ -27,7 +27,11 @@ import com.vylia.privacy.domain.learn.PermissionTheme
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import com.vylia.privacy.domain.learn.GradeBand
+import com.vylia.privacy.domain.analysis.DeviceAnalysis
+import com.vylia.privacy.domain.analysis.TrackerUsage
 import com.vylia.privacy.domain.learn.GradeBands
+import com.vylia.privacy.domain.learn.TrackerCategoryInfo
+import com.vylia.privacy.domain.learn.TrackerGlossary
 import com.vylia.privacy.domain.learn.gradeRiskLabel
 import com.vylia.privacy.domain.scoring.Rules
 import com.vylia.privacy.domain.scoring.Scoring
@@ -50,6 +54,8 @@ fun ApprendreScreen(
 ) {
     val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
     val rules = loadedRules.rules
+    val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val detected = remember(homeState.scannedApps) { DeviceAnalysis.from(homeState.scannedApps).trackers }
     var query by rememberSaveable { mutableStateOf("") }
     val glossary = remember(query) { PermissionGlossary.entries.filter { it.matches(query) }.groupBy { it.theme } }
 
@@ -71,6 +77,25 @@ fun ApprendreScreen(
         item { PermissionScoring(rules) }
         item { TrackerScoring(rules) }
         item { CategoryResolution(rules) }
+
+        item {
+            Spacer(Modifier.height(8.dp))
+            Text("Lexique des traqueurs", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(
+                "Les grandes familles de traqueurs, ce qu'elles font de vos données et les plus répandues. " +
+                    "Un traqueur peut appartenir à plusieurs familles : c'est la plus grave qui compte dans le score.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+        items(TrackerGlossary.entries, key = { "tracker-${it.category}" }) { info ->
+            val weight = if (info.category == TrackerGlossary.UNCATEGORIZED) rules.trackerRules.defaultWeight
+            else rules.trackerRules.categoryWeights[info.category]
+            val onDevice = detected.filter { usage ->
+                usage.tracker.categories.ifEmpty { listOf(TrackerGlossary.UNCATEGORIZED) }.contains(info.category)
+            }
+            TrackerCategoryCard(info, weight, onDevice)
+        }
 
         item {
             Spacer(Modifier.height(8.dp))
@@ -209,9 +234,10 @@ private fun TrackerScoring(rules: Rules) {
                 "qui a plusieurs usages compte pour le plus grave."
         )
         trackerRules.categoryWeights.entries.sortedByDescending { it.value }.forEach { (category, weight) ->
-            WeightLine(trackerCategoryName(category), weight, trackerCategoryExplanation(category))
+            WeightLine(TrackerGlossary.displayName(category), weight, "")
         }
-        WeightLine("Sans catégorie connue", trackerRules.defaultWeight, "Traqueur dont l'usage n'est pas documenté.")
+        WeightLine("Sans catégorie connue", trackerRules.defaultWeight, "")
+        Paragraph("Ce que fait chaque catégorie, et des exemples, dans le lexique des traqueurs ci-dessous.")
         Paragraph("Les traqueurs ne peuvent pas faire perdre plus de ${rules.scoring.trackerCap} points au total.")
         Subtitle("Si l'analyse n'a pas pu se faire")
         Paragraph(
@@ -238,26 +264,6 @@ private fun CategoryResolution(rules: Rules) {
             "Une app « Non catégorisée » n'a aucun passe-droit : chaque permission sensible y est considérée comme inattendue."
         )
     }
-}
-
-private fun trackerCategoryName(category: String): String = when (category) {
-    "Advertisement" -> "Publicité"
-    "Profiling" -> "Profilage"
-    "Location" -> "Localisation"
-    "Identification" -> "Identification"
-    "Analytics" -> "Mesure d'audience"
-    "Crash reporting" -> "Rapports de plantage"
-    else -> category
-}
-
-private fun trackerCategoryExplanation(category: String): String = when (category) {
-    "Advertisement" -> "Affiche des publicités ciblées et suit vos réactions pour mieux vous cibler."
-    "Profiling" -> "Construit un profil de vos centres d'intérêt et comportements, souvent croisé ou revendu."
-    "Location" -> "Collecte votre position pour la publicité ou la revente de données."
-    "Identification" -> "Relie votre activité à un identifiant pour vous reconnaître d'une app ou d'un service à l'autre."
-    "Analytics" -> "Mesure votre usage de l'app (écrans vus, clics, durée) pour le compte de l'éditeur et du fournisseur."
-    "Crash reporting" -> "Envoie un rapport technique quand l'app plante. Peu intrusif, mais il décrit votre appareil."
-    else -> ""
 }
 
 @Composable
@@ -300,6 +306,63 @@ private fun gradeRiskDescription(band: GradeBand, scoring: Scoring): String {
     }
     return listOf(profile, constraint).filter { it.isNotEmpty() }.joinToString(" ")
 }
+
+// --- Lexique des traqueurs -------------------------------------------------------------------
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun TrackerCategoryCard(info: TrackerCategoryInfo, weight: Int?, onDevice: List<TrackerUsage>) {
+    var expanded by rememberSaveable(info.category) { mutableStateOf(false) }
+    VyliaCard(modifier = Modifier.fillMaxWidth().clickable { expanded = !expanded }) {
+        Column(modifier = Modifier.padding(14.dp)) {
+            Row {
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(info.name, fontWeight = FontWeight.Bold)
+                    Text(info.riskLevel, style = MaterialTheme.typography.labelMedium, color = riskLevelColor(weight))
+                }
+                Text(if (expanded) "▲" else "▼", color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Spacer(Modifier.height(6.dp))
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                if (weight != null) TransparencyBadge("−$weight pts par traqueur")
+                TransparencyBadge(
+                    if (onDevice.isEmpty()) "Aucun sur votre téléphone"
+                    else "${onDevice.size} détecté(s) chez vous"
+                )
+            }
+            if (expanded) {
+                Spacer(Modifier.height(8.dp))
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    LabeledText("Le risque pour votre vie privée", info.risk)
+                    if (info.examples.isNotEmpty()) {
+                        Text("Les plus répandus", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                            info.examples.forEach { TransparencyBadge(it) }
+                        }
+                    }
+                    if (onDevice.isNotEmpty()) {
+                        Text("Sur votre téléphone", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                        onDevice.take(5).forEach { usage ->
+                            Text("${usage.tracker.name} · ${usage.apps.size} app(s)", style = MaterialTheme.typography.bodyMedium)
+                        }
+                        if (onDevice.size > 5) {
+                            Text(
+                                "… et ${onDevice.size - 5} autre(s), voir l'onglet Analyse.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** Couleur du niveau de risque, sur l'échelle du score (poids 12 ≈ rouge, 2 ≈ vert). */
+@Composable
+private fun riskLevelColor(weight: Int?): Color =
+    if (weight == null) MaterialTheme.colorScheme.onSurfaceVariant else scoreGradientColor(100 - weight * 7)
 
 // --- 2. Lexique -------------------------------------------------------------------------------
 

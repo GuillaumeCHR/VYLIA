@@ -29,6 +29,7 @@ import com.vylia.privacy.domain.analysis.PermissionUsage
 import com.vylia.privacy.domain.analysis.PurposeAnomaly
 import com.vylia.privacy.domain.analysis.TrackerUsage
 import com.vylia.privacy.domain.analysis.WatchedPermission
+import com.vylia.privacy.domain.learn.TrackerGlossary
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.ScoreRating
@@ -263,7 +264,7 @@ private fun TrackersSection(analysis: DeviceAnalysis, onAppClick: (AuditedApp) -
         if (analysis.trackerCategories.isNotEmpty()) {
             val max = analysis.trackerCategories.first().second.coerceAtLeast(1)
             analysis.trackerCategories.forEach { (category, count) ->
-                CategoryBar(category.frenchCategory, count, count / max.toFloat())
+                CategoryBar(TrackerGlossary.displayName(category), count, count / max.toFloat())
             }
             Spacer(Modifier.height(12.dp))
         }
@@ -304,7 +305,7 @@ private fun TrackerLine(usage: TrackerUsage, expanded: Boolean, onToggle: () -> 
             Column(modifier = Modifier.weight(1f)) {
                 Text(usage.tracker.name, fontWeight = FontWeight.Bold)
                 Text(
-                    usage.tracker.categories.ifEmpty { listOf(DeviceAnalysis.UNCATEGORIZED) }.joinToString { it.frenchCategory },
+                    usage.tracker.categories.ifEmpty { listOf(DeviceAnalysis.UNCATEGORIZED) }.joinToString { TrackerGlossary.displayName(it) },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
@@ -318,17 +319,6 @@ private fun TrackerLine(usage: TrackerUsage, expanded: Boolean, onToggle: () -> 
         }
     }
 }
-
-private val String.frenchCategory: String
-    get() = when (this) {
-        "Advertisement" -> "Publicité"
-        "Analytics" -> "Mesure d'audience"
-        "Profiling" -> "Profilage"
-        "Location" -> "Localisation"
-        "Identification" -> "Identification"
-        "Crash reporting" -> "Rapports de plantage"
-        else -> this
-    }
 
 // --- Briques communes -------------------------------------------------------------------------
 

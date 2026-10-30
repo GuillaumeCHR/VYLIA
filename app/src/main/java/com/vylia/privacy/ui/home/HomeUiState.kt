@@ -11,6 +11,8 @@ data class HomeUiState(
     val selectedFilter: AppFilter = AppFilter.USER,
     /** Apps de l'onglet sélectionné, de la plus à risque à la moins à risque. */
     val apps: List<AuditedApp> = emptyList(),
+    /** Toutes les apps du scan (les deux onglets en mode Avancé) : écran Analyse et détail d'une app. */
+    val scannedApps: List<AuditedApp> = emptyList(),
     /** Score moyen de l'onglet sélectionné ; `null` tant qu'il n'y a aucune app. */
     val averageScore: PrivacyScore? = null,
     /** Score moyen par type d'apps, quel que soit l'onglet (écran Analyse). */

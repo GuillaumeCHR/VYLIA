@@ -168,6 +168,7 @@ class HomeViewModel(
                     advancedMode = advanced,
                     selectedFilter = filter,
                     apps = visible,
+                    scannedApps = scan.apps,
                     averageScore = PrivacyScore.average(visible.map { it.score }),
                     userAverageScore = PrivacyScore.average(scan.apps.filter { AppFilter.USER.matches(it.app) }.map { it.score }),
                     systemAverageScore = PrivacyScore.average(scan.apps.filter { AppFilter.SYSTEM.matches(it.app) }.map { it.score }),

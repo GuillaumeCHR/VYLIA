@@ -43,7 +43,7 @@ fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.
     var detailPackage by rememberSaveable { mutableStateOf<String?>(null) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     // Toujours la version la plus récente de l'app (le score évolue pendant l'analyse des traqueurs).
-    val detailApp = detailPackage?.let { pkg -> homeState.apps.find { it.app.packageName == pkg } }
+    val detailApp = detailPackage?.let { pkg -> homeState.scannedApps.find { it.app.packageName == pkg } }
 
     Scaffold(
         bottomBar = {
@@ -74,7 +74,7 @@ fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.
         }
         when (currentTab) {
             AppTab.SCAN -> HomeScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
-            AppTab.ANALYZE -> AnalyseScreen(modifier)
+            AppTab.ANALYZE -> AnalyseScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
             AppTab.AGIR -> AgirScreen(modifier)
             AppTab.LEARN -> ApprendreScreen(modifier)
             AppTab.SETTINGS -> SettingsScreen(modifier)

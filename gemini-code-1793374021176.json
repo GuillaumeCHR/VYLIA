@@ -1,0 +1,92 @@
+{
+  "version": "3.0",
+  "last_update": "2026-10-30",
+  "description": "Matrice de référence VIPACY avec sous-catégories sémantiques et gestion stricte des arrière-plans.",
+  
+  "global_red_flags": {
+    "background_location_forbidden_for": [
+      "TOOLS", "SHOPPING", "ENTERTAINMENT", "FINANCE", "EDUCATION", "NEWS_AND_MAGAZINES", "PHOTOGRAPHY", "MUSIC_AND_AUDIO"
+    ]
+  },
+
+  "sub_categories": {
+    "UTILITY_FLASHLIGHT": {
+      "parent_category": "TOOLS",
+      "package_keywords": ["flashlight", "torch", "lampe", "torche", "boussole", "compass"],
+      "description": "Lampes torches et boussoles simples",
+      "allowed_permissions": ["CAMERA", "FLASHLIGHT", "VIBRATE", "WAKE_LOCK"],
+      "tolerated_permissions": ["INTERNET"],
+      "forbidden_permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "WRITE_CONTACTS", "READ_SMS", "SEND_SMS", "RECORD_AUDIO", "READ_PHONE_STATE", "GET_ACCOUNTS"]
+    },
+    "UTILITY_QR_SCANNER": {
+      "parent_category": "TOOLS",
+      "package_keywords": ["qr", "barcode", "scanner", "reader", "flashcode"],
+      "description": "Scanners de codes-barres et QR codes",
+      "allowed_permissions": ["CAMERA", "INTERNET", "ACCESS_NETWORK_STATE", "VIBRATE"],
+      "tolerated_permissions": ["READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
+      "forbidden_permissions": ["ACCESS_FINE_LOCATION", "READ_CONTACTS", "READ_SMS", "SEND_SMS", "RECORD_AUDIO", "READ_PHONE_STATE"]
+    },
+    "UTILITY_CALCULATOR": {
+      "parent_category": "TOOLS",
+      "package_keywords": ["calculator", "calculatrice", "calc"],
+      "description": "Calculatrices",
+      "allowed_permissions": ["VIBRATE", "WAKE_LOCK"],
+      "tolerated_permissions": [],
+      "forbidden_permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "CAMERA", "RECORD_AUDIO", "READ_CONTACTS", "READ_SMS", "INTERNET"]
+    },
+    "FINANCE_BANKING": {
+      "parent_category": "FINANCE",
+      "package_keywords": ["bank", "banque", "wallet", "pay", "paypal", "revolut", "bourse"],
+      "description": "Applications bancaires et de paiement sécurisé",
+      "allowed_permissions": ["INTERNET", "ACCESS_NETWORK_STATE", "CAMERA", "USE_BIOMETRIC", "USE_FINGERPRINT", "VIBRATE", "WAKE_LOCK"],
+      "tolerated_permissions": ["ACCESS_FINE_LOCATION", "READ_CONTACTS", "RECEIVE_SMS"],
+      "forbidden_permissions": ["RECORD_AUDIO", "SEND_SMS", "READ_SMS", "CALL_PHONE", "READ_EXTERNAL_STORAGE", "ACCESS_BACKGROUND_LOCATION"]
+    }
+  },
+
+  "base_categories": {
+    "NAVIGATION": {
+      "display_name": "Navigation & Cartographie",
+      "allowed_permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "INTERNET", "ACCESS_NETWORK_STATE", "WAKE_LOCK", "VIBRATE", "BLUETOOTH"],
+      "tolerated_permissions": ["READ_EXTERNAL_STORAGE", "CAMERA"],
+      "forbidden_permissions": ["READ_CONTACTS", "READ_SMS", "SEND_SMS", "RECORD_AUDIO"]
+    },
+    "COMMUNICATION": {
+      "display_name": "Communication & Messagerie",
+      "allowed_permissions": ["INTERNET", "ACCESS_NETWORK_STATE", "RECORD_AUDIO", "CAMERA", "READ_CONTACTS", "WRITE_CONTACTS", "VIBRATE", "WAKE_LOCK", "RECEIVE_BOOT_COMPLETED"],
+      "tolerated_permissions": ["ACCESS_FINE_LOCATION", "READ_SMS", "SEND_SMS", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
+      "forbidden_permissions": ["PROCESS_OUTGOING_CALLS", "INSTALL_PACKAGES"]
+    },
+    "SOCIAL": {
+      "display_name": "Réseaux Sociaux",
+      "allowed_permissions": ["INTERNET", "ACCESS_NETWORK_STATE", "CAMERA", "RECORD_AUDIO", "READ_CONTACTS", "ACCESS_FINE_LOCATION", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE", "READ_MEDIA_IMAGES", "READ_MEDIA_VIDEO", "VIBRATE", "WAKE_LOCK"],
+      "tolerated_permissions": ["BLUETOOTH", "NFC"],
+      "forbidden_permissions": ["READ_SMS", "SEND_SMS", "INSTALL_PACKAGES"]
+    },
+    "SHOPPING": {
+      "display_name": "Shopping & E-Commerce",
+      "allowed_permissions": ["INTERNET", "ACCESS_NETWORK_STATE", "CAMERA", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE", "VIBRATE", "WAKE_LOCK"],
+      "tolerated_permissions": ["ACCESS_FINE_LOCATION", "READ_CONTACTS"],
+      "forbidden_permissions": ["READ_SMS", "SEND_SMS", "RECORD_AUDIO", "CALL_PHONE", "GET_ACCOUNTS", "ACCESS_BACKGROUND_LOCATION"]
+    },
+    "TOOLS": {
+      "display_name": "Outils & Utilitaires généraux",
+      "allowed_permissions": ["INTERNET", "ACCESS_NETWORK_STATE", "VIBRATE", "WAKE_LOCK", "READ_EXTERNAL_STORAGE", "WRITE_EXTERNAL_STORAGE"],
+      "tolerated_permissions": ["CAMERA", "FLASHLIGHT"],
+      "forbidden_permissions": ["ACCESS_FINE_LOCATION", "ACCESS_BACKGROUND_LOCATION", "READ_CONTACTS", "READ_SMS", "SEND_SMS", "RECORD_AUDIO", "CALL_PHONE"]
+    },
+    "WEATHER": {
+      "display_name": "Météo",
+      "allowed_permissions": ["INTERNET", "ACCESS_NETWORK_STATE", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION", "WAKE_LOCK"],
+      "tolerated_permissions": ["VIBRATE"],
+      "forbidden_permissions": ["READ_CONTACTS", "READ_SMS", "SEND_SMS", "RECORD_AUDIO", "CAMERA", "CALL_PHONE", "ACCESS_BACKGROUND_LOCATION"]
+    }
+  },
+
+  "penalty_weights": {
+    "allowed": 0,
+    "tolerated": 5,
+    "forbidden": 25,
+    "background_location_abuse": 20
+  }
+}

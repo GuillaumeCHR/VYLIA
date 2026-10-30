@@ -1,0 +1,17 @@
+Tu es un expert en développement Android natif (Kotlin + Jetpack Compose).
+Je souhaite créer une application appelée "Untrack", un audit de confidentialité et de permissions 100% local (type Yuka de la privacy).
+
+Génère la structure de base (Squelette) d'un projet Android comprenant :
+1. Une architecture propre (MVVM) en Jetpack Compose avec Material Design 3 (Material You).
+2. Un service Kotlin utilisant `PackageManager` pour récupérer la liste des applications installées par l'utilisateur (en excluant ou filtrant les paquets système).
+3. Pour chaque application installée, extrait :
+   - Le nom de l'application
+   - L'icône
+   - Le nom du package
+   - La liste des permissions déclarées (ex: Camera, Location, Contacts, Micro).
+4. Un écran principal basique affichant cette liste sous forme de LazyColumn avec une carte simple par application.
+
+Contraintes :
+- Code en Kotlin moderne et Jetpack Compose.
+- Zéro dépendance réseau inutile. Tout doit tourner en local.
+- Le code doit être clair, commenté et prêt à être exécuté sous Android Studio.

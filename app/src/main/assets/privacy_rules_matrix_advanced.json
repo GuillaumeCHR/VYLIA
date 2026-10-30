@@ -1,0 +1,118 @@
+{
+  "rules": [
+    {
+      "category": "GAME",
+      "allowed_permissions": [],
+      "disallowed_permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.READ_CONTACTS",
+        "android.permission.WRITE_CONTACTS",
+        "android.permission.READ_SMS",
+        "android.permission.SEND_SMS",
+        "android.permission.CALL_PHONE"
+      ],
+      "penalty": 20
+    },
+    {
+      "category": "PRODUCTIVITY",
+      "allowed_permissions": [
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+      ],
+      "disallowed_permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "penalty": 15
+    },
+    {
+      "category": "AUDIO",
+      "allowed_permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_MEDIA_AUDIO"
+      ],
+      "disallowed_permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.READ_CONTACTS",
+        "android.permission.CAMERA",
+        "android.permission.READ_SMS"
+      ],
+      "penalty": 15
+    },
+    {
+      "category": "VIDEO",
+      "allowed_permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_MEDIA_VIDEO"
+      ],
+      "disallowed_permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.READ_CONTACTS",
+        "android.permission.READ_SMS"
+      ],
+      "penalty": 15
+    },
+    {
+      "category": "IMAGE",
+      "allowed_permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "disallowed_permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.READ_CONTACTS",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_SMS"
+      ],
+      "penalty": 15
+    },
+    {
+      "category": "SOCIAL",
+      "allowed_permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_CONTACTS",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ],
+      "disallowed_permissions": [
+        "android.permission.BIND_ACCESSIBILITY_SERVICE"
+      ],
+      "penalty": 20
+    },
+    {
+      "category": "NEWS",
+      "allowed_permissions": [],
+      "disallowed_permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.READ_CONTACTS",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_SMS"
+      ],
+      "penalty": 20
+    },
+    {
+      "category": "MAPS",
+      "allowed_permissions": [
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
+      ],
+      "disallowed_permissions": [
+        "android.permission.READ_SMS",
+        "android.permission.READ_CONTACTS"
+      ],
+      "penalty": 15
+    }
+  ]
+}

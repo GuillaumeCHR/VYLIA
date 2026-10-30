@@ -1,0 +1,13 @@
+<!-- Bouclier stylisé barré : "Pryva". Zone utile centrée dans le safe-zone 66dp des icônes adaptatives. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M54,30L36,37v14c0,11.1 7.7,21.5 18,24 10.3,-2.5 18,-12.9 18,-24V37L54,30z" />
+    <path
+        android:fillColor="#FF1B5E3B"
+        android:pathData="M49.5,62.5l-8,-8 3,-3 5,5 13,-13 3,3z" />
+</vector>

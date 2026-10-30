@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Thème de fenêtre minimal : tout le style visuel est géré par Compose (PryvaTheme). -->
+    <style name="Theme.Vipacy" parent="android:Theme.Material.Light.NoActionBar" />
+</resources>

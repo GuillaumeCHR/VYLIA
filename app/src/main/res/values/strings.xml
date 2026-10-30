@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">VIPACY</string>
+
+    <string name="home_refresh">Relancer l\'analyse</string>
+    <string name="home_scanning">Analyse des applications…</string>
+    <string name="home_error">L\'analyse a échoué : %1$s</string>
+    <string name="home_retry">Réessayer</string>
+    <string name="home_empty">Aucune application dans cette catégorie.</string>
+
+    <string name="tab_user_apps">Applications Utilisateur (%1$d)</string>
+    <string name="tab_system_apps">Applications Système (%1$d)</string>
+
+    <string name="header_title">Score de confidentialité</string>
+    <string name="header_subtitle_user">Moyenne de vos %1$d applications</string>
+    <string name="header_subtitle_system">Moyenne des %1$d applications système</string>
+    <string name="score_out_of">/100</string>
+
+    <string name="risk_low">Faible risque</string>
+    <string name="risk_medium">Risque modéré</string>
+    <string name="risk_high">Risque élevé</string>
+
+    <string name="app_no_critical_permission">Aucune permission critique</string>
+    <string name="trackers_failed">Analyse des traqueurs impossible</string>
+    <plurals name="trackers_found">
+        <item quantity="one">%1$d traqueur détecté</item>
+        <item quantity="many">%1$d traqueurs détectés</item>
+        <item quantity="other">%1$d traqueurs détectés</item>
+    </plurals>
+    <string name="trackers_none">Aucun traqueur détecté</string>
+    <string name="permission_requested_only">%1$s (demandée)</string>
+
+</resources>

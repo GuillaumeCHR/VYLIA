@@ -29,6 +29,7 @@ import com.vylia.privacy.R
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.DetectedPermission
 import com.vylia.privacy.domain.model.TrackerAnalysis
+import com.vylia.privacy.ui.components.ScoreBadge
 
 private val IconSize = 44.dp
 

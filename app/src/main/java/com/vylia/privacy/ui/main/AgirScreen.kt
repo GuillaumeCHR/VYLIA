@@ -20,7 +20,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import com.vylia.privacy.ui.theme.Emerald
+import com.vylia.privacy.ui.theme.Slate300
+import com.vylia.privacy.ui.theme.Slate400
+import com.vylia.privacy.ui.theme.Slate900
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.ScoreBadge
 import androidx.compose.ui.platform.LocalContext
@@ -64,10 +68,7 @@ fun AgirScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         // Section 1: Sensibiliser
-        Card(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-        ) {
+        VyliaCard(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("Sensibiliser", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(4.dp))
@@ -87,9 +88,9 @@ fun AgirScreen(
         }
         
         // Section 2: Assainir
-        Card(
+        VyliaCard(
             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+            containerColor = MaterialTheme.colorScheme.errorContainer
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("⚠️ Assainir (Worst of Fame)", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
@@ -111,10 +112,7 @@ fun AgirScreen(
         }
         
         // Section 3: Valoriser
-        Card(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9)) // Light green
-        ) {
+        VyliaCard(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text("🏆 Valoriser (Hall of Fame)", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(4.dp))
@@ -131,7 +129,7 @@ fun AgirScreen(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
                             Text(app.app.label, modifier = Modifier.weight(1f))
-                            ScoreBadge(score = app.score.value, color = MaterialTheme.colorScheme.primary)
+                            ScoreBadge(app.score)
                         }
                     }
                 }
@@ -148,11 +146,11 @@ suspend fun generateAndSaveScoreBitmap(context: Context, score: Int): Uri? = wit
         val canvas = Canvas(bitmap)
         
         // Draw background
-        canvas.drawColor(android.graphics.Color.parseColor("#121212")) // Dark mode bg
+        canvas.drawColor(Slate900.toArgb())
         
         // Draw texts
         val paint = Paint().apply {
-            color = android.graphics.Color.WHITE
+            color = Slate300.toArgb()
             textSize = 80f
             textAlign = Paint.Align.CENTER
             isAntiAlias = true
@@ -162,15 +160,15 @@ suspend fun generateAndSaveScoreBitmap(context: Context, score: Int): Uri? = wit
         
         paint.textSize = 250f
         paint.color = when {
-            score >= 80 -> android.graphics.Color.parseColor("#4CAF50")
-            score >= 50 -> android.graphics.Color.parseColor("#FFC107")
-            else -> android.graphics.Color.parseColor("#F44336")
+            score >= 80 -> Emerald.toArgb()
+            score >= 50 -> android.graphics.Color.parseColor("#F59E0B")
+            else -> android.graphics.Color.parseColor("#EF4444")
         }
         
         canvas.drawText("$score/100", width / 2f, 1000f, paint)
         
         paint.textSize = 50f
-        paint.color = android.graphics.Color.LTGRAY
+        paint.color = Slate400.toArgb()
         canvas.drawText("Analyse 100% locale, sans serveur", width / 2f, 1800f, paint)
 
         // Save to cache

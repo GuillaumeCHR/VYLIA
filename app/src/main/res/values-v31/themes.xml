@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Android 12+ : le splash système reprend le fond unifié #0F172A, enchaîné ensuite par VyliaSplashScreen. -->
+    <style name="Theme.Vylia" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/vylia_slate_900</item>
+        <item name="android:windowSplashScreenBackground">@color/vylia_slate_900</item>
+        <item name="android:windowSplashScreenIconBackgroundColor">@color/vylia_slate_900</item>
+    </style>
+</resources>

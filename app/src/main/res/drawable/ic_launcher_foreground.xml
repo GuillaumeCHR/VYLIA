@@ -1,13 +1,26 @@
-<!-- Bouclier stylisé barré : "VYLIA". Zone utile centrée dans le safe-zone 66dp des icônes adaptatives. -->
+<!-- Chaîne brisée VYLIA : deux maillons séparés (émeraude / cyan) et éclats de rupture.
+     Même géométrie que VyliaLogo (Compose), centrée dans le safe-zone 66dp des icônes adaptatives. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <path
-        android:fillColor="#FFFFFFFF"
-        android:pathData="M54,30L36,37v14c0,11.1 7.7,21.5 18,24 10.3,-2.5 18,-12.9 18,-24V37L54,30z" />
-    <path
-        android:fillColor="#FF1B5E3B"
-        android:pathData="M49.5,62.5l-8,-8 3,-3 5,5 13,-13 3,3z" />
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:rotation="-45">
+        <path
+            android:pathData="M32,46H40A8,8 0,0 1,40 62H32A8,8 0,0 1,32 46Z"
+            android:strokeWidth="6"
+            android:strokeColor="#FF10B981" />
+        <path
+            android:pathData="M68,46H76A8,8 0,0 1,76 62H68A8,8 0,0 1,68 46Z"
+            android:strokeWidth="6"
+            android:strokeColor="#FF38BDF8" />
+        <path
+            android:pathData="M54,40V34M50,41L47,36M58,41L61,36M54,68V74M50,67L47,72M58,67L61,72"
+            android:strokeWidth="2.5"
+            android:strokeColor="#FFCBD5E1"
+            android:strokeLineCap="round" />
+    </group>
 </vector>

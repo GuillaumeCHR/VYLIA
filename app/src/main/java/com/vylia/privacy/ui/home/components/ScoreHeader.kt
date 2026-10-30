@@ -8,10 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateIntAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.StrokeCap
@@ -21,9 +25,11 @@ import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.PrivacyScore
+import com.vylia.privacy.ui.components.ScoreAnimationMillis
+import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.theme.color
 
-/** En-tête : jauge circulaire du score moyen de l'onglet sélectionné. */
+/** En-tête : jauge circulaire du score moyen de l'onglet sélectionné, animée à chaque nouveau calcul. */
 @Composable
 fun ScoreHeader(
     averageScore: PrivacyScore?,
@@ -31,7 +37,7 @@ fun ScoreHeader(
     filter: AppFilter,
     modifier: Modifier = Modifier,
 ) {
-    ElevatedCard(modifier = modifier.fillMaxWidth()) {
+    VyliaCard(modifier = modifier.fillMaxWidth()) {
         Row(
             modifier = Modifier.padding(20.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -69,17 +75,22 @@ private fun ScoreGauge(score: PrivacyScore?) {
         if (score == null) {
             CircularProgressIndicator(modifier = Modifier.size(88.dp), strokeWidth = 8.dp)
         } else {
+            val animation = tween<Float>(ScoreAnimationMillis)
+            val progress by animateFloatAsState(score.value / PrivacyScore.MAX.toFloat(), animation, label = "gaugeProgress")
+            val value by animateIntAsState(score.value, tween(ScoreAnimationMillis), label = "gaugeValue")
+            val accent by animateColorAsState(score.rating.color.accent, tween(ScoreAnimationMillis), label = "gaugeAccent")
+            val track by animateColorAsState(score.rating.color.container, tween(ScoreAnimationMillis), label = "gaugeTrack")
             CircularProgressIndicator(
-                progress = { score.value / PrivacyScore.MAX.toFloat() },
+                progress = { progress },
                 modifier = Modifier.size(88.dp),
-                color = score.rating.color.accent,
-                trackColor = score.rating.color.container,
+                color = accent,
+                trackColor = track,
                 strokeWidth = 8.dp,
                 strokeCap = StrokeCap.Round,
             )
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = score.value.toString(),
+                    text = value.toString(),
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold,
                 )

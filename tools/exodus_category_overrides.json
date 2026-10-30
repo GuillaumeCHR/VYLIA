@@ -1,6 +1,8 @@
 {
- "validated": false,
- "comment": "PROPOSITION à valider. Catégories ajoutées aux traqueurs sans catégorie dans l'API Exodus. Passer validated à true puis lancer tools/update_exodus_trackers.py. Les traqueurs listés dans 'uncategorized' gardent le poids par défaut des règles.",
+ "validated": true,
+ "last_reviewed": "2026-10-30",
+ "review_interval_days": 180,
+ "comment": "Catégories ajoutées aux traqueurs sans catégorie dans l'API Exodus (validées le 2026-10-30). À réviser tous les 6 mois et à chaque nouveau traqueur signalé par tools/update_exodus_trackers.py : corriger 'categories', déplacer si besoin vers 'uncategorized', puis mettre à jour 'last_reviewed'. Les traqueurs de 'uncategorized' gardent volontairement le poids par défaut des règles.",
  "categories": {
   "ADLIB": [
    "Advertisement"

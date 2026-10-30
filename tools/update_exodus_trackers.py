@@ -9,8 +9,10 @@ Licence : base et résultats de l'API sous Open Database License (ODbL 1.0),
 Seuls id, name, code_signature, categories et website sont conservés : l'app n'a besoin que
 de ça et le fichier passe d'environ 570 Ko à environ 50 Ko.
 
-Les catégories manquantes côté Exodus peuvent être complétées par
-tools/exodus_category_overrides.json, appliqué uniquement si "validated" vaut true.
+Les catégories manquantes côté Exodus sont complétées par tools/exodus_category_overrides.json,
+appliqué uniquement si "validated" vaut true. Ce mapping est à réviser régulièrement : le script
+signale une révision échue ("last_reviewed" + "review_interval_days"), les nouveaux traqueurs
+sans catégorie à classer, et les entrées devenues inutiles (Exodus les catégorise désormais).
 
 Usage : python3 tools/update_exodus_trackers.py [--source fichier.json]
 """
@@ -36,17 +38,34 @@ def load_source(path):
 
 
 def load_overrides():
+    """Renvoie (mapping validé, traqueurs volontairement neutres)."""
     if not OVERRIDES.exists():
-        return {}
+        return {}, set()
     data = json.loads(OVERRIDES.read_text(encoding="utf-8"))
     if not data.get("validated"):
         print(f"{OVERRIDES.name} non validé : catégories Exodus brutes conservées.")
-        return {}
+        return {}, set()
     mapping = data["categories"]
     unknown = {c for cats in mapping.values() for c in cats} - EXODUS_CATEGORIES
     if unknown:
         raise SystemExit(f"Catégories inconnues dans {OVERRIDES.name} : {sorted(unknown)}")
-    return mapping
+    reviewed = datetime.date.fromisoformat(data["last_reviewed"])
+    due = reviewed + datetime.timedelta(days=data.get("review_interval_days", 180))
+    if datetime.date.today() >= due:
+        print(f"⚠ Révision du mapping échue depuis le {due.isoformat()} (dernière : {reviewed.isoformat()}).")
+    else:
+        print(f"Mapping révisé le {reviewed.isoformat()}, prochaine révision le {due.isoformat()}.")
+    return mapping, set(data.get("uncategorized", []))
+
+
+def report_review_needs(trackers, mapping, neutral):
+    uncategorized = {t["name"] for t in trackers.values() if not t.get("categories")}
+    to_classify = sorted(uncategorized - set(mapping) - neutral)
+    obsolete = sorted(set(mapping) - uncategorized)
+    if to_classify:
+        print(f"⚠ {len(to_classify)} traqueur(s) sans catégorie à classer dans {OVERRIDES.name} : {to_classify}")
+    if obsolete:
+        print(f"ℹ {len(obsolete)} entrée(s) inutile(s), catégorisée(s) ou retirée(s) par Exodus : {obsolete}")
 
 
 def main():
@@ -55,7 +74,9 @@ def main():
     args = parser.parse_args()
 
     trackers = load_source(args.source)["trackers"]
-    overrides = load_overrides()
+    overrides, neutral = load_overrides()
+    if overrides:
+        report_review_needs(trackers, overrides, neutral)
     applied = 0
     slim = {}
     for key, tracker in sorted(trackers.items(), key=lambda item: int(item[0])):

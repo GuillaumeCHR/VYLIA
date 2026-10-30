@@ -2,7 +2,6 @@ package com.vylia.privacy.domain.scoring
 
 import com.vylia.privacy.domain.scoring.TestFixtures.trackers
 import org.junit.Assert.assertEquals
-import org.junit.Ignore
 import org.junit.Test
 
 /**
@@ -21,10 +20,8 @@ class PrivacyScorerTest {
         category: String = "CATEGORY_UNDEFINED",
     ) = AppScan(packageName, targetSdk, category, declaredPermissions = granted, grantedPermissions = granted, trackers = trackers)
 
-    // "Amazon Advertisement" n'a aucune catégorie dans Exodus : poids par défaut 5 au lieu de 12,
-    // d'où 57 de pénalité traqueurs et un score de 40. Réactivé une fois le mapping
-    // tools/exodus_category_overrides.json validé et appliqué au snapshot.
-    @Ignore("En attente de validation du mapping des catégories Exodus manquantes")
+    // "Amazon Advertisement" n'a pas de catégorie dans Exodus : c'est le mapping validé
+    // (tools/exodus_category_overrides.json) qui le classe en Advertisement (12) ; sans lui, 40 au lieu de 37.
     @Test
     fun `leboncoin vaut 37 (D)`() {
         val result = scorer.score(

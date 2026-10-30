@@ -20,5 +20,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Pryva"
+rootProject.name = "VYLIA"
 include(":app")

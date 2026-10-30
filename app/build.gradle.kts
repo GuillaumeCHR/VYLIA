@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace = "com.vipacy.app"
+    namespace = "com.vylia.privacy"
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.vipacy.app"
+        applicationId = "com.vylia.privacy"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1

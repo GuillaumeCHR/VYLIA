@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">VIPACY</string>
+    <string name="app_name">VYLIA</string>
+    <string name="app_tagline">The Privacy Scorer</string>
 
     <string name="home_refresh">Relancer l\'analyse</string>
     <string name="home_scanning">Analyse des applications…</string>

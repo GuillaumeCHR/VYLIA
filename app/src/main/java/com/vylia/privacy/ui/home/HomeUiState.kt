@@ -13,6 +13,9 @@ data class HomeUiState(
     val apps: List<AuditedApp> = emptyList(),
     /** Score moyen de l'onglet sélectionné ; `null` tant qu'il n'y a aucune app. */
     val averageScore: PrivacyScore? = null,
+    /** Score moyen par type d'apps, quel que soit l'onglet (écran Analyse). */
+    val userAverageScore: PrivacyScore? = null,
+    val systemAverageScore: PrivacyScore? = null,
     val userAppCount: Int = 0,
     val systemAppCount: Int = 0,
     /** Analyse DEX des traqueurs encore en cours (les scores peuvent encore baisser). */

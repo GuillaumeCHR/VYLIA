@@ -8,6 +8,9 @@
     <string name="home_error">L\'analyse a échoué : %1$s</string>
     <string name="home_retry">Réessayer</string>
     <string name="home_empty">Aucune application dans cette catégorie.</string>
+    <string name="home_search_hint">Rechercher une application</string>
+    <string name="home_search_clear">Effacer la recherche</string>
+    <string name="home_search_empty">Aucune application ne correspond à « %1$s ».</string>
 
     <string name="mode_badge_basic">Analyse 100 % locale · Mode Basique (apps utilisateur)</string>
     <string name="mode_badge_advanced">Analyse 100 % locale · Mode Avancé (toutes les apps)</string>

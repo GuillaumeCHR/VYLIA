@@ -23,7 +23,22 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import java.text.Normalizer
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -44,7 +59,6 @@ import com.vylia.privacy.domain.scoring.Confidence
 import com.vylia.privacy.domain.scoring.ScoreResult
 import com.vylia.privacy.ui.components.TransparencyBadge
 import com.vylia.privacy.ui.home.components.AppCard
-import com.vylia.privacy.ui.home.components.ScoreHeader
 import com.vylia.privacy.ui.theme.VyliaTheme
 
 private val Tabs = listOf(AppFilter.USER, AppFilter.SYSTEM)
@@ -56,9 +70,12 @@ fun HomeScreen(
     viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    var query by rememberSaveable { mutableStateOf("") }
     HomeContent(
         modifier = modifier,
         state = state,
+        query = query,
+        onQueryChange = { query = it },
         onFilterSelected = viewModel::selectFilter,
         onRefresh = viewModel::refresh,
         onAppClick = onAppClick,
@@ -71,6 +88,8 @@ fun HomeScreen(
 fun HomeContent(
     modifier: Modifier = Modifier,
     state: HomeUiState,
+    query: String = "",
+    onQueryChange: (String) -> Unit = {},
     onFilterSelected: (AppFilter) -> Unit,
     onRefresh: () -> Unit,
     onAppClick: (AuditedApp) -> Unit = {},
@@ -92,10 +111,9 @@ fun HomeContent(
         },
     ) { innerPadding ->
         Column(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-            ScoreHeader(
-                averageScore = state.averageScore,
-                appCount = state.apps.size,
-                filter = state.selectedFilter,
+            AppSearchBar(
+                query = query,
+                onQueryChange = onQueryChange,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
 
@@ -126,6 +144,7 @@ fun HomeContent(
             }
 
             val bottomPadding = innerPadding.calculateBottomPadding()
+            val results = remember(state.apps, query) { state.apps.filter { it.matches(query) } }
             when {
                 state.isLoading -> CenteredMessage(stringResource(R.string.home_scanning), showProgress = true)
                 state.errorMessage != null -> CenteredMessage(
@@ -134,11 +153,46 @@ fun HomeContent(
                     onAction = onRefresh,
                 )
                 state.apps.isEmpty() -> CenteredMessage(stringResource(R.string.home_empty))
-                else -> AppList(state.apps, onAppClick, PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = bottomPadding + 16.dp))
+                results.isEmpty() -> CenteredMessage(stringResource(R.string.home_search_empty, query.trim()))
+                else -> AppList(results, onAppClick, PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = bottomPadding + 16.dp))
             }
         }
     }
 }
+
+/** Recherche par nom ou par paquet, sans tenir compte de la casse ni des accents. */
+@Composable
+private fun AppSearchBar(query: String, onQueryChange: (String) -> Unit, modifier: Modifier = Modifier) {
+    val focusManager = LocalFocusManager.current
+    OutlinedTextField(
+        value = query,
+        onValueChange = onQueryChange,
+        modifier = modifier.fillMaxWidth(),
+        placeholder = { Text(stringResource(R.string.home_search_hint)) },
+        leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
+        trailingIcon = {
+            if (query.isNotEmpty()) {
+                IconButton(onClick = { onQueryChange("") }) {
+                    Icon(Icons.Default.Close, contentDescription = stringResource(R.string.home_search_clear))
+                }
+            }
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(16.dp),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+        keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
+    )
+}
+
+private fun AuditedApp.matches(query: String): Boolean {
+    val needle = query.trim().normalizedForSearch()
+    return needle.isEmpty() || needle in app.label.normalizedForSearch() || needle in app.packageName.lowercase()
+}
+
+private fun String.normalizedForSearch(): String =
+    Normalizer.normalize(this, Normalizer.Form.NFD).replace(DiacriticalMarks, "").lowercase()
+
+private val DiacriticalMarks = Regex("\\p{Mn}+")
 
 @Composable
 private fun AppList(apps: List<AuditedApp>, onAppClick: (AuditedApp) -> Unit, contentPadding: PaddingValues) {

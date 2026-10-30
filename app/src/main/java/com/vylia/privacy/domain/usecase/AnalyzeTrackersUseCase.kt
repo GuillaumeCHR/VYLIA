@@ -6,27 +6,38 @@ import com.vylia.privacy.domain.repository.TrackerAnalyzer
 import com.vylia.privacy.domain.scoring.PrivacyScorer
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 
 /**
  * Second passage, lent : analyse le DEX de chaque application et émet l'app re-notée
- * dès que son résultat est connu. N'émet rien si la base de signatures est vide.
+ * dès que son résultat est connu (ordre non garanti). N'émet rien si la base de signatures est vide.
+ *
+ * Au plus [maxParallelApks] APK sont ouverts à la fois, pour borner la mémoire et les E/S.
  */
 class AnalyzeTrackersUseCase(
     private val analyzer: TrackerAnalyzer,
+    private val maxParallelApks: Int = 3,
     private val scorer: () -> PrivacyScorer,
 ) {
-    operator fun invoke(apps: List<AuditedApp>): Flow<AuditedApp> = flow {
-        if (!analyzer.isAvailable()) return@flow
+    operator fun invoke(apps: List<AuditedApp>): Flow<AuditedApp> = channelFlow {
+        if (!analyzer.isAvailable()) return@channelFlow
+        val permits = Semaphore(maxParallelApks)
         for (audited in apps) {
-            val analysis = try {
-                TrackerAnalysis.Analyzed(analyzer.findTrackers(audited.app))
-            } catch (e: CancellationException) {
-                throw e
-            } catch (_: Exception) {
-                TrackerAnalysis.Failed
+            launch {
+                permits.withPermit {
+                    val analysis = try {
+                        TrackerAnalysis.Analyzed(analyzer.findTrackers(audited.app))
+                    } catch (e: CancellationException) {
+                        throw e
+                    } catch (_: Exception) {
+                        TrackerAnalysis.Failed
+                    }
+                    send(scorer().scoreApp(audited.app, analysis))
+                }
             }
-            emit(scorer().scoreApp(audited.app, analysis))
         }
     }
 }

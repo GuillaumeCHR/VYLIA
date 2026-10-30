@@ -17,6 +17,22 @@ class DexClassNameReaderTest {
         )
     }
 
+    @Test
+    fun `lit un vrai DEX produit par d8`() {
+        val dex = javaClass.classLoader!!.getResourceAsStream("fixtures/sample.dex")!!.use { it.readBytes() }
+        assertEquals(
+            setOf("app.example.MainActivity", "com.adobe.mobile.Analytics", "com.adobe.mobile.Analytics\$Inner", "com.facebook.ads.AdView"),
+            DexClassNameReader.readClassNames(dex).toSet(),
+        )
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `rejette un DEX dont les sections sortent du fichier`() {
+        val dex = buildDex(listOf("Lcom/foo/Bar;"))
+        ByteBuffer.wrap(dex).order(ByteOrder.LITTLE_ENDIAN).putInt(0x60, 1_000_000) // class_defs_size
+        DexClassNameReader.readClassNames(dex)
+    }
+
     @Test(expected = IllegalArgumentException::class)
     fun `rejette un fichier qui n est pas un DEX`() {
         DexClassNameReader.readClassNames(ByteArray(0x70))

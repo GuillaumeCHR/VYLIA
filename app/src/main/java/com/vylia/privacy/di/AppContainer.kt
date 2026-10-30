@@ -8,10 +8,12 @@ import com.vylia.privacy.data.rewards.PrefsRewardsStore
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
 import com.vylia.privacy.data.trackers.DexTrackerAnalyzer
+import com.vylia.privacy.data.trackers.TrackerScanCache
 import com.vylia.privacy.data.trackers.TrackerUpdater
 import com.vylia.privacy.domain.rewards.BadgesManager
 import com.vylia.privacy.domain.usecase.AnalyzeTrackersUseCase
 import com.vylia.privacy.domain.usecase.AuditAppsUseCase
+import java.io.File
 
 /** Injection de dépendances manuelle : suffisante pour la V1, sans framework supplémentaire. */
 class AppContainer(context: Context) {
@@ -25,8 +27,12 @@ class AppContainer(context: Context) {
     private val appScanner = AppScanner(context)
 
     val trackerSignatureRepository = AssetTrackerSignatureRepository(context)
-    private val trackerAnalyzer = DexTrackerAnalyzer(trackerSignatureRepository)
+    private val trackerAnalyzer = DexTrackerAnalyzer(
+        trackerSignatureRepository,
+        TrackerScanCache(File(context.filesDir, "tracker_scan_cache.json")),
+        tempDir = context.cacheDir,
+    )
 
     val auditAppsUseCase = AuditAppsUseCase(appScanner, scorer)
-    val analyzeTrackersUseCase = AnalyzeTrackersUseCase(trackerAnalyzer, scorer)
+    val analyzeTrackersUseCase = AnalyzeTrackersUseCase(trackerAnalyzer, scorer = scorer)
 }

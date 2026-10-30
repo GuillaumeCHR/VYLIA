@@ -233,11 +233,21 @@ fun SettingsScreen(
         Text(text = "Crédits & Partenaires", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Un grand merci à Exodus Privacy pour la mise à disposition de leur base de signatures de traqueurs sous licence ODbL.",
+            text = "Signatures de traqueurs : Exodus Privacy. Base de données et résultats de l'API publiés sous " +
+                "Open Database License (ODbL 1.0), contenus sous Database Contents License (DbCL 1.0). " +
+                "VYLIA embarque un extrait de cette base (nom, signature de code, catégories) : l'analyse " +
+                "des applications se fait entièrement sur l'appareil.",
             style = MaterialTheme.typography.bodyMedium
         )
+        Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "https://exodus-privacy.eu.org/",
+            text = "Limite : la détection repose sur les noms de classes connus. Un SDK obfusqué ou renommé " +
+                "peut passer inaperçu (faux négatif) ; l'absence de traqueur détecté n'est pas une garantie.",
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        Text(
+            text = "https://exodus-privacy.eu.org/ · https://opendatacommons.org/licenses/odbl/1-0/",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.primary
         )

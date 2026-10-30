@@ -10,7 +10,7 @@ object TestFixtures {
 
     /** Catégories Exodus par nom de traqueur, depuis le snapshot embarqué. */
     val exodusCategories: Map<String, Set<String>> by lazy {
-        ExodusTrackerParser().parse(File("src/main/assets/trackers.json").readText())
+        ExodusTrackerParser().parse(File("src/main/assets/exodus_trackers.json").readText())
             .associate { it.tracker.name to it.tracker.categories.toSet() }
     }
 

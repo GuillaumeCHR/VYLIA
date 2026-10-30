@@ -1,0 +1,340 @@
+{
+ "validated": false,
+ "comment": "PROPOSITION à valider. Catégories ajoutées aux traqueurs sans catégorie dans l'API Exodus. Passer validated à true puis lancer tools/update_exodus_trackers.py. Les traqueurs listés dans 'uncategorized' gardent le poids par défaut des règles.",
+ "categories": {
+  "ADLIB": [
+   "Advertisement"
+  ],
+  "AMoAd": [
+   "Advertisement"
+  ],
+  "AdFit (Daum)": [
+   "Advertisement"
+  ],
+  "Add Apt Tr": [
+   "Advertisement"
+  ],
+  "Adform": [
+   "Advertisement"
+  ],
+  "Adincube": [
+   "Advertisement"
+  ],
+  "Adobe Experience Cloud": [
+   "Profiling"
+  ],
+  "Adot": [
+   "Advertisement"
+  ],
+  "AdsWizz": [
+   "Advertisement"
+  ],
+  "AltBeacon": [
+   "Location"
+  ],
+  "Amazon Advertisement": [
+   "Advertisement"
+  ],
+  "Amazon Mobile Associates": [
+   "Advertisement"
+  ],
+  "Amobee": [
+   "Advertisement"
+  ],
+  "AppBrain": [
+   "Advertisement"
+  ],
+  "AppMetrica": [
+   "Analytics"
+  ],
+  "AppMonet": [
+   "Advertisement"
+  ],
+  "AppNexus": [
+   "Advertisement"
+  ],
+  "Appnext": [
+   "Advertisement"
+  ],
+  "Appodeal": [
+   "Advertisement"
+  ],
+  "Apteligent by VMWare (formerly Crittercism)": [
+   "Crash reporting"
+  ],
+  "Auditude": [
+   "Advertisement"
+  ],
+  "Axonix": [
+   "Advertisement"
+  ],
+  "Baidu APPX": [
+   "Advertisement"
+  ],
+  "Baidu Location": [
+   "Location"
+  ],
+  "Baidu Map": [
+   "Location"
+  ],
+  "Baidu Maps": [
+   "Location"
+  ],
+  "Baidu Mobile Ads": [
+   "Advertisement"
+  ],
+  "Baidu Navigation": [
+   "Location"
+  ],
+  "Bitly": [
+   "Analytics"
+  ],
+  "Brightcove": [
+   "Analytics"
+  ],
+  "Bugly": [
+   "Crash reporting"
+  ],
+  "ChartBoost": [
+   "Advertisement"
+  ],
+  "Cheetah Ads": [
+   "Advertisement"
+  ],
+  "Cloudmobi": [
+   "Advertisement"
+  ],
+  "Conversant": [
+   "Advertisement"
+  ],
+  "Conviva": [
+   "Analytics"
+  ],
+  "Criteo": [
+   "Advertisement"
+  ],
+  "CrowdTangle": [
+   "Analytics"
+  ],
+  "Display": [
+   "Advertisement"
+  ],
+  "Duapps": [
+   "Advertisement"
+  ],
+  "Emarsys Predict": [
+   "Profiling"
+  ],
+  "Enhance": [
+   "Advertisement"
+  ],
+  "Facebook Notifications": [
+   "Analytics"
+  ],
+  "Facebook Places": [
+   "Location"
+  ],
+  "Facebook Share": [
+   "Analytics"
+  ],
+  "Factual": [
+   "Location"
+  ],
+  "Fiksu": [
+   "Advertisement"
+  ],
+  "FollowAnalytics": [
+   "Analytics"
+  ],
+  "Fyber SponsorPay": [
+   "Advertisement"
+  ],
+  "Gemius HeatMap": [
+   "Analytics"
+  ],
+  "Gimbal": [
+   "Location"
+  ],
+  "Glispa Connect (Formerly Avocarrot)": [
+   "Advertisement"
+  ],
+  "Google Ads": [
+   "Advertisement"
+  ],
+  "Google DoubleClick": [
+   "Advertisement"
+  ],
+  "Heyzap (bought by Fyber)": [
+   "Advertisement"
+  ],
+  "INFOnline": [
+   "Analytics"
+  ],
+  "In Loco": [
+   "Location"
+  ],
+  "InMarket": [
+   "Location"
+  ],
+  "Inmobi": [
+   "Advertisement"
+  ],
+  "Inrix": [
+   "Location"
+  ],
+  "Integral Ad Science": [
+   "Advertisement"
+  ],
+  "Ligatus": [
+   "Advertisement"
+  ],
+  "Lotame": [
+   "Profiling"
+  ],
+  "MAdvertise": [
+   "Advertisement"
+  ],
+  "Mail.ru": [
+   "Advertisement"
+  ],
+  "Mapbox": [
+   "Location"
+  ],
+  "Millennial Media": [
+   "Advertisement"
+  ],
+  "Mozilla Telemetry": [
+   "Analytics"
+  ],
+  "NativeX": [
+   "Advertisement"
+  ],
+  "Nexage": [
+   "Advertisement"
+  ],
+  "Ogury Presage": [
+   "Advertisement"
+  ],
+  "OneSignal": [
+   "Analytics"
+  ],
+  "OpenBack": [
+   "Analytics"
+  ],
+  "OtherLevels": [
+   "Analytics"
+  ],
+  "OutBrain": [
+   "Advertisement"
+  ],
+  "Persona.ly": [
+   "Advertisement"
+  ],
+  "Placed": [
+   "Location"
+  ],
+  "PushSpring": [
+   "Profiling"
+  ],
+  "Pushwoosh": [
+   "Analytics"
+  ],
+  "Qualtrics": [
+   "Analytics"
+  ],
+  "Radar": [
+   "Location"
+  ],
+  "Salesforce Marketing Cloud": [
+   "Profiling"
+  ],
+  "Schibsted": [
+   "Profiling"
+  ],
+  "Sensoro": [
+   "Location"
+  ],
+  "Sentiance": [
+   "Location"
+  ],
+  "ShallWeAD": [
+   "Advertisement"
+  ],
+  "Smaato": [
+   "Advertisement"
+  ],
+  "Smart": [
+   "Advertisement"
+  ],
+  "Soomla": [
+   "Advertisement"
+  ],
+  "Square Metrics": [
+   "Location"
+  ],
+  "Supersonic Ads": [
+   "Advertisement"
+  ],
+  "Swirl": [
+   "Location"
+  ],
+  "Taboola": [
+   "Advertisement"
+  ],
+  "Tapjoy": [
+   "Advertisement"
+  ],
+  "Tencent Map LBS": [
+   "Location"
+  ],
+  "Tencent MobWin": [
+   "Advertisement"
+  ],
+  "Tutela": [
+   "Location"
+  ],
+  "Tutucloud": [
+   "Advertisement"
+  ],
+  "Twine Data": [
+   "Location"
+  ],
+  "Umeng Analytics": [
+   "Analytics"
+  ],
+  "Urbanairship": [
+   "Analytics"
+  ],
+  "WeChat Location": [
+   "Location"
+  ],
+  "Widespace": [
+   "Advertisement"
+  ],
+  "Xiti": [
+   "Analytics"
+  ],
+  "YouAppi": [
+   "Advertisement"
+  ],
+  "flymob": [
+   "Advertisement"
+  ],
+  "maio by i-mobile": [
+   "Advertisement"
+  ],
+  "myTracker": [
+   "Analytics"
+  ]
+ },
+ "uncategorized": [
+  "HelpShift",
+  "JW Player",
+  "Locuslabs",
+  "Pusher",
+  "ScoreLoop",
+  "TeleQuid",
+  "Tencent Weiyun",
+  "Umeng Feedback"
+ ]
+}

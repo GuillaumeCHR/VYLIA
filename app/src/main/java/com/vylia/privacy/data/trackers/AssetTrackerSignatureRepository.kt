@@ -10,7 +10,10 @@ import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
 import java.io.File
 
-/** Charge la base Exodus en privilégiant la version téléchargée, puis la version assets/. */
+/**
+ * Charge la base Exodus en privilégiant la version téléchargée, puis le snapshot `assets/` ;
+ * signatures et automate de recherche sont construits une seule fois.
+ */
 class AssetTrackerSignatureRepository(
     private val context: Context,
     private val parser: ExodusTrackerParser = ExodusTrackerParser(),
@@ -18,10 +21,16 @@ class AssetTrackerSignatureRepository(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : TrackerSignatureRepository {
 
-    private val mutex = Mutex()
-    private var cached: List<TrackerSignature>? = null
+    private class Loaded(val signatures: List<TrackerSignature>, val matcher: TrackerMatcher)
 
-    override suspend fun getSignatures(): List<TrackerSignature> = mutex.withLock {
+    private val mutex = Mutex()
+    private var cached: Loaded? = null
+
+    override suspend fun getSignatures(): List<TrackerSignature> = load().signatures
+
+    override suspend fun getMatcher(): TrackerMatcher = load().matcher
+
+    private suspend fun load(): Loaded = mutex.withLock {
         cached ?: withContext(ioDispatcher) {
             val downloadedFile = File(context.filesDir, TrackerUpdater.DOWNLOADED_FILE_NAME)
             val jsonContent = if (downloadedFile.exists()) {
@@ -29,7 +38,8 @@ class AssetTrackerSignatureRepository(
             } else {
                 context.assets.open(fileName).bufferedReader().use { it.readText() }
             }
-            parser.parse(jsonContent)
+            val signatures = parser.parse(jsonContent)
+            Loaded(signatures, TrackerMatcher(signatures))
         }.also { cached = it }
     }
 
@@ -38,6 +48,7 @@ class AssetTrackerSignatureRepository(
     }
 
     companion object {
-        const val EXODUS_TRACKERS_ASSET = "trackers.json"
+        /** Snapshot allégé, rafraîchi par tools/update_exodus_trackers.py (données Exodus Privacy, ODbL). */
+        const val EXODUS_TRACKERS_ASSET = "exodus_trackers.json"
     }
 }

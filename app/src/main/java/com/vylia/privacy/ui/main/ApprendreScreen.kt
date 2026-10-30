@@ -24,7 +24,15 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vylia.privacy.domain.learn.PermissionGlossary
 import com.vylia.privacy.domain.learn.PermissionInfo
 import com.vylia.privacy.domain.learn.PermissionTheme
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
+import com.vylia.privacy.domain.learn.GradeBand
+import com.vylia.privacy.domain.learn.GradeBands
+import com.vylia.privacy.domain.learn.gradeRiskLabel
 import com.vylia.privacy.domain.scoring.Rules
+import com.vylia.privacy.domain.scoring.Scoring
+import com.vylia.privacy.ui.components.GradeScale
+import com.vylia.privacy.ui.components.scoreGradientColor
 import com.vylia.privacy.ui.components.TransparencyBadge
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.home.HomeViewModel
@@ -115,15 +123,18 @@ private fun ScoreOverview(rules: Rules) {
         )
         Formula("Score = ${scoring.base} − permissions (max ${scoring.permissionCap}) − traqueurs (max ${scoring.trackerCap})")
         Paragraph(
+            "La pénalité des permissions n'est pas la même pour toutes les apps : elle est pondérée par l'usage " +
+                "attendu pour la catégorie de l'app. Le GPS ne coûte rien à une app de navigation, qui en a besoin, " +
+                "mais coûte cher à un jeu, qui n'en a aucune raison (détails en 1 et 3 ci-dessous)."
+        )
+        Paragraph(
             "Les plafonds évitent qu'un seul aspect écrase tout : une app ne perd jamais plus de " +
                 "${scoring.permissionCap} points pour ses permissions ni plus de ${scoring.trackerCap} pour ses traqueurs."
         )
-        Subtitle("La note")
-        val grades = scoring.grades.sortedByDescending { it.min }
-        grades.forEachIndexed { index, grade ->
-            val upper = if (index == 0) scoring.base else grades[index - 1].min - 1
-            BulletLine("${grade.grade} : de ${grade.min} à $upper")
-        }
+        Subtitle("La note et le risque associé")
+        val bands = GradeBands.from(scoring)
+        GradeScale(bands, base = scoring.base, modifier = Modifier.padding(vertical = 4.dp))
+        bands.forEach { band -> GradeRiskLine(band, scoring) }
         Paragraph(
             "Un « ${scoring.unanalyzedPolicy.gradeSuffix} » après la note (ex. B${scoring.unanalyzedPolicy.gradeSuffix}) " +
                 "signale un score provisoire : les traqueurs n'ont pas encore pu être analysés."
@@ -247,6 +258,47 @@ private fun trackerCategoryExplanation(category: String): String = when (categor
     "Analytics" -> "Mesure votre usage de l'app (écrans vus, clics, durée) pour le compte de l'éditeur et du fournisseur."
     "Crash reporting" -> "Envoie un rapport technique quand l'app plante. Peu intrusif, mais il décrit votre appareil."
     else -> ""
+}
+
+@Composable
+private fun GradeRiskLine(band: GradeBand, scoring: Scoring) {
+    val color = scoreGradientColor((band.min + band.max) / 2, scoring.base)
+    Row(modifier = Modifier.padding(vertical = 4.dp)) {
+        Surface(color = color, shape = RoundedCornerShape(8.dp), modifier = Modifier.size(36.dp)) {
+            Box(contentAlignment = Alignment.Center) {
+                Text(band.grade, fontWeight = FontWeight.Bold, color = Color.White, style = MaterialTheme.typography.titleMedium)
+            }
+        }
+        Spacer(Modifier.width(12.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Text("${gradeRiskLabel(band.grade)} · ${band.min} à ${band.max}", fontWeight = FontWeight.Bold, color = color)
+            Text(gradeRiskDescription(band, scoring), style = MaterialTheme.typography.bodySmall)
+        }
+    }
+}
+
+/** Description du risque, complétée par ce que la formule impose réellement pour tomber dans la tranche. */
+private fun gradeRiskDescription(band: GradeBand, scoring: Scoring): String {
+    val profile = when (band.grade) {
+        "A" -> "Peu ou pas de permissions sensibles, et elles servent la fonction de l'app ; aucun traqueur ou presque."
+        "B" -> "Quelques permissions tolérées ou un petit nombre de traqueurs, souvent de mesure d'audience ou de rapports de plantage."
+        "C" -> "Des permissions sans rapport avec la fonction de l'app, ou plusieurs traqueurs dont des publicitaires. À surveiller."
+        "D" -> "Typiquement de nombreux traqueurs publicitaires ou de profilage, souvent avec des permissions intrusives. Cherchez une alternative."
+        "E" -> "Collecte massive de données. À remplacer si possible."
+        else -> ""
+    }
+    val permissions = band.permissionPenaltyAbove
+    val trackers = band.trackerPenaltyAbove
+    val constraint = when {
+        permissions != null && trackers != null ->
+            "Sous ${band.max + 1}, une app cumule forcément des permissions intrusives (plus de $permissions points) " +
+                "et des traqueurs importants (plus de $trackers points)."
+        trackers != null ->
+            "Les permissions seules (plafonnées à ${scoring.permissionCap}) ne peuvent pas faire descendre une app sous " +
+                "${band.max + 1} : les traqueurs pèsent forcément" + (if (trackers > 0) ", plus de $trackers points." else ".")
+        else -> ""
+    }
+    return listOf(profile, constraint).filter { it.isNotEmpty() }.joinToString(" ")
 }
 
 // --- 2. Lexique -------------------------------------------------------------------------------

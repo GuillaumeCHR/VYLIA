@@ -40,7 +40,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import com.vylia.privacy.domain.learn.GradeBand
 import com.vylia.privacy.domain.learn.PermissionGlossary
+import com.vylia.privacy.domain.learn.gradeRiskLabel
+import com.vylia.privacy.ui.components.GradeScale
+import com.vylia.privacy.ui.components.scoreGradientColor
 import com.vylia.privacy.ui.main.PermissionExplanation
 import com.vylia.privacy.domain.scoring.TrackerFinding
 import com.vylia.privacy.ui.components.ScoreBadge
@@ -54,6 +58,8 @@ import java.util.Locale
 fun AppDetailScreen(
     auditedApp: AuditedApp,
     categoryName: String,
+    gradeBands: List<GradeBand>,
+    scoreBase: Int,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -97,6 +103,17 @@ fun AppDetailScreen(
                         color = auditedApp.score.rating.color.accent,
                     )
                 }
+            }
+        }
+
+        VyliaCard(modifier = Modifier.fillMaxWidth()) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(
+                    text = "${gradeRiskLabel(result.grade)} · ${result.score}/$scoreBase",
+                    fontWeight = FontWeight.Bold,
+                    color = scoreGradientColor(result.score, scoreBase),
+                )
+                GradeScale(gradeBands, base = scoreBase, marker = result.score)
             }
         }
 

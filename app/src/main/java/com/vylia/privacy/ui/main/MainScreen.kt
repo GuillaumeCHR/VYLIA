@@ -25,6 +25,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.ui.detail.AppDetailScreen
 import com.vylia.privacy.ui.home.HomeScreen
 import com.vylia.privacy.ui.home.HomeViewModel
@@ -42,6 +43,7 @@ fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.
     var currentTab by remember { mutableStateOf(AppTab.SCAN) }
     var detailPackage by rememberSaveable { mutableStateOf<String?>(null) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
+    val rules by homeViewModel.rules.collectAsStateWithLifecycle()
     // Toujours la version la plus récente de l'app (le score évolue pendant l'analyse des traqueurs).
     val detailApp = detailPackage?.let { pkg -> homeState.scannedApps.find { it.app.packageName == pkg } }
 
@@ -67,6 +69,8 @@ fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.
             AppDetailScreen(
                 auditedApp = detailApp,
                 categoryName = homeViewModel.categoryName(detailApp.result.categoryId),
+                gradeBands = GradeBands.from(rules.rules.scoring),
+                scoreBase = rules.rules.scoring.base,
                 onBack = { detailPackage = null },
                 modifier = modifier,
             )

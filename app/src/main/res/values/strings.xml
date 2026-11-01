@@ -273,6 +273,11 @@
     <string name="alt_installed">Installed</string>
     <string name="alt_open_source">Open source</string>
     <string name="alt_get">Get it</string>
+    <string name="adtrack_intro_title">Two ways to cut ad tracking</string>
+    <string name="adtrack_intro_text">Before contacting a tracker\'s server, an app asks for its address (a DNS request). Refusing to answer that request stops the data from being sent, for every app at once. Two tools can do it:</string>
+    <string name="adtrack_intro_shield">• VYLIA Shield: the filtering is done on the phone, with VYLIA\'s lists. One switch, a choice between web and mobile filtering, a pause, and a live counter. It uses a local VPN (Android allows only one VPN at a time) and does not encrypt the requests it lets through.</string>
+    <string name="adtrack_intro_private_dns">• Private DNS: your requests are encrypted and sent to a service you choose, set once in Android\'s settings, with no VPN. It only blocks trackers if that service filters them (NextDNS can, Quad9 does not), and the service sees your requests.</string>
+    <string name="adtrack_intro_choice">Use one or the other: when private DNS is set to a service, Android sends it the requests directly and the Shield sees none of them. To block trackers simply, choose the Shield; to also encrypt your requests, choose a private DNS that filters (NextDNS).</string>
     <string name="shield_title">VYLIA Shield</string>
     <string name="shield_subtitle">Blocks the tracking requests of all your apps, right on the phone.</string>
     <string name="shield_status_off">Off</string>

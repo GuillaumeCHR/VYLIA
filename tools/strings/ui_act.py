@@ -106,6 +106,16 @@ S = [
  ("alt_installed", "Installed", "Installée"),
  ("alt_open_source", "Open source", "Libre"),
  ("alt_get", "Get it", "L'obtenir"),
+ # Réduire › Traçage pub : introduction, bouclier ou DNS privé
+ ("adtrack_intro_title", "Two ways to cut ad tracking", "Deux façons de réduire le traçage publicitaire"),
+ ("adtrack_intro_text", "Before contacting a tracker's server, an app asks for its address (a DNS request). Refusing to answer that request stops the data from being sent, for every app at once. Two tools can do it:",
+  "Avant de contacter le serveur d'un traqueur, une app demande son adresse (une requête DNS). Refuser de répondre à cette requête empêche les données de partir, pour toutes les apps à la fois. Deux outils le font :"),
+ ("adtrack_intro_shield", "• VYLIA Shield: the filtering is done on the phone, with VYLIA's lists. One switch, a choice between web and mobile filtering, a pause, and a live counter. It uses a local VPN (Android allows only one VPN at a time) and does not encrypt the requests it lets through.",
+  "• Bouclier VYLIA : le filtrage se fait sur le téléphone, avec les listes de VYLIA. Un interrupteur, le choix entre filtrage web et mobile, une pause, et un compteur en direct. Il utilise un VPN local (Android n'en autorise qu'un à la fois) et ne chiffre pas les requêtes qu'il laisse passer."),
+ ("adtrack_intro_private_dns", "• Private DNS: your requests are encrypted and sent to a service you choose, set once in Android's settings, with no VPN. It only blocks trackers if that service filters them (NextDNS can, Quad9 does not), and the service sees your requests.",
+  "• DNS privé : vos requêtes sont chiffrées et envoyées à un service que vous choisissez, réglé une fois dans les paramètres d'Android, sans VPN. Il ne bloque les traqueurs que si ce service les filtre (NextDNS le peut, Quad9 non), et ce service voit vos requêtes."),
+ ("adtrack_intro_choice", "Use one or the other: when private DNS is set to a service, Android sends it the requests directly and the Shield sees none of them. To block trackers simply, choose the Shield; to also encrypt your requests, choose a private DNS that filters (NextDNS).",
+  "L'un ou l'autre : quand le DNS privé est réglé sur un service, Android lui envoie directement les requêtes et le bouclier n'en voit aucune. Pour bloquer les traqueurs simplement, choisissez le bouclier ; pour chiffrer aussi vos requêtes, un DNS privé qui filtre (NextDNS).",),
  # Réduire › Traçage pub : Bouclier VYLIA (VPN local)
  ("shield_title", "VYLIA Shield", "Bouclier VYLIA"),
  ("shield_subtitle", "Blocks the tracking requests of all your apps, right on the phone.", "Bloque les requêtes de traçage de toutes vos apps, directement sur le téléphone."),

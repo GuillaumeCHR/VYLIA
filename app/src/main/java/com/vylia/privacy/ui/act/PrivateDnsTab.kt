@@ -69,7 +69,8 @@ internal fun PrivateDnsTab(
     // Région du téléphone (réglage de langue et région), jamais sa position.
     val resolvers = catalogue.availableIn(Locale.getDefault().country)
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        // Le bouclier d'abord : un geste suffit. Le DNS privé, alternative sans VPN, vient ensuite.
+        // D'abord la différence entre les deux outils, puis le bouclier (un geste suffit), puis le DNS privé.
+        item(key = "intro") { IntroCard() }
         item(key = "shield") { shield() }
         item { StatusCard(status, catalogue, shieldOn) }
         item { WhyCard() }
@@ -114,6 +115,20 @@ private fun statusText(status: PrivateDnsStatus, catalogue: PrivateDnsCatalogue)
             stringResource(R.string.dns_status_hostname, known?.name ?: status.hostname) to Color(0xFF10B981)
         }
     }
+
+/** Bouclier VYLIA ou DNS privé : ce que fait chacun, et pourquoi c'est l'un ou l'autre. */
+@Composable
+private fun IntroCard() {
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.adtrack_intro_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.adtrack_intro_text), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.adtrack_intro_shield), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.adtrack_intro_private_dns), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.adtrack_intro_choice), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
 
 /** Le lien avec le reste de VYLIA : les traqueurs détectés dans vos apps, et ce qu'un DNS filtrant y change. */
 @Composable

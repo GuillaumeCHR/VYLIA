@@ -277,6 +277,11 @@
     <string name="alt_installed">Installée</string>
     <string name="alt_open_source">Libre</string>
     <string name="alt_get">L\'obtenir</string>
+    <string name="adtrack_intro_title">Deux façons de réduire le traçage publicitaire</string>
+    <string name="adtrack_intro_text">Avant de contacter le serveur d\'un traqueur, une app demande son adresse (une requête DNS). Refuser de répondre à cette requête empêche les données de partir, pour toutes les apps à la fois. Deux outils le font :</string>
+    <string name="adtrack_intro_shield">• Bouclier VYLIA : le filtrage se fait sur le téléphone, avec les listes de VYLIA. Un interrupteur, le choix entre filtrage web et mobile, une pause, et un compteur en direct. Il utilise un VPN local (Android n\'en autorise qu\'un à la fois) et ne chiffre pas les requêtes qu\'il laisse passer.</string>
+    <string name="adtrack_intro_private_dns">• DNS privé : vos requêtes sont chiffrées et envoyées à un service que vous choisissez, réglé une fois dans les paramètres d\'Android, sans VPN. Il ne bloque les traqueurs que si ce service les filtre (NextDNS le peut, Quad9 non), et ce service voit vos requêtes.</string>
+    <string name="adtrack_intro_choice">L\'un ou l\'autre : quand le DNS privé est réglé sur un service, Android lui envoie directement les requêtes et le bouclier n\'en voit aucune. Pour bloquer les traqueurs simplement, choisissez le bouclier ; pour chiffrer aussi vos requêtes, un DNS privé qui filtre (NextDNS).</string>
     <string name="shield_title">Bouclier VYLIA</string>
     <string name="shield_subtitle">Bloque les requêtes de traçage de toutes vos apps, directement sur le téléphone.</string>
     <string name="shield_status_off">Désactivé</string>

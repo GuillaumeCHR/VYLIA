@@ -9,7 +9,7 @@ scanne vos applications pour savoir ce qu'elles font de vos données. Le but est
 compréhension simple des enjeux de vie privée : une note lisible, des explications sans jargon, des bonnes pratiques
 mises en avant autant que les dérives, et des gestes concrets pour reprendre la main.
 
-> Version actuelle : **0.7.2** (dernière version publiée : 0.7.0) ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)).
+> Version actuelle : **0.7.2** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.
 
@@ -81,7 +81,7 @@ et ne peut exclure aucune app de l'audit. Leur évolution est documentée dans [
 
 ## Installer
 
-Téléchargez `vylia-0.7.0.apk` depuis la [page des versions](https://github.com/GuillaumeCHR/VYLIA/releases/latest),
+Téléchargez le fichier `vylia-X.Y.Z.apk` de la dernière version depuis la [page des versions](https://github.com/GuillaumeCHR/VYLIA/releases/latest),
 puis ouvrez-le sur le téléphone (Android demande d'autoriser l'installation depuis cette source). Empreinte SHA-256 du
 certificat de signature, pour vérifier l'APK avec `apksigner verify --print-certs` :
 

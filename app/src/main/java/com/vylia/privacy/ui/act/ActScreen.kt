@@ -35,6 +35,7 @@ import com.vylia.privacy.R
 import com.vylia.privacy.domain.act.ReductionAdvisor
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.PrivacyScore
+import com.vylia.privacy.domain.shield.ShieldStatus
 import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.scan.ScanViewModel
@@ -112,7 +113,7 @@ fun ActScreen(
                 val shield by actViewModel.shield.collectAsStateWithLifecycle()
                 val blocklistSize by actViewModel.blocklistSize.collectAsStateWithLifecycle()
                 val otherVpn by actViewModel.otherVpn.collectAsStateWithLifecycle()
-                PrivateDnsTab(dnsCatalogue, dnsStatus, dnsListUpdate, actViewModel::updateDnsList) {
+                PrivateDnsTab(dnsCatalogue, dnsStatus, dnsListUpdate, actViewModel::updateDnsList, shieldOn = shield.status == ShieldStatus.ON) {
                     ShieldCard(
                         state = shield,
                         blocklistSize = blocklistSize,

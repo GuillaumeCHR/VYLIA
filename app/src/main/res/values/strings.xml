@@ -98,6 +98,9 @@
     <string name="analysis_title">Analysis</string>
     <string name="analysis_tab_overview">Overview</string>
     <string name="analysis_tab_tracking">Tracking</string>
+    <string name="analysis_section_zones">Risk zones</string>
+    <string name="analysis_section_anomalies">Anomalies</string>
+    <string name="analysis_section_trackers">Trackers</string>
     <string name="tracking_curve_title">Average score over time</string>
     <string name="tracking_curve_empty">The tracking starts with your first complete scan.</string>
     <string name="tracking_curve_now">Today: %1$s on average, spread (standard deviation) %2$s points.</string>

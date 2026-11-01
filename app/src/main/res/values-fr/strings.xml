@@ -98,6 +98,9 @@
     <string name="analysis_title">Analyse</string>
     <string name="analysis_tab_overview">Vue d\'ensemble</string>
     <string name="analysis_tab_tracking">Suivi</string>
+    <string name="analysis_section_zones">Zones de risque</string>
+    <string name="analysis_section_anomalies">Anomalies</string>
+    <string name="analysis_section_trackers">Traqueurs</string>
     <string name="tracking_curve_title">Score moyen dans le temps</string>
     <string name="tracking_curve_empty">Le suivi commence avec votre premier scan complet.</string>
     <string name="tracking_curve_now">Aujourd\'hui : %1$s de moyenne, dispersion (écart-type) de %2$s points.</string>

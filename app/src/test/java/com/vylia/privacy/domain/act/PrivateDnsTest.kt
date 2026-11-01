@@ -14,9 +14,9 @@ class PrivateDnsTest {
     private val nextdns = bundled.resolvers.single { it.id == "nextdns" }
 
     @Test
-    fun `the bundled list offers Quad9 first, as recommended, then NextDNS only`() {
-        assertEquals(listOf("quad9", "nextdns"), bundled.availableIn("FR").map { it.id })
-        assertTrue(quad9.recommended)
+    fun `the bundled list recommends NextDNS for ad tracking, then offers Quad9 only`() {
+        assertEquals(listOf("nextdns", "quad9"), bundled.availableIn("FR").map { it.id })
+        assertTrue(nextdns.recommended)
         assertEquals("dns.quad9.net", quad9.hostnameFor())
         assertTrue(bundled.resolvers.all { it.privacyPolicy.startsWith("https://") })
     }

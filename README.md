@@ -9,7 +9,7 @@ scanne vos applications pour savoir ce qu'elles font de vos données. Le but est
 compréhension simple des enjeux de vie privée : une note lisible, des explications sans jargon, des bonnes pratiques
 mises en avant autant que les dérives, et des gestes concrets pour reprendre la main.
 
-> Version actuelle : **0.8.1** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)).
+> Version actuelle : **0.8.2** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.
 
@@ -41,7 +41,7 @@ mises en avant autant que les dérives, et des gestes concrets pour reprendre la
   app intrusive supprimée, un bilan à partager.
 - **Comprendre** : le calcul du score, les badges, le lexique des traqueurs et celui des permissions, avec ce que
   chacun révèle de vous et combien de vos apps sont concernées ; une loupe pour chercher dans chaque onglet.
-- **DNS privé** : un guide pour chiffrer les requêtes DNS de tout le téléphone (Quad9 recommandé, ou NextDNS), avec
+- **DNS privé** : un guide pour chiffrer les requêtes DNS de tout le téléphone (NextDNS recommandé pour bloquer les traqueurs publicitaires, ou Quad9 sans compte), avec
   l'état actuel, les étapes dans les réglages Android et comment revenir en arrière.
 - **Suivi** : la courbe de votre score moyen dans le temps, les apps qui pèsent le plus, l'historique des
   installations, suppressions et autorisations.

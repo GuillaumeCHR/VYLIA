@@ -9,7 +9,7 @@ scanne vos applications pour savoir ce qu'elles font de vos données. Le but est
 compréhension simple des enjeux de vie privée : une note lisible, des explications sans jargon, des bonnes pratiques
 mises en avant autant que les dérives, et des gestes concrets pour reprendre la main.
 
-> Version actuelle : **0.7.0**, première version publiée ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)).
+> Version actuelle : **0.7.1** (dernière version publiée : 0.7.0) ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.
 

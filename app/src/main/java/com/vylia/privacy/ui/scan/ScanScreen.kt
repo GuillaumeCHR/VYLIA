@@ -104,6 +104,7 @@ fun ScanScreen(
     var gradeFilter by rememberSaveable { mutableStateOf<String?>(null) }
     var scanTab by rememberSaveable { mutableStateOf(ScanTab.RISK) }
     var badgeFilter by rememberSaveable { mutableStateOf<String?>(null) }
+    var categoryFilter by rememberSaveable { mutableStateOf<String?>(null) }
     ScanContent(
         modifier = modifier,
         state = state,
@@ -116,6 +117,8 @@ fun ScanScreen(
         onScanTab = { scanTab = it },
         badgeFilter = badgeFilter,
         onBadgeFilter = { badgeFilter = it },
+        categoryFilter = categoryFilter,
+        onCategoryFilter = { categoryFilter = it },
         onFilterSelected = viewModel::selectFilter,
         onRefresh = viewModel::refresh,
         onAppClick = onAppClick,
@@ -137,6 +140,8 @@ fun ScanContent(
     onScanTab: (ScanTab) -> Unit = {},
     badgeFilter: String? = null,
     onBadgeFilter: (String?) -> Unit = {},
+    categoryFilter: String? = null,
+    onCategoryFilter: (String?) -> Unit = {},
     onFilterSelected: (AppFilter) -> Unit,
     onRefresh: () -> Unit,
     onAppClick: (AuditedApp) -> Unit = {},
@@ -222,7 +227,7 @@ fun ScanContent(
                 state.apps.isEmpty() -> CenteredMessage(stringResource(R.string.home_empty))
                 searched.isEmpty() -> CenteredMessage(stringResource(R.string.home_search_empty, query.trim()))
                 scanTab == ScanTab.RISK -> RiskTab(searched, rules, gradeFilter, onGradeFilter, onAppClick, contentPadding)
-                scanTab == ScanTab.CATEGORY -> CategoryTab(searched, rules, onAppClick, contentPadding)
+                scanTab == ScanTab.CATEGORY -> CategoryTab(searched, rules, categoryFilter, onCategoryFilter, onAppClick, contentPadding)
                 else -> BadgeTab(searched, rules, badgeFilter, onBadgeFilter, onAppClick, contentPadding)
             }
         }
@@ -287,6 +292,8 @@ private fun RiskTab(
 private fun CategoryTab(
     apps: List<AuditedApp>,
     rules: Rules?,
+    categoryFilter: String?,
+    onCategoryFilter: (String?) -> Unit,
     onAppClick: (AuditedApp) -> Unit,
     contentPadding: PaddingValues,
 ) {
@@ -296,9 +303,28 @@ private fun CategoryTab(
             .map { (id, list) -> Triple(id, resources.categoryName(id, rules), list) }
             .sortedBy { it.second }
     }
+    // Une catégorie choisie qui n'a plus d'app (recherche, désinstallation) revient à « Toutes ».
+    val selected = categoryFilter?.takeIf { id -> groups.any { it.first == id } }
     var expanded by rememberSaveable { mutableStateOf<String?>(null) }
     LazyColumn(contentPadding = contentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        groups.forEach { (id, name, list) ->
+        // Accès rapide, comme l'onglet Par badge : une ligne de pastilles qui défile, les plus fournies d'abord.
+        item(key = "category-chips") {
+            Row(modifier = Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                FilterChip(
+                    selected = selected == null,
+                    onClick = { onCategoryFilter(null) },
+                    label = { Text("${stringResource(R.string.filter_all_grades)} · ${apps.size}") },
+                )
+                groups.sortedByDescending { it.third.size }.forEach { (id, name, list) ->
+                    FilterChip(
+                        selected = selected == id,
+                        onClick = { onCategoryFilter(if (selected == id) null else id) },
+                        label = { Text("$name · ${list.size}") },
+                    )
+                }
+            }
+        }
+        groups.filter { selected == null || it.first == selected }.forEach { (id, name, list) ->
             item(key = "category-$id") {
                 CategoryHeader(
                     name = name,

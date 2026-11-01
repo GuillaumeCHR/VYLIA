@@ -22,26 +22,16 @@ private val Background = Color(0xFF0F172A)
 private val TileIdle = Color(0xFF1E293B)
 private val GlyphIdle = Color(0xFF475569)
 private val Cyan = Color(0xFF38BDF8)
-private val BugRed = Color(0xFFEF4444)
-private val BugDark = Color(0xFF7F1D1D)
-private val Glitch = Color(0xFF22D3EE)
+/** Petits espions bienveillants : tuile violette, chapeau, lunettes noires et sourire (ni rouge, ni menace). */
+private val SpyTile = Color(0xFF7C3AED)
+private val SpyInk = Color(0xFF1E1B4B)
+private val SpyFace = Color(0xFFFFD7B5)
+private val SpyBand = Color(0xFFF59E0B)
 
 /** Applis saines : tons du haut de l'échelle du score (vert émeraude à orange), comme de vraies icônes. */
 private val CleanColors = arrayOf(
     Color(0xFF10B981), Color(0xFF84CC16), Color(0xFFF59E0B), Color(0xFF10B981),
     Color(0xFFF97316), Color(0xFF84CC16), Color(0xFF10B981), Color(0xFFF59E0B),
-)
-
-/** Bug « digitalisé » en pixel art (9 × 8) : antennes, yeux, pattes. */
-private val BugPixels = arrayOf(
-    "..X...X..",
-    "...X.X...",
-    "..XXXXX..",
-    ".XX.X.XX.",
-    "XXXXXXXXX",
-    "X.XXXXX.X",
-    "X.X...X.X",
-    "...X.X...",
 )
 
 /**
@@ -66,6 +56,14 @@ internal class ScanLayout(val width: Float, val height: Float) {
     private val rowY = FloatArray(ROWS)
     private val scanLeft: Float
     private val scanRight: Float
+
+    /** Sourire d'un espion, centré sur l'origine de sa tuile (construit une fois). */
+    val smile = Path().apply {
+        val w = iconSize * 0.08f
+        val y = iconSize * 0.16f
+        moveTo(-w, y)
+        quadraticTo(0f, y + iconSize * 0.07f, w, y)
+    }
 
     /** Triangle « lecture » d'une icône, centré sur l'origine (construit une fois). */
     val playGlyph = Path().apply {
@@ -97,9 +95,10 @@ internal class ScanLayout(val width: Float, val height: Float) {
             revealTime[i] = SplashTimeline.SETUP_END + ((r + f * ROW_TRAVEL) / ROWS * scanDuration).toLong()
             // Éjection : vers l'extérieur de la grille, avec une pointe d'aléatoire fixe.
             val dirX = if (c == 1) (if (r % 2 == 0) 1f else -1f) else (c - 1).toFloat()
-            ejectVx[i] = dirX * width * (1.5f + 0.25f * ((i * 7) % 3))
-            ejectVy[i] = (r - 1.5f) * height * 0.35f - height * 0.25f
-            ejectSpin[i] = if (i % 2 == 0) 540f else -420f
+            // Sortie en douceur : l'espion s'éclipse vers le haut en flottant, sans tourbillon.
+            ejectVx[i] = dirX * width * (0.18f + 0.04f * ((i * 7) % 3))
+            ejectVy[i] = -height * (0.45f + 0.05f * r)
+            ejectSpin[i] = if (i % 2 == 0) 14f else -14f
         }
     }
 
@@ -127,7 +126,8 @@ internal class ScanLayout(val width: Float, val height: Float) {
 
 /**
  * Dessine l'intro « scan » à un instant donné, en aplats (ni ombre, ni dégradé) : grille d'applis, loupe qui la
- * traverse, applis saines révélées en vert à orange, applis intrusives qui « buguent » en rouge puis sont expulsées,
+ * traverse, applis saines révélées en vert à orange, applis intrusives démasquées en petits espions bienveillants qui
+ * s'éclipsent,
  * et signature Yogi Studio. Aucune allocation par image.
  */
 internal class ScanPainter(private val layout: ScanLayout) {
@@ -135,19 +135,9 @@ internal class ScanPainter(private val layout: ScanLayout) {
 
     fun draw(scope: DrawScope, time: Long, presents: TextLayoutResult) = with(scope) {
         drawRect(Background)
-        val shake = shakeOffset(time)
-        translate(left = shake) {
-            if (time < SplashTimeline.EJECT_END + ICON_FADE) drawIcons(time)
-            if (time in SplashTimeline.SETUP_END..SplashTimeline.SCAN_END + LOUPE_FADE) drawLoupe(time)
-        }
+        if (time < SplashTimeline.EJECT_END + ICON_FADE) drawIcons(time)
+        if (time in SplashTimeline.SETUP_END..SplashTimeline.SCAN_END + LOUPE_FADE) drawLoupe(time)
         if (time >= SplashTimeline.EJECT_END) drawSignature(time, presents)
-    }
-
-    /** Petit tremblement au moment de l'expulsion, amorti en 0,35 s. */
-    private fun shakeOffset(time: Long): Float {
-        val dt = (time - SplashTimeline.EJECT) / 1_000f
-        if (dt < 0f || dt > 0.35f) return 0f
-        return 10f * layout.unit * sin(2f * PI.toFloat() * 20f * dt) * exp(-dt / 0.1f)
     }
 
     private fun DrawScope.drawIcons(time: Long) {
@@ -160,7 +150,7 @@ internal class ScanPainter(private val layout: ScanLayout) {
             if (layout.intrusive[i] && time >= SplashTimeline.EJECT) {
                 drawEjected(i, time)
             } else if (layout.intrusive[i] && revealed) {
-                drawBug(i, time, layout.iconX[i], layout.iconY[i], 0f, pop, fade)
+                drawSpy(i, time, layout.iconX[i], layout.iconY[i], 0f, pop, fade)
             } else if (revealed) {
                 // Appli saine : sa couleur apparaît avec un petit rebond, puis un anneau « validé » à l'expulsion.
                 val bounce = 1f + 0.12f * sin(PI.toFloat() * progress(time, layout.revealTime[i], layout.revealTime[i] + REVEAL_MS))
@@ -209,52 +199,47 @@ internal class ScanPainter(private val layout: ScanLayout) {
     }
 
     /**
-     * Appli intrusive démasquée : tuile rouge sombre et bug en pixels rouges ; juste après la révélation,
-     * un « glitch » (décalages cyan / rouge) la fait trembler, puis elle frémit jusqu'à l'expulsion.
+     * Appli intrusive démasquée : un petit espion bienveillant (chapeau, lunettes noires, sourire). Démasqué, il
+     * sursaute avec un rebond, puis se balance doucement jusqu'à ce qu'il s'éclipse.
      */
-    private fun DrawScope.drawBug(i: Int, time: Long, x: Float, y: Float, angle: Float, scale: Float, alpha: Float) {
+    private fun DrawScope.drawSpy(i: Int, time: Long, x: Float, y: Float, angle: Float, scale: Float, alpha: Float) {
         val s = layout.iconSize
         val since = time - layout.revealTime[i]
-        val glitching = since < GLITCH_MS
-        val jitter = if (glitching) ((since / 40) % 3 - 1) * 4f * layout.unit else sin(time / 30f + i) * layout.unit
-        translate(x + jitter, y) {
-            rotate(angle, pivot = Offset.Zero) {
-                scale(scale, pivot = Offset.Zero) {
-                    drawRoundRect(BugDark, Offset(-s / 2, -s / 2), Size(s, s), CornerRadius(s * 0.26f), alpha = alpha)
-                    if (glitching) {
-                        drawPixels(-3f * layout.unit, Glitch, alpha * 0.8f)
-                        drawPixels(3f * layout.unit, BugRed, alpha * 0.6f)
+        val bounce = if (since in 0 until REVEAL_POP_MS) 1f + 0.18f * sin(PI.toFloat() * since / REVEAL_POP_MS) else 1f
+        val sway = 4f * sin(time / 180f + i)
+        translate(x, y) {
+            rotate(angle + sway, pivot = Offset.Zero) {
+                scale(scale * bounce, pivot = Offset.Zero) {
+                    drawRoundRect(SpyTile, Offset(-s / 2, -s / 2), Size(s, s), CornerRadius(s * 0.26f), alpha = alpha)
+                    drawCircle(SpyFace, radius = s * 0.24f, center = Offset(0f, s * 0.08f), alpha = alpha)
+                    // Chapeau : bord, calotte et ruban safran.
+                    drawRoundRect(SpyInk, Offset(-s * 0.2f, -s * 0.34f), Size(s * 0.4f, s * 0.22f), CornerRadius(s * 0.06f), alpha = alpha)
+                    drawRect(SpyBand, Offset(-s * 0.2f, -s * 0.18f), Size(s * 0.4f, s * 0.04f), alpha = alpha)
+                    drawRoundRect(SpyInk, Offset(-s * 0.34f, -s * 0.14f), Size(s * 0.68f, s * 0.07f), CornerRadius(s * 0.035f), alpha = alpha)
+                    // Lunettes noires et sourire.
+                    listOf(-1f, 1f).forEach { side ->
+                        drawRoundRect(
+                            SpyInk,
+                            Offset(side * s * 0.1f - s * 0.08f, s * 0.0f),
+                            Size(s * 0.16f, s * 0.09f),
+                            CornerRadius(s * 0.04f),
+                            alpha = alpha,
+                        )
                     }
-                    drawPixels(0f, BugRed, alpha)
+                    drawLine(SpyInk, Offset(-s * 0.03f, s * 0.03f), Offset(s * 0.03f, s * 0.03f), s * 0.025f, alpha = alpha)
+                    drawPath(layout.smile, SpyInk, alpha = alpha, style = Stroke(s * 0.035f, cap = StrokeCap.Round))
                 }
             }
         }
     }
 
-    private fun DrawScope.drawPixels(shiftX: Float, color: Color, alpha: Float) {
-        val px = layout.iconSize * 0.075f
-        val left = -px * 4.5f + shiftX
-        val top = -px * 4f
-        for (r in BugPixels.indices) {
-            val line = BugPixels[r]
-            for (c in line.indices) {
-                if (line[c] == 'X') drawRect(color, Offset(left + c * px, top + r * px), Size(px * 0.9f, px * 0.9f), alpha = alpha)
-            }
-        }
-    }
-
-    /** Expulsion : le bug part hors champ en tournoyant, avec une traînée de fantômes. */
+    /** L'espion s'éclipse : il s'envole doucement vers le haut en s'estompant, en soulevant un peu son chapeau. */
     private fun DrawScope.drawEjected(i: Int, time: Long) {
-        for (ghost in TRAIL downTo 0) {
-            val t = time - ghost * TRAIL_STEP_MS
-            if (t < SplashTimeline.EJECT) continue
-            val p = progress(t, SplashTimeline.EJECT, SplashTimeline.EJECT_END)
-            val e = p * p
-            val x = layout.iconX[i] + layout.ejectVx[i] * e
-            val y = layout.iconY[i] + layout.ejectVy[i] * e
-            val alpha = if (ghost == 0) 1f else TRAIL_ALPHA / ghost
-            drawBug(i, Long.MAX_VALUE / 2, x, y, layout.ejectSpin[i] * p, 1f + 0.3f * p, alpha)
-        }
+        val p = progress(time, SplashTimeline.EJECT, SplashTimeline.EJECT_END)
+        val e = easeInOutCubic(p)
+        val x = layout.iconX[i] + layout.ejectVx[i] * e
+        val y = layout.iconY[i] + layout.ejectVy[i] * e
+        drawSpy(i, Long.MAX_VALUE / 2, x, y, layout.ejectSpin[i] * p, 1f - 0.2f * p, 1f - p)
     }
 
     /** Anneau vert qui s'élargit autour des applis saines au moment de l'expulsion. */
@@ -321,13 +306,10 @@ internal class ScanPainter(private val layout: ScanLayout) {
         const val ROW_DELAY = 80L
         const val POP_MS = 420L
         const val REVEAL_MS = 260L
-        const val GLITCH_MS = 320L
+        const val REVEAL_POP_MS = 320L
         const val LOUPE_FADE = 150L
         const val ICON_FADE = 200L
         const val RING_MS = 450L
-        const val TRAIL = 3
-        const val TRAIL_STEP_MS = 28L
-        const val TRAIL_ALPHA = 0.35f
         const val RING_DRAW_MS = 450L
         const val CHARACTER_DELAY = 300L
         const val CHARACTER_MS = 450L

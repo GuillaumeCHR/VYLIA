@@ -16,8 +16,8 @@ mises en avant autant que les dérives, et des gestes concrets pour reprendre la
 
 | | | | | |
 |:---:|:---:|:---:|:---:|:---:|
-| <img src="docs/screenshots/intro-scan.png" width="170" alt="Intro : une loupe parcourt une grille d'applis, les applis intrusives apparaissent en bugs rouges"> | <img src="docs/screenshots/intro-expulsion.png" width="170" alt="Intro : les bugs rouges sont expulsés, les applis saines restent en vert et orange"> | <img src="docs/screenshots/comprendre.png" width="170" alt="Onglet Comprendre : le Privacy Score en bref, formule et échelle des notes A à E"> | <img src="docs/screenshots/grille-de-score.png" width="170" alt="Grille de score : capacités conditionnelles et permissions justifiées par catégorie"> | <img src="docs/screenshots/a-propos.png" width="170" alt="À propos : logo VYLIA, version, Yogi Studio et engagement de vie privée"> |
-| Intro : le scan | Intro : l'expulsion | Comprendre | Grille de score | À propos |
+| <img src="docs/screenshots/intro-scan.png" width="170" alt="Intro : une loupe parcourt une grille d'applis, les applis intrusives se révèlent en petits espions à chapeau et lunettes noires"> | <img src="docs/screenshots/intro-eclipse.png" width="170" alt="Intro : les petits espions s'éclipsent en flottant, les applis saines restent en vert et orange"> | <img src="docs/screenshots/comprendre.png" width="170" alt="Onglet Comprendre : le Privacy Score en bref, formule et échelle des notes A à E"> | <img src="docs/screenshots/grille-de-score.png" width="170" alt="Grille de score : capacités conditionnelles et permissions justifiées par catégorie"> | <img src="docs/screenshots/a-propos.png" width="170" alt="À propos : logo VYLIA, version, Yogi Studio et engagement de vie privée"> |
+| Intro : le scan | Intro : les espions s'éclipsent | Comprendre | Grille de score | À propos |
 
 ## Ce qu'elle fait
 

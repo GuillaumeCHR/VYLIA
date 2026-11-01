@@ -76,7 +76,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 |---|---|---|
 | 1 | Scoring et badges de qualification | Fait : badges v2.1 puis v3 (capture, arrière-plan), patterns de sécurité |
 | 2 | Analyse exhaustive des permissions | Fait : toutes les permissions par thème, niveau de protection Android, fiches |
-| 3 | Icône et splash screen | Splash « scan » fait ; icône à revoir ; mascottes bienveillantes à arbitrer |
+| 3 | Icône et splash screen | Fait : icône loupe et coche, splash avec petits espions bienveillants qui s'éclipsent |
 | 4 | Écran Scan en 3 onglets | Fait : par risque, par catégorie, par badge ; icône → fiche Android |
 | 5 | Suivi longitudinal | À faire |
 | 6 | Agir en 3 sous-onglets | Fait : Réduire (gain exact, apps inutilisées), Alternatives (catalogue), Récompenses et partage |
@@ -87,7 +87,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 
 1. ~~Comprendre : sous-onglet Badges et relecture des textes pour la grille v3~~ (fait le 2026-11-01).
 2. ~~§6 Agir~~ (fait le 2026-11-01).
-3. §3 Refonte visuelle : nouvelle icône centrée sur l'idée de scan / audit (sans codes agressifs de cybersécurité),
+3. ~~§3 Refonte visuelle~~ (fait le 2026-11-01) : nouvelle icône centrée sur l'idée de scan / audit (sans codes agressifs de cybersécurité),
    et splash screen redéfini avec une mascotte ou de petits espions stylisés et bienveillants, dans un registre
    ludique, moderne et rassurant (à la place des bugs rouges expulsés).
 4. §5 Suivi longitudinal et §7 Automatisations (ils partagent le stockage de l'historique).

@@ -14,7 +14,7 @@ internal object SplashTimeline {
     /** 2. Le scan : la loupe parcourt la grille en serpentin ; chaque appli révèle sa vraie nature au passage. */
     const val SCAN_END = 2_000L
 
-    /** 3. L'expulsion : les applis intrusives (bugs rouges) sont éjectées hors de l'écran, les saines restent. */
+    /** 3. Les applis intrusives (petits espions) s'éclipsent en flottant, les saines restent. */
     const val EJECT = 2_050L
     const val EJECT_END = 2_600L
 

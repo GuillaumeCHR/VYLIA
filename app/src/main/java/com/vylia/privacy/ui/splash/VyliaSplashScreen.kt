@@ -58,7 +58,7 @@ import com.vylia.privacy.ui.theme.Slate900
 
 /**
  * Intro « scan » (≈ 4,6 s), sur le schéma de celle de Molkky Board : une grille d'applis apparaît, une loupe la
- * traverse et démasque les applis intrusives (bugs rouges pixelisés) qui sont expulsées, tandis que les applis saines
+ * traverse et démasque les applis intrusives (petits espions bienveillants) qui s'éclipsent, tandis que les applis saines
  * (icônes vertes à orange) restent ; signature Yogi Studio ; puis le logo VYLIA claque (la chaîne se brise) et le
  * logotype glisse en haut à gauche, à la place exacte du titre de l'écran Scan. Un tap passe au logo. Avec
  * « Réduire les animations », simple fondu du logo.
@@ -108,7 +108,8 @@ private fun SplashClock(elapsed: MutableLongState, reduced: Boolean, end: Long, 
                 val next = before + (now - last)
                 last = now
                 if (!reduced && before < SplashTimeline.EJECT && next >= SplashTimeline.EJECT) {
-                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    // Une touche légère, pas une alarme : les espions s'en vont.
+                    haptic.performHapticFeedback(HapticFeedbackType.TextHandleMove)
                 }
                 elapsed.longValue = next
             }

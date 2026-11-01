@@ -35,7 +35,7 @@ class ShieldController(
     private var blocklist: Blocklist? = null
     private var unsaved = 0
 
-    /** Liste embarquée, lue au premier démarrage du bouclier (environ 44 000 domaines). Appel bloquant. */
+    /** Liste embarquée, lue au premier démarrage du bouclier (environ 86 000 domaines). Appel bloquant. */
     @Synchronized
     fun blocklist(): Blocklist = blocklist ?: context.assets.open(ASSET).bufferedReader().use { Blocklist.parse(it.readText()) }
         .also { blocklist = it }

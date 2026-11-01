@@ -46,12 +46,21 @@ requêtes DNS vers les serveurs de traçage, avec un compteur en direct. Débloq
 
 - **Exodus Privacy** (`network_signature`, ODbL) : catégories Advertisement, Analytics, Profiling, Identification
   seulement (catégories complétées comme pour le score). Le nom du traqueur est gardé et affiché à chaque blocage.
-- **EasyPrivacy** (GPL v3, compatible avec la licence de VYLIA) : seules les règles `||domaine^` sans option ni
-  chemin, moins les exceptions `@@||domaine^`.
+- **EasyPrivacy** (pistage) et **EasyList** (publicité, surtout sa section des serveurs de pub) (GPL v3, compatible
+  avec la licence de VYLIA) : seules les règles `||domaine^` sans option ni chemin, moins les exceptions
+  `@@||domaine^` des deux listes.
 - **Jamais bloqués** : les domaines de plateformes (`google.com`, `facebook.com`, `amazonaws.com`…), qu'une
   signature trop large bloquerait en entier ; un sous-domaine précis reste bloquable.
 
-Au 2026-11-01 : 540 domaines Exodus, 43 318 EasyPrivacy, 43 682 après fusion, environ 1 Mo (compressé dans l'APK).
+Au 2026-11-01 : 540 domaines Exodus, 43 318 EasyPrivacy, 42 851 EasyList, 86 431 après fusion, environ 1,9 Mo
+(compressé dans l'APK).
+
+EasyList vise le web : elle ne couvre pas plusieurs régies des jeux mobiles (ironSource `supersonicads.com`, Meta
+Audience Network `an.facebook.com`, Pangle, Mintegral `mtgglobals.com`, Unity Ads `unityads.unity3d.com`) ni
+Firebase Analytics (`app-measurement.com`). À combler par une liste maison des SDK publicitaires mobiles.
+
+Vidéos récompensées : ce sont des pubs servies par les mêmes régies ; bloquées, elles tournent dans le vide (constaté
+sur State.io et Mr Autofire). Piste : une pause du bouclier de quelques minutes, d'un geste.
 Le test `BlocklistTest` vérifie que la liste embarquée ne bloque pas les grandes plateformes.
 
 ## Vie privée
@@ -87,7 +96,7 @@ tests unitaires (liste, paquets, badge), essai sur téléphone (accord VPN, dém
    renvoyait le tunnel lui-même) : blocage, résolution, State.io et Mr Autofire OK. Reste : consommation sur une
    journée, passage Wi-Fi ↔ 4G, `app-measurement.com` (Firebase Analytics) absent des listes.
 2. Liste d'exceptions par l'utilisateur (« ne plus bloquer ce domaine ») depuis les derniers blocages.
-3. Crédits : ajouter EasyPrivacy (GPL v3) dans À propos à côté d'Exodus ; mentionner le bouclier dans la politique
+3. Crédits : ajouter EasyPrivacy et EasyList (GPL v3) dans À propos à côté d'Exodus ; mentionner le bouclier dans la politique
    de confidentialité.
-4. Option : EasyList (publicités) en plus d'EasyPrivacy ; mise à jour de la liste sur demande, comme la liste DNS.
+4. ~~EasyList~~ (fait). Liste maison des régies mobiles ; mise à jour de la liste sur demande, comme la liste DNS.
 5. Version 0.9.0 une fois validé.

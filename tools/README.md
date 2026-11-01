@@ -29,12 +29,12 @@ Le changement de catégories invalide le cache d'analyse sur les appareils : tou
 ## Liste de blocage du Bouclier VYLIA
 
 ```
-python3 tools/update_shield_blocklist.py                                   # télécharge Exodus et EasyPrivacy
-python3 tools/update_shield_blocklist.py --exodus api.json --easyprivacy easyprivacy.txt
+python3 tools/update_shield_blocklist.py          # télécharge Exodus, EasyPrivacy et EasyList
+python3 tools/update_shield_blocklist.py --exodus api.json --easyprivacy easyprivacy.txt --easylist easylist.txt
 ```
 
 Produit `app/src/main/assets/shield_blocklist.json` : domaines de traçage Exodus (pub, analytics, profilage,
-identification ; ODbL) et règles de domaine EasyPrivacy (GPL v3), sans les domaines de plateformes listés dans
+identification ; ODbL) et règles de domaine EasyPrivacy et EasyList (GPL v3), sans les domaines de plateformes listés dans
 `NEVER_BLOCK`. Après mise à jour : `./gradlew testDebugUnitTest` (`BlocklistTest` contrôle la liste embarquée).
 Détails : `docs/shield.md`.
 

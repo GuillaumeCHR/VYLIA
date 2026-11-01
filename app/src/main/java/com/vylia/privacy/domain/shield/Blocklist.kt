@@ -4,7 +4,7 @@ import com.vylia.privacy.domain.security.Untrusted
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
-/** Raison d'un blocage : la règle qui l'a déclenché et le traqueur Exodus connu pour elle (`null` : EasyPrivacy). */
+/** Raison d'un blocage : la règle qui l'a déclenché et le traqueur Exodus connu pour elle (`null` : EasyList). */
 data class BlockMatch(val rule: String, val trackerName: String?)
 
 /**

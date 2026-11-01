@@ -281,14 +281,14 @@
     <string name="shield_status_failed">Could not start. Try again; if it keeps failing, check the VPN screen in Android settings.</string>
     <string name="shield_blocked_total">%1$s blocked in total</string>
     <string name="shield_recent_title">Latest blocks</string>
-    <string name="shield_recent_easyprivacy">Tracking server (EasyPrivacy)</string>
+    <string name="shield_recent_easyprivacy">Tracking or ad server (EasyList)</string>
     <string name="shield_how">How it works: VYLIA creates a VPN on the phone itself. Only DNS requests (the Internet\'s directory) go through it: those for known tracking servers are refused, the others go on to your network\'s usual DNS. Nothing is sent to a VYLIA server, and the rest of your traffic does not go through VYLIA.</string>
     <string name="shield_private_dns_conflict">Private DNS is set to %1$s: Android then sends its requests straight to that service and the Shield sees none of them. Choose one or the other: to use the Shield, set private DNS back to Automatic.</string>
     <string name="shield_other_vpn">Another VPN is on: turning on the Shield will replace it.</string>
     <string name="shield_limits">Limits: apps that encrypt their own DNS (some browsers) bypass the Shield, and blocking a tracker can occasionally break a feature: if an app misbehaves, turn the Shield off.</string>
     <string name="shield_always_on">To keep it on after a restart, turn on “Always-on VPN” for VYLIA in Android\'s VPN settings, but leave “Block connections without VPN” off: the Shield only carries DNS, so that option would cut off the Internet.</string>
     <string name="shield_vpn_settings">VPN settings</string>
-    <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0) and EasyPrivacy (GPL v3), %1$s tracking domains.</string>
+    <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0), EasyPrivacy and EasyList (GPL v3), %1$s tracking and ad domains.</string>
     <plurals name="act_story_trophies">
         <item quantity="one">%1$d trophy</item>
         <item quantity="other">%1$d trophies</item>

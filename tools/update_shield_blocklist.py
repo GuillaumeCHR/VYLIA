@@ -4,9 +4,10 @@
 Sources, téléchargées sur le poste de dev uniquement (l'app ne télécharge rien pour le bouclier) :
   - Exodus Privacy, champ network_signature de /api/trackers (ODbL 1.0) : domaines contactés par les SDK de
     traçage, avec le nom du traqueur, affiché dans l'app à chaque blocage ;
-  - EasyPrivacy (https://easylist.to, GPL v3 ou CC BY-SA 3.0, au choix ; VYLIA étant sous GPL v3, c'est elle qui
-    s'applique) : seules les règles qui visent un domaine entier, « ||domaine^ » sans chemin ni option, ont un sens
-    au niveau DNS. Les exceptions de même forme (« @@||domaine^ ») sont respectées.
+  - EasyPrivacy (pistage) et EasyList (publicité) (https://easylist.to, GPL v3 ou CC BY-SA 3.0, au choix ; VYLIA
+    étant sous GPL v3, c'est elle qui s'applique) : seules les règles qui visent un domaine entier, « ||domaine^ »
+    sans chemin ni option, ont un sens au niveau DNS ; pour EasyList, ce sont surtout ses serveurs de publicité.
+    Les exceptions de même forme (« @@||domaine^ ») de l'une ou l'autre liste sont respectées.
 
 Prudence, pour ne pas casser d'apps :
   - côté Exodus, seuls les traqueurs de catégorie Advertisement, Analytics, Profiling ou Identification sont
@@ -18,6 +19,7 @@ Prudence, pour ne pas casser d'apps :
     sont écartées et listées.
 
 Usage : python3 tools/update_shield_blocklist.py [--exodus api.json] [--easyprivacy easyprivacy.txt]
+                                                  [--easylist easylist.txt]
 Produit app/src/main/assets/shield_blocklist.json.
 """
 import argparse
@@ -29,6 +31,7 @@ import urllib.request
 
 EXODUS_URL = "https://reports.exodus-privacy.eu.org/api/trackers"
 EASYPRIVACY_URL = "https://easylist.to/easylist/easyprivacy.txt"
+EASYLIST_URL = "https://easylist.to/easylist/easylist.txt"
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "app/src/main/assets/shield_blocklist.json"
 OVERRIDES = ROOT / "tools/exodus_category_overrides.json"
@@ -82,7 +85,8 @@ def exodus_domains(api, mapping):
     return domains, skipped
 
 
-def easyprivacy_domains(text):
+def adblock_domains(text):
+    """Règles de domaine entier d'une liste au format Adblock Plus : (domaines, exceptions, version)."""
     rules, exceptions = set(), set()
     for line in text.splitlines():
         if m := EASY_RULE.match(line):
@@ -91,7 +95,7 @@ def easyprivacy_domains(text):
             exceptions.add(m.group(1))
     version = next((l.split(":", 1)[1].strip() for l in text.splitlines()[:10] if l.startswith("! Version:")), "?")
     kept = {d for d in rules if DOMAIN.match(d) and not is_protected(d)}
-    return kept - exceptions, version
+    return kept, exceptions, version
 
 
 def drop_redundant(domains):
@@ -106,14 +110,19 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--exodus", help="réponse de l'API Exodus déjà téléchargée")
     parser.add_argument("--easyprivacy", help="easyprivacy.txt déjà téléchargé")
+    parser.add_argument("--easylist", help="easylist.txt déjà téléchargé")
     args = parser.parse_args()
 
     api = json.loads(pathlib.Path(args.exodus).read_text(encoding="utf-8") if args.exodus else fetch(EXODUS_URL, "application/json"))
-    easy = pathlib.Path(args.easyprivacy).read_text(encoding="utf-8") if args.easyprivacy else fetch(EASYPRIVACY_URL, "text/plain")
+    def load_list(path, url):
+        return pathlib.Path(path).read_text(encoding="utf-8") if path else fetch(url, "text/plain")
 
     exodus, skipped = exodus_domains(api, overrides())
-    easyprivacy, easy_version = easyprivacy_domains(easy)
-    kept = drop_redundant(set(exodus) | easyprivacy)
+    easyprivacy, privacy_exceptions, privacy_version = adblock_domains(load_list(args.easyprivacy, EASYPRIVACY_URL))
+    easylist, list_exceptions, list_version = adblock_domains(load_list(args.easylist, EASYLIST_URL))
+    exceptions = privacy_exceptions | list_exceptions
+    lists = (easyprivacy | easylist) - exceptions
+    kept = drop_redundant(set(exodus) | lists)
     trackers = {}
     for domain in sorted(kept):
         if domain in exodus:
@@ -125,16 +134,18 @@ def main():
         "generated": datetime.date.today().isoformat(),
         "sources": [
             {"name": "Exodus Privacy", "url": EXODUS_URL, "license": "ODbL 1.0"},
-            {"name": "EasyPrivacy", "url": EASYPRIVACY_URL, "license": "GPL v3", "version": easy_version},
+            {"name": "EasyPrivacy", "url": EASYPRIVACY_URL, "license": "GPL v3", "version": privacy_version},
+            {"name": "EasyList", "url": EASYLIST_URL, "license": "GPL v3", "version": list_version},
         ],
         # nom du traqueur Exodus -> domaines (le nom est affiché dans l'app à chaque blocage)
         "trackers": trackers,
-        # domaines EasyPrivacy sans traqueur Exodus correspondant
+        # domaines EasyPrivacy et EasyList sans traqueur Exodus correspondant
         "domains": others,
     }
     OUTPUT.write_text(json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-    print(f"Exodus : {len(exodus)} domaines ({len(skipped)} signatures écartées) ; EasyPrivacy {easy_version} : "
-          f"{len(easyprivacy)} domaines.")
+    print(f"Exodus : {len(exodus)} domaines ({len(skipped)} signatures écartées) ; EasyPrivacy {privacy_version} : "
+          f"{len(easyprivacy)} domaines ; EasyList {list_version} : {len(easylist)} domaines ; "
+          f"{len(exceptions)} exceptions.")
     print(f"{len(kept)} domaines après fusion -> {OUTPUT.relative_to(ROOT)} ({OUTPUT.stat().st_size // 1024} Ko)")
     for line in skipped:
         print("  écartée :", line)

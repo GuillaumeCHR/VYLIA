@@ -1,377 +1,133 @@
 package com.vylia.privacy.ui.act
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.net.Uri
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.*
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Tab
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
-import com.vylia.privacy.ui.theme.Emerald
-import com.vylia.privacy.ui.theme.Slate300
-import com.vylia.privacy.ui.theme.Slate400
-import com.vylia.privacy.ui.theme.Slate900
-import com.vylia.privacy.ui.components.VyliaCard
-import com.vylia.privacy.ui.components.ScoreBadge
-import com.vylia.privacy.ui.components.openAppSettings
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.text.style.TextAlign
-import com.vylia.privacy.domain.model.PrivacyScore
-import com.vylia.privacy.domain.rewards.Badge
-import com.vylia.privacy.domain.rewards.RemovedApp
-import com.vylia.privacy.domain.rewards.RewardsState
-import com.vylia.privacy.ui.components.ScoreAnimationMillis
-import com.vylia.privacy.ui.theme.CyanAccent
-import java.text.DateFormat
-import com.vylia.privacy.ui.scan.ScanViewModel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.LifecycleResumeEffect
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vylia.privacy.R
-import com.vylia.privacy.ui.components.currentLocale
+import com.vylia.privacy.domain.act.ReductionAdvisor
+import com.vylia.privacy.domain.model.AppFilter
+import com.vylia.privacy.domain.model.PrivacyScore
+import com.vylia.privacy.ui.components.ScoreBadge
+import com.vylia.privacy.ui.components.VyliaCard
+import com.vylia.privacy.ui.scan.ScanViewModel
 
+/** Les trois modules pratiques de l'onglet Agir. */
+private enum class ActTab(@param:StringRes val title: Int) {
+    REDUCE(R.string.act_tab_reduce),
+    ALTERNATIVES(R.string.act_tab_alternatives),
+    REWARDS(R.string.act_tab_rewards),
+}
+
+/**
+ * Agir : en tête, l'analyse globale (score moyen de vos apps et score atteignable en suivant les propositions), puis
+ * trois modules : Réduire (autorisations à retirer, apps à supprimer), Alternatives, Récompenses et partage.
+ */
 @Composable
 fun ActScreen(
     modifier: Modifier = Modifier,
-    viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
+    viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
+    actViewModel: ActViewModel = viewModel(factory = ActViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val loadedRules by viewModel.rules.collectAsStateWithLifecycle()
     val rewards by viewModel.rewards.collectAsStateWithLifecycle()
     val recentRewards by viewModel.recentRewards.collectAsStateWithLifecycle()
-    val apps = state.apps
-    
-    val hallOfFame = apps.filter { it.score.value >= 80 }
-    val worstOfFame = apps.filter { it.score.value < 50 }.sortedBy { it.score.value }
-    
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+    val usage by actViewModel.usage.collectAsStateWithLifecycle()
+    var tab by rememberSaveable { mutableStateOf(ActTab.REDUCE) }
 
-    val scrollState = rememberScrollState()
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(scrollState),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Text(text = stringResource(R.string.act_title), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-        Spacer(modifier = Modifier.height(24.dp))
-
-        // Section 1: Sensibiliser
-        VyliaCard(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(stringResource(R.string.act_share_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(stringResource(R.string.act_share_text), style = MaterialTheme.typography.bodyMedium)
-                Spacer(modifier = Modifier.height(12.dp))
-                val chooserTitle = stringResource(R.string.act_share_chooser)
-                Button(onClick = {
-                    coroutineScope.launch {
-                        val uri = generateAndSaveScoreBitmap(context, state.averageScore?.value ?: 100)
-                        uri?.let { shareImage(context, it, chooserTitle) }
-                    }
-                }) {
-                    Icon(Icons.Default.Share, contentDescription = null)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.act_share_button))
-                }
-            }
-        }
-        
-        // Section 2: Hall of Fame / Récompenses
-        RewardsSection(
-            rewards = rewards,
-            recentRewards = recentRewards,
-            onDismissRecent = viewModel::dismissRecentRewards,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)
-        )
-
-        // Section 3: Assainir
-        VyliaCard(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-            containerColor = MaterialTheme.colorScheme.errorContainer
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(stringResource(R.string.act_cleanup_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(stringResource(R.string.act_cleanup_text), style = MaterialTheme.typography.bodyMedium)
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                if (worstOfFame.isEmpty()) {
-                    Text(stringResource(R.string.act_cleanup_empty), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                } else {
-                    worstOfFame.take(5).forEach { app ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp),
-                            horizontalArrangement = Arrangement.spacedBy(8.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(app.app.label, fontWeight = FontWeight.Bold)
-                                Text(
-                                    stringResource(R.string.act_cleanup_points, app.score.value, PrivacyScore.MAX - app.score.value),
-                                    style = MaterialTheme.typography.bodySmall
-                                )
-                            }
-                            TextButton(onClick = { openAppSettings(context, app.app.packageName) }) {
-                                Text(stringResource(R.string.act_manage))
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        
-        // Section 4: Valoriser
-        VyliaCard(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(stringResource(R.string.act_good_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(stringResource(R.string.act_good_text), style = MaterialTheme.typography.bodyMedium)
-                Spacer(modifier = Modifier.height(16.dp))
-                
-                if (hallOfFame.isEmpty()) {
-                    Text(stringResource(R.string.act_good_empty))
-                } else {
-                    hallOfFame.take(5).forEach { app ->
-                        Row(
-                            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(app.app.label, modifier = Modifier.weight(1f))
-                            ScoreBadge(app.score)
-                        }
-                    }
-                }
-            }
-        }
+    // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
+    LifecycleResumeEffect(Unit) {
+        actViewModel.refreshUsage()
+        onPauseOrDispose { }
     }
-}
 
-@OptIn(ExperimentalLayoutApi::class)
-@Composable
-private fun RewardsSection(
-    rewards: RewardsState,
-    recentRewards: List<RemovedApp>,
-    onDismissRecent: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    VyliaCard(modifier = modifier) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(stringResource(R.string.act_rewards_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(stringResource(R.string.act_rewards_text), style = MaterialTheme.typography.bodyMedium)
-
-            AnimatedVisibility(
-                visible = recentRewards.isNotEmpty(),
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
-            ) {
-                Surface(
-                    modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
-                    shape = RoundedCornerShape(12.dp),
-                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
-                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.primary)
-                ) {
-                    Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = pluralStringResource(
-                                R.plurals.act_rewards_congrats, recentRewards.size,
-                                recentRewards.joinToString { it.label }, recentRewards.sumOf { it.points },
-                            ),
-                            modifier = Modifier.weight(1f),
-                            fontWeight = FontWeight.Bold
-                        )
-                        TextButton(onClick = onDismissRecent) { Text(stringResource(R.string.ok)) }
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            AnimatedPoints(rewards.points)
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(stringResource(R.string.act_badges, rewards.unlockedBadges.size, Badge.entries.size), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(8.dp))
-            FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Badge.entries.forEach { badge -> BadgeChip(badge, unlocked = badge in rewards.unlockedBadges) }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-            Text(stringResource(R.string.act_removed_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(4.dp))
-            if (rewards.removedApps.isEmpty()) {
-                Text(
-                    stringResource(R.string.act_removed_empty),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            } else {
-                val locale = currentLocale()
-                val dateFormat = remember(locale) { DateFormat.getDateInstance(DateFormat.SHORT, locale) }
-                rewards.removedApps.take(10).forEach { removed ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        ScoreBadge(PrivacyScore(removed.score))
-                        Column(modifier = Modifier.weight(1f)) {
-                            Text(removed.label, fontWeight = FontWeight.Bold)
-                            Text(
-                                pluralStringResource(R.plurals.act_removed_line, removed.trackerCount, removed.trackerCount, dateFormat.format(removed.removedAt)),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                        Text("+${removed.points}", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
-                    }
-                }
-            }
-        }
+    val userApps = remember(state.scannedApps) { state.scannedApps.filter { AppFilter.USER.matches(it.app) } }
+    val scorer = loadedRules.scorer
+    val revocations = remember(userApps, scorer) { ReductionAdvisor.revocations(userApps, scorer) }
+    val removals = remember(userApps, usage) { ReductionAdvisor.removals(userApps, usage.lastUsed, System.currentTimeMillis()) }
+    val projected = remember(userApps, revocations, removals, scorer) {
+        ReductionAdvisor.projectedAverage(userApps, revocations, removals, scorer)
     }
-}
 
-/** Compteur de points qui défile jusqu'à sa valeur à l'affichage, puis à chaque nouveau gain. */
-@Composable
-private fun AnimatedPoints(points: Int) {
-    val animated = remember { Animatable(0f) }
-    LaunchedEffect(points) {
-        animated.animateTo(points.toFloat(), tween(ScoreAnimationMillis * 2))
-    }
-    Row(verticalAlignment = Alignment.Bottom) {
-        Text(
-            text = animated.value.toInt().toString(),
-            style = MaterialTheme.typography.displaySmall,
-            fontWeight = FontWeight.Bold,
-            color = CyanAccent
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            stringResource(R.string.act_points),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(bottom = 6.dp)
-        )
-    }
-}
-
-@Composable
-private fun BadgeChip(badge: Badge, unlocked: Boolean) {
-    Surface(
-        modifier = Modifier.width(104.dp).alpha(if (unlocked) 1f else 0.4f),
-        shape = RoundedCornerShape(12.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
-        border = if (unlocked) BorderStroke(1.dp, MaterialTheme.colorScheme.primary) else null
-    ) {
+    Column(modifier = modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(if (unlocked) badge.emoji else "🔒", style = MaterialTheme.typography.headlineSmall)
-            Text(stringResource(badge.title), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
-            Text(
-                stringResource(badge.description),
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center
-            )
+            Text(stringResource(R.string.act_title), style = MaterialTheme.typography.headlineMedium)
+            if (!state.isLoading) SummaryCard(state.userAverageScore, projected, revocations.size, removals.size)
+        }
+        PrimaryTabRow(selectedTabIndex = tab.ordinal) {
+            ActTab.entries.forEach { entry ->
+                Tab(
+                    selected = tab == entry,
+                    onClick = { tab = entry },
+                    text = {
+                        Text(
+                            stringResource(entry.title),
+                            maxLines = 1,
+                            softWrap = false,
+                            autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = LocalTextStyle.current.fontSize),
+                        )
+                    },
+                )
+            }
+        }
+        when {
+            state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
+            tab == ActTab.REDUCE -> ReduceTab(revocations, removals, usage)
+            tab == ActTab.ALTERNATIVES -> AlternativesTab(userApps, state.scannedApps, actViewModel.catalogue)
+            else -> RewardsTab(state.userAverageScore?.value, rewards, recentRewards, viewModel::dismissRecentRewards)
         }
     }
 }
 
-suspend fun generateAndSaveScoreBitmap(context: Context, score: Int): Uri? = withContext(Dispatchers.IO) {
-    try {
-        val width = 1080
-        val height = 1920
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        
-        // Draw background
-        canvas.drawColor(Slate900.toArgb())
-        
-        // Draw texts
-        val paint = Paint().apply {
-            color = Slate300.toArgb()
-            textSize = 80f
-            textAlign = Paint.Align.CENTER
-            isAntiAlias = true
+/** Analyse globale : score moyen actuel, score atteignable, et ce qu'il faut faire pour y arriver. */
+@Composable
+private fun SummaryCard(current: PrivacyScore?, projected: PrivacyScore?, revocations: Int, removals: Int) {
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            current?.let { ScoreBadge(it) }
+            Column(modifier = Modifier.weight(1f)) {
+                Text(stringResource(R.string.act_summary_title), fontWeight = FontWeight.Bold)
+                val reachable = projected?.takeIf { current != null && it.value > current.value }
+                Text(
+                    if (reachable == null || revocations + removals == 0) stringResource(R.string.act_summary_nothing)
+                    else stringResource(R.string.act_summary_reachable, reachable.value) + " · " +
+                        pluralStringResource(R.plurals.act_summary_revocations, revocations, revocations) + " · " +
+                        pluralStringResource(R.plurals.act_summary_removals, removals, removals),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
-        
-        canvas.drawText(context.getString(R.string.act_story_title), width / 2f, 400f, paint)
-        
-        paint.textSize = 250f
-        paint.color = when {
-            score >= 80 -> Emerald.toArgb()
-            score >= 50 -> android.graphics.Color.parseColor("#F59E0B")
-            else -> android.graphics.Color.parseColor("#EF4444")
-        }
-        
-        canvas.drawText("$score/100", width / 2f, 1000f, paint)
-        
-        paint.textSize = 50f
-        paint.color = Slate400.toArgb()
-        canvas.drawText(context.getString(R.string.act_story_footer), width / 2f, 1800f, paint)
-
-        // Save to cache
-        val imagePath = File(context.cacheDir, "images")
-        imagePath.mkdirs()
-        val file = File(imagePath, "vylia_score.png")
-        FileOutputStream(file).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-        }
-        
-        FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-    } catch (e: Exception) {
-        null
     }
-}
-
-fun shareImage(context: Context, uri: Uri, chooserTitle: String) {
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "image/png"
-        putExtra(Intent.EXTRA_STREAM, uri)
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-    context.startActivity(Intent.createChooser(intent, chooserTitle))
 }

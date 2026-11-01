@@ -73,4 +73,26 @@ class BadgesManagerTest {
 
         assertTrue(Badge.TRACKER_HUNTER in manager.state.value.unlockedBadges)
     }
+
+    @Test
+    fun `desintoxication - trois autorisations sensibles retirees d un scan a l autre`() {
+        val nosy = AppSnapshot("Fouineuse", 40, 2, setOf("READ_CONTACTS", "ACCESS_FINE_LOCATION", "READ_CALENDAR"))
+        manager.onScanCompleted(mapOf("nosy" to nosy))
+        manager.onScanCompleted(mapOf("nosy" to nosy.copy(sensitiveGranted = setOf("READ_CALENDAR"))))
+        assertEquals(2, manager.state.value.revokedPermissions)
+        assertFalse(Badge.DETOX in manager.state.value.unlockedBadges)
+        manager.onScanCompleted(mapOf("nosy" to nosy.copy(sensitiveGranted = emptySet())))
+        assertTrue(Badge.DETOX in manager.state.value.unlockedBadges)
+    }
+
+    @Test
+    fun `bon echange - une alternative du catalogue installee apres le premier scan`() {
+        manager.onScanCompleted(mapOf("notes" to clean), alternativePackages = setOf("org.thoughtcrime.securesms"))
+        assertFalse(Badge.GOOD_SWAP in manager.state.value.unlockedBadges)
+        manager.onScanCompleted(
+            mapOf("notes" to clean, "org.thoughtcrime.securesms" to clean),
+            alternativePackages = setOf("org.thoughtcrime.securesms"),
+        )
+        assertTrue(Badge.GOOD_SWAP in manager.state.value.unlockedBadges)
+    }
 }

@@ -376,6 +376,10 @@
     <string name="badge_no_red_zone_description">No user app below 50/100</string>
     <string name="badge_green_device">Green device</string>
     <string name="badge_green_device_description">Average user app score of at least 80/100</string>
+    <string name="badge_detox">Detox</string>
+    <string name="badge_detox_description">Revoke 3 sensitive permissions an app didn\'t need</string>
+    <string name="badge_good_swap">Good swap</string>
+    <string name="badge_good_swap_description">Install an alternative from the catalogue</string>
 
     <!-- Permissions à risque (puces des cartes, export CSV) -->
     <string name="risk_access_background_location">Background location</string>

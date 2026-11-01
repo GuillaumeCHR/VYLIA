@@ -16,11 +16,19 @@ enum class Badge(val emoji: String, @param:StringRes val title: Int, @param:Stri
     TRACKER_HUNTER("🎯", R.string.badge_tracker_hunter, R.string.badge_tracker_hunter_description),
     NO_RED_ZONE("🛡️", R.string.badge_no_red_zone, R.string.badge_no_red_zone_description),
     GREEN_DEVICE("🌿", R.string.badge_green_device, R.string.badge_green_device_description),
+    DETOX("💊", R.string.badge_detox, R.string.badge_detox_description),
+    GOOD_SWAP("🔄", R.string.badge_good_swap, R.string.badge_good_swap_description),
 }
 
 /** Dernier état connu d'une app utilisateur, référence pour détecter sa suppression. */
 @Serializable
-data class AppSnapshot(val label: String, val score: Int, val trackerCount: Int)
+data class AppSnapshot(
+    val label: String,
+    val score: Int,
+    val trackerCount: Int,
+    /** Permissions sensibles accordées et pénalisées : leur retrait d'un scan à l'autre est compté (Désintoxication). */
+    val sensitiveGranted: Set<String> = emptySet(),
+)
 
 /** App intrusive supprimée par l'utilisateur : plus elle était intrusive, plus elle rapporte de points. */
 @Serializable
@@ -41,6 +49,10 @@ data class RewardsState(
     val removedApps: List<RemovedApp> = emptyList(),
     val unlockedBadges: Map<Badge, Long> = emptyMap(),
     val completedScans: Int = 0,
+    /** Permissions sensibles retirées par l'utilisateur, constatées d'un scan complet à l'autre. */
+    val revokedPermissions: Int = 0,
+    /** Alternatives du catalogue installées depuis le premier scan (paquets). */
+    val swaps: Set<String> = emptySet(),
 ) {
     val points: Int get() = removedApps.sumOf { it.points }
 }
@@ -87,11 +99,24 @@ class BadgesManager(
         return rewarded
     }
 
-    /** Scan complet terminé : [userApps] devient la référence du prochain diff. */
+    /**
+     * Scan complet terminé : [userApps] devient la référence du prochain diff. Par rapport au scan précédent, on compte
+     * les permissions sensibles retirées (même app) et les alternatives du catalogue nouvellement installées.
+     */
     @Synchronized
-    fun onScanCompleted(userApps: Map<String, AppSnapshot>) {
+    fun onScanCompleted(userApps: Map<String, AppSnapshot>, alternativePackages: Set<String> = emptySet()) {
         val current = _state.value
-        val next = current.copy(snapshot = userApps, completedScans = current.completedScans + 1)
+        val previous = current.snapshot
+        val revoked = userApps.entries.sumOf { (pkg, app) ->
+            previous[pkg]?.let { (it.sensitiveGranted - app.sensitiveGranted).size } ?: 0
+        }
+        val swaps = if (previous.isEmpty()) emptySet() else userApps.keys.filter { it !in previous && it in alternativePackages }
+        val next = current.copy(
+            snapshot = userApps,
+            completedScans = current.completedScans + 1,
+            revokedPermissions = current.revokedPermissions + revoked,
+            swaps = current.swaps + swaps,
+        )
         update(next.copy(unlockedBadges = unlock(next, userApps.values)))
     }
 
@@ -102,6 +127,8 @@ class BadgesManager(
             if (state.removedApps.isNotEmpty()) add(Badge.FIRST_CLEANUP)
             if (state.removedApps.size >= 5) add(Badge.BIG_CLEANUP)
             if (state.removedApps.sumOf { it.trackerCount } >= 20) add(Badge.TRACKER_HUNTER)
+            if (state.revokedPermissions >= DETOX_REVOCATIONS) add(Badge.DETOX)
+            if (state.swaps.isNotEmpty()) add(Badge.GOOD_SWAP)
             if (!userApps.isNullOrEmpty()) {
                 if (userApps.none { it.score < INTRUSIVE_THRESHOLD }) add(Badge.NO_RED_ZONE)
                 if (userApps.map { it.score }.average() >= 80) add(Badge.GREEN_DEVICE)
@@ -119,5 +146,8 @@ class BadgesManager(
     companion object {
         /** Même seuil que la zone rouge du score. */
         const val INTRUSIVE_THRESHOLD = 50
+
+        /** Permissions sensibles à retirer pour le trophée Désintoxication. */
+        const val DETOX_REVOCATIONS = 3
     }
 }

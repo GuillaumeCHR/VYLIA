@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.VyliaApplication
 import com.vylia.privacy.data.apps.PackageRemovalMonitor
+import com.vylia.privacy.data.alternatives.AlternativesRepository
 import com.vylia.privacy.data.export.CsvExporter
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
@@ -41,6 +42,7 @@ class ScanViewModel(
     private val ruleMatrixRepository: RuleMatrixRepository,
     private val badgesManager: BadgesManager,
     packageRemovalMonitor: PackageRemovalMonitor,
+    private val alternatives: AlternativesRepository,
 ) : ViewModel() {
 
     private sealed interface ScanState {
@@ -117,7 +119,10 @@ class ScanViewModel(
                     "en ${SystemClock.elapsedRealtime() - listedAt} ms ($unanalyzed non analysées)",
             )
             if (BuildConfig.DEBUG) logScores()
-            badgesManager.onScanCompleted(currentApps().filter { AppFilter.USER.matches(it.app) }.toSnapshots())
+            badgesManager.onScanCompleted(
+                currentApps().filter { AppFilter.USER.matches(it.app) }.toSnapshots(),
+                alternatives.catalogue.packages,
+            )
         }
     }
 
@@ -201,7 +206,8 @@ class ScanViewModel(
 
     private fun List<AuditedApp>.toSnapshots(): Map<String, AppSnapshot> = associate {
         val trackerCount = (it.trackerAnalysis as? TrackerAnalysis.Analyzed)?.trackers?.size ?: 0
-        it.app.packageName to AppSnapshot(it.app.label, it.score.value, trackerCount)
+        val sensitive = it.result.permissionFindings.filter { f -> f.granted && f.penalty > 0.0 }.map { f -> f.permission }.toSet()
+        it.app.packageName to AppSnapshot(it.app.label, it.score.value, trackerCount, sensitive)
     }
 
     companion object {
@@ -218,6 +224,7 @@ class ScanViewModel(
                     container.ruleMatrixRepository,
                     container.badgesManager,
                     container.packageRemovalMonitor,
+                    container.alternativesRepository,
                 )
             }
         }

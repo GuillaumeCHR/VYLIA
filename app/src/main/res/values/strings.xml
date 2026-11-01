@@ -161,14 +161,6 @@
     <string name="act_share_chooser">Share my report</string>
     <string name="act_story_title">My VYLIA report</string>
     <string name="act_story_footer" formatted="false">100% on-device analysis, no server</string>
-    <string name="act_cleanup_title">⚠️ Clean up (Worst of Fame)</string>
-    <string name="act_cleanup_text">The most intrusive apps on your device. Uninstall them to earn points: the more intrusive an app, the more its removal is worth.</string>
-    <string name="act_cleanup_empty">No critical app detected!</string>
-    <string name="act_cleanup_points">%1$d/100 · +%2$d pts if removed</string>
-    <string name="act_manage">Manage</string>
-    <string name="act_good_title">🌿 Celebrate (exemplary apps)</string>
-    <string name="act_good_text">The top of the class (score ≥ 80). Zero trackers and respect for your privacy.</string>
-    <string name="act_good_empty">No app meets the criteria yet.</string>
     <string name="act_rewards_title">🏆 Hall of Fame — Rewards</string>
     <string name="act_rewards_text">Each intrusive app (score below 50) you remove earns 100 minus its score in points.</string>
     <string name="act_badges">Badges (%1$d/%2$d)</string>
@@ -176,6 +168,65 @@
     <string name="act_removed_empty">None yet. Head to “Clean up” below to get started.</string>
     <string name="act_points">privacy points</string>
     <string name="ok">OK</string>
+    <string name="act_tab_reduce">Reduce</string>
+    <string name="act_tab_alternatives">Alternatives</string>
+    <string name="act_tab_rewards">Rewards</string>
+    <string name="act_summary_title">Average score of your apps</string>
+    <string name="act_summary_reachable">Reachable: %1$d</string>
+    <string name="act_summary_nothing">Nothing urgent: your apps already respect your privacy well.</string>
+    <string name="act_story_points">%1$d privacy points</string>
+    <string name="reduce_revoke_hint">Permissions your apps use without needing them. Each gain is recalculated by the scoring engine. Tap to open the app\'s Android settings, then Permissions.</string>
+    <string name="reduce_revoke_empty">No permission to revoke: every granted permission fits its app\'s purpose.</string>
+    <string name="reduce_revoke_line">Revoke: %1$s</string>
+    <string name="reduce_gain_points">+%1$d pts</string>
+    <string name="reduce_score_after">Score %1$d → %2$d</string>
+    <string name="reduce_badge_lost">Loses</string>
+    <string name="reduce_remove_hint">Intrusive apps, and apps you no longer open that score below 70. Removing an intrusive app earns points.</string>
+    <string name="reduce_remove_hint_no_usage">Intrusive apps first. With usage access, VYLIA can also suggest the apps you no longer open.</string>
+    <string name="reduce_remove_empty">No app to remove.</string>
+    <string name="reduce_reward_points">+%1$d pts</string>
+    <string name="reduce_last_used_unknown">Last use unknown</string>
+    <string name="reduce_unused_year">Not opened for over a year</string>
+    <string name="reduce_last_used_today">Opened today</string>
+    <string name="reduce_usage_title">Find the apps you no longer use</string>
+    <string name="reduce_usage_text">Android can tell VYLIA when each app was last opened. This usage access is read on your phone only and never leaves it. You can withdraw it at any time in the same screen.</string>
+    <string name="reduce_usage_button">Allow usage access</string>
+    <string name="alt_worst_title">Worst of Fame: what to replace</string>
+    <string name="alt_worst_hint">Your least respectful apps that have an ethical or free alternative. Tap one to get it.</string>
+    <string name="alt_worst_empty">None of your poorly rated apps has a listed alternative.</string>
+    <string name="alt_hall_title">Hall of Fame: alternatives to adopt</string>
+    <string name="alt_hall_hint">Free or privacy-respecting apps, by family. Installing one earns the Good swap trophy.</string>
+    <string name="alt_installed">Installed</string>
+    <string name="alt_open_source">Open source</string>
+    <string name="alt_get">Get it</string>
+    <plurals name="act_story_trophies">
+        <item quantity="one">%1$d trophy</item>
+        <item quantity="other">%1$d trophies</item>
+    </plurals>
+    <plurals name="act_summary_revocations">
+        <item quantity="one">%1$d permission to revoke</item>
+        <item quantity="other">%1$d permissions to revoke</item>
+    </plurals>
+    <plurals name="act_summary_removals">
+        <item quantity="one">%1$d app to remove</item>
+        <item quantity="other">%1$d apps to remove</item>
+    </plurals>
+    <plurals name="reduce_revoke_title">
+        <item quantity="one">Revoke %1$d permission</item>
+        <item quantity="other">Revoke %1$d permissions</item>
+    </plurals>
+    <plurals name="reduce_remove_title">
+        <item quantity="one">Remove %1$d app</item>
+        <item quantity="other">Remove %1$d apps</item>
+    </plurals>
+    <plurals name="reduce_last_used_days">
+        <item quantity="one">Opened %1$d day ago</item>
+        <item quantity="other">Opened %1$d days ago</item>
+    </plurals>
+    <plurals name="reduce_unused_months">
+        <item quantity="one">Not opened for %1$d month</item>
+        <item quantity="other">Not opened for %1$d months</item>
+    </plurals>
     <plurals name="act_rewards_congrats">
         <item quantity="one">🎉 Well done! %1$s removed: +%2$d pts</item>
         <item quantity="other">🎉 Well done! %1$s removed: +%2$d pts</item>

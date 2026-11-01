@@ -79,11 +79,15 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 | 3 | Icône et splash screen | Splash « scan » fait ; icône à revoir ; mascottes bienveillantes à arbitrer |
 | 4 | Écran Scan en 3 onglets | Fait : par risque, par catégorie, par badge ; icône → fiche Android |
 | 5 | Suivi longitudinal | À faire |
-| 6 | Agir en 3 sous-onglets | À faire |
+| 6 | Agir en 3 sous-onglets | Fait : Réduire (gain exact, apps inutilisées), Alternatives (catalogue), Récompenses et partage |
 | 7 | Notifications et scans programmés | À faire |
 |   | Grille de score v3 | Faite et visible dans Paramètres › Règles de score › Voir la grille |
 
 ### Prochaines actions
 
 1. ~~Comprendre : sous-onglet Badges et relecture des textes pour la grille v3~~ (fait le 2026-11-01).
-2. §6 Agir, puis §5 Suivi longitudinal et §7 Automatisations (ils partagent le stockage de l'historique).
+2. ~~§6 Agir~~ (fait le 2026-11-01).
+3. §3 Refonte visuelle : nouvelle icône centrée sur l'idée de scan / audit (sans codes agressifs de cybersécurité),
+   et splash screen redéfini avec une mascotte ou de petits espions stylisés et bienveillants, dans un registre
+   ludique, moderne et rassurant (à la place des bugs rouges expulsés).
+4. §5 Suivi longitudinal et §7 Automatisations (ils partagent le stockage de l'historique).

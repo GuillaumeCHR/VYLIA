@@ -7,6 +7,11 @@
         android:name="android.permission.QUERY_ALL_PACKAGES"
         tools:ignore="QueryAllPackagesPermission" />
 
+    <!-- Accès spécial activé par l'utilisateur (onglet Agir) : date de dernière utilisation des apps, lue sur le téléphone. -->
+    <uses-permission
+        android:name="android.permission.PACKAGE_USAGE_STATS"
+        tools:ignore="ProtectedPermissions" />
+
     <!-- Requiert Internet uniquement pour la mise à jour manuelle de la base Exodus Privacy -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

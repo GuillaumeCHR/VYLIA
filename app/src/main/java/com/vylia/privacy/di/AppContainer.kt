@@ -3,6 +3,8 @@ package com.vylia.privacy.di
 import android.content.Context
 import com.vylia.privacy.data.apps.AppScanner
 import com.vylia.privacy.data.apps.PackageRemovalMonitor
+import com.vylia.privacy.data.apps.UsageStatsReader
+import com.vylia.privacy.data.alternatives.AlternativesRepository
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rewards.PrefsRewardsStore
 import com.vylia.privacy.data.rules.RuleMatrixRepository
@@ -22,6 +24,8 @@ class AppContainer(context: Context) {
     val ruleMatrixRepository = RuleMatrixRepository(context)
     val badgesManager = BadgesManager(PrefsRewardsStore(context))
     val packageRemovalMonitor = PackageRemovalMonitor(context)
+    val alternativesRepository = AlternativesRepository(context)
+    val usageStatsReader = UsageStatsReader(context)
 
     private val scorer = { ruleMatrixRepository.current.value.scorer }
     private val appScanner = AppScanner(context)

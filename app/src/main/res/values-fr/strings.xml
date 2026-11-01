@@ -165,14 +165,6 @@
     <string name="act_share_chooser">Partager mon bilan</string>
     <string name="act_story_title">Mon Bilan VYLIA</string>
     <string name="act_story_footer" formatted="false">Analyse 100 % locale, sans serveur</string>
-    <string name="act_cleanup_title">⚠️ Assainir (Worst of Fame)</string>
-    <string name="act_cleanup_text">Les applications les plus intrusives de votre appareil. Désinstallez-les pour gagner des points : plus une app est intrusive, plus sa suppression rapporte.</string>
-    <string name="act_cleanup_empty">Aucune application critique détectée !</string>
-    <string name="act_cleanup_points">%1$d/100 · +%2$d pts si supprimée</string>
-    <string name="act_manage">Gérer</string>
-    <string name="act_good_title">🌿 Valoriser (apps exemplaires)</string>
-    <string name="act_good_text">Les bonnes élèves (score ≥ 80). Zéro traqueur et respect de la vie privée.</string>
-    <string name="act_good_empty">Aucune application ne remplit les critères pour le moment.</string>
     <string name="act_rewards_title">🏆 Hall of Fame — Récompenses</string>
     <string name="act_rewards_text">Chaque application intrusive (score &lt; 50) que vous supprimez rapporte 100 − son score en points.</string>
     <string name="act_badges">Badges (%1$d/%2$d)</string>
@@ -180,6 +172,72 @@
     <string name="act_removed_empty">Aucune pour l\'instant. Rendez-vous dans « Assainir » ci-dessous pour commencer.</string>
     <string name="act_points">points de confidentialité</string>
     <string name="ok">OK</string>
+    <string name="act_tab_reduce">Réduire</string>
+    <string name="act_tab_alternatives">Alternatives</string>
+    <string name="act_tab_rewards">Récompenses</string>
+    <string name="act_summary_title">Score moyen de vos apps</string>
+    <string name="act_summary_reachable">Atteignable : %1$d</string>
+    <string name="act_summary_nothing">Rien d\'urgent : vos apps respectent déjà bien votre vie privée.</string>
+    <string name="act_story_points">%1$d points de confidentialité</string>
+    <string name="reduce_revoke_hint">Des autorisations dont vos apps se servent sans en avoir besoin. Chaque gain est recalculé par le moteur de score. Touchez pour ouvrir la fiche Android de l\'app, puis Autorisations.</string>
+    <string name="reduce_revoke_empty">Aucune autorisation à retirer : chaque autorisation accordée sert la finalité de son app.</string>
+    <string name="reduce_revoke_line">Retirer : %1$s</string>
+    <string name="reduce_gain_points">+%1$d pts</string>
+    <string name="reduce_score_after">Score %1$d → %2$d</string>
+    <string name="reduce_badge_lost">Perd</string>
+    <string name="reduce_remove_hint">Les apps intrusives, et celles que vous n\'ouvrez plus et qui notent moins de 70. Supprimer une app intrusive rapporte des points.</string>
+    <string name="reduce_remove_hint_no_usage">Les apps intrusives d\'abord. Avec l\'accès aux données d\'utilisation, VYLIA peut aussi proposer les apps que vous n\'ouvrez plus.</string>
+    <string name="reduce_remove_empty">Aucune app à supprimer.</string>
+    <string name="reduce_reward_points">+%1$d pts</string>
+    <string name="reduce_last_used_unknown">Dernière utilisation inconnue</string>
+    <string name="reduce_unused_year">Pas ouverte depuis plus d\'un an</string>
+    <string name="reduce_last_used_today">Ouverte aujourd\'hui</string>
+    <string name="reduce_usage_title">Repérer les apps que vous n\'utilisez plus</string>
+    <string name="reduce_usage_text">Android peut indiquer à VYLIA quand chaque app a été ouverte pour la dernière fois. Cet accès aux données d\'utilisation est lu sur votre téléphone et n\'en sort jamais. Vous pouvez le retirer à tout moment dans le même écran.</string>
+    <string name="reduce_usage_button">Autoriser l\'accès aux données d\'utilisation</string>
+    <string name="alt_worst_title">Worst of Fame : à remplacer</string>
+    <string name="alt_worst_hint">Vos apps les moins respectueuses qui ont une alternative éthique ou libre. Touchez-en une pour l\'obtenir.</string>
+    <string name="alt_worst_empty">Aucune de vos apps mal notées n\'a d\'alternative répertoriée.</string>
+    <string name="alt_hall_title">Hall of Fame : les alternatives à adopter</string>
+    <string name="alt_hall_hint">Des apps libres ou respectueuses, par famille. En installer une débloque le trophée Bon échange.</string>
+    <string name="alt_installed">Installée</string>
+    <string name="alt_open_source">Libre</string>
+    <string name="alt_get">L\'obtenir</string>
+    <plurals name="act_story_trophies">
+        <item quantity="one">%1$d trophée</item>
+        <item quantity="many">%1$d trophées</item>
+        <item quantity="other">%1$d trophées</item>
+    </plurals>
+    <plurals name="act_summary_revocations">
+        <item quantity="one">%1$d autorisation à retirer</item>
+        <item quantity="many">%1$d autorisations à retirer</item>
+        <item quantity="other">%1$d autorisations à retirer</item>
+    </plurals>
+    <plurals name="act_summary_removals">
+        <item quantity="one">%1$d app à supprimer</item>
+        <item quantity="many">%1$d apps à supprimer</item>
+        <item quantity="other">%1$d apps à supprimer</item>
+    </plurals>
+    <plurals name="reduce_revoke_title">
+        <item quantity="one">Retirer %1$d autorisation</item>
+        <item quantity="many">Retirer %1$d autorisations</item>
+        <item quantity="other">Retirer %1$d autorisations</item>
+    </plurals>
+    <plurals name="reduce_remove_title">
+        <item quantity="one">Supprimer %1$d app</item>
+        <item quantity="many">Supprimer %1$d apps</item>
+        <item quantity="other">Supprimer %1$d apps</item>
+    </plurals>
+    <plurals name="reduce_last_used_days">
+        <item quantity="one">Ouverte il y a %1$d jour</item>
+        <item quantity="many">Ouverte il y a %1$d jours</item>
+        <item quantity="other">Ouverte il y a %1$d jours</item>
+    </plurals>
+    <plurals name="reduce_unused_months">
+        <item quantity="one">Pas ouverte depuis %1$d mois</item>
+        <item quantity="many">Pas ouverte depuis %1$d mois</item>
+        <item quantity="other">Pas ouverte depuis %1$d mois</item>
+    </plurals>
     <plurals name="act_rewards_congrats">
         <item quantity="one">🎉 Bravo ! %1$s supprimée : +%2$d pts</item>
         <item quantity="many">🎉 Bravo ! %1$s supprimées : +%2$d pts</item>

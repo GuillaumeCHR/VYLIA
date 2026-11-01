@@ -319,6 +319,8 @@ BADGES = {
  "TRACKER_HUNTER": (("Tracker hunter", "Chasseur de traqueurs"), ("Eliminate 20 trackers by removing apps", "Éliminer 20 traqueurs en supprimant des apps")),
  "NO_RED_ZONE": (("No red zone", "Zéro zone rouge"), ("No user app below 50/100", "Aucune app utilisateur sous 50/100")),
  "GREEN_DEVICE": (("Green device", "Appareil vert"), ("Average user app score of at least 80/100", "Score moyen des apps utilisateur d'au moins 80/100")),
+ "DETOX": (("Detox", "Désintoxication"), ("Revoke 3 sensitive permissions an app didn't need", "Retirer 3 autorisations sensibles dont une app n'avait pas besoin")),
+ "GOOD_SWAP": (("Good swap", "Bon échange"), ("Install an alternative from the catalogue", "Installer une alternative du catalogue")),
 }
 
 # Paliers Health Connect des règles (ensembles « @… »)

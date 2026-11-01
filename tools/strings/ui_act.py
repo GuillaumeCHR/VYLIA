@@ -1,0 +1,32 @@
+S = [
+ ("act_title", "Act", "Agir"),
+ ("act_share_title", "Raise awareness", "Sensibiliser"),
+ ("act_share_text", "Generate an image of your overall privacy report (100%% offline) to share with friends and family.", "Générez une image de votre bilan global de confidentialité (100 %% hors-ligne) pour la partager avec vos proches."),
+ ("act_share_button", "Share my report (Story)", "Partager mon bilan (Story)"),
+ ("act_share_chooser", "Share my report", "Partager mon bilan"),
+ ("act_story_title", "My VYLIA report", "Mon Bilan VYLIA"),
+ ("act_story_footer", "100%% on-device analysis, no server", "Analyse 100 %% locale, sans serveur"),
+ ("act_cleanup_title", "⚠️ Clean up (Worst of Fame)", "⚠️ Assainir (Worst of Fame)"),
+ ("act_cleanup_text", "The most intrusive apps on your device. Uninstall them to earn points: the more intrusive an app, the more its removal is worth.",
+  "Les applications les plus intrusives de votre appareil. Désinstallez-les pour gagner des points : plus une app est intrusive, plus sa suppression rapporte."),
+ ("act_cleanup_empty", "No critical app detected!", "Aucune application critique détectée !"),
+ ("act_cleanup_points", "%1$d/100 · +%2$d pts if removed", "%1$d/100 · +%2$d pts si supprimée"),
+ ("act_manage", "Manage", "Gérer"),
+ ("act_good_title", "🌿 Celebrate (exemplary apps)", "🌿 Valoriser (apps exemplaires)"),
+ ("act_good_text", "The top of the class (score ≥ 80). Zero trackers and respect for your privacy.", "Les bonnes élèves (score ≥ 80). Zéro traqueur et respect de la vie privée."),
+ ("act_good_empty", "No app meets the criteria yet.", "Aucune application ne remplit les critères pour le moment."),
+ ("act_rewards_title", "🏆 Hall of Fame — Rewards", "🏆 Hall of Fame — Récompenses"),
+ ("act_rewards_text", "Each intrusive app (score below 50) you remove earns 100 minus its score in points.", "Chaque application intrusive (score < 50) que vous supprimez rapporte 100 − son score en points."),
+ ("act_badges", "Badges (%1$d/%2$d)", "Badges (%1$d/%2$d)"),
+ ("act_removed_title", "Intrusive apps removed", "Applications intrusives supprimées"),
+ ("act_removed_empty", "None yet. Head to “Clean up” below to get started.", "Aucune pour l'instant. Rendez-vous dans « Assainir » ci-dessous pour commencer."),
+ ("act_points", "privacy points", "points de confidentialité"),
+ ("ok", "OK", "OK"),
+]
+
+P = [
+ ("act_rewards_congrats", ("🎉 Well done! %1$s removed: +%2$d pts", "🎉 Well done! %1$s removed: +%2$d pts"),
+  ("🎉 Bravo ! %1$s supprimée : +%2$d pts", "🎉 Bravo ! %1$s supprimées : +%2$d pts")),
+ ("act_removed_line", ("%1$d tracker eliminated · %2$s", "%1$d trackers eliminated · %2$s"),
+  ("%1$d traqueur éliminé · %2$s", "%1$d traqueurs éliminés · %2$s")),
+]

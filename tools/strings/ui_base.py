@@ -1,0 +1,26 @@
+S = [
+ ("splash_presents", "Yogi Studio presents", "Yogi Studio présente"),
+ ("splash_skip_hint", "Intro animation. Tap to skip.", "Animation d'introduction. Touchez pour passer."),
+ ("home_refresh", "Restart the analysis", "Relancer l'analyse"),
+ ("home_scanning", "Analysing apps…", "Analyse des applications…"),
+ ("home_error", "The analysis failed: %1$s", "L'analyse a échoué : %1$s"),
+ ("home_retry", "Retry", "Réessayer"),
+ ("home_empty", "No app in this category.", "Aucune application dans cette catégorie."),
+ ("home_search_hint", "Search for an app", "Rechercher une application"),
+ ("home_search_clear", "Clear search", "Effacer la recherche"),
+ ("home_search_empty", "No app matches “%1$s”.", "Aucune application ne correspond à « %1$s »."),
+ ("tab_user_apps", "My apps (%1$d)", "Mes apps (%1$d)"),
+ ("tab_system_apps", "System (%1$d)", "Système (%1$d)"),
+ ("score_out_of", "/100", "/100"),
+ ("header_title", "Privacy score", "Score de confidentialité"),
+ ("header_subtitle_user", "Average of your %1$d apps", "Moyenne de vos %1$d applications"),
+ ("header_subtitle_system", "Average of the %1$d system apps", "Moyenne des %1$d applications système"),
+ ("risk_low", "Low risk", "Faible risque"),
+ ("risk_medium", "Moderate risk", "Risque modéré"),
+ ("risk_high", "High risk", "Risque élevé"),
+ ("trackers_failed", "Tracker analysis not possible", "Analyse des traqueurs impossible"),
+ ("trackers_none", "No tracker detected", "Aucun traqueur détecté"),
+]
+P = [
+ ("trackers_found", ("%1$d tracker detected", "%1$d trackers detected"), ("%1$d traqueur détecté", "%1$d traqueurs détectés")),
+]

@@ -13,6 +13,7 @@ object CategoryRationale {
     private class Texts(@param:StringRes val name: Int, @param:StringRes val rationale: Int)
 
     private val texts = mapOf(
+        // region generated:categories (tools/strings/generate.py)
         "DEFAULT" to Texts(R.string.category_default, R.string.category_default_rationale),
         "NAVIGATION" to Texts(R.string.category_navigation, R.string.category_navigation_rationale),
         "TRANSPORT" to Texts(R.string.category_transport, R.string.category_transport_rationale),
@@ -41,6 +42,7 @@ object CategoryRationale {
         "DATING" to Texts(R.string.category_dating, R.string.category_dating_rationale),
         "KEYBOARD" to Texts(R.string.category_keyboard, R.string.category_keyboard_rationale),
         "EDUCATION_FAMILY" to Texts(R.string.category_education_family, R.string.category_education_family_rationale),
+        // endregion
     )
 
     @StringRes

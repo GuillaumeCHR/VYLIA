@@ -1,0 +1,400 @@
+# Textes des lexiques (en, fr) : permissions, thèmes, modes d'octroi, traqueurs, catégories, badges de récompense.
+# Lus par generate.py.
+import sys
+from glossary_extra import EXTRA, EXTRA_THEMES
+
+GRANTS = {
+ "RUNTIME": (("Permission prompt", "Fenêtre de demande"),
+   ("Android asks you in a pop-up the first time the app needs it. You can revoke it at any time: Settings > Apps > the app > Permissions.",
+    "Android vous la demande dans une fenêtre la première fois que l'app en a besoin. Vous pouvez la retirer à tout moment : Paramètres > Applications > l'app > Autorisations.")),
+ "BACKGROUND": (("“Allow all the time” setting", "Réglage « Toujours autoriser »"),
+   ("It is never granted with a single tap: you have to choose “Allow all the time” in the app's permissions. Switch it back to “Allow only while using the app” if in doubt.",
+    "Elle n'est jamais accordée d'un simple clic : il faut choisir « Toujours autoriser » dans les autorisations de l'app. Repassez-la sur « Seulement si l'app est en cours d'utilisation » si vous doutez.")),
+ "WITH_MEDIA": (("Tied to photo access", "Liée à l'accès aux photos"),
+   ("No separate prompt: it comes with access to your photos and videos. Removing the app's photo access removes it too.",
+    "Pas de fenêtre distincte : elle accompagne l'accès à vos photos et vidéos. Retirer l'accès aux photos de l'app la retire aussi.")),
+ "SPECIAL": (("Special access", "Accès spécial"),
+   ("A powerful access you have to switch on yourself in a dedicated settings screen (Settings > Apps > Special app access). An app that sends you there needs a very good reason.",
+    "C'est un accès puissant qu'il faut activer soi-même dans un écran dédié des paramètres (Paramètres > Applications > Accès spéciaux). Une app qui vous y envoie doit avoir une très bonne raison.")),
+ "INSTALL": (("Granted automatically", "Accordée d'office"),
+   ("It is granted automatically at install time, without any prompt, and cannot be revoked without uninstalling the app.",
+    "Elle est accordée automatiquement à l'installation, sans aucune fenêtre de demande, et ne peut pas être retirée sans désinstaller l'app.")),
+}
+
+THEMES = {
+ "LOCATION": ("Location", "Localisation"),
+ "MESSAGES_CALLS": ("Messages and calls", "Messages et appels"),
+ "CONTACTS": ("Identity, contacts and accounts", "Identité, contacts et comptes"),
+ "MIC_CAMERA": ("Microphone and camera", "Micro et caméra"),
+ "CALENDAR": ("Calendar", "Agenda"),
+ "HEALTH": ("Sensors, health and activity", "Capteurs, santé et activité"),
+ "FILES": ("Photos, videos and files", "Photos, vidéos et fichiers"),
+ "NEARBY": ("Nearby devices", "Appareils à proximité"),
+ "APPS": ("Your apps", "Vos applications"),
+ "CONTROL": ("Phone control", "Contrôle du téléphone"),
+ "NETWORK": ("Network and Internet", "Réseau et Internet"),
+ "ADS": ("Advertising and measurement", "Publicité et mesure"),
+ "SYSTEM": ("How the app runs", "Fonctionnement de l'app"),
+ "OTHER": ("Other permissions", "Autres permissions"),
+}
+
+# permission, theme, grant, (title en, fr), (allows en, fr), (why en, fr)
+PERMS = [
+ ("ACCESS_BACKGROUND_LOCATION", "LOCATION", "BACKGROUND", ("Background location", "Position en arrière-plan"),
+  ("Know your location even when the app is closed or you are not using it.", "Connaître votre position même quand l'app est fermée ou que vous ne l'utilisez pas."),
+  ("This is round-the-clock tracking: home, work, places of care, worship or dating, schedules… A few days of locations are enough to identify you and reconstruct your life. This data is highly sought after by data brokers.",
+   "C'est un suivi 24 h/24 : domicile, travail, lieux de soin, de culte, de rencontre, horaires… Quelques jours de positions suffisent à vous identifier et à reconstituer votre vie. Ces données sont très recherchées par les courtiers en données.")),
+ ("ACCESS_FINE_LOCATION", "LOCATION", "RUNTIME", ("Precise location (GPS)", "Position précise (GPS)"),
+  ("Know your location to within a few metres while you use the app.", "Connaître votre position à quelques mètres près pendant que vous utilisez l'app."),
+  ("Essential for a GPS or a running app, but it reveals exactly where you are. For an app that only needs the city (weather, shop), approximate location is enough.",
+   "Indispensable pour un GPS ou une app de course, mais révèle où vous êtes exactement. Pour une app qui n'a besoin que de la ville (météo, boutique), la position approximative suffit.")),
+ ("ACCESS_COARSE_LOCATION", "LOCATION", "RUNTIME", ("Approximate location", "Position approximative"),
+  ("Know your location at neighbourhood or city level.", "Connaître votre position à l'échelle du quartier ou de la ville."),
+  ("Less intrusive than GPS, it still reveals your regular movements and is often used to target local advertising.",
+   "Moins intrusive que le GPS, elle indique tout de même vos déplacements réguliers et sert souvent à cibler la publicité locale.")),
+ ("ACCESS_MEDIA_LOCATION", "LOCATION", "WITH_MEDIA", ("Photo locations", "Lieux de prise des photos"),
+  ("Read the GPS coordinates stored in your photos and videos.", "Lire les coordonnées GPS enregistrées dans vos photos et vidéos."),
+  ("Your photos tell where you were and when: home, holidays, places you visit. An app can retrace your past movements without ever asking for your location.",
+   "Vos photos racontent où vous étiez et quand : domicile, vacances, lieux fréquentés. Une app peut ainsi retracer vos déplacements passés sans jamais demander votre position.")),
+ ("READ_SMS", "MESSAGES_CALLS", "RUNTIME", ("Read SMS", "Lecture des SMS"),
+  ("Read all your text messages, old and new.", "Lire tous vos SMS, anciens comme nouveaux."),
+  ("Your private conversations, but also banking and login verification codes received by SMS: enough to take over accounts. Google restricts it to default SMS apps.",
+   "Vos conversations privées, mais aussi les codes de validation bancaires et de connexion reçus par SMS : de quoi prendre le contrôle de comptes. Google en réserve l'usage aux apps de SMS par défaut.")),
+ ("RECEIVE_SMS", "MESSAGES_CALLS", "RUNTIME", ("Receive SMS", "Réception des SMS"),
+  ("Be notified of and read each text message as it arrives.", "Être prévenue et lire chaque SMS au moment où il arrive."),
+  ("Lets an app intercept one-time codes as soon as they arrive, a classic technique of banking malware.",
+   "Permet d'intercepter les codes à usage unique dès leur réception, technique classique des logiciels malveillants bancaires.")),
+ ("SEND_SMS", "MESSAGES_CALLS", "RUNTIME", ("Send SMS", "Envoi de SMS"),
+  ("Send text messages on your behalf, without going through your messaging app.", "Envoyer des SMS en votre nom, sans passer par votre app de messagerie."),
+  ("Risk of premium-rate texts billed to your plan, or messages sent to your contacts without your knowledge.",
+   "Risque de SMS surtaxés facturés sur votre forfait, ou de messages envoyés à vos contacts à votre insu.")),
+ ("RECEIVE_MMS", "MESSAGES_CALLS", "RUNTIME", ("Receive MMS", "Réception des MMS"),
+  ("Receive and read MMS (messages with a photo or video).", "Recevoir et lire les MMS (messages avec photo ou vidéo)."),
+  ("Gives access to the content of private messages, photos included.", "Donne accès au contenu de messages privés, photos comprises.")),
+ ("READ_CALL_LOG", "MESSAGES_CALLS", "RUNTIME", ("Call log", "Journal d'appels"),
+  ("Read the list of your calls: numbers, dates, durations.", "Lire la liste de vos appels : numéros, dates, durées."),
+  ("Who you call, when and for how long maps out your personal, medical or professional circle. Google restricts it to default phone apps.",
+   "Qui vous appelez, quand et combien de temps dessine votre cercle intime, médical ou professionnel. Google en réserve l'usage aux apps de téléphone par défaut.")),
+ ("WRITE_CALL_LOG", "MESSAGES_CALLS", "RUNTIME", ("Modify call log", "Modification du journal d'appels"),
+  ("Add, change or delete entries in your call history.", "Ajouter, modifier ou effacer des entrées de votre historique d'appels."),
+  ("An app could erase the trace of calls it made or tamper with your history.", "Une app pourrait effacer la trace d'appels qu'elle a passés ou falsifier votre historique.")),
+ ("PROCESS_OUTGOING_CALLS", "MESSAGES_CALLS", "RUNTIME", ("Outgoing calls", "Appels sortants"),
+  ("See the number you dial and redirect or cancel the call (legacy permission, removed since Android 10).", "Voir le numéro que vous composez et rediriger ou annuler l'appel (permission ancienne, retirée depuis Android 10)."),
+  ("Reveals every number you call; its presence often betrays an old or poorly maintained app.", "Révèle tous les numéros que vous appelez ; sa présence trahit souvent une app ancienne ou peu maintenue.")),
+ ("CALL_PHONE", "MESSAGES_CALLS", "RUNTIME", ("Make calls", "Passer des appels"),
+  ("Call a number directly, without you confirming in the Phone app.", "Appeler un numéro directement, sans que vous confirmiez dans l'app Téléphone."),
+  ("Useful for a “call customer service” button, but also allows calls to premium-rate numbers.", "Utile pour un bouton « appeler le service client », mais permet aussi des appels vers des numéros surtaxés.")),
+ ("ANSWER_PHONE_CALLS", "MESSAGES_CALLS", "RUNTIME", ("Answer calls", "Répondre aux appels"),
+  ("Pick up or hang up an incoming call for you.", "Décrocher ou raccrocher un appel entrant à votre place."),
+  ("Legitimate for a watch or a connected car; elsewhere, an app has no reason to handle your calls.", "Légitime pour une montre ou une voiture connectée ; ailleurs, une app n'a aucune raison de gérer vos appels.")),
+ ("READ_PHONE_STATE", "MESSAGES_CALLS", "RUNTIME", ("Phone status and identity", "État et identité du téléphone"),
+  ("Know whether you are on a call, your carrier, your network and information about the SIM card.", "Savoir si vous êtes en communication, connaître votre opérateur, votre réseau et des informations sur la carte SIM."),
+  ("The reassuring name hides information useful for recognising you from one app to another. Advertising SDKs love it to build a device fingerprint.",
+   "Le nom rassurant cache des informations utiles pour vous reconnaître d'une app à l'autre. Elle est très prisée des SDK publicitaires pour constituer une empreinte de l'appareil.")),
+ ("READ_PHONE_NUMBERS", "MESSAGES_CALLS", "RUNTIME", ("Your phone number", "Votre numéro de téléphone"),
+  ("Read the phone number of your SIM cards.", "Lire le numéro de téléphone de vos cartes SIM."),
+  ("Your number is a stable, personal identifier that can be used to find you elsewhere (messaging apps, data leaks, cold calling).",
+   "Votre numéro est un identifiant stable et personnel, qui permet de vous retrouver ailleurs (messageries, fuites de données, démarchage).")),
+ ("READ_CONTACTS", "CONTACTS", "RUNTIME", ("Address book", "Carnet d'adresses"),
+  ("Read all your contacts: names, numbers, e-mails, addresses, notes.", "Lire tous vos contacts : noms, numéros, e-mails, adresses, notes."),
+  ("This is not only your data but your loved ones' too, and they agreed to nothing. Address books are often uploaded to servers to “find friends” or feed profiles.",
+   "Ce ne sont pas seulement vos données mais celles de vos proches, qui n'ont rien accepté. Les carnets d'adresses sont souvent envoyés aux serveurs pour « trouver des amis » ou alimenter des profils.")),
+ ("WRITE_CONTACTS", "CONTACTS", "RUNTIME", ("Modify contacts", "Modification des contacts"),
+  ("Add, change or delete contacts.", "Ajouter, modifier ou supprimer des contacts."),
+  ("An app can add its own entries (sales number, support) or alter yours.", "Une app peut ajouter ses propres fiches (numéro de démarchage, support) ou altérer les vôtres.")),
+ ("GET_ACCOUNTS", "CONTACTS", "RUNTIME", ("Phone accounts", "Comptes du téléphone"),
+  ("See the accounts registered on the phone (Google, e-mail, social networks).", "Voir les comptes enregistrés sur le téléphone (Google, e-mail, réseaux sociaux)."),
+  ("Since Android 8, the app only sees its own accounts or those you entrust to it, but asking for it still signals interest in your online identity.",
+   "Depuis Android 8, l'app ne voit plus que ses propres comptes ou ceux que vous lui confiez, mais sa demande reste un signal d'intérêt pour votre identité en ligne.")),
+ ("RECORD_AUDIO", "MIC_CAMERA", "RUNTIME", ("Microphone", "Microphone"),
+  ("Record sound through the microphone while you use the app.", "Enregistrer le son via le micro pendant que vous utilisez l'app."),
+  ("Conversations, voices, background noise: the microphone picks up far more than your voice command. Android shows a green dot when it is in use; be wary if it appears for no reason.",
+   "Conversations, voix, bruits de fond : le micro capte bien plus que votre commande vocale. Android affiche un point vert quand il est utilisé ; méfiez-vous s'il apparaît sans raison.")),
+ ("CAMERA", "MIC_CAMERA", "RUNTIME", ("Camera", "Appareil photo"),
+  ("Take photos and videos, or scan a code, while you use the app.", "Prendre des photos et des vidéos, ou scanner un code, pendant que vous utilisez l'app."),
+  ("Normal for scanning a QR code or a document. Less so for an app with nothing to photograph. A green dot signals when it is in use.",
+   "Normal pour scanner un QR code ou un document. Moins pour une app qui n'a rien à photographier. Un point vert signale son utilisation.")),
+ ("READ_CALENDAR", "CALENDAR", "RUNTIME", ("Read calendar", "Lecture de l'agenda"),
+  ("Read all your appointments and those of shared calendars.", "Lire tous vos rendez-vous et ceux des agendas partagés."),
+  ("Your medical, work or personal appointments, with places and attendees, describe your life precisely, and that of the other guests.",
+   "Vos rendez-vous médicaux, professionnels ou personnels, avec lieux et participants, décrivent précisément votre vie et celle des autres invités.")),
+ ("WRITE_CALENDAR", "CALENDAR", "RUNTIME", ("Modify calendar", "Modification de l'agenda"),
+  ("Create, change or delete events.", "Créer, modifier ou supprimer des événements."),
+  ("Handy for adding a booking, but an app can also delete or change your appointments.", "Pratique pour ajouter une réservation, mais une app peut aussi effacer ou modifier vos rendez-vous.")),
+ ("BODY_SENSORS", "HEALTH", "RUNTIME", ("Body sensors", "Capteurs corporels"),
+  ("Read health sensors: heart rate, blood oxygen, etc.", "Lire les capteurs de santé : rythme cardiaque, oxygénation du sang, etc."),
+  ("Health data is among the most sensitive there is (GDPR, article 9): it can reveal illness, stress or pregnancy.",
+   "Les données de santé sont parmi les plus sensibles qui soient (RGPD, article 9) : elles peuvent révéler maladies, stress ou grossesse.")),
+ ("BODY_SENSORS_BACKGROUND", "HEALTH", "BACKGROUND", ("Body sensors in the background", "Capteurs corporels en arrière-plan"),
+  ("Read your health sensors even when the app is not open.", "Lire vos capteurs de santé même quand l'app n'est pas ouverte."),
+  ("Permanent health monitoring, rarely needed outside a watch or medical tracking app.", "Une surveillance de santé permanente, rarement nécessaire hors d'une app de montre ou de suivi médical.")),
+ ("ACTIVITY_RECOGNITION", "HEALTH", "RUNTIME", ("Physical activity", "Activité physique"),
+  ("Detect whether you are walking, running, cycling or driving, and count your steps.", "Détecter si vous marchez, courez, êtes en vélo ou en voiture, et compter vos pas."),
+  ("Reveals your habits, journeys and lifestyle, even without access to your location.", "Révèle vos habitudes, vos trajets et votre mode de vie, même sans accès à la position.")),
+ ("READ_EXTERNAL_STORAGE", "FILES", "RUNTIME", ("Files and media (legacy access)", "Fichiers et médias (ancien accès)"),
+  ("Read the photos, videos, music and documents in shared storage.", "Lire les photos, vidéos, musiques et documents du stockage partagé."),
+  ("Opens access to your whole gallery and downloads. Since Android 13 it has been replaced by finer-grained access: VYLIA only counts it for apps built for older versions.",
+   "Ouvre l'accès à toute votre galerie et vos téléchargements. Depuis Android 13, elle est remplacée par des accès plus fins : VYLIA ne la compte que pour les apps conçues pour des versions plus anciennes.")),
+ ("MANAGE_EXTERNAL_STORAGE", "FILES", "SPECIAL", ("All files access", "Accès à tous les fichiers"),
+  ("Read, modify and delete every file in shared storage, without restriction.", "Lire, modifier et supprimer tous les fichiers du stockage partagé, sans restriction."),
+  ("ID documents, statements, photos, backups: everything becomes readable. In principle reserved for file managers and antivirus apps.",
+   "Documents d'identité, relevés, photos, sauvegardes : tout devient lisible. Réservé en principe aux gestionnaires de fichiers et antivirus.")),
+ ("READ_MEDIA_IMAGES", "FILES", "RUNTIME", ("Photos", "Photos"),
+  ("Read the photos in your gallery.", "Lire les photos de votre galerie."),
+  ("Faces, photographed documents, screenshots, places: a gallery says a lot. Android 14 lets you share only selected photos; prefer that option.",
+   "Visages, documents photographiés, captures d'écran, lieux : une galerie en dit beaucoup. Android 14 permet de ne partager que certaines photos ; préférez cette option.")),
+ ("READ_MEDIA_VIDEO", "FILES", "RUNTIME", ("Videos", "Vidéos"),
+  ("Read the videos in your gallery.", "Lire les vidéos de votre galerie."),
+  ("Same concern as photos: your videos show people and places.", "Même enjeu que pour les photos : vos vidéos montrent des personnes et des lieux.")),
+ ("READ_MEDIA_AUDIO", "FILES", "RUNTIME", ("Audio files", "Fichiers audio"),
+  ("Read your music, podcasts and recordings.", "Lire votre musique, vos podcasts et vos enregistrements."),
+  ("Not very sensitive for music, more so for voice memos or call recordings.", "Peu sensible pour la musique, davantage pour des mémos vocaux ou des enregistrements d'appels.")),
+ ("BLUETOOTH_SCAN", "NEARBY", "RUNTIME", ("Bluetooth device scan", "Recherche d'appareils Bluetooth"),
+  ("Detect Bluetooth devices around you (earbuds, watches, beacons).", "Détecter les appareils Bluetooth autour de vous (écouteurs, montres, balises)."),
+  ("Bluetooth beacons in shops and public places reveal where you are, even without location access.", "Les balises Bluetooth des magasins et lieux publics permettent de savoir où vous êtes, même sans accès à la position.")),
+ ("NEARBY_WIFI_DEVICES", "NEARBY", "RUNTIME", ("Nearby Wi-Fi devices", "Appareils Wi-Fi à proximité"),
+  ("Detect and connect to nearby Wi-Fi devices (printer, speaker, camera).", "Détecter et se connecter aux appareils Wi-Fi proches (imprimante, enceinte, caméra)."),
+  ("The list of nearby networks and devices can be used to infer your location.", "La liste des réseaux et appareils voisins peut servir à déduire votre position.")),
+ ("QUERY_ALL_PACKAGES", "APPS", "INSTALL", ("List of your apps", "Liste de vos applications"),
+  ("See the full list of apps installed on your phone.", "Voir la liste complète des applications installées sur votre téléphone."),
+  ("Your app list says a lot about you: a health, banking, dating, religious or political app reveals intimate information. The combination of installed apps is also a near-unique fingerprint for tracking you.",
+   "Votre liste d'apps en dit beaucoup sur vous : une app de santé, une banque, une app de rencontre, religieuse ou politique révèlent des informations intimes. La combinaison des apps installées sert aussi d'empreinte quasi unique pour vous pister.")),
+ ("PACKAGE_USAGE_STATS", "APPS", "SPECIAL", ("Usage statistics", "Statistiques d'utilisation"),
+  ("Know which apps you use, when and for how long.", "Savoir quelles apps vous utilisez, quand et combien de temps."),
+  ("Your sleeping hours, habits and night-time or work usage can be read in these statistics.", "Vos horaires de sommeil, vos habitudes, vos usages de nuit ou au travail se lisent dans ces statistiques.")),
+ ("REQUEST_INSTALL_PACKAGES", "APPS", "SPECIAL", ("Install other apps", "Installation d'autres applications"),
+  ("Offer to install apps downloaded outside the Play Store.", "Proposer l'installation d'applications téléchargées en dehors du Play Store."),
+  ("A gateway for apps not checked by Google, or even malicious ones. Legitimate for a browser or an alternative store (F-Droid), suspicious elsewhere.",
+   "Une porte d'entrée pour des apps non vérifiées par Google, voire malveillantes. Légitime pour un navigateur ou un magasin alternatif (F-Droid), suspecte ailleurs.")),
+ ("BIND_ACCESSIBILITY_SERVICE", "CONTROL", "SPECIAL", ("Accessibility service", "Service d'accessibilité"),
+  ("Read everything shown on screen and act for you: tap, type text, navigate.", "Lire tout ce qui s'affiche à l'écran et agir à votre place : toucher, saisir du texte, naviguer."),
+  ("This is Android's most powerful access, designed to help people with disabilities. It can read passwords and messages, and it is the favourite tool of spyware. Only grant it to an accessibility app you trust.",
+   "C'est l'accès le plus puissant d'Android, conçu pour aider les personnes handicapées. Il permet de lire mots de passe et messages, et c'est l'outil favori des logiciels espions. À n'accorder qu'à une app d'accessibilité de confiance.")),
+ ("BIND_NOTIFICATION_LISTENER_SERVICE", "CONTROL", "SPECIAL", ("Notification access", "Lecture des notifications"),
+  ("Read all your notifications, from every app, and dismiss them.", "Lire toutes vos notifications, de toutes les apps, et pouvoir les fermer."),
+  ("Message previews, e-mails, verification codes, bank alerts: everything goes through notifications.", "Aperçus de messages, e-mails, codes de validation, alertes bancaires : tout transite par les notifications.")),
+ ("BIND_DEVICE_ADMIN", "CONTROL", "SPECIAL", ("Device administrator", "Administrateur de l'appareil"),
+  ("Lock the phone, enforce a PIN, wipe all data, prevent uninstallation.", "Verrouiller le téléphone, imposer un code, effacer toutes les données, empêcher la désinstallation."),
+  ("Legitimate for a work phone managed by your employer or an anti-theft app. Elsewhere it is excessive control, sometimes used to make an app impossible to remove.",
+   "Légitime pour un téléphone professionnel géré par votre employeur ou un antivol. Ailleurs, c'est un contrôle excessif, parfois utilisé pour rendre une app impossible à supprimer.")),
+ ("SYSTEM_ALERT_WINDOW", "CONTROL", "SPECIAL", ("Display over other apps", "Affichage par-dessus les autres apps"),
+  ("Show windows on top of other apps (chat bubbles, floating player).", "Afficher des fenêtres au-dessus des autres applications (bulles de discussion, lecteur flottant)."),
+  ("A fake window can cover a real app to make you type a password or tap a button without realising.", "Une fausse fenêtre peut recouvrir une vraie app pour vous faire saisir un mot de passe ou toucher un bouton à votre insu.")),
+("INTERNET", "NETWORK", "INSTALL", ("Internet access", "Accès à Internet"),
+  ("Send and receive data over the Internet.", "Envoyer et recevoir des données par Internet."),
+  ("Almost every app has it, and it is not counted in the score. But it is the door through which everything the app collects leaves the phone: an app without it cannot send anything.",
+   "Presque toutes les apps l'ont, et elle n'est pas comptée dans le score. Mais c'est la porte par laquelle tout ce que l'app collecte quitte le téléphone : une app qui ne l'a pas ne peut rien envoyer.")),
+ ("ACCESS_NETWORK_STATE", "NETWORK", "INSTALL", ("Network status", "État du réseau"),
+  ("Know whether you are connected, and whether through Wi-Fi or mobile data.", "Savoir si vous êtes connecté, et si c'est en Wi-Fi ou en données mobiles."),
+  ("Harmless on its own: it lets an app wait for Wi-Fi before a big download.", "Anodine en soi : elle permet par exemple d'attendre le Wi-Fi avant un gros téléchargement.")),
+ ("ACCESS_WIFI_STATE", "NETWORK", "INSTALL", ("Wi-Fi information", "Informations Wi-Fi"),
+  ("See the Wi-Fi network you are connected to and nearby networks.", "Voir le réseau Wi-Fi auquel vous êtes connecté et les réseaux voisins."),
+  ("The names of the networks around you can reveal where you are, even without location access.", "Le nom des réseaux qui vous entourent peut révéler où vous êtes, même sans accès à la position.")),
+ ("com.google.android.gms.permission.AD_ID", "ADS", "INSTALL", ("Advertising ID", "Identifiant publicitaire"),
+  ("Read your phone's advertising ID, the same for every app.", "Lire l'identifiant publicitaire du téléphone, le même pour toutes les apps."),
+  ("It lets advertisers recognise you from one app to another and build a profile. You can delete it: Settings > Privacy > Ads (or Google > Ads).",
+   "Il permet aux annonceurs de vous reconnaître d'une app à l'autre et de constituer un profil. Vous pouvez le supprimer : Paramètres > Confidentialité > Annonces (ou Google > Annonces).")),
+ ("com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE", "ADS", "INSTALL", ("Install referrer", "Origine de l'installation"),
+  ("Ask the Play Store which ad or link led you to install the app.", "Demander au Play Store quelle publicité ou quel lien vous a mené à installer l'app."),
+  ("Used to measure advertising campaigns: it ties your installation to an ad you saw elsewhere.", "Sert à mesurer les campagnes publicitaires : elle relie votre installation à une publicité vue ailleurs.")),
+ ("RECEIVE_BOOT_COMPLETED", "SYSTEM", "INSTALL", ("Start at boot", "Démarrage au boot"),
+  ("Run as soon as the phone starts, without you opening the app.", "Se lancer dès le démarrage du téléphone, sans que vous ouvriez l'app."),
+  ("Useful for an alarm clock or a messaging app. Combined with other accesses, it lets an app work in the background without you knowing.",
+   "Utile pour un réveil ou une messagerie. Combinée à d'autres accès, elle permet à une app de fonctionner en arrière-plan à votre insu.")),
+ ("FOREGROUND_SERVICE", "SYSTEM", "INSTALL", ("Foreground service", "Service au premier plan"),
+  ("Keep running in the background, with a permanent notification.", "Continuer à fonctionner en arrière-plan, avec une notification permanente."),
+  ("Normal for music, navigation or a call. The notification is there to warn you: if you don't understand it, check the app.",
+   "Normal pour la musique, la navigation ou un appel. La notification est là pour vous prévenir : si vous ne la comprenez pas, vérifiez l'app.")),
+ ("POST_NOTIFICATIONS", "SYSTEM", "RUNTIME", ("Notifications", "Notifications"),
+  ("Show notifications.", "Afficher des notifications."),
+  ("Not a privacy risk, but often a way to bring you back into the app. You can refuse it or limit it per notification category.",
+   "Pas un risque pour la vie privée, mais souvent un moyen de vous faire revenir dans l'app. Vous pouvez la refuser ou la limiter par catégorie de notification.")),
+ ("WAKE_LOCK", "SYSTEM", "INSTALL", ("Keep the phone awake", "Empêcher la mise en veille"),
+  ("Prevent the phone from going to sleep while a task is running.", "Empêcher le téléphone de se mettre en veille pendant une tâche."),
+  ("No privacy risk; mostly an effect on the battery.", "Aucun risque pour la vie privée ; surtout un effet sur la batterie.")),
+ ("BLUETOOTH_CONNECT", "NEARBY", "RUNTIME", ("Connect to Bluetooth devices", "Connexion aux appareils Bluetooth"),
+  ("Connect to Bluetooth devices already paired with the phone.", "Se connecter aux appareils Bluetooth déjà associés au téléphone."),
+  ("Reveals the list of your devices (car, watch, earbuds): a clue about your habits.", "Révèle la liste de vos appareils (voiture, montre, écouteurs) : un indice sur vos habitudes.")),
+ ("NFC", "NEARBY", "INSTALL", ("NFC", "NFC"),
+  ("Exchange data with an NFC tag or terminal held close to the phone.", "Échanger des données avec une puce ou un terminal NFC approché du téléphone."),
+  ("Needed for contactless payment or reading an ID document; only works at a few centimetres.", "Nécessaire au paiement sans contact ou à la lecture d'une pièce d'identité ; ne fonctionne qu'à quelques centimètres.")),
+ ("USE_BIOMETRIC", "CONTACTS", "INSTALL", ("Biometric authentication", "Authentification biométrique"),
+  ("Ask you to confirm with your fingerprint or face.", "Vous demander de confirmer avec votre empreinte ou votre visage."),
+  ("Reassuring: the app never sees your fingerprint, Android only answers “yes” or “no”.", "Rassurante : l'app ne voit jamais votre empreinte, Android lui répond seulement « oui » ou « non ».")),
+ ("REQUEST_IGNORE_BATTERY_OPTIMIZATIONS", "SYSTEM", "SPECIAL", ("Ignore battery optimisation", "Ignorer l'optimisation de la batterie"),
+  ("Ask to escape the battery saver so it can keep running in the background.", "Demander à échapper à l'économiseur de batterie pour continuer à tourner en arrière-plan."),
+  ("Legitimate for a watch or messaging app; elsewhere, a sign of an app that wants to stay active permanently.", "Légitime pour une montre ou une messagerie ; ailleurs, le signe d'une app qui veut rester active en permanence.")),
+]
+
+THEMES.update(EXTRA_THEMES)
+PERMS += EXTRA
+
+TRACKERS = [
+ ("Advertisement", "advertisement", ("Advertising", "Publicité"), "high",
+  ("Collects your phone's advertising ID, your interests and how you react to ads, then auctions them to many advertisers every time an ad is shown. Your data thus travels to dozens of companies you have never heard of.",
+   "Récupère l'identifiant publicitaire de votre téléphone, vos centres d'intérêt et vos réactions aux publicités, puis les met aux enchères auprès de nombreux annonceurs à chaque affichage. Vos données circulent ainsi chez des dizaines d'entreprises que vous ne connaissez pas.")),
+ ("Profiling", "profiling", ("Profiling", "Profilage"), "high",
+  ("Builds a detailed portrait of you: habits, purchases, interests, sometimes health or opinions inferred from your behaviour. These profiles are cross-referenced between apps and feed data brokers.",
+   "Assemble un portrait détaillé de vous : habitudes, achats, centres d'intérêt, parfois santé ou opinions déduites de votre comportement. Ces profils sont croisés d'une app à l'autre et alimentent les courtiers en données.")),
+ ("Location", "location", ("Location", "Localisation"), "high",
+  ("Records your locations, often continuously, including through Bluetooth beacons in shops. They reveal home, work and sensitive places (health, worship, dating) and are almost impossible to anonymise.",
+   "Enregistre vos positions, souvent en continu, y compris grâce aux balises Bluetooth des magasins. Elles révèlent domicile, travail et lieux sensibles (santé, culte, rencontres) et sont presque impossibles à anonymiser.")),
+ ("Identification", "identification", ("Identification", "Identification"), "significant",
+  ("Links your activity to an identity: Facebook or other account, device identifier. It becomes possible to recognise you from one app to another and tie your usage to your real name.",
+   "Relie votre activité à une identité : compte Facebook ou autre, identifiant de l'appareil. Il devient possible de vous reconnaître d'une app à l'autre et de rattacher votre usage à votre vrai nom.")),
+ ("Analytics", "analytics", ("Analytics", "Mesure d'audience"), "moderate",
+  ("Measures what you do in the app (screens viewed, taps, purchases, time spent) and sends it to a third party, often Google or Facebook, even if you have no account there. Also used to attribute your install to an ad campaign.",
+   "Mesure ce que vous faites dans l'app (écrans vus, clics, achats, durée) et l'envoie à un tiers, souvent Google ou Facebook, même si vous n'y avez pas de compte. Sert aussi à attribuer votre installation à une campagne publicitaire.")),
+ ("Crash reporting", "crash", ("Crash reporting", "Rapports de plantage"), "low",
+  ("Sends a technical report when the app crashes: phone model, Android version, steps before the error. Useful for app quality and not very intrusive, but it still describes your device.",
+   "Envoie un rapport technique quand l'app plante : modèle du téléphone, version d'Android, étapes avant l'erreur. Utile à la qualité de l'app et peu intrusif, mais il décrit tout de même votre appareil.")),
+ ("UNCATEGORIZED", "uncategorized", ("No known category", "Sans catégorie connue"), "unknown",
+  ("The Exodus database does not document what it does. To be safe, it is counted as an analytics tracker.",
+   "La base Exodus ne documente pas son usage. Par prudence, il est compté comme un traqueur de mesure d'audience.")),
+]
+
+CATEGORIES = {
+ "DEFAULT": (("Uncategorised", "Non catégorisée"),
+  ("Unknown category: no permission is presumed necessary, each one is considered unexpected.", "Catégorie inconnue : aucune permission n'est présumée nécessaire, chacune est jugée inattendue.")),
+ "NAVIGATION": (("Navigation & maps", "Navigation & Cartographie"),
+  ("Guidance relies on your location. Microphone (voice commands), contacts (addresses) and Bluetooth (car) are tolerated.", "Le guidage repose sur votre position. Micro (commandes vocales), contacts (adresses) et Bluetooth (voiture) sont tolérés.")),
+ "TRANSPORT": (("Transport & mobility", "Transports & Mobilité"),
+  ("Timetables and routes around you. The camera (scanning a ticket) and calendar (adding a trip) are tolerated.", "Horaires et itinéraires autour de vous. La caméra (scanner un billet) et l'agenda (ajouter un trajet) sont tolérés.")),
+ "VEHICLE": (("Connected vehicle", "Véhicule connecté"),
+  ("Locate the car and connect to it over Bluetooth. Contacts, calendar and microphone are tolerated for in-car features.", "Localiser la voiture et s'y connecter en Bluetooth. Contacts, agenda et micro sont tolérés pour les fonctions embarquées.")),
+ "WEATHER": (("Weather", "Météo"),
+  ("The city is enough for local weather. Precise or background location is only tolerated, for alerts.", "La ville suffit pour la météo locale. La position précise ou en arrière-plan n'est que tolérée, pour les alertes.")),
+ "UTILITY": (("Simple tools", "Outils simples"),
+  ("A torch, calculator or compass needs nothing sensitive. The camera is tolerated for the torch, even though Android has not needed it since version 6.", "Lampe, calculatrice ou boussole n'ont besoin de rien de sensible. La caméra est tolérée pour la lampe, même si Android s'en passe depuis la version 6.")),
+ "MESSAGING": (("Messaging & calls", "Messagerie & Appels"),
+  ("Write to your contacts, send photos, videos and voice messages, make calls.", "Écrire à vos contacts, envoyer photos, vidéos et messages vocaux, passer des appels.")),
+ "EMAIL": (("E-mail", "E-mail"),
+  ("Find recipients and attach files or photos. Calendar and microphone are tolerated.", "Retrouver les destinataires et joindre des fichiers ou des photos. Agenda et micro sont tolérés.")),
+ "SOCIAL": (("Social networks", "Réseaux sociaux"),
+  ("Post photos, videos and sounds. Finding friends and tagging a post's location are only tolerated.", "Publier photos, vidéos et sons. Retrouver des amis et localiser une publication ne sont que tolérés.")),
+ "MEDIA_PLAYER": (("Audio, video & streaming", "Audio, vidéo & streaming"),
+  ("Play your music and videos. Bluetooth (speakers) and microphone (music recognition) are tolerated.", "Lire votre musique et vos vidéos. Bluetooth (enceintes) et micro (reconnaissance musicale) sont tolérés.")),
+ "NEWS_READING": (("News & reading", "Presse & Lecture"),
+  ("Reading articles requires no sensitive permission. The city is tolerated for local news.", "Lire des articles ne demande aucune permission sensible. La ville est tolérée pour l'info locale.")),
+ "ECOMMERCE": (("Shopping & e-commerce", "E-commerce & Achats"),
+  ("Scan a product and photograph a listing. Location, to find a nearby shop or listing, is tolerated.", "Scanner un produit et photographier une annonce. La position, pour trouver un magasin ou une annonce proche, est tolérée.")),
+ "FINANCE_ACCOUNTS": (("Banking, payment & customer accounts", "Banque, paiement & comptes clients"),
+  ("Scan a cheque or an ID document. Reading your SMS is unnecessary: Android passes on verification codes without giving access to them.", "Scanner un chèque ou une pièce d'identité. Lire vos SMS est inutile : Android transmet les codes de validation sans y donner accès.")),
+ "HEALTH_ADMIN": (("Health (admin, appointments, insurance)", "Santé (administratif, RDV, assurance)"),
+  ("Send a prescription or a receipt as a photo. Calendar and location are tolerated for appointments.", "Envoyer une ordonnance ou un justificatif en photo. Agenda et position sont tolérés pour les rendez-vous.")),
+ "WEARABLE_COMPANION": (("Watch / wearable companion", "Compagnon de montre / objet connecté"),
+  ("Pair and sync the watch: Bluetooth, sensors, activity, location. SMS and calls are tolerated to show them on your wrist.", "Relier et synchroniser la montre : Bluetooth, capteurs, activité, position. SMS et appels sont tolérés pour les afficher au poignet.")),
+ "FITNESS": (("Sport & fitness", "Sport & Fitness"),
+  ("Track your routes and efforts: location, activity, sensors, Bluetooth for a heart-rate strap.", "Suivre vos parcours et vos efforts : position, activité, capteurs, Bluetooth pour une ceinture cardio.")),
+ "SECURITY_AUTH": (("Security, authentication & identity", "Sécurité, authentification & identité"),
+  ("Scan a QR code to add an account. Accessibility is tolerated for password autofill.", "Scanner un QR code pour ajouter un compte. L'accessibilité est tolérée pour le remplissage automatique des mots de passe.")),
+ "BROWSER": (("Web browser", "Navigateur web"),
+  ("A browser asks nothing for itself: it relays requests from websites (camera, microphone, location), hence a simple tolerance.", "Un navigateur ne demande rien pour lui-même : il relaie les demandes des sites web (caméra, micro, position), d'où une simple tolérance.")),
+ "AI_ASSISTANT": (("AI assistants", "Assistants IA"),
+  ("Talk to the assistant and show it pictures. Calendar, contacts and location are only tolerated.", "Parler à l'assistant et lui montrer des images. Agenda, contacts et position ne sont que tolérés.")),
+ "PRODUCTIVITY_CLOUD": (("Office, cloud & dev", "Bureautique, cloud & dev"),
+  ("Open, scan and sync your files and photos.", "Ouvrir, numériser et synchroniser vos fichiers et photos.")),
+ "PHOTO_VIDEO": (("Photo, video & galleries", "Photo, vidéo & galeries"),
+  ("Take and manage your photos and videos, connect to a camera over Bluetooth or Wi-Fi.", "Prendre et gérer vos photos et vidéos, se connecter à une caméra en Bluetooth ou Wi-Fi.")),
+ "TRAVEL_LEISURE": (("Travel, outings & events", "Voyage, sorties & événements"),
+  ("Find places and events around you. Calendar and photos are tolerated for bookings.", "Trouver des lieux et des événements autour de vous. Agenda et photos sont tolérés pour les réservations.")),
+ "GAME": (("Games", "Jeux"),
+  ("A game needs no sensitive permission. Microphone and Bluetooth are tolerated for voice chat and controllers.", "Un jeu n'a besoin d'aucune permission sensible. Micro et Bluetooth sont tolérés pour le chat vocal et les manettes.")),
+ "ACCESSIBILITY": (("Accessibility", "Accessibilité"),
+  ("Reading the screen and acting for you is precisely their job: accessibility and microphone are justified.", "Lire l'écran et agir à votre place, c'est précisément leur rôle : accessibilité et micro sont justifiés.")),
+ "HEALTH_TRACKING": (("Health tracking (cycle, glucose, blood pressure)", "Suivi de santé (cycle, glycémie, tension)"),
+  ("Personal medical tracking: it needs intimate health data, and nothing else.", "Suivi médical personnel : il a besoin de données de santé intimes, et de rien d'autre.")),
+ "DATING": (("Dating", "Rencontres"),
+  ("Profiles, photos and proximity: the city is enough, and your address book has no business here.", "Profils, photos et proximité : la ville suffit, et votre carnet d'adresses n'a rien à y faire.")),
+ "KEYBOARD": (("Keyboards", "Claviers"),
+  ("A keyboard sees everything you type: it should ask for nothing more than the microphone, for dictation.", "Un clavier voit tout ce que vous tapez : il ne devrait rien demander d'autre que le micro, pour la dictée.")),
+ "EDUCATION_FAMILY": (("School, family & discovery", "Scolarité, famille & découverte"),
+  ("Send homework or documents as photos. The calendar is tolerated for the timetable.", "Envoyer des devoirs ou des documents en photo. L'agenda est toléré pour l'emploi du temps.")),
+}
+
+BADGES = {
+ "FIRST_AUDIT": (("First audit", "Premier audit"), ("Complete a first full scan", "Terminer une première analyse complète")),
+ "FIRST_CLEANUP": (("First clean-up", "Premier ménage"), ("Remove an intrusive app", "Supprimer une application intrusive")),
+ "BIG_CLEANUP": (("Spring cleaning", "Grand nettoyage"), ("Remove 5 intrusive apps", "Supprimer 5 applications intrusives")),
+ "TRACKER_HUNTER": (("Tracker hunter", "Chasseur de traqueurs"), ("Eliminate 20 trackers by removing apps", "Éliminer 20 traqueurs en supprimant des apps")),
+ "NO_RED_ZONE": (("No red zone", "Zéro zone rouge"), ("No user app below 50/100", "Aucune app utilisateur sous 50/100")),
+ "GREEN_DEVICE": (("Green device", "Appareil vert"), ("Average user app score of at least 80/100", "Score moyen des apps utilisateur d'au moins 80/100")),
+}
+
+# Paliers Health Connect des règles (ensembles « @… »)
+SETS = {
+ "HEALTH_INTIMATE": ("Health: intimate data", "Santé : données intimes"),
+ "HEALTH_VITALS": ("Health: vital signs and sleep", "Santé : constantes et sommeil"),
+ "HEALTH_ACTIVITY": ("Health: physical activity", "Santé : activité physique"),
+ "HEALTH_BACKGROUND": ("Health: history and background access", "Santé : historique et arrière-plan"),
+}
+
+# PermissionRegistry (puces des cartes et export CSV)
+REGISTRY = [
+ ("ACCESS_BACKGROUND_LOCATION", ("Background location", "Géolocalisation en arrière-plan")),
+ ("BIND_ACCESSIBILITY_SERVICE", ("Accessibility service", "Service d'Accessibilité")),
+ ("CAMERA", ("Camera", "Appareil photo")),
+ ("RECORD_AUDIO", ("Microphone", "Microphone")),
+ ("READ_SMS", ("Read SMS", "Lecture des SMS")),
+ ("RECEIVE_SMS", ("Receive SMS", "Réception des SMS")),
+ ("SEND_SMS", ("Send SMS", "Envoi de SMS")),
+ ("ACCESS_FINE_LOCATION", ("Precise location", "Géolocalisation précise")),
+ ("READ_CONTACTS", ("Address book", "Carnet d'adresses")),
+ ("WRITE_CONTACTS", ("Modify contacts", "Modification des contacts")),
+ ("GET_ACCOUNTS", ("Device accounts", "Comptes de l'appareil")),
+ ("READ_CALENDAR", ("Calendar", "Agenda / Calendrier")),
+ ("WRITE_CALENDAR", ("Modify calendar", "Modification de l'agenda")),
+ ("ACCESS_COARSE_LOCATION", ("Approximate location", "Géolocalisation approximative")),
+ ("READ_EXTERNAL_STORAGE", ("Read storage", "Lecture du stockage")),
+ ("WRITE_EXTERNAL_STORAGE", ("Write storage", "Écriture du stockage")),
+ ("MANAGE_EXTERNAL_STORAGE", ("All files access", "Accès à tous les fichiers")),
+ ("READ_MEDIA_IMAGES", ("Photos", "Photos")),
+ ("READ_MEDIA_VIDEO", ("Videos", "Vidéos")),
+ ("READ_MEDIA_AUDIO", ("Audio files", "Fichiers audio")),
+ ("READ_MEDIA_VISUAL_USER_SELECTED", ("Selected photos", "Photos sélectionnées")),
+]
+
+
+def esc(s):
+    s = s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    s = s.replace("'", "\\'").replace('"', '\\"')
+    if s.startswith("@") or s.startswith("?"):
+        s = "\\" + s
+    return s
+
+
+def xml(lang):
+    i = 0 if lang == "en" else 1
+    out = []
+    def add(name, pair):
+        out.append(f'    <string name="{name}">{esc(pair[i])}</string>')
+    out.append("    <!-- Lexique des permissions (onglet Apprendre) -->")
+    for k, (label, expl) in GRANTS.items():
+        add(f"grant_{k.lower()}", label)
+        add(f"grant_{k.lower()}_explanation", expl)
+    for k, title in THEMES.items():
+        add(f"perm_theme_{k.lower()}", title)
+    for p, _, _, title, allows, why in PERMS:
+        n = p.replace('.*', '_all').split('.')[-1].lower()
+        add(f"perm_{n}_title", title)
+        add(f"perm_{n}_allows", allows)
+        add(f"perm_{n}_why", why)
+    out.append("\n    <!-- Lexique des traqueurs -->")
+    for _, key, name, _, risk in TRACKERS:
+        add(f"tracker_cat_{key}", name)
+        add(f"tracker_cat_{key}_risk", risk)
+    out.append("\n    <!-- Catégories d'apps des règles de score -->")
+    for k, (name, why) in CATEGORIES.items():
+        add(f"category_{k.lower()}", name)
+        add(f"category_{k.lower()}_rationale", why)
+    out.append("\n    <!-- Paliers Health Connect -->")
+    for k, label in SETS.items():
+        add(f"set_{k.lower()}", label)
+    out.append("\n    <!-- Badges -->")
+    for k, (title, desc) in BADGES.items():
+        add(f"badge_{k.lower()}", title)
+        add(f"badge_{k.lower()}_description", desc)
+    out.append("\n    <!-- Permissions à risque (puces des cartes, export CSV) -->")
+    for p, title in REGISTRY:
+        add(f"risk_{p.lower()}", title)
+    return "\n".join(out) + "\n"

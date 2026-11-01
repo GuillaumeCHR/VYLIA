@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Généré par tools/strings/generate.py : ne pas modifier. -->
 <resources>
     <string name="app_name" translatable="false">VYLIA</string>
     <string name="app_tagline" translatable="false">The Privacy Scorer</string>
@@ -184,7 +185,7 @@
         <item quantity="other">%1$d trackers eliminated · %2$s</item>
     </plurals>
 
-    <!-- Apprendre -->
+    <!-- Comprendre -->
     <string name="learn_title">Understand</string>
     <string name="understand_tab_score">Score</string>
     <string name="understand_tab_trackers">Trackers</string>
@@ -275,7 +276,7 @@
         <item quantity="other">… and %1$d others, see the Analysis tab.</item>
     </plurals>
 
-    <!-- Paramètres et À propos -->
+    <!-- Paramètres, À propos et grille de score -->
     <string name="settings_title">Settings</string>
     <string name="settings_general">General</string>
     <string name="settings_language">Language</string>

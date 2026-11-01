@@ -28,37 +28,41 @@ import com.vylia.privacy.domain.scoring.SecurityFinding
  * de règles n'a pas de traduction : on affiche alors le libellé et la description du JSON.
  */
 private val BadgeTexts = mapOf(
-        "PERM_FEATHER" to (R.string.badgedef_perm_feather to R.string.badgedef_perm_feather_description),
-        "PERM_ON_TARGET" to (R.string.badgedef_perm_on_target to R.string.badgedef_perm_on_target_description),
-        "PERM_NOSY" to (R.string.badgedef_perm_nosy to R.string.badgedef_perm_nosy_description),
-        "PERM_FISHING" to (R.string.badgedef_perm_fishing to R.string.badgedef_perm_fishing_description),
-        "PERM_OUTLAW" to (R.string.badgedef_perm_outlaw to R.string.badgedef_perm_outlaw_description),
-        "PERM_GLUTTON" to (R.string.badgedef_perm_glutton to R.string.badgedef_perm_glutton_description),
-        "SEC_WANTED" to (R.string.badgedef_sec_wanted to R.string.badgedef_sec_wanted_description),
-        "SEC_BIG_EARS" to (R.string.badgedef_sec_big_ears to R.string.badgedef_sec_big_ears_description),
-        "SEC_SPY_PIANIST" to (R.string.badgedef_sec_spy_pianist to R.string.badgedef_sec_spy_pianist_description),
-        "SEC_MOLOTOV" to (R.string.badgedef_sec_molotov to R.string.badgedef_sec_molotov_description),
-        "TRK_ORGANIC" to (R.string.badgedef_trk_organic to R.string.badgedef_trk_organic_description),
-        "TRK_MECHANIC" to (R.string.badgedef_trk_mechanic to R.string.badgedef_trk_mechanic_description),
-        "TRK_SANDWICH" to (R.string.badgedef_trk_sandwich to R.string.badgedef_trk_sandwich_description),
-        "TRK_AD_NETWORK" to (R.string.badgedef_trk_ad_network to R.string.badgedef_trk_ad_network_description),
-        "TRK_GPS_SNITCH" to (R.string.badgedef_trk_gps_snitch to R.string.badgedef_trk_gps_snitch_description),
-        "TRK_FULL_HOUSE" to (R.string.badgedef_trk_full_house to R.string.badgedef_trk_full_house_description),
-        "TRK_HORNET_NEST" to (R.string.badgedef_trk_hornet_nest to R.string.badgedef_trk_hornet_nest_description),
-        "TRK_BLACK_BOX" to (R.string.badgedef_trk_black_box to R.string.badgedef_trk_black_box_description),
-        "PERM_ROLLING" to (R.string.badgedef_perm_rolling to R.string.badgedef_perm_rolling_description),
-        "PERM_NIGHT_OWL" to (R.string.badgedef_perm_night_owl to R.string.badgedef_perm_night_owl_description),
-        "PERM_DORMANT" to (R.string.badgedef_perm_dormant to R.string.badgedef_perm_dormant_description),
-        "COMBO_TOP_OF_CLASS" to (R.string.badgedef_combo_top_of_class to R.string.badgedef_combo_top_of_class_description),
-        "COMBO_DOUBLE_TROUBLE" to (R.string.badgedef_combo_double_trouble to R.string.badgedef_combo_double_trouble_description),
+    // region generated:badges (tools/strings/generate.py)
+    "PERM_FEATHER" to (R.string.badgedef_perm_feather to R.string.badgedef_perm_feather_description),
+    "PERM_ON_TARGET" to (R.string.badgedef_perm_on_target to R.string.badgedef_perm_on_target_description),
+    "PERM_NOSY" to (R.string.badgedef_perm_nosy to R.string.badgedef_perm_nosy_description),
+    "PERM_FISHING" to (R.string.badgedef_perm_fishing to R.string.badgedef_perm_fishing_description),
+    "PERM_OUTLAW" to (R.string.badgedef_perm_outlaw to R.string.badgedef_perm_outlaw_description),
+    "PERM_GLUTTON" to (R.string.badgedef_perm_glutton to R.string.badgedef_perm_glutton_description),
+    "SEC_WANTED" to (R.string.badgedef_sec_wanted to R.string.badgedef_sec_wanted_description),
+    "SEC_BIG_EARS" to (R.string.badgedef_sec_big_ears to R.string.badgedef_sec_big_ears_description),
+    "SEC_SPY_PIANIST" to (R.string.badgedef_sec_spy_pianist to R.string.badgedef_sec_spy_pianist_description),
+    "SEC_MOLOTOV" to (R.string.badgedef_sec_molotov to R.string.badgedef_sec_molotov_description),
+    "TRK_ORGANIC" to (R.string.badgedef_trk_organic to R.string.badgedef_trk_organic_description),
+    "TRK_MECHANIC" to (R.string.badgedef_trk_mechanic to R.string.badgedef_trk_mechanic_description),
+    "TRK_SANDWICH" to (R.string.badgedef_trk_sandwich to R.string.badgedef_trk_sandwich_description),
+    "TRK_AD_NETWORK" to (R.string.badgedef_trk_ad_network to R.string.badgedef_trk_ad_network_description),
+    "TRK_GPS_SNITCH" to (R.string.badgedef_trk_gps_snitch to R.string.badgedef_trk_gps_snitch_description),
+    "TRK_FULL_HOUSE" to (R.string.badgedef_trk_full_house to R.string.badgedef_trk_full_house_description),
+    "TRK_HORNET_NEST" to (R.string.badgedef_trk_hornet_nest to R.string.badgedef_trk_hornet_nest_description),
+    "TRK_BLACK_BOX" to (R.string.badgedef_trk_black_box to R.string.badgedef_trk_black_box_description),
+    "PERM_ROLLING" to (R.string.badgedef_perm_rolling to R.string.badgedef_perm_rolling_description),
+    "PERM_NIGHT_OWL" to (R.string.badgedef_perm_night_owl to R.string.badgedef_perm_night_owl_description),
+    "PERM_DORMANT" to (R.string.badgedef_perm_dormant to R.string.badgedef_perm_dormant_description),
+    "COMBO_TOP_OF_CLASS" to (R.string.badgedef_combo_top_of_class to R.string.badgedef_combo_top_of_class_description),
+    "COMBO_DOUBLE_TROUBLE" to (R.string.badgedef_combo_double_trouble to R.string.badgedef_combo_double_trouble_description),
+    // endregion
 )
 
 private val SecurityTexts = mapOf(
-        "KNOWN_STALKERWARE" to (R.string.security_known_stalkerware to R.string.security_known_stalkerware_description),
-        "KEYLOGGER_CAPABLE" to (R.string.security_keylogger_capable to R.string.security_keylogger_capable_description),
-        "COVERT_RECORDING" to (R.string.security_covert_recording to R.string.security_covert_recording_description),
-        "STALKERWARE_PROFILE" to (R.string.security_stalkerware_profile to R.string.security_stalkerware_profile_description),
-        "OVERLAY_TROJAN" to (R.string.security_overlay_trojan to R.string.security_overlay_trojan_description),
+    // region generated:security (tools/strings/generate.py)
+    "KNOWN_STALKERWARE" to (R.string.security_known_stalkerware to R.string.security_known_stalkerware_description),
+    "KEYLOGGER_CAPABLE" to (R.string.security_keylogger_capable to R.string.security_keylogger_capable_description),
+    "COVERT_RECORDING" to (R.string.security_covert_recording to R.string.security_covert_recording_description),
+    "STALKERWARE_PROFILE" to (R.string.security_stalkerware_profile to R.string.security_stalkerware_profile_description),
+    "OVERLAY_TROJAN" to (R.string.security_overlay_trojan to R.string.security_overlay_trojan_description),
+    // endregion
 )
 
 fun Resources.badgeLabel(badge: BadgeDef): String = BadgeTexts[badge.id]?.first?.let(::getString) ?: badge.label

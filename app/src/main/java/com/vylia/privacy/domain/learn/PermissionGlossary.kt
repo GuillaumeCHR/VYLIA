@@ -48,6 +48,7 @@ data class PermissionInfo(
 object PermissionGlossary {
 
     val entries: List<PermissionInfo> = listOf(
+        // region generated:permissions (tools/strings/generate.py)
         info("ACCESS_BACKGROUND_LOCATION", PermissionTheme.LOCATION, GrantMode.BACKGROUND, R.string.perm_access_background_location_title, R.string.perm_access_background_location_allows, R.string.perm_access_background_location_why),
         info("ACCESS_FINE_LOCATION", PermissionTheme.LOCATION, GrantMode.RUNTIME, R.string.perm_access_fine_location_title, R.string.perm_access_fine_location_allows, R.string.perm_access_fine_location_why),
         info("ACCESS_COARSE_LOCATION", PermissionTheme.LOCATION, GrantMode.RUNTIME, R.string.perm_access_coarse_location_title, R.string.perm_access_coarse_location_allows, R.string.perm_access_coarse_location_why),
@@ -133,6 +134,7 @@ object PermissionGlossary {
         info("READ_LOGS", PermissionTheme.CONTROL, GrantMode.SPECIAL, R.string.perm_read_logs_title, R.string.perm_read_logs_allows, R.string.perm_read_logs_why),
         info("WRITE_SETTINGS", PermissionTheme.CONTROL, GrantMode.SPECIAL, R.string.perm_write_settings_title, R.string.perm_write_settings_allows, R.string.perm_write_settings_why),
         info("health.*", PermissionTheme.HEALTH, GrantMode.RUNTIME, R.string.perm_health_all_title, R.string.perm_health_all_allows, R.string.perm_health_all_why),
+        // endregion
     )
 
     private val byPermission = entries.associateBy { it.permission }

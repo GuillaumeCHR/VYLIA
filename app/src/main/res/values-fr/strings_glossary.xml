@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Textes des lexiques, catégories et badges. -->
+<!-- Généré par tools/strings/generate.py : ne pas modifier. -->
 <resources>
     <!-- Lexique des permissions (onglet Apprendre) -->
     <string name="grant_runtime">Fenêtre de demande</string>

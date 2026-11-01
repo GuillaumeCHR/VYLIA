@@ -92,3 +92,10 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
    ludique, moderne et rassurant (à la place des bugs rouges expulsés).
 4. ~~§5 Suivi~~ (fait le 2026-11-01). Reste §7 Automatisations : notification à l'installation, scans de fond
    programmés qui alimentent le Suivi (le stockage `history.json` est prêt).
+5. §6 Agir › Réduire, deux nouveaux modules (non développés) :
+   - **V1 — Guidage DNS privé** : tutoriel pas à pas et bouton d'accès rapide aux paramètres système pour activer un
+     DNS chiffré anti-traqueurs (ex. AdGuard, NextDNS), sans code complexe ni impact sur la batterie.
+   - **V2 — Bouclier VYLIA (VPN local)** : interception DNS 100 % locale via l'API `VpnService` d'Android, qui filtre en
+     temps réel les requêtes de traçage sortantes sans envoyer aucune donnée vers l'extérieur, activable par un simple
+     interrupteur. Attention : demande l'accès Internet et un service au premier plan, à refléter dans l'écran
+     « Vie privée » et dans la grille (VYLIA est exclue de son propre score).

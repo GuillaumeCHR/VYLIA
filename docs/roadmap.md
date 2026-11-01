@@ -57,7 +57,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 
 ### B. Alternatives
 * Catalogue d'alternatives éthiques et open-source pour les applications les plus courantes, regroupées par catégories.
-* Mise en avant du **Hall of Fame** (les meilleures alternatives à adopter, lien Play Store par défaut). Le Worst of Fame a été retiré (2026-11-01).
+* Alternatives par famille (lien Play Store par défaut), après une introduction : remplacer n'est pas toujours possible, réduire le risque vient d'abord, pas de téléphone « dégooglisé ». Worst of Fame et Hall of Fame retirés (2026-11-01).
 
 ### C. Récompenses & Partage (Gamification refactorisée)
 * **Hall of Fame / Trophées :** Centralisation de tous les badges de gamification obtenus grâce aux actions de nettoyage (ex: *"Désintoxication"*, *"Chasseur de traqueurs"*).

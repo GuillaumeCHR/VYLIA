@@ -43,8 +43,8 @@ import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.currentLocale
 
 /**
- * Alternatives : le Hall of Fame des alternatives éthiques ou libres, par famille. Les alternatives déjà installées
- * sont repérées.
+ * Alternatives éthiques ou libres, par famille, après une introduction : remplacer n'est pas toujours possible, réduire
+ * le risque vient d'abord, et VYLIA ne vise pas le téléphone « dégooglisé ». Les alternatives déjà installées sont repérées.
  */
 @Composable
 internal fun AlternativesTab(allApps: List<AuditedApp>, catalogue: AlternativeCatalogue) {
@@ -52,7 +52,15 @@ internal fun AlternativesTab(allApps: List<AuditedApp>, catalogue: AlternativeCa
     val installed = remember(allApps) { allApps.map { it.app.packageName }.toSet() }
     var open by rememberSaveable { mutableStateOf<String?>(null) }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        item { SectionHeader(stringResource(R.string.alt_hall_title), stringResource(R.string.alt_hall_hint)) }
+        item {
+            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                Text(stringResource(R.string.alt_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.alt_intro), style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.alt_reduce_first), style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.alt_degoogle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(stringResource(R.string.alt_trophy), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
         items(catalogue.groups, key = { "group-${it.id}" }) { group ->
             GroupCard(group, installed, language, expanded = open == group.id) { open = if (open == group.id) null else group.id }
         }

@@ -271,8 +271,11 @@
     <string name="reduce_usage_title">Repérer les apps que vous n\'utilisez plus</string>
     <string name="reduce_usage_text">Android peut indiquer à VYLIA quand chaque app a été ouverte pour la dernière fois. Cet accès aux données d\'utilisation est lu sur votre téléphone et n\'en sort jamais. Vous pouvez le retirer à tout moment dans le même écran.</string>
     <string name="reduce_usage_button">Autoriser l\'accès aux données d\'utilisation</string>
-    <string name="alt_hall_title">Hall of Fame : les alternatives à adopter</string>
-    <string name="alt_hall_hint">Des apps libres ou respectueuses, par famille. En installer une débloque le trophée Bon échange.</string>
+    <string name="alt_title">Des alternatives plus respectueuses</string>
+    <string name="alt_intro">Changer d\'app est souvent le moyen le plus radical de protéger vos données, mais ce n\'est pas toujours possible. Votre banque, les services publics, l\'outil imposé par votre employeur ou la messagerie qu\'utilisent vos proches n\'ont généralement pas d\'équivalent.</string>
+    <string name="alt_reduce_first">C\'est pourquoi la démarche commence par réduire le risque des apps que vous gardez : retirer les autorisations inutiles, supprimer les apps oubliées, bloquer le traçage publicitaire. C\'est l\'objet de l\'onglet Réduire. Ensuite seulement, quand une alternative existe, changer devient intéressant : vous en trouverez ci-dessous, classées par famille et, pour la plupart, disponibles sur le Play Store.</string>
+    <string name="alt_degoogle">Certains vont plus loin et adoptent un téléphone entièrement « dégooglisé », qui fonctionne sans les services de Google. Cette voie demande des compromis que tout le monde n\'est pas prêt à faire, et ce n\'est pas celle de VYLIA : notre philosophie est de réduire votre exposition tout en gardant votre téléphone et vos apps habituelles.</string>
+    <string name="alt_trophy">Installer une alternative débloque le trophée Bon échange.</string>
     <string name="alt_installed">Installée</string>
     <string name="alt_open_source">Libre</string>
     <string name="alt_get">L\'obtenir</string>

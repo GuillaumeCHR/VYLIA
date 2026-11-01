@@ -14,7 +14,7 @@ import kotlinx.serialization.json.Json
 import java.io.File
 
 /**
- * Règles de score v2 (`vylia_rules_v2.json`), 100 % locales :
+ * Règles de score v2.1 (`vylia_rules_v2_1.json`), 100 % locales :
  * 1. copie importée par l'utilisateur (sélecteur de fichiers, typiquement depuis Téléchargements),
  * 2. sinon, ou si la copie est illisible, règles intégrées dans `assets/`.
  *
@@ -40,8 +40,10 @@ class RuleMatrixRepository(private val context: Context) {
                 ?: error("Fichier illisible")
             val rules = parse(content)
             require("DEFAULT" in rules.categories) { "Catégorie DEFAULT absente" }
+            // Le moteur valide badges et patterns de sécurité à la construction : avant d'écraser la copie.
+            val loaded = LoadedRules(rules, Source.IMPORTED)
             importedFile.writeText(content)
-            _current.value = LoadedRules(rules, Source.IMPORTED)
+            _current.value = loaded
             rules.categories.size
         }
     }
@@ -68,7 +70,7 @@ class RuleMatrixRepository(private val context: Context) {
 
     companion object {
         private const val TAG = "RuleMatrixRepository"
-        const val BUNDLED_ASSET = "vylia_rules_v2.json"
+        const val BUNDLED_ASSET = "vylia_rules_v2_1.json"
         private const val IMPORTED_FILE_NAME = "imported_vylia_rules_v2.json"
         private val json = Json { ignoreUnknownKeys = true }
 

@@ -27,13 +27,13 @@ import com.vylia.privacy.ui.theme.Slate400
 import com.vylia.privacy.ui.theme.Slate900
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.ScoreBadge
+import com.vylia.privacy.ui.components.openAppSettings
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import android.provider.Settings
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -60,6 +60,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.vylia.privacy.R
+import com.vylia.privacy.ui.components.currentLocale
 
 @Composable
 fun AgirScreen(
@@ -86,25 +90,26 @@ fun AgirScreen(
             .verticalScroll(scrollState),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Text(text = "Agir", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+        Text(text = stringResource(R.string.act_title), style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Spacer(modifier = Modifier.height(24.dp))
 
         // Section 1: Sensibiliser
         VyliaCard(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text("Sensibiliser", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.act_share_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text("Générez une image de votre bilan global de confidentialité (100% hors-ligne) pour la partager avec vos proches.", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.act_share_text), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(12.dp))
+                val chooserTitle = stringResource(R.string.act_share_chooser)
                 Button(onClick = {
                     coroutineScope.launch {
                         val uri = generateAndSaveScoreBitmap(context, state.averageScore?.value ?: 100)
-                        uri?.let { shareImage(context, it) }
+                        uri?.let { shareImage(context, it, chooserTitle) }
                     }
                 }) {
-                    Icon(Icons.Default.Share, contentDescription = "Partager")
+                    Icon(Icons.Default.Share, contentDescription = null)
                     Spacer(modifier = Modifier.width(8.dp))
-                    Text("Partager mon bilan (Story)")
+                    Text(stringResource(R.string.act_share_button))
                 }
             }
         }
@@ -123,13 +128,13 @@ fun AgirScreen(
             containerColor = MaterialTheme.colorScheme.errorContainer
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text("⚠️ Assainir (Worst of Fame)", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.act_cleanup_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text("Les applications les plus intrusives de votre appareil. Désinstallez-les pour gagner des points : plus une app est intrusive, plus sa suppression rapporte.", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.act_cleanup_text), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(8.dp))
                 
                 if (worstOfFame.isEmpty()) {
-                    Text("Aucune application critique détectée !", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                    Text(stringResource(R.string.act_cleanup_empty), fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                 } else {
                     worstOfFame.take(5).forEach { app ->
                         Row(
@@ -140,12 +145,12 @@ fun AgirScreen(
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(app.app.label, fontWeight = FontWeight.Bold)
                                 Text(
-                                    "${app.score.value}/100 · +${PrivacyScore.MAX - app.score.value} pts si supprimée",
+                                    stringResource(R.string.act_cleanup_points, app.score.value, PrivacyScore.MAX - app.score.value),
                                     style = MaterialTheme.typography.bodySmall
                                 )
                             }
-                            TextButton(onClick = { openAppDetails(context, app.app.packageName) }) {
-                                Text("Gérer")
+                            TextButton(onClick = { openAppSettings(context, app.app.packageName) }) {
+                                Text(stringResource(R.string.act_manage))
                             }
                         }
                     }
@@ -156,13 +161,13 @@ fun AgirScreen(
         // Section 4: Valoriser
         VyliaCard(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text("🌿 Valoriser (apps exemplaires)", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+                Text(stringResource(R.string.act_good_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.height(4.dp))
-                Text("Les bonnes élèves (Score >= 80). Zéro traqueur et respect de la vie privée.", style = MaterialTheme.typography.bodyMedium)
+                Text(stringResource(R.string.act_good_text), style = MaterialTheme.typography.bodyMedium)
                 Spacer(modifier = Modifier.height(16.dp))
                 
                 if (hallOfFame.isEmpty()) {
-                    Text("Aucune application ne remplit les critères pour le moment.")
+                    Text(stringResource(R.string.act_good_empty))
                 } else {
                     hallOfFame.take(5).forEach { app ->
                         Row(
@@ -190,9 +195,9 @@ private fun RewardsSection(
 ) {
     VyliaCard(modifier = modifier) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("🏆 Hall of Fame — Récompenses", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
+            Text(stringResource(R.string.act_rewards_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
             Spacer(modifier = Modifier.height(4.dp))
-            Text("Chaque application intrusive (score < 50) que vous supprimez rapporte 100 − son score en points.", style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.act_rewards_text), style = MaterialTheme.typography.bodyMedium)
 
             AnimatedVisibility(
                 visible = recentRewards.isNotEmpty(),
@@ -207,11 +212,14 @@ private fun RewardsSection(
                 ) {
                     Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
                         Text(
-                            text = "🎉 Bravo ! ${recentRewards.joinToString { it.label }} supprimée(s) : +${recentRewards.sumOf { it.points }} pts",
+                            text = pluralStringResource(
+                                R.plurals.act_rewards_congrats, recentRewards.size,
+                                recentRewards.joinToString { it.label }, recentRewards.sumOf { it.points },
+                            ),
                             modifier = Modifier.weight(1f),
                             fontWeight = FontWeight.Bold
                         )
-                        TextButton(onClick = onDismissRecent) { Text("OK") }
+                        TextButton(onClick = onDismissRecent) { Text(stringResource(R.string.ok)) }
                     }
                 }
             }
@@ -220,7 +228,7 @@ private fun RewardsSection(
             AnimatedPoints(rewards.points)
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Badges (${rewards.unlockedBadges.size}/${Badge.entries.size})", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.act_badges, rewards.unlockedBadges.size, Badge.entries.size), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(8.dp))
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -230,16 +238,17 @@ private fun RewardsSection(
             }
 
             Spacer(modifier = Modifier.height(16.dp))
-            Text("Applications intrusives supprimées", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.act_removed_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(4.dp))
             if (rewards.removedApps.isEmpty()) {
                 Text(
-                    "Aucune pour l'instant. Rendez-vous dans « Assainir » ci-dessous pour commencer.",
+                    stringResource(R.string.act_removed_empty),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             } else {
-                val dateFormat = remember { DateFormat.getDateInstance(DateFormat.SHORT) }
+                val locale = currentLocale()
+                val dateFormat = remember(locale) { DateFormat.getDateInstance(DateFormat.SHORT, locale) }
                 rewards.removedApps.take(10).forEach { removed ->
                     Row(
                         modifier = Modifier.fillMaxWidth().padding(vertical = 6.dp),
@@ -250,7 +259,7 @@ private fun RewardsSection(
                         Column(modifier = Modifier.weight(1f)) {
                             Text(removed.label, fontWeight = FontWeight.Bold)
                             Text(
-                                "${removed.trackerCount} traqueur(s) éliminé(s) · ${dateFormat.format(removed.removedAt)}",
+                                pluralStringResource(R.plurals.act_removed_line, removed.trackerCount, removed.trackerCount, dateFormat.format(removed.removedAt)),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -279,7 +288,7 @@ private fun AnimatedPoints(points: Int) {
         )
         Spacer(modifier = Modifier.width(8.dp))
         Text(
-            "points de confidentialité",
+            stringResource(R.string.act_points),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 6.dp)
@@ -300,22 +309,15 @@ private fun BadgeChip(badge: Badge, unlocked: Boolean) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(if (unlocked) badge.emoji else "🔒", style = MaterialTheme.typography.headlineSmall)
-            Text(badge.title, style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
+            Text(stringResource(badge.title), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.Bold, textAlign = TextAlign.Center)
             Text(
-                badge.description,
+                stringResource(badge.description),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
         }
     }
-}
-
-/** Fiche système de l'app (bouton Désinstaller) ; ne nécessite aucune permission, contrairement à ACTION_DELETE. */
-private fun openAppDetails(context: Context, packageName: String) {
-    context.startActivity(
-        Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:$packageName"))
-    )
 }
 
 suspend fun generateAndSaveScoreBitmap(context: Context, score: Int): Uri? = withContext(Dispatchers.IO) {
@@ -336,7 +338,7 @@ suspend fun generateAndSaveScoreBitmap(context: Context, score: Int): Uri? = wit
             isAntiAlias = true
         }
         
-        canvas.drawText("Mon Bilan VYLIA", width / 2f, 400f, paint)
+        canvas.drawText(context.getString(R.string.act_story_title), width / 2f, 400f, paint)
         
         paint.textSize = 250f
         paint.color = when {
@@ -349,7 +351,7 @@ suspend fun generateAndSaveScoreBitmap(context: Context, score: Int): Uri? = wit
         
         paint.textSize = 50f
         paint.color = Slate400.toArgb()
-        canvas.drawText("Analyse 100% locale, sans serveur", width / 2f, 1800f, paint)
+        canvas.drawText(context.getString(R.string.act_story_footer), width / 2f, 1800f, paint)
 
         // Save to cache
         val imagePath = File(context.cacheDir, "images")
@@ -365,11 +367,11 @@ suspend fun generateAndSaveScoreBitmap(context: Context, score: Int): Uri? = wit
     }
 }
 
-fun shareImage(context: Context, uri: Uri) {
+fun shareImage(context: Context, uri: Uri, chooserTitle: String) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "image/png"
         putExtra(Intent.EXTRA_STREAM, uri)
         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     }
-    context.startActivity(Intent.createChooser(intent, "Partager mon bilan"))
+    context.startActivity(Intent.createChooser(intent, chooserTitle))
 }

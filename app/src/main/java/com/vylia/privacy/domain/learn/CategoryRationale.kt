@@ -1,39 +1,48 @@
 package com.vylia.privacy.domain.learn
 
+import androidx.annotation.StringRes
+import com.vylia.privacy.R
+
 /**
- * Pourquoi, en une phrase, une catégorie d'app justifie ou tolère certaines permissions
- * (voir `allowed` / `tolerated` dans vylia_rules_v2.json).
+ * Nom traduit d'une catégorie d'app et pourquoi, en une phrase, elle justifie ou tolère certaines permissions
+ * (voir `allowed` / `tolerated` dans vylia_rules_v2_1.json). Une catégorie ajoutée par import n'y figure pas :
+ * on affiche alors le `display_name` et la `description` des règles.
  */
 object CategoryRationale {
 
-    private val rationales = mapOf(
-        "DEFAULT" to "Catégorie inconnue : aucune permission n'est présumée nécessaire, chacune est jugée inattendue.",
-        "NAVIGATION" to "Le guidage repose sur votre position. Micro (commandes vocales), contacts (adresses) et Bluetooth (voiture) sont tolérés.",
-        "TRANSPORT" to "Horaires et itinéraires autour de vous. La caméra (scanner un billet) et l'agenda (ajouter un trajet) sont tolérés.",
-        "VEHICLE" to "Localiser la voiture et s'y connecter en Bluetooth. Contacts, agenda et micro sont tolérés pour les fonctions embarquées.",
-        "WEATHER" to "La ville suffit pour la météo locale. La position précise ou en arrière-plan n'est que tolérée, pour les alertes.",
-        "UTILITY" to "Lampe, calculatrice ou boussole n'ont besoin de rien de sensible. La caméra est tolérée pour la lampe, même si Android s'en passe depuis la version 6.",
-        "MESSAGING" to "Écrire à vos contacts, envoyer photos, vidéos et messages vocaux, passer des appels.",
-        "EMAIL" to "Retrouver les destinataires et joindre des fichiers ou des photos. Agenda et micro sont tolérés.",
-        "SOCIAL" to "Publier photos, vidéos et sons. Retrouver des amis et localiser une publication ne sont que tolérés.",
-        "MEDIA_PLAYER" to "Lire votre musique et vos vidéos. Bluetooth (enceintes) et micro (reconnaissance musicale) sont tolérés.",
-        "NEWS_READING" to "Lire des articles ne demande aucune permission sensible. La ville est tolérée pour l'info locale.",
-        "ECOMMERCE" to "Scanner un produit et photographier une annonce. La position, pour trouver un magasin ou une annonce proche, est tolérée.",
-        "FINANCE_ACCOUNTS" to "Scanner un chèque ou une pièce d'identité. Lire vos SMS est inutile : Android transmet les codes de validation sans y donner accès.",
-        "HEALTH_ADMIN" to "Envoyer une ordonnance ou un justificatif en photo. Agenda et position sont tolérés pour les rendez-vous.",
-        "WEARABLE_COMPANION" to "Relier et synchroniser la montre : Bluetooth, capteurs, activité, position. SMS et appels sont tolérés pour les afficher au poignet.",
-        "FITNESS" to "Suivre vos parcours et vos efforts : position, activité, capteurs, Bluetooth pour une ceinture cardio.",
-        "SECURITY_AUTH" to "Scanner un QR code pour ajouter un compte. L'accessibilité est tolérée pour le remplissage automatique des mots de passe.",
-        "BROWSER" to "Un navigateur ne demande rien pour lui-même : il relaie les demandes des sites web (caméra, micro, position), d'où une simple tolérance.",
-        "AI_ASSISTANT" to "Parler à l'assistant et lui montrer des images. Agenda, contacts et position ne sont que tolérés.",
-        "PRODUCTIVITY_CLOUD" to "Ouvrir, numériser et synchroniser vos fichiers et photos.",
-        "PHOTO_VIDEO" to "Prendre et gérer vos photos et vidéos, se connecter à une caméra en Bluetooth ou Wi-Fi.",
-        "TRAVEL_LEISURE" to "Trouver des lieux et des événements autour de vous. Agenda et photos sont tolérés pour les réservations.",
-        "GAME" to "Un jeu n'a besoin d'aucune permission sensible. Micro et Bluetooth sont tolérés pour le chat vocal et les manettes.",
-        "ACCESSIBILITY" to "Lire l'écran et agir à votre place, c'est précisément leur rôle : accessibilité et micro sont justifiés.",
-        "EDUCATION_FAMILY" to "Envoyer des devoirs ou des documents en photo. L'agenda est toléré pour l'emploi du temps.",
+    private class Texts(@param:StringRes val name: Int, @param:StringRes val rationale: Int)
+
+    private val texts = mapOf(
+        "DEFAULT" to Texts(R.string.category_default, R.string.category_default_rationale),
+        "NAVIGATION" to Texts(R.string.category_navigation, R.string.category_navigation_rationale),
+        "TRANSPORT" to Texts(R.string.category_transport, R.string.category_transport_rationale),
+        "VEHICLE" to Texts(R.string.category_vehicle, R.string.category_vehicle_rationale),
+        "WEATHER" to Texts(R.string.category_weather, R.string.category_weather_rationale),
+        "UTILITY" to Texts(R.string.category_utility, R.string.category_utility_rationale),
+        "MESSAGING" to Texts(R.string.category_messaging, R.string.category_messaging_rationale),
+        "EMAIL" to Texts(R.string.category_email, R.string.category_email_rationale),
+        "SOCIAL" to Texts(R.string.category_social, R.string.category_social_rationale),
+        "MEDIA_PLAYER" to Texts(R.string.category_media_player, R.string.category_media_player_rationale),
+        "NEWS_READING" to Texts(R.string.category_news_reading, R.string.category_news_reading_rationale),
+        "ECOMMERCE" to Texts(R.string.category_ecommerce, R.string.category_ecommerce_rationale),
+        "FINANCE_ACCOUNTS" to Texts(R.string.category_finance_accounts, R.string.category_finance_accounts_rationale),
+        "HEALTH_ADMIN" to Texts(R.string.category_health_admin, R.string.category_health_admin_rationale),
+        "WEARABLE_COMPANION" to Texts(R.string.category_wearable_companion, R.string.category_wearable_companion_rationale),
+        "FITNESS" to Texts(R.string.category_fitness, R.string.category_fitness_rationale),
+        "SECURITY_AUTH" to Texts(R.string.category_security_auth, R.string.category_security_auth_rationale),
+        "BROWSER" to Texts(R.string.category_browser, R.string.category_browser_rationale),
+        "AI_ASSISTANT" to Texts(R.string.category_ai_assistant, R.string.category_ai_assistant_rationale),
+        "PRODUCTIVITY_CLOUD" to Texts(R.string.category_productivity_cloud, R.string.category_productivity_cloud_rationale),
+        "PHOTO_VIDEO" to Texts(R.string.category_photo_video, R.string.category_photo_video_rationale),
+        "TRAVEL_LEISURE" to Texts(R.string.category_travel_leisure, R.string.category_travel_leisure_rationale),
+        "GAME" to Texts(R.string.category_game, R.string.category_game_rationale),
+        "ACCESSIBILITY" to Texts(R.string.category_accessibility, R.string.category_accessibility_rationale),
+        "EDUCATION_FAMILY" to Texts(R.string.category_education_family, R.string.category_education_family_rationale),
     )
 
-    /** Justification de la catégorie, ou la description des règles pour une catégorie ajoutée par import. */
-    fun of(categoryId: String, rulesDescription: String?): String? = rationales[categoryId] ?: rulesDescription
+    @StringRes
+    fun nameOf(categoryId: String): Int? = texts[categoryId]?.name
+
+    @StringRes
+    fun of(categoryId: String): Int? = texts[categoryId]?.rationale
 }

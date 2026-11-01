@@ -29,7 +29,6 @@ import com.vylia.privacy.domain.analysis.PermissionUsage
 import com.vylia.privacy.domain.analysis.PurposeAnomaly
 import com.vylia.privacy.domain.analysis.TrackerUsage
 import com.vylia.privacy.domain.analysis.WatchedPermission
-import com.vylia.privacy.domain.learn.TrackerGlossary
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.ScoreRating
@@ -38,6 +37,17 @@ import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.home.HomeViewModel
 import com.vylia.privacy.ui.home.components.ScoreHeader
 import com.vylia.privacy.ui.theme.color
+import androidx.annotation.StringRes
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.vylia.privacy.R
+import com.vylia.privacy.ui.components.categoryName
+import com.vylia.privacy.ui.components.currentLocale
+import com.vylia.privacy.ui.components.formatted
+import com.vylia.privacy.ui.components.trackerCategoryName
+import java.text.DateFormat
+import java.util.Date
 
 /** Nombre de lignes affichées avant "Tout voir" dans chaque liste. */
 private const val PreviewCount = 5
@@ -63,7 +73,7 @@ fun AnalyseScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         item {
-            Text(text = "Analyse", style = MaterialTheme.typography.headlineMedium)
+            Text(text = stringResource(R.string.analysis_title), style = MaterialTheme.typography.headlineMedium)
         }
 
         // Score de confidentialité de l'appareil.
@@ -89,7 +99,7 @@ fun AnalyseScreen(
                     CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
                     Spacer(Modifier.width(8.dp))
                     Text(
-                        text = if (homeState.isLoading) "Scan en cours…" else "Analyse des traqueurs en cours : les résultats se complètent.",
+                        text = stringResource(if (homeState.isLoading) R.string.analysis_scanning else R.string.analysis_trackers_running),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
@@ -98,19 +108,26 @@ fun AnalyseScreen(
         }
 
         item { ZonesSection(analysis, onAppClick) }
-        item { AnomaliesSection(analysis.anomalies, homeViewModel::categoryName, onAppClick) }
+        item {
+            val rules by homeViewModel.rules.collectAsStateWithLifecycle()
+            val resources = LocalResources.current
+            AnomaliesSection(analysis.anomalies, { resources.categoryName(it, rules.rules) }, onAppClick)
+        }
         item { PermissionsSection(analysis.permissions, onAppClick) }
         item { TrackersSection(analysis, onAppClick) }
 
         item {
             Text(
-                text = "Analyse 100% locale basée sur le référentiel Exodus Privacy du ${settingsState.lastUpdateDate}.",
+                text = stringResource(
+                    R.string.analysis_footer,
+                    DateFormat.getDateInstance(DateFormat.SHORT, currentLocale()).format(Date(settingsState.lastUpdateTimestamp)),
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             if (settingsState.isObsolete) {
                 Text(
-                    text = "⚠️ La base de données de traqueurs n'est plus à jour (>90 jours).",
+                    text = stringResource(R.string.analysis_database_obsolete),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error
                 )
@@ -125,7 +142,7 @@ fun AnalyseScreen(
 private fun ZonesSection(analysis: DeviceAnalysis, onAppClick: (AuditedApp) -> Unit) {
     var selected by rememberSaveable { mutableStateOf(ScoreRating.POOR) }
     val apps = analysis.zones[selected].orEmpty()
-    Section(title = "Zones de risque", subtitle = "Rouge : moins de 50 · Orange : 50 à 79 · Verte : 80 et plus") {
+    Section(title = stringResource(R.string.analysis_zones), subtitle = stringResource(R.string.analysis_zones_hint)) {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             listOf(ScoreRating.POOR, ScoreRating.FAIR, ScoreRating.GOOD).forEach { rating ->
                 ZoneTab(
@@ -138,8 +155,8 @@ private fun ZonesSection(analysis: DeviceAnalysis, onAppClick: (AuditedApp) -> U
             }
         }
         Spacer(Modifier.height(8.dp))
-        ExpandableList(apps, key = "zone-$selected", empty = "Aucune application dans cette zone.") { app ->
-            AppLine(app, subtitle = "Note ${app.result.grade}", onClick = { onAppClick(app) })
+        ExpandableList(apps, key = "zone-$selected", empty = stringResource(R.string.analysis_zone_empty)) { app ->
+            AppLine(app, subtitle = stringResource(R.string.grade_label, app.result.grade), onClick = { onAppClick(app) })
         }
     }
 }
@@ -156,16 +173,17 @@ private fun ZoneTab(rating: ScoreRating, count: Int, selected: Boolean, onClick:
     ) {
         Column(modifier = Modifier.padding(vertical = 10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
             Text(count.toString(), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            Text(rating.zoneName, style = MaterialTheme.typography.labelMedium)
+            Text(stringResource(rating.zoneName), style = MaterialTheme.typography.labelMedium)
         }
     }
 }
 
-private val ScoreRating.zoneName: String
+@get:StringRes
+private val ScoreRating.zoneName: Int
     get() = when (this) {
-        ScoreRating.POOR -> "Zone rouge"
-        ScoreRating.FAIR -> "Zone orange"
-        ScoreRating.GOOD -> "Zone verte"
+        ScoreRating.POOR -> R.string.analysis_zone_red
+        ScoreRating.FAIR -> R.string.analysis_zone_orange
+        ScoreRating.GOOD -> R.string.analysis_zone_green
     }
 
 // --- Adéquation permissions / finalité --------------------------------------------------------
@@ -177,19 +195,29 @@ private fun AnomaliesSection(
     onAppClick: (AuditedApp) -> Unit
 ) {
     Section(
-        title = "Anomalies de finalité (${anomalies.size})",
-        subtitle = "Permissions sans rapport avec la catégorie de l'app : interdites, ou inattendues pour une catégorie connue."
+        title = stringResource(R.string.analysis_anomalies, anomalies.size),
+        subtitle = stringResource(R.string.analysis_anomalies_hint)
     ) {
-        ExpandableList(anomalies, key = "anomalies", empty = "Aucune surexposition de données détectée.") { anomaly ->
+        val resources = LocalResources.current
+        val locale = currentLocale()
+        ExpandableList(anomalies, key = "anomalies", empty = stringResource(R.string.analysis_anomalies_empty)) { anomaly ->
             val details = anomaly.findings.joinToString { finding ->
-                val label = WatchedPermission.entries.find { it.permission == finding.permission }?.label ?: finding.permission
-                val context = if (finding.context == Context.FORBIDDEN) "interdite" else "inattendue"
-                "$label ($context${if (finding.granted) "" else ", déclarée"})"
+                val label = WatchedPermission.entries.find { it.permission == finding.permission }?.label?.let(resources::getString)
+                    ?: finding.permission
+                resources.getString(
+                    when {
+                        finding.context == Context.FORBIDDEN && finding.granted -> R.string.analysis_anomaly_forbidden
+                        finding.context == Context.FORBIDDEN -> R.string.analysis_anomaly_forbidden_declared
+                        finding.granted -> R.string.analysis_anomaly_unexpected
+                        else -> R.string.analysis_anomaly_unexpected_declared
+                    },
+                    label,
+                )
             }
             AppLine(
                 app = anomaly.app,
                 subtitle = "${categoryName(anomaly.app.result.categoryId)} · $details",
-                trailing = "−" + "%.1f".format(anomaly.penalty).removeSuffix(".0").removeSuffix(",0"),
+                trailing = "−" + anomaly.penalty.formatted(locale, decimals = 1),
                 onClick = { onAppClick(anomaly.app) }
             )
         }
@@ -203,9 +231,9 @@ private fun AnomaliesSection(
 private fun PermissionsSection(permissions: List<PermissionUsage>, onAppClick: (AuditedApp) -> Unit) {
     var selected by rememberSaveable { mutableStateOf<WatchedPermission?>(null) }
     val usage = permissions.find { it.permission == selected } ?: permissions.firstOrNull()
-    Section(title = "Par permission", subtitle = "Quelles apps peuvent accéder au micro, à la caméra, à votre position…") {
+    Section(title = stringResource(R.string.analysis_by_permission), subtitle = stringResource(R.string.analysis_by_permission_hint)) {
         if (usage == null) {
-            EmptyLine("Aucune permission sensible demandée.")
+            EmptyLine(stringResource(R.string.analysis_by_permission_empty))
             return@Section
         }
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -213,13 +241,14 @@ private fun PermissionsSection(permissions: List<PermissionUsage>, onAppClick: (
                 FilterChip(
                     selected = item == usage,
                     onClick = { selected = item.permission },
-                    label = { Text("${item.permission.label} · ${item.total}") }
+                    label = { Text("${stringResource(item.permission.label)} · ${item.total}") }
                 )
             }
         }
         Spacer(Modifier.height(8.dp))
         Text(
-            text = "${usage.granted.size} accordée(s), ${usage.declaredOnly.size} seulement déclarée(s)",
+            text = pluralStringResource(R.plurals.analysis_granted_count, usage.granted.size, usage.granted.size) + ", " +
+                pluralStringResource(R.plurals.analysis_declared_count, usage.declaredOnly.size, usage.declaredOnly.size),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
@@ -227,29 +256,30 @@ private fun PermissionsSection(permissions: List<PermissionUsage>, onAppClick: (
         ExpandableList(apps, key = "perm-${usage.permission}", empty = "") { (app, granted) ->
             AppLine(
                 app = app,
-                subtitle = if (granted) "Accordée" else "Déclarée, non accordée",
+                subtitle = stringResource(if (granted) R.string.analysis_granted else R.string.analysis_declared_only),
                 onClick = { onAppClick(app) }
             )
         }
     }
 }
 
-private val WatchedPermission.label: String
+@get:StringRes
+private val WatchedPermission.label: Int
     get() = when (this) {
-        WatchedPermission.MICROPHONE -> "Micro"
-        WatchedPermission.CAMERA -> "Caméra"
-        WatchedPermission.BACKGROUND_LOCATION -> "Position en arrière-plan"
-        WatchedPermission.FINE_LOCATION -> "Position précise"
-        WatchedPermission.CONTACTS -> "Contacts"
-        WatchedPermission.SMS -> "SMS"
-        WatchedPermission.CALL_LOG -> "Journal d'appels"
-        WatchedPermission.CALENDAR -> "Agenda"
-        WatchedPermission.ACCESSIBILITY -> "Accessibilité"
-        WatchedPermission.NOTIFICATIONS -> "Lecture des notifications"
-        WatchedPermission.OVERLAY -> "Superposition"
-        WatchedPermission.USAGE_STATS -> "Statistiques d'usage"
-        WatchedPermission.ALL_FILES -> "Tous les fichiers"
-        WatchedPermission.BODY_SENSORS -> "Capteurs corporels"
+        WatchedPermission.MICROPHONE -> R.string.watched_microphone
+        WatchedPermission.CAMERA -> R.string.watched_camera
+        WatchedPermission.BACKGROUND_LOCATION -> R.string.watched_background_location
+        WatchedPermission.FINE_LOCATION -> R.string.watched_fine_location
+        WatchedPermission.CONTACTS -> R.string.watched_contacts
+        WatchedPermission.SMS -> R.string.watched_sms
+        WatchedPermission.CALL_LOG -> R.string.watched_call_log
+        WatchedPermission.CALENDAR -> R.string.watched_calendar
+        WatchedPermission.ACCESSIBILITY -> R.string.watched_accessibility
+        WatchedPermission.NOTIFICATIONS -> R.string.watched_notifications
+        WatchedPermission.OVERLAY -> R.string.watched_overlay
+        WatchedPermission.USAGE_STATS -> R.string.watched_usage_stats
+        WatchedPermission.ALL_FILES -> R.string.watched_all_files
+        WatchedPermission.BODY_SENSORS -> R.string.watched_body_sensors
     }
 
 // --- Par traqueurs ----------------------------------------------------------------------------
@@ -258,17 +288,20 @@ private val WatchedPermission.label: String
 private fun TrackersSection(analysis: DeviceAnalysis, onAppClick: (AuditedApp) -> Unit) {
     var expandedTracker by rememberSaveable { mutableStateOf<Int?>(null) }
     Section(
-        title = "Traqueurs (${analysis.trackers.size})",
-        subtitle = "${analysis.appsWithTrackers} app(s) sur ${analysis.analyzedAppCount} analysée(s) embarquent au moins un traqueur."
+        title = stringResource(R.string.analysis_trackers, analysis.trackers.size),
+        subtitle = pluralStringResource(
+            R.plurals.analysis_trackers_hint, analysis.appsWithTrackers, analysis.appsWithTrackers, analysis.analyzedAppCount,
+        )
     ) {
+        val resources = LocalResources.current
         if (analysis.trackerCategories.isNotEmpty()) {
             val max = analysis.trackerCategories.first().second.coerceAtLeast(1)
             analysis.trackerCategories.forEach { (category, count) ->
-                CategoryBar(TrackerGlossary.displayName(category), count, count / max.toFloat())
+                CategoryBar(resources.trackerCategoryName(category), count, count / max.toFloat())
             }
             Spacer(Modifier.height(12.dp))
         }
-        ExpandableList(analysis.trackers, key = "trackers", empty = "Aucun traqueur détecté pour l'instant.") { usage ->
+        ExpandableList(analysis.trackers, key = "trackers", empty = stringResource(R.string.analysis_trackers_empty)) { usage ->
             TrackerLine(
                 usage = usage,
                 expanded = expandedTracker == usage.tracker.id,
@@ -284,7 +317,7 @@ private fun CategoryBar(label: String, count: Int, fraction: Float) {
     Column(modifier = Modifier.padding(vertical = 3.dp)) {
         Row {
             Text(label, style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
-            Text("$count app(s)", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
+            Text(pluralStringResource(R.plurals.app_count, count, count), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold)
         }
         LinearProgressIndicator(
             progress = { fraction },
@@ -297,6 +330,7 @@ private fun CategoryBar(label: String, count: Int, fraction: Float) {
 
 @Composable
 private fun TrackerLine(usage: TrackerUsage, expanded: Boolean, onToggle: () -> Unit, onAppClick: (AuditedApp) -> Unit) {
+    val resources = LocalResources.current
     Column {
         Row(
             modifier = Modifier.fillMaxWidth().clickable(onClick = onToggle).padding(vertical = 8.dp),
@@ -305,12 +339,12 @@ private fun TrackerLine(usage: TrackerUsage, expanded: Boolean, onToggle: () -> 
             Column(modifier = Modifier.weight(1f)) {
                 Text(usage.tracker.name, fontWeight = FontWeight.Bold)
                 Text(
-                    usage.tracker.categories.ifEmpty { listOf(DeviceAnalysis.UNCATEGORIZED) }.joinToString { TrackerGlossary.displayName(it) },
+                    usage.tracker.categories.ifEmpty { listOf(DeviceAnalysis.UNCATEGORIZED) }.joinToString { resources.trackerCategoryName(it) },
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
-            Text("${usage.apps.size} app(s) ${if (expanded) "▲" else "▼"}", style = MaterialTheme.typography.labelLarge)
+            Text("${pluralStringResource(R.plurals.app_count, usage.apps.size, usage.apps.size)} ${if (expanded) "▲" else "▼"}", style = MaterialTheme.typography.labelLarge)
         }
         if (expanded) {
             usage.apps.forEach { app ->
@@ -345,7 +379,7 @@ private fun <T> ExpandableList(items: List<T>, key: String, empty: String, row: 
     (if (expanded) items else items.take(PreviewCount)).forEach { row(it) }
     if (items.size > PreviewCount) {
         TextButton(onClick = { expanded = !expanded }) {
-            Text(if (expanded) "Réduire" else "Tout voir (${items.size})")
+            Text(if (expanded) stringResource(R.string.list_collapse) else stringResource(R.string.list_show_all, items.size))
         }
     }
 }

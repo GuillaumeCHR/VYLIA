@@ -18,7 +18,7 @@ class PermissionGlossaryTest {
     fun `une entree par permission, textes renseignes`() {
         val entries = PermissionGlossary.entries
         assertEquals(entries.size, entries.map { it.permission }.toSet().size)
-        entries.forEach { assertTrue(it.permission, it.title.isNotBlank() && it.allows.isNotBlank() && it.whySensitive.isNotBlank()) }
+        entries.forEach { assertTrue(it.permission, it.title != 0 && it.allows != 0 && it.whySensitive != 0) }
     }
 
     @Test

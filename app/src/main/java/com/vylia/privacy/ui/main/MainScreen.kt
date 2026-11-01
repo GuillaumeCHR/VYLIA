@@ -1,5 +1,6 @@
 package com.vylia.privacy.ui.main
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,7 +14,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
+import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -25,22 +29,27 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.stringResource
+import com.vylia.privacy.ui.components.categoryName
+import com.vylia.privacy.R
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.ui.detail.AppDetailScreen
 import com.vylia.privacy.ui.home.HomeScreen
 import com.vylia.privacy.ui.home.HomeViewModel
 
-enum class AppTab(val title: String, val icon: ImageVector) {
-    SCAN("Scan", Icons.Default.Search),
-    ANALYZE("Analyse", Icons.Default.List),
-    AGIR("Agir", Icons.Default.Star),
-    LEARN("Apprendre", Icons.Default.Info),
-    SETTINGS("Paramètres", Icons.Default.Settings)
+enum class AppTab(@param:StringRes val title: Int, val icon: ImageVector) {
+    SCAN(R.string.tab_scan, Icons.Default.Search),
+    ANALYZE(R.string.tab_analyze, Icons.Default.List),
+    AGIR(R.string.tab_act, Icons.Default.Star),
+    LEARN(R.string.tab_learn, Icons.Default.Info),
+    SETTINGS(R.string.tab_settings, Icons.Default.Settings)
 }
 
 @Composable
 fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)) {
-    var currentTab by remember { mutableStateOf(AppTab.SCAN) }
+    // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
+    var currentTab by rememberSaveable { mutableStateOf(AppTab.SCAN) }
     var detailPackage by rememberSaveable { mutableStateOf<String?>(null) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val rules by homeViewModel.rules.collectAsStateWithLifecycle()
@@ -57,8 +66,16 @@ fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.
                             currentTab = tab
                             detailPackage = null
                         },
-                        icon = { Icon(tab.icon, contentDescription = tab.title) },
-                        label = { Text(tab.title) }
+                        icon = { Icon(tab.icon, contentDescription = null) },
+                        // Une seule ligne : le libellé rétrécit plutôt que de se couper (« Comprendre », grande police).
+                        label = {
+                            Text(
+                                stringResource(tab.title),
+                                maxLines = 1,
+                                softWrap = false,
+                                autoSize = TextAutoSize.StepBased(minFontSize = 8.sp, maxFontSize = LocalTextStyle.current.fontSize),
+                            )
+                        }
                     )
                 }
             }
@@ -68,7 +85,7 @@ fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.
         if (detailApp != null) {
             AppDetailScreen(
                 auditedApp = detailApp,
-                categoryName = homeViewModel.categoryName(detailApp.result.categoryId),
+                categoryName = LocalResources.current.categoryName(detailApp.result.categoryId, rules.rules),
                 gradeBands = GradeBands.from(rules.rules.scoring),
                 scoreBase = rules.rules.scoring.base,
                 onBack = { detailPackage = null },
@@ -77,11 +94,15 @@ fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.
             return@Scaffold
         }
         when (currentTab) {
-            AppTab.SCAN -> HomeScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
+            // L'écran Scan a sa propre barre d'en-tête (sous la barre d'état) : seule la marge du bas lui est utile.
+            AppTab.SCAN -> HomeScreen(
+                Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
+                onAppClick = { detailPackage = it.app.packageName },
+            )
             AppTab.ANALYZE -> AnalyseScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
             AppTab.AGIR -> AgirScreen(modifier)
-            AppTab.LEARN -> ApprendreScreen(modifier)
-            AppTab.SETTINGS -> SettingsScreen(modifier)
+            AppTab.LEARN -> ComprendreScreen(modifier)
+            AppTab.SETTINGS -> SettingsScreen(modifier, onOpenLearn = { currentTab = AppTab.LEARN })
         }
     }
 }

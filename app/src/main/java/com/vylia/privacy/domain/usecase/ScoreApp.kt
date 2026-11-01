@@ -22,6 +22,7 @@ internal fun PrivacyScorer.scoreApp(app: InstalledApp, analysis: TrackerAnalysis
             declaredPermissions = app.declaredPermissions,
             grantedPermissions = app.grantedPermissions,
             trackers = trackers,
+            signals = app.signals,
         )
     )
     return AuditedApp(app = app, score = PrivacyScore(result.score), trackerAnalysis = analysis, result = result)

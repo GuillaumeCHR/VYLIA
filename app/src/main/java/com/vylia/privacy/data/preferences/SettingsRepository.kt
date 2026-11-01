@@ -39,6 +39,13 @@ class SettingsRepository(context: Context) {
         _lastUpdateTimestamp.value = timestamp
     }
 
+    /** Vrai une fois la langue par défaut (anglais) appliquée au premier lancement. */
+    val languageInitialized: Boolean get() = prefs.getBoolean(KEY_LANGUAGE_INITIALIZED, false)
+
+    fun setLanguageInitialized() {
+        prefs.edit().putBoolean(KEY_LANGUAGE_INITIALIZED, true).apply()
+    }
+
     fun setAdvancedMode(enabled: Boolean) {
         prefs.edit().putBoolean(KEY_ADVANCED_MODE, enabled).apply()
         _advancedMode.value = enabled
@@ -48,5 +55,6 @@ class SettingsRepository(context: Context) {
         private const val KEY_LAST_UPDATE = "last_exodus_update_timestamp"
         private const val KEY_ADVANCED_MODE = "advanced_mode"
         private const val KEY_LAST_SCAN = "last_scan_timestamp"
+        private const val KEY_LANGUAGE_INITIALIZED = "language_initialized"
     }
 }

@@ -29,11 +29,19 @@ import com.vylia.privacy.R
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.DetectedPermission
 import com.vylia.privacy.domain.model.TrackerAnalysis
+import com.vylia.privacy.ui.components.BadgeRow
 import com.vylia.privacy.ui.components.ScoreBadge
+import com.vylia.privacy.ui.components.openAppSettings
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 
 private val IconSize = 44.dp
 
-/** Carte d'une application : icône, nom, badge de score et permissions critiques. */
+/**
+ * Carte d'une application : icône, nom, traqueurs, badges de qualification et score. L'icône ouvre directement
+ * la fiche système de l'app (désinstaller, gérer les autorisations), sans passer par le Play Store.
+ */
 @Composable
 fun AppCard(auditedApp: AuditedApp, modifier: Modifier = Modifier, onClick: () -> Unit = {}) {
     val app = auditedApp.app
@@ -43,7 +51,7 @@ fun AppCard(auditedApp: AuditedApp, modifier: Modifier = Modifier, onClick: () -
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            AppIcon(app.icon)
+            AppIcon(app.icon, label = app.label, packageName = app.packageName)
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Column {
                     Text(
@@ -61,7 +69,7 @@ fun AppCard(auditedApp: AuditedApp, modifier: Modifier = Modifier, onClick: () -
                     )
                 }
                 TrackerSummary(auditedApp.trackerAnalysis)
-                PermissionSummary(app.permissions)
+                if (auditedApp.result.displayedBadges.isNotEmpty()) BadgeRow(auditedApp.result.displayedBadges)
             }
             ScoreBadge(auditedApp.score)
         }
@@ -69,11 +77,19 @@ fun AppCard(auditedApp: AuditedApp, modifier: Modifier = Modifier, onClick: () -
 }
 
 @Composable
-private fun AppIcon(drawable: android.graphics.drawable.Drawable) {
+private fun AppIcon(drawable: android.graphics.drawable.Drawable, label: String, packageName: String) {
+    val context = LocalContext.current
     val sizePx = with(LocalDensity.current) { IconSize.roundToPx() }
     // Rasterisation mémorisée : faite une seule fois par icône visible.
     val bitmap = remember(drawable, sizePx) { drawable.toBitmap(sizePx, sizePx).asImageBitmap() }
-    Image(bitmap = bitmap, contentDescription = null, modifier = Modifier.size(IconSize))
+    Image(
+        bitmap = bitmap,
+        contentDescription = stringResource(R.string.app_icon_manage, label),
+        modifier = Modifier
+            .clip(RoundedCornerShape(12.dp))
+            .clickable { openAppSettings(context, packageName) }
+            .size(IconSize),
+    )
 }
 
 /** Rien n'est affiché tant que l'analyse DEX n'a pas eu lieu. */
@@ -90,41 +106,4 @@ private fun TrackerSummary(analysis: TrackerAnalysis) {
         }
     }
     Text(text = text, style = MaterialTheme.typography.labelLarge, color = color)
-}
-
-@Composable
-private fun PermissionSummary(permissions: List<DetectedPermission>) {
-    if (permissions.isEmpty()) {
-        Text(
-            text = stringResource(R.string.app_no_critical_permission),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
-        return
-    }
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
-        verticalArrangement = Arrangement.spacedBy(6.dp),
-    ) {
-        permissions.forEach { PermissionChip(it) }
-    }
-}
-
-/** Puce pleine si la permission est accordée, simple contour si elle n'est que demandée. */
-@Composable
-private fun PermissionChip(permission: DetectedPermission) {
-    val label = permission.risk.title
-    val colors = MaterialTheme.colorScheme
-    Surface(
-        shape = RoundedCornerShape(8.dp),
-        color = if (permission.isGranted) colors.secondaryContainer else colors.surface,
-        contentColor = if (permission.isGranted) colors.onSecondaryContainer else colors.onSurfaceVariant,
-        border = if (permission.isGranted) null else BorderStroke(1.dp, colors.outlineVariant),
-    ) {
-        Text(
-            text = if (permission.isGranted) label else stringResource(R.string.permission_requested_only, label),
-            style = MaterialTheme.typography.labelMedium,
-            modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp),
-        )
-    }
 }

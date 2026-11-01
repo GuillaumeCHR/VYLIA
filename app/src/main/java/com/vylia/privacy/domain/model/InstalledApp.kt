@@ -22,6 +22,8 @@ data class InstalledApp(
     val declaredPermissions: Set<String> = emptySet(),
     /** Permissions runtime accordées + permissions spéciales actives (AppOps, accessibilité, notifications, admin). */
     val grantedPermissions: Set<String> = emptySet(),
+    /** Signaux de sécurité (ids de `security.signals` des règles), collectés au scan. */
+    val signals: Set<String> = emptySet(),
     /**
      * Permissions du manifeste, plus `BIND_ACCESSIBILITY_SERVICE` si l'app déclare un service
      * d'accessibilité (cette permission protège le service, elle n'est jamais "demandée").

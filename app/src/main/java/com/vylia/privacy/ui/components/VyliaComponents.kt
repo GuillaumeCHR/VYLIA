@@ -24,6 +24,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.vylia.privacy.R
 import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.ui.home.components.labelRes
 import com.vylia.privacy.ui.theme.Slate800
@@ -58,7 +59,7 @@ fun ScoreBadge(score: PrivacyScore, modifier: Modifier = Modifier) {
     val animatedValue by animateIntAsState(score.value, tween(ScoreAnimationMillis), label = "scoreValue")
     val container by animateColorAsState(riskColor.container, tween(ScoreAnimationMillis), label = "scoreContainer")
     val content by animateColorAsState(riskColor.onContainer, tween(ScoreAnimationMillis), label = "scoreContent")
-    val description = "${score.value}/100, ${stringResource(score.rating.labelRes)}"
+    val description = stringResource(R.string.score_description, score.value, stringResource(score.rating.labelRes))
     Surface(
         modifier = modifier
             .size(52.dp)

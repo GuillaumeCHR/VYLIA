@@ -1,5 +1,7 @@
 package com.vylia.privacy.domain.learn
 
+import androidx.annotation.StringRes
+import com.vylia.privacy.R
 import com.vylia.privacy.domain.scoring.Scoring
 import kotlin.math.floor
 
@@ -20,13 +22,14 @@ data class GradeBand(
 )
 
 /** Niveau de risque associé à une note. */
-fun gradeRiskLabel(grade: String): String = when (grade.removeSuffix("?")) {
-    "A" -> "Risque faible"
-    "B" -> "Risque modéré"
-    "C" -> "Risque marqué"
-    "D" -> "Risque élevé"
-    "E" -> "Risque critique"
-    else -> "Note $grade"
+@StringRes
+fun gradeRiskLabel(grade: String): Int = when (grade.removeSuffix("?")) {
+    "A" -> R.string.risk_level_low
+    "B" -> R.string.risk_level_moderate
+    "C" -> R.string.risk_level_significant
+    "D" -> R.string.risk_level_high
+    "E" -> R.string.risk_level_critical
+    else -> R.string.risk_level_unknown
 }
 
 object GradeBands {

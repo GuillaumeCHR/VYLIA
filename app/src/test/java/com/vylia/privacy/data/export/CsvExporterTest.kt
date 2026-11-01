@@ -38,12 +38,21 @@ class CsvExporterTest {
         result = ScoreResult(42, "C", Confidence.FULL, "DEFAULT", 0.0, 0, emptyList(), emptyList()),
     )
 
+    private val labels = CsvExporter.Labels(
+        header = listOf("Nom de l'application", "Package", "Type", "Score", "Note", "Confiance", "Nombre de traqueurs", "Traqueurs détectés", "Permissions à risque accordées"),
+        userApp = "Utilisateur",
+        systemApp = "Système",
+        notAnalyzed = "Non analysé",
+        analysisFailed = "Échec de l'analyse",
+        permissionTitle = { "#$it" },
+    )
+
     private fun rows(csv: String) = csv.removePrefix("﻿").trimEnd().split("\r\n")
 
     @Test
     fun `exporte la taille reelle de la liste des traqueurs et leurs noms`() {
         val trackers = List(3) { Tracker(it, "Tracker $it", null, emptyList()) }
-        val row = rows(CsvExporter.export(listOf(audited("App", TrackerAnalysis.Analyzed(trackers)))))[1]
+        val row = rows(CsvExporter.export(listOf(audited("App", TrackerAnalysis.Analyzed(trackers))), labels))[1]
 
         assertEquals(
             "\"App\",\"com.example.app\",\"Utilisateur\",\"42\",\"C\",\"FULL\",\"3\",\"Tracker 0 | Tracker 1 | Tracker 2\",\"\"",
@@ -53,14 +62,14 @@ class CsvExporterTest {
 
     @Test
     fun `distingue zero traqueur d une app non analysee ou en echec`() {
-        assertEquals("0", CsvExporter.trackerCount(TrackerAnalysis.Analyzed(emptyList())))
-        assertEquals("Non analysé", CsvExporter.trackerCount(TrackerAnalysis.NotAnalyzed))
-        assertEquals("Échec de l'analyse", CsvExporter.trackerCount(TrackerAnalysis.Failed))
+        assertEquals("0", CsvExporter.trackerCount(TrackerAnalysis.Analyzed(emptyList()), labels))
+        assertEquals("Non analysé", CsvExporter.trackerCount(TrackerAnalysis.NotAnalyzed, labels))
+        assertEquals("Échec de l'analyse", CsvExporter.trackerCount(TrackerAnalysis.Failed, labels))
     }
 
     @Test
     fun `echappe les guillemets et commence par un BOM UTF-8`() {
-        val csv = CsvExporter.export(listOf(audited("Super \"App\", v2", TrackerAnalysis.NotAnalyzed, isSystemApp = true)))
+        val csv = CsvExporter.export(listOf(audited("Super \"App\", v2", TrackerAnalysis.NotAnalyzed, isSystemApp = true)), labels)
 
         assertTrue(csv.startsWith("﻿\"Nom de l'application\""))
         assertTrue(rows(csv)[1].startsWith("\"Super \"\"App\"\", v2\",\"com.example.app\",\"Système\""))

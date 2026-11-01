@@ -39,6 +39,12 @@ import com.vylia.privacy.domain.learn.gradeRiskLabel
 import com.vylia.privacy.domain.scoring.Category
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.scoreGradientColor
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.vylia.privacy.R
+import com.vylia.privacy.domain.scoring.Rules
+import com.vylia.privacy.ui.components.categoryName
 
 /** "Dernier scan : aujourd'hui à 22:41", ou l'état du scan en cours. */
 @Composable
@@ -57,10 +63,10 @@ fun LastScanLine(lastScanAt: Long?, scanning: Boolean, modifier: Modifier = Modi
         }
         Text(
             text = when {
-                scanning && last != null -> "Scan en cours · dernier scan complet : $last"
-                scanning -> "Premier scan en cours…"
-                last != null -> "Dernier scan : $last"
-                else -> "Aucun scan terminé"
+                scanning && last != null -> stringResource(R.string.scan_running_last, last)
+                scanning -> stringResource(R.string.scan_first_running)
+                last != null -> stringResource(R.string.scan_last, last)
+                else -> stringResource(R.string.scan_none)
             },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -82,7 +88,7 @@ fun GradeFilterRow(
         modifier = modifier.horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
-        FilterChip(selected = selected == null, onClick = { onSelect(null) }, label = { Text("Toutes") })
+        FilterChip(selected = selected == null, onClick = { onSelect(null) }, label = { Text(stringResource(R.string.filter_all_grades)) })
         bands.forEach { band ->
             val count = counts[band.grade] ?: 0
             FilterChip(
@@ -98,48 +104,29 @@ fun GradeFilterRow(
     }
 }
 
-/** Menu des catégories présentes dans le scan, avec leur nombre d'apps. `null` : toutes. */
-@Composable
-fun CategoryFilter(
-    options: List<Triple<String, String, Int>>,
-    selected: String?,
-    onSelect: (String?) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    var expanded by remember { mutableStateOf(false) }
-    Box(modifier = modifier) {
-        FilterChip(
-            selected = selected != null,
-            onClick = { expanded = true },
-            label = { Text("Catégorie : " + (options.find { it.first == selected }?.second ?: "toutes")) },
-            trailingIcon = { Icon(Icons.Default.ArrowDropDown, contentDescription = null) },
-        )
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-            DropdownMenuItem(text = { Text("Toutes les catégories") }, onClick = { onSelect(null); expanded = false })
-            options.forEach { (id, name, count) ->
-                DropdownMenuItem(text = { Text("$name ($count)") }, onClick = { onSelect(id); expanded = false })
-            }
-        }
-    }
-}
-
 /** En-tête d'une catégorie : permissions justifiées et tolérées, et pourquoi. */
 @Composable
-fun CategoryExpectationsCard(categoryId: String, category: Category, modifier: Modifier = Modifier) {
-    fun titles(permissions: Set<String>) = permissions.joinToString { PermissionGlossary.find(it)?.title ?: it }
+fun CategoryExpectationsCard(categoryId: String, category: Category, rules: Rules?, modifier: Modifier = Modifier) {
+    val resources = LocalResources.current
+    fun titles(permissions: Set<String>) =
+        permissions.joinToString { PermissionGlossary.find(it)?.title?.let(resources::getString) ?: it }
     VyliaCard(modifier = modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(14.dp)) {
-            Text(category.displayName, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            CategoryRationale.of(categoryId, category.description)?.let {
+            Text(resources.categoryName(categoryId, rules), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            (CategoryRationale.of(categoryId)?.let { stringResource(it) } ?: category.description)?.let {
                 Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(Modifier.height(6.dp))
-            ExpectationLine("Justifiées", if (category.allowed.isEmpty()) "aucune" else titles(category.allowed), MaterialTheme.colorScheme.primary)
+            ExpectationLine(
+                stringResource(R.string.expectations_allowed),
+                if (category.allowed.isEmpty()) stringResource(R.string.expectations_none) else titles(category.allowed),
+                MaterialTheme.colorScheme.primary,
+            )
             if (category.tolerated.isNotEmpty()) {
-                ExpectationLine("Tolérées", titles(category.tolerated), MaterialTheme.colorScheme.secondary)
+                ExpectationLine(stringResource(R.string.expectations_tolerated), titles(category.tolerated), MaterialTheme.colorScheme.secondary)
             }
             Text(
-                "Toute autre permission sensible est pénalisée comme inattendue ou interdite.",
+                stringResource(R.string.expectations_other),
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(top = 4.dp),
@@ -151,7 +138,7 @@ fun CategoryExpectationsCard(categoryId: String, category: Category, modifier: M
 @Composable
 private fun ExpectationLine(label: String, text: String, color: androidx.compose.ui.graphics.Color) {
     Row(modifier = Modifier.padding(vertical = 2.dp)) {
-        Text("$label : ", style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, color = color)
+        Text(stringResource(R.string.label_colon, label), style = MaterialTheme.typography.bodySmall, fontWeight = FontWeight.Bold, color = color)
         Text(text, style = MaterialTheme.typography.bodySmall)
     }
 }
@@ -160,7 +147,8 @@ private fun ExpectationLine(label: String, text: String, color: androidx.compose
 @Composable
 fun GradeFilterSummary(band: GradeBand, scoreBase: Int, count: Int, modifier: Modifier = Modifier) {
     Text(
-        text = "Note ${band.grade} · ${gradeRiskLabel(band.grade)} (${band.min} à ${band.max}) · $count app(s)",
+        text = stringResource(R.string.grade_filter_summary, band.grade, stringResource(gradeRiskLabel(band.grade)), band.min, band.max) +
+            " · " + pluralStringResource(R.plurals.app_count, count, count),
         style = MaterialTheme.typography.labelLarge,
         color = scoreGradientColor((band.min + band.max) / 2, scoreBase),
         modifier = modifier,

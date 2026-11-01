@@ -40,50 +40,81 @@ import com.vylia.privacy.ui.components.scoreGradientColor
 import com.vylia.privacy.ui.components.TransparencyBadge
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.home.HomeViewModel
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.stringResource
+import com.vylia.privacy.R
+import androidx.annotation.StringRes
+import com.vylia.privacy.domain.model.AuditedApp
+import com.vylia.privacy.ui.components.currentLocale
+import com.vylia.privacy.ui.components.formatted
+import com.vylia.privacy.ui.components.trackerCategoryName
+import android.content.res.Resources
 import java.text.Normalizer
 import java.util.Locale
 
+/** Onglets de l'écran Comprendre : chaque contenu est à un toucher, sans long défilement. */
+private enum class UnderstandTab(@param:StringRes val title: Int) {
+    SCORE(R.string.understand_tab_score),
+    TRACKERS(R.string.understand_tab_trackers),
+    PERMISSIONS(R.string.understand_tab_permissions),
+}
+
 /**
- * Pédagogie : 1/ comment le Privacy Score est calculé (valeurs lues dans les règles en vigueur),
- * 2/ lexique des permissions sensibles et de leurs impacts.
+ * Pédagogie, en trois onglets : 1/ comment le Privacy Score est calculé (valeurs lues dans les règles en vigueur),
+ * 2/ lexique des traqueurs, 3/ lexique des permissions sensibles et de leurs impacts.
  */
 @Composable
-fun ApprendreScreen(
+fun ComprendreScreen(
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
 ) {
     val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
     val rules = loadedRules.rules
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
-    val detected = remember(homeState.scannedApps) { DeviceAnalysis.from(homeState.scannedApps).trackers }
-    var query by rememberSaveable { mutableStateOf("") }
-    val glossary = remember(query) { PermissionGlossary.entries.filter { it.matches(query) }.groupBy { it.theme } }
+    var tab by rememberSaveable { mutableStateOf(UnderstandTab.SCORE) }
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        item {
-            Text("Apprendre", style = MaterialTheme.typography.headlineMedium)
+    Column(modifier = modifier.fillMaxSize()) {
+        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)) {
+            Text(stringResource(R.string.learn_title), style = MaterialTheme.typography.headlineMedium)
             Text(
-                "Comprendre votre Privacy Score et ce que chaque autorisation permet vraiment.",
+                stringResource(R.string.learn_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+        PrimaryTabRow(selectedTabIndex = tab.ordinal) {
+            UnderstandTab.entries.forEach { entry ->
+                Tab(selected = tab == entry, onClick = { tab = entry }, text = { Text(stringResource(entry.title)) })
+            }
+        }
+        when (tab) {
+            UnderstandTab.SCORE -> ScoreTab(rules)
+            UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps)
+            UnderstandTab.PERMISSIONS -> PermissionsTab(rules)
+        }
+    }
+}
 
+private val TabContentPadding = PaddingValues(16.dp)
+
+@Composable
+private fun ScoreTab(rules: Rules) {
+    LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { ScoreOverview(rules) }
         item { PermissionScoring(rules) }
         item { TrackerScoring(rules) }
         item { CategoryResolution(rules) }
+    }
+}
 
+@Composable
+private fun TrackersTab(rules: Rules, scannedApps: List<AuditedApp>) {
+    val detected = remember(scannedApps) { DeviceAnalysis.from(scannedApps).trackers }
+    LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Spacer(Modifier.height(8.dp))
-            Text("Lexique des traqueurs", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text(
-                "Les grandes familles de traqueurs, ce qu'elles font de vos données et les plus répandues. " +
-                    "Un traqueur peut appartenir à plusieurs familles : c'est la plus grave qui compte dans le score.",
+                stringResource(R.string.learn_trackers_glossary_hint),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -96,12 +127,20 @@ fun ApprendreScreen(
             }
             TrackerCategoryCard(info, weight, onDevice)
         }
+    }
+}
 
+@Composable
+private fun PermissionsTab(rules: Rules) {
+    var query by rememberSaveable { mutableStateOf("") }
+    val resources = LocalResources.current
+    val glossary = remember(query, resources) {
+        PermissionGlossary.entries.filter { it.matches(query, resources) }.groupBy { it.theme }
+    }
+    LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
-            Spacer(Modifier.height(8.dp))
-            Text("Lexique des permissions", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Text(
-                "Touchez une permission pour savoir ce qu'elle permet, pourquoi c'est sensible et comment elle est accordée.",
+                stringResource(R.string.learn_permissions_glossary_hint),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -110,11 +149,13 @@ fun ApprendreScreen(
                 value = query,
                 onValueChange = { query = it },
                 modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text("Rechercher (ex. SMS, READ_PHONE_STATE, position)") },
+                placeholder = { Text(stringResource(R.string.learn_search_hint)) },
                 leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
                 trailingIcon = {
                     if (query.isNotEmpty()) {
-                        IconButton(onClick = { query = "" }) { Icon(Icons.Default.Close, contentDescription = "Effacer") }
+                        IconButton(onClick = { query = "" }) {
+                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.home_search_clear))
+                        }
                     }
                 },
                 singleLine = true,
@@ -122,12 +163,14 @@ fun ApprendreScreen(
             )
         }
         if (glossary.isEmpty()) {
-            item { Text("Aucune permission ne correspond à « ${query.trim()} ».", color = MaterialTheme.colorScheme.onSurfaceVariant) }
+            item {
+                Text(stringResource(R.string.learn_search_empty, query.trim()), color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
         }
         PermissionTheme.entries.forEach { theme ->
             val infos = glossary[theme] ?: return@forEach
             item(key = "theme-$theme") {
-                Text(theme.title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
+                Text(stringResource(theme.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
             }
             items(infos, key = { it.permission }) { info ->
                 PermissionCard(info, weight = rules.permissionWeights[info.permission])
@@ -141,80 +184,67 @@ fun ApprendreScreen(
 @Composable
 private fun ScoreOverview(rules: Rules) {
     val scoring = rules.scoring
-    LearnCard("Le Privacy Score en bref") {
-        Paragraph(
-            "Chaque application part de ${scoring.base} points. Elle en perd selon les autorisations qu'elle " +
-                "demande et les traqueurs qu'elle embarque. Tout est calculé sur votre téléphone, sans connexion."
-        )
-        Formula("Score = ${scoring.base} − permissions (max ${scoring.permissionCap}) − traqueurs (max ${scoring.trackerCap})")
-        Paragraph(
-            "La pénalité des permissions n'est pas la même pour toutes les apps : elle est pondérée par l'usage " +
-                "attendu pour la catégorie de l'app. Le GPS ne coûte rien à une app de navigation, qui en a besoin, " +
-                "mais coûte cher à un jeu, qui n'en a aucune raison (détails en 1 et 3 ci-dessous)."
-        )
-        Paragraph(
-            "Les plafonds évitent qu'un seul aspect écrase tout : une app ne perd jamais plus de " +
-                "${scoring.permissionCap} points pour ses permissions ni plus de ${scoring.trackerCap} pour ses traqueurs."
-        )
-        Subtitle("La note et le risque associé")
+    LearnCard(stringResource(R.string.learn_overview_title)) {
+        Paragraph(stringResource(R.string.learn_overview_intro, scoring.base))
+        Formula(stringResource(R.string.learn_overview_formula, scoring.base, scoring.permissionCap, scoring.trackerCap))
+        Paragraph(stringResource(R.string.learn_overview_weighting))
+        Paragraph(stringResource(R.string.learn_overview_caps, scoring.permissionCap, scoring.trackerCap))
+        Subtitle(stringResource(R.string.learn_overview_grades))
         val bands = GradeBands.from(scoring)
         GradeScale(bands, base = scoring.base, modifier = Modifier.padding(vertical = 4.dp))
         bands.forEach { band -> GradeRiskLine(band, scoring) }
-        Paragraph(
-            "Un « ${scoring.unanalyzedPolicy.gradeSuffix} » après la note (ex. B${scoring.unanalyzedPolicy.gradeSuffix}) " +
-                "signale un score provisoire : les traqueurs n'ont pas encore pu être analysés."
-        )
-        Subtitle("Les zones de couleur")
-        BulletLine("Zone verte : 80 et plus")
-        BulletLine("Zone orange : de 50 à 79")
-        BulletLine("Zone rouge : moins de 50")
+        val suffix = scoring.unanalyzedPolicy.gradeSuffix
+        Paragraph(stringResource(R.string.learn_overview_partial, suffix, "B$suffix"))
+        Subtitle(stringResource(R.string.learn_overview_zones))
+        BulletLine(stringResource(R.string.learn_zone_green))
+        BulletLine(stringResource(R.string.learn_zone_orange))
+        BulletLine(stringResource(R.string.learn_zone_red))
     }
 }
 
 @Composable
 private fun PermissionScoring(rules: Rules) {
     val multipliers = rules.scoring.contextMultipliers
-    LearnCard("1. Les permissions") {
+    val locale = currentLocale()
+    LearnCard(stringResource(R.string.learn_permissions_title)) {
         val weights = rules.permissionWeights
         val lightest = weights.minByOrNull { it.value }
         val heaviest = weights.values.maxOrNull()
+        val resources = LocalResources.current
+        fun title(permission: String) = PermissionGlossary.find(permission)?.title?.let(resources::getString) ?: permission
         if (lightest != null && heaviest != null) {
-            val heaviestTitles = weights.filterValues { it == heaviest }.keys.map { PermissionGlossary.find(it)?.title ?: it }
+            val heaviestTitles = weights.filterValues { it == heaviest }.keys.map(::title)
             Paragraph(
-                "Chaque permission sensible a un poids selon sa gravité : de ${lightest.value} " +
-                    "(${PermissionGlossary.find(lightest.key)?.title ?: lightest.key}) à $heaviest " +
-                    "(${heaviestTitles.joinToString().lowercase(Locale.FRANCE)}). Ce poids est ensuite ajusté selon deux questions."
+                stringResource(
+                    R.string.learn_permissions_weights,
+                    lightest.value, title(lightest.key), heaviest, heaviestTitles.joinToString().lowercase(locale),
+                )
             )
         }
-        Formula("Pénalité = poids × contexte × octroi")
-        Subtitle("A-t-elle un rapport avec ce que fait l'app ? (contexte)")
-        BulletLine("Justifiée (×${multipliers["allowed"].fr()}) : nécessaire à la fonction, ex. le GPS pour une app de navigation.")
-        BulletLine("Tolérée (×${multipliers["tolerated"].fr()}) : compréhensible mais pas indispensable.")
-        BulletLine("Inattendue (×${multipliers["unexpected"].fr()}) : sans lien évident avec la catégorie de l'app.")
-        BulletLine("Interdite (×${multipliers["forbidden"].fr()}) : sans aucune justification, ex. les contacts pour un jeu.")
-        Subtitle("L'avez-vous accordée ? (octroi)")
-        Paragraph(
-            "Une permission accordée compte entièrement. Une permission seulement déclarée (l'app la prévoit mais " +
-                "vous ne l'avez pas acceptée) compte pour ×${rules.scoring.declaredOnlyFactor.fr()} : elle reste un signal d'intention."
-        )
+        Formula(stringResource(R.string.learn_permissions_formula))
+        Subtitle(stringResource(R.string.learn_context_title))
+        BulletLine(stringResource(R.string.learn_context_allowed, multipliers["allowed"].formatted(locale)))
+        BulletLine(stringResource(R.string.learn_context_tolerated, multipliers["tolerated"].formatted(locale)))
+        BulletLine(stringResource(R.string.learn_context_unexpected, multipliers["unexpected"].formatted(locale)))
+        BulletLine(stringResource(R.string.learn_context_forbidden, multipliers["forbidden"].formatted(locale)))
+        Subtitle(stringResource(R.string.learn_grant_title))
+        Paragraph(stringResource(R.string.learn_grant_text, rules.scoring.declaredOnlyFactor.formatted(locale)))
         val fine = rules.permissionWeights["ACCESS_FINE_LOCATION"]
         val forbidden = multipliers["forbidden"]
         if (fine != null && forbidden != null) {
-            Subtitle("Exemple")
+            Subtitle(stringResource(R.string.learn_example_title))
             Paragraph(
-                "La position précise pèse $fine. Accordée à une app de navigation, où elle est justifiée : " +
-                    "$fine × ${multipliers["allowed"].fr()} = 0 point perdu. Accordée à un jeu, où elle est interdite : " +
-                    "$fine × ${forbidden.fr()} = ${(fine * forbidden).fr()} points perdus."
+                stringResource(
+                    R.string.learn_example_text,
+                    fine, multipliers["allowed"].formatted(locale), forbidden.formatted(locale), (fine * forbidden).formatted(locale),
+                )
             )
         }
-        Subtitle("Pour ne pas compter deux fois")
-        BulletLine("Position précise et approximative ne comptent qu'une fois (la plus lourde).")
-        BulletLine("Photos, vidéos, audio et ancien accès aux fichiers ne comptent qu'une fois.")
-        BulletLine("Pour les SMS, la plus lourde compte entièrement, les autres à moitié.")
-        BulletLine(
-            "L'ancien accès aux fichiers n'est compté que pour les apps conçues pour Android 12 ou antérieur : " +
-                "au-delà, Android l'ignore."
-        )
+        Subtitle(stringResource(R.string.learn_no_double_count))
+        BulletLine(stringResource(R.string.learn_no_double_location))
+        BulletLine(stringResource(R.string.learn_no_double_media))
+        BulletLine(stringResource(R.string.learn_no_double_sms))
+        BulletLine(stringResource(R.string.learn_no_double_storage))
     }
 }
 
@@ -222,47 +252,28 @@ private fun PermissionScoring(rules: Rules) {
 private fun TrackerScoring(rules: Rules) {
     val trackerRules = rules.trackerRules
     val policy = rules.scoring.unanalyzedPolicy
-    LearnCard("2. Les traqueurs") {
-        Paragraph(
-            "Un traqueur est un morceau de code fourni par une autre entreprise (souvent une régie publicitaire) " +
-                "et intégré à l'app. Il collecte des informations sur vous et les envoie à ses propres serveurs, " +
-                "en plus de l'éditeur de l'app."
-        )
-        Paragraph(
-            "VYLIA les repère en cherchant leurs signatures dans le code de chaque app, à partir de la base " +
-                "publique Exodus Privacy. Chaque traqueur coûte des points selon ce qu'il fait ; un traqueur " +
-                "qui a plusieurs usages compte pour le plus grave."
-        )
+    val resources = LocalResources.current
+    LearnCard(stringResource(R.string.learn_trackers_title)) {
+        Paragraph(stringResource(R.string.learn_trackers_what))
+        Paragraph(stringResource(R.string.learn_trackers_how))
         trackerRules.categoryWeights.entries.sortedByDescending { it.value }.forEach { (category, weight) ->
-            WeightLine(TrackerGlossary.displayName(category), weight, "")
+            WeightLine(resources.trackerCategoryName(category), weight, "")
         }
-        WeightLine("Sans catégorie connue", trackerRules.defaultWeight, "")
-        Paragraph("Ce que fait chaque catégorie, et des exemples, dans le lexique des traqueurs ci-dessous.")
-        Paragraph("Les traqueurs ne peuvent pas faire perdre plus de ${rules.scoring.trackerCap} points au total.")
-        Subtitle("Si l'analyse n'a pas pu se faire")
-        Paragraph(
-            "En attendant l'analyse (ou si l'app n'a pas pu être lue), on retire forfaitairement " +
-                "${policy.assumedTrackerPenalty} points et la note porte un « ${policy.gradeSuffix} »."
-        )
-        Subtitle("Limite")
-        Paragraph(
-            "La détection repose sur des noms de code connus. Un traqueur caché (code obfusqué) ou trop récent " +
-                "peut passer inaperçu : « aucun traqueur détecté » n'est pas une garantie absolue."
-        )
+        WeightLine(stringResource(R.string.tracker_cat_uncategorized), trackerRules.defaultWeight, "")
+        Paragraph(stringResource(R.string.learn_trackers_see_glossary))
+        Paragraph(stringResource(R.string.learn_trackers_cap, rules.scoring.trackerCap))
+        Subtitle(stringResource(R.string.learn_trackers_unanalyzed_title))
+        Paragraph(stringResource(R.string.learn_trackers_unanalyzed_text, policy.assumedTrackerPenalty, policy.gradeSuffix))
+        Subtitle(stringResource(R.string.learn_limit_title))
+        Paragraph(stringResource(R.string.learn_limit_text))
     }
 }
 
 @Composable
 private fun CategoryResolution(rules: Rules) {
-    LearnCard("3. La catégorie de l'app") {
-        Paragraph(
-            "Ce qui est « justifié » dépend de ce que fait l'app : le micro est normal pour Shazam, pas pour une " +
-                "calculatrice. VYLIA classe chaque app dans l'une de ${rules.categories.size} catégories, d'après une liste " +
-                "d'apps connues ou, à défaut, la catégorie déclarée par l'éditeur."
-        )
-        Paragraph(
-            "Une app « Non catégorisée » n'a aucun passe-droit : chaque permission sensible y est considérée comme inattendue."
-        )
+    LearnCard(stringResource(R.string.learn_category_title)) {
+        Paragraph(stringResource(R.string.learn_category_text, rules.categories.size))
+        Paragraph(stringResource(R.string.learn_category_default))
     }
 }
 
@@ -277,31 +288,36 @@ private fun GradeRiskLine(band: GradeBand, scoring: Scoring) {
         }
         Spacer(Modifier.width(12.dp))
         Column(modifier = Modifier.weight(1f)) {
-            Text("${gradeRiskLabel(band.grade)} · ${band.min} à ${band.max}", fontWeight = FontWeight.Bold, color = color)
+            Text(
+                stringResource(R.string.learn_grade_line, stringResource(gradeRiskLabel(band.grade)), band.min, band.max),
+                fontWeight = FontWeight.Bold,
+                color = color
+            )
             Text(gradeRiskDescription(band, scoring), style = MaterialTheme.typography.bodySmall)
         }
     }
 }
 
 /** Description du risque, complétée par ce que la formule impose réellement pour tomber dans la tranche. */
+@Composable
 private fun gradeRiskDescription(band: GradeBand, scoring: Scoring): String {
     val profile = when (band.grade) {
-        "A" -> "Peu ou pas de permissions sensibles, et elles servent la fonction de l'app ; aucun traqueur ou presque."
-        "B" -> "Quelques permissions tolérées ou un petit nombre de traqueurs, souvent de mesure d'audience ou de rapports de plantage."
-        "C" -> "Des permissions sans rapport avec la fonction de l'app, ou plusieurs traqueurs dont des publicitaires. À surveiller."
-        "D" -> "Typiquement de nombreux traqueurs publicitaires ou de profilage, souvent avec des permissions intrusives. Cherchez une alternative."
-        "E" -> "Collecte massive de données. À remplacer si possible."
+        "A" -> stringResource(R.string.learn_grade_a)
+        "B" -> stringResource(R.string.learn_grade_b)
+        "C" -> stringResource(R.string.learn_grade_c)
+        "D" -> stringResource(R.string.learn_grade_d)
+        "E" -> stringResource(R.string.learn_grade_e)
         else -> ""
     }
     val permissions = band.permissionPenaltyAbove
     val trackers = band.trackerPenaltyAbove
     val constraint = when {
         permissions != null && trackers != null ->
-            "Sous ${band.max + 1}, une app cumule forcément des permissions intrusives (plus de $permissions points) " +
-                "et des traqueurs importants (plus de $trackers points)."
+            stringResource(R.string.learn_grade_both, band.max + 1, permissions, trackers)
+        trackers != null && trackers > 0 ->
+            stringResource(R.string.learn_grade_trackers_more, scoring.permissionCap, band.max + 1, trackers)
         trackers != null ->
-            "Les permissions seules (plafonnées à ${scoring.permissionCap}) ne peuvent pas faire descendre une app sous " +
-                "${band.max + 1} : les traqueurs pèsent forcément" + (if (trackers > 0) ", plus de $trackers points." else ".")
+            stringResource(R.string.learn_grade_trackers, scoring.permissionCap, band.max + 1)
         else -> ""
     }
     return listOf(profile, constraint).filter { it.isNotEmpty() }.joinToString(" ")
@@ -317,37 +333,40 @@ private fun TrackerCategoryCard(info: TrackerCategoryInfo, weight: Int?, onDevic
         Column(modifier = Modifier.padding(14.dp)) {
             Row {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(info.name, fontWeight = FontWeight.Bold)
-                    Text(info.riskLevel, style = MaterialTheme.typography.labelMedium, color = riskLevelColor(weight))
+                    Text(stringResource(info.name), fontWeight = FontWeight.Bold)
+                    Text(stringResource(info.riskLevel), style = MaterialTheme.typography.labelMedium, color = riskLevelColor(weight))
                 }
                 Text(if (expanded) "▲" else "▼", color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(Modifier.height(6.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                if (weight != null) TransparencyBadge("−$weight pts par traqueur")
+                if (weight != null) TransparencyBadge(stringResource(R.string.learn_points_per_tracker, weight))
                 TransparencyBadge(
-                    if (onDevice.isEmpty()) "Aucun sur votre téléphone"
-                    else "${onDevice.size} détecté(s) chez vous"
+                    if (onDevice.isEmpty()) stringResource(R.string.learn_none_on_device)
+                    else pluralStringResource(R.plurals.learn_detected_on_device, onDevice.size, onDevice.size)
                 )
             }
             if (expanded) {
                 Spacer(Modifier.height(8.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    LabeledText("Le risque pour votre vie privée", info.risk)
+                    LabeledText(stringResource(R.string.learn_tracker_risk), stringResource(info.risk))
                     if (info.examples.isNotEmpty()) {
-                        Text("Les plus répandus", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                        Text(stringResource(R.string.learn_tracker_examples), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                         FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                             info.examples.forEach { TransparencyBadge(it) }
                         }
                     }
                     if (onDevice.isNotEmpty()) {
-                        Text("Sur votre téléphone", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                        Text(stringResource(R.string.learn_tracker_on_device), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
                         onDevice.take(5).forEach { usage ->
-                            Text("${usage.tracker.name} · ${usage.apps.size} app(s)", style = MaterialTheme.typography.bodyMedium)
+                            Text(
+                                pluralStringResource(R.plurals.learn_tracker_apps, usage.apps.size, usage.tracker.name, usage.apps.size),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
                         }
                         if (onDevice.size > 5) {
                             Text(
-                                "… et ${onDevice.size - 5} autre(s), voir l'onglet Analyse.",
+                                pluralStringResource(R.plurals.learn_tracker_more, onDevice.size - 5, onDevice.size - 5),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -373,7 +392,7 @@ private fun PermissionCard(info: PermissionInfo, weight: Int?) {
         Column(modifier = Modifier.padding(14.dp)) {
             Row {
                 Column(modifier = Modifier.weight(1f)) {
-                    Text(info.title, fontWeight = FontWeight.Bold)
+                    Text(stringResource(info.title), fontWeight = FontWeight.Bold)
                     Text(
                         info.permission,
                         style = MaterialTheme.typography.labelSmall,
@@ -385,8 +404,8 @@ private fun PermissionCard(info: PermissionInfo, weight: Int?) {
             }
             Spacer(Modifier.height(6.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
-                TransparencyBadge(info.grant.label)
-                if (weight != null) TransparencyBadge("Poids $weight")
+                TransparencyBadge(stringResource(info.grant.label))
+                if (weight != null) TransparencyBadge(stringResource(R.string.learn_weight, weight))
             }
             if (expanded) {
                 Spacer(Modifier.height(8.dp))
@@ -400,9 +419,9 @@ private fun PermissionCard(info: PermissionInfo, weight: Int?) {
 @Composable
 fun PermissionExplanation(info: PermissionInfo) {
     Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-        LabeledText("Ce que ça permet", info.allows)
-        LabeledText("Pourquoi c'est sensible", info.whySensitive)
-        LabeledText("Comment elle est accordée", info.grant.explanation)
+        LabeledText(stringResource(R.string.learn_perm_allows), stringResource(info.allows))
+        LabeledText(stringResource(R.string.learn_perm_why), stringResource(info.whySensitive))
+        LabeledText(stringResource(R.string.learn_perm_grant), stringResource(info.grant.explanation))
     }
 }
 
@@ -414,9 +433,12 @@ private fun LabeledText(label: String, text: String) {
     }
 }
 
-private fun PermissionInfo.matches(query: String): Boolean {
+/** Recherche dans les textes de la langue affichée, ainsi que dans le nom technique de la permission. */
+private fun PermissionInfo.matches(query: String, resources: Resources): Boolean {
     val needle = query.trim().normalized()
-    return needle.isEmpty() || listOf(title, permission, allows, theme.title).any { needle in it.normalized() }
+    return needle.isEmpty() ||
+        listOf(resources.getString(title), permission, resources.getString(allows), resources.getString(theme.title))
+            .any { needle in it.normalized() }
 }
 
 private fun String.normalized(): String =
@@ -470,10 +492,4 @@ private fun WeightLine(label: String, weight: Int, explanation: String) {
         }
         Text("−$weight", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.Bold)
     }
-}
-
-/** Nombre au format français, sans décimale inutile (0,4 ; 12,8 ; 0). */
-private fun Double?.fr(): String {
-    if (this == null) return "?"
-    return String.format(Locale.FRANCE, "%.2f", this).trimEnd('0').trimEnd(',')
 }

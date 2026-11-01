@@ -18,12 +18,18 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+
+/** Résultat d'une action sur les règles de score, traduit par l'écran. */
+sealed interface RulesMessage {
+    data class Imported(val categoryCount: Int) : RulesMessage
+    /** [detail] : cause technique, affichée telle quelle (peut être absente). */
+    data class Rejected(val detail: String?) : RulesMessage
+    data object Reset : RulesMessage
+}
 
 data class SettingsUiState(
-    val lastUpdateDate: String = "",
+    /** Date de la base Exodus utilisée (téléchargée, ou première installation). */
+    val lastUpdateTimestamp: Long = 0L,
     val isObsolete: Boolean = false,
     val isUpdating: Boolean = false,
     val updateError: String? = null,
@@ -32,7 +38,7 @@ data class SettingsUiState(
     val rulesImported: Boolean = false,
     val ruleCategoryCount: Int = 0,
     /** Résultat du dernier import de règles, affiché sous le bouton. */
-    val rulesMessage: String? = null,
+    val rulesMessage: RulesMessage? = null,
 )
 
 class SettingsViewModel(
@@ -42,11 +48,10 @@ class SettingsViewModel(
     private val ruleMatrixRepository: RuleMatrixRepository,
 ) : ViewModel() {
 
-    private val dateFormatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
     private val _isUpdating = MutableStateFlow(false)
     private val _updateError = MutableStateFlow<String?>(null)
     private val _updateSuccess = MutableStateFlow(false)
-    private val _rulesMessage = MutableStateFlow<String?>(null)
+    private val _rulesMessage = MutableStateFlow<RulesMessage?>(null)
 
     private val updateState = combine(
         settingsRepository.lastUpdateTimestamp,
@@ -55,7 +60,7 @@ class SettingsViewModel(
         _updateSuccess
     ) { timestamp, isUpdating, updateError, updateSuccess ->
         SettingsUiState(
-            lastUpdateDate = dateFormatter.format(Date(timestamp)),
+            lastUpdateTimestamp = timestamp,
             isObsolete = trackerUpdater.isDatabaseObsolete(timestamp),
             isUpdating = isUpdating,
             updateError = updateError,
@@ -89,7 +94,7 @@ class SettingsViewModel(
                     _updateSuccess.value = true
                 },
                 onFailure = { error ->
-                    _updateError.value = error.localizedMessage ?: "Erreur"
+                    _updateError.value = error.localizedMessage ?: error.javaClass.simpleName
                 }
             )
             _isUpdating.value = false
@@ -108,15 +113,15 @@ class SettingsViewModel(
     fun importRules(uri: Uri) {
         viewModelScope.launch {
             _rulesMessage.value = ruleMatrixRepository.import(uri).fold(
-                onSuccess = { count -> "Règles importées ($count catégories). Les scores ont été recalculés." },
-                onFailure = { error -> "Import refusé : ${error.localizedMessage ?: "fichier invalide"}. Les règles actuelles sont conservées." }
+                onSuccess = { count -> RulesMessage.Imported(count) },
+                onFailure = { error -> RulesMessage.Rejected(error.localizedMessage) }
             )
         }
     }
 
     fun resetRules() {
         ruleMatrixRepository.resetToBundled()
-        _rulesMessage.value = "Règles intégrées rétablies."
+        _rulesMessage.value = RulesMessage.Reset
     }
 
     companion object {

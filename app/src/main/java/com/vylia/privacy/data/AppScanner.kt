@@ -26,7 +26,8 @@ import kotlinx.coroutines.withContext
 
 /**
  * Lit les applications installées via le [PackageManager] :
- * - **Apps utilisateur** : paquets non système ayant une activité `ACTION_MAIN` / `CATEGORY_LAUNCHER`.
+ * - **Apps utilisateur** : tous les paquets non système avec du code, y compris ceux sans icône de lanceur :
+ *   une app qui se cache du tiroir d'apps est justement un signal de logiciel espion (`NO_LAUNCHER_ICON`).
  * - **Apps système** : tous les paquets `FLAG_SYSTEM`, y compris ceux sans icône de lanceur
  *   (services et bloatware constructeur), hormis les paquets purement techniques sans code
  *   (overlays de ressources, thèmes…).
@@ -46,6 +47,7 @@ class AppScanner(
     private val packageManager = context.packageManager
     private val contentResolver = context.contentResolver
     private val appOps = context.getSystemService(AppOpsManager::class.java)
+    private val securitySignals = SecuritySignalCollector(context)
 
     override suspend fun getInstalledApps(filter: AppFilter): List<InstalledApp> =
         withContext(ioDispatcher) {
@@ -55,14 +57,19 @@ class AppScanner(
                 notificationListeners = NotificationManagerCompat.getEnabledListenerPackages(context),
                 deviceAdmins = activeDeviceAdminPackages(),
             )
+            val signalSnapshot = securitySignals.snapshot()
             getInstalledPackages().mapNotNull { packageInfo ->
                 ensureActive()
                 val appInfo = packageInfo.applicationInfo ?: return@mapNotNull null
                 val isSystemApp = appInfo.isSystemApp()
-                val isListed = if (isSystemApp) appInfo.hasCode() else packageInfo.packageName in launcherPackages
                 // Filtrage avant loadApp() : on ne charge pas d'icône pour un paquet écarté.
-                if (isListed && filter.matches(isSystemApp)) {
-                    loadApp(packageInfo, appInfo, isSystemApp, specialAccess)
+                if (appInfo.hasCode() && filter.matches(isSystemApp)) {
+                    val signals = securitySignals.signals(
+                        packageInfo,
+                        hasLauncherIcon = packageInfo.packageName in launcherPackages,
+                        snap = signalSnapshot,
+                    )
+                    loadApp(packageInfo, appInfo, isSystemApp, specialAccess, signals)
                 } else {
                     null
                 }
@@ -109,6 +116,7 @@ class AppScanner(
         appInfo: ApplicationInfo,
         isSystemApp: Boolean,
         specialAccess: SpecialAccess,
+        signals: Set<String>,
     ): InstalledApp {
         val packageName = packageInfo.packageName
         val requested = packageInfo.requestedPermissions.orEmpty()
@@ -157,6 +165,7 @@ class AppScanner(
             appInfoCategory = categoryKey(appInfo),
             declaredPermissions = permissions.mapTo(HashSet(), ::shortName),
             grantedPermissions = granted.mapTo(HashSet(), ::shortName),
+            signals = signals,
             requestedPermissions = permissions,
             permissions = PermissionRegistry.strongestByFamily(permissions).map { strongest ->
                 val familyGranted = permissions.any { permission ->

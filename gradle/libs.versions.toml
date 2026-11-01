@@ -6,6 +6,7 @@ minSdk = "26"
 targetSdk = "37"
 
 androidx-activity = "1.13.0"
+androidx-appcompat = "1.8.0"
 androidx-compose-bom = "2026.09.00"
 androidx-core = "1.19.1"
 androidx-lifecycle = "2.11.0"
@@ -14,6 +15,7 @@ kotlinx-serialization = "1.12.0"
 junit4 = "4.13.2"
 
 [libraries]
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidx-compose-bom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }

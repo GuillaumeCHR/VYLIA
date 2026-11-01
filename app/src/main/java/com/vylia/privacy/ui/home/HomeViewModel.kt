@@ -119,13 +119,12 @@ class HomeViewModel(
         }
     }
 
-    /** Règles de score en vigueur (intégrées ou importées), pour les explications de l'onglet Apprendre. */
+    /** Règles de score en vigueur (intégrées ou importées), pour les explications de l'onglet Comprendre. */
     val rules: StateFlow<RuleMatrixRepository.LoadedRules> = ruleMatrixRepository.current
 
-    fun categoryName(categoryId: String): String = ruleMatrixRepository.current.value.scorer.categoryDisplayName(categoryId)
 
     /** Toutes les apps du dernier scan (les deux onglets), pour l'export. */
-    fun exportCsv(): String = CsvExporter.export(currentApps())
+    fun exportCsv(labels: CsvExporter.Labels): String = CsvExporter.export(currentApps(), labels)
 
     fun dismissRecentRewards() {
         _recentRewards.value = emptyList()

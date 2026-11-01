@@ -48,10 +48,20 @@ import com.vylia.privacy.ui.components.scoreGradientColor
 import com.vylia.privacy.ui.main.PermissionExplanation
 import com.vylia.privacy.domain.scoring.TrackerFinding
 import com.vylia.privacy.ui.components.ScoreBadge
+import com.vylia.privacy.ui.components.BadgeChip
+import com.vylia.privacy.ui.components.badgeDescription
+import com.vylia.privacy.ui.components.securityDescription
+import com.vylia.privacy.ui.components.securityLabel
+import com.vylia.privacy.domain.scoring.ScoreResult
+import androidx.compose.ui.platform.LocalResources
 import com.vylia.privacy.ui.components.TransparencyBadge
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.theme.color
-import java.util.Locale
+import androidx.annotation.StringRes
+import androidx.compose.ui.res.stringResource
+import com.vylia.privacy.R
+import com.vylia.privacy.ui.components.currentLocale
+import com.vylia.privacy.ui.components.formatted
 
 /** Détail du score v2 : catégorie, confiance, constats permissions et traqueurs. */
 @Composable
@@ -76,9 +86,9 @@ fun AppDetailScreen(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Retour")
+                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
             }
-            Text("Détail du score", style = MaterialTheme.typography.titleLarge)
+            Text(stringResource(R.string.detail_title), style = MaterialTheme.typography.titleLarge)
         }
 
         VyliaCard(modifier = Modifier.fillMaxWidth()) {
@@ -92,12 +102,12 @@ fun AppDetailScreen(
                     Text(app.label, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
                     Text(app.packageName, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(Modifier.height(6.dp))
-                    TransparencyBadge(text = "Catégorie : $categoryName")
+                    TransparencyBadge(text = stringResource(R.string.detail_category, categoryName))
                 }
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     ScoreBadge(auditedApp.score)
                     Text(
-                        text = "Note ${result.grade}",
+                        text = stringResource(R.string.grade_label, result.grade),
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                         color = auditedApp.score.rating.color.accent,
@@ -109,7 +119,7 @@ fun AppDetailScreen(
         VyliaCard(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Text(
-                    text = "${gradeRiskLabel(result.grade)} · ${result.score}/$scoreBase",
+                    text = "${stringResource(gradeRiskLabel(result.grade))} · ${result.score}/$scoreBase",
                     fontWeight = FontWeight.Bold,
                     color = scoreGradientColor(result.score, scoreBase),
                 )
@@ -117,36 +127,39 @@ fun AppDetailScreen(
             }
         }
 
+        if (result.securityFindings.isNotEmpty()) SecurityCard(result)
+        if (result.badges.isNotEmpty()) BadgesCard(result)
+
         VyliaCard(modifier = Modifier.fillMaxWidth()) {
             Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 if (result.confidence == Confidence.FULL) {
-                    Text("Confiance : complète", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.detail_confidence_full), fontWeight = FontWeight.Bold)
                     Text(
-                        "Permissions et traqueurs ont été analysés.",
+                        stringResource(R.string.detail_confidence_full_hint),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 } else {
-                    Text("Confiance : partielle (note suivie de « ? »)", fontWeight = FontWeight.Bold)
+                    Text(stringResource(R.string.detail_confidence_partial), fontWeight = FontWeight.Bold)
                     Text(
                         text = if (auditedApp.trackerAnalysis == TrackerAnalysis.Failed) {
-                            "L'APK n'a pas pu être analysé : une pénalité forfaitaire de ${result.trackerPenalty} pts remplace les traqueurs."
+                            stringResource(R.string.detail_apk_failed, result.trackerPenalty)
                         } else {
-                            "Analyse des traqueurs pas encore faite : une pénalité forfaitaire de ${result.trackerPenalty} pts est appliquée en attendant."
+                            stringResource(R.string.detail_trackers_pending, result.trackerPenalty)
                         },
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
                 Spacer(Modifier.height(4.dp))
-                PenaltyRow("Permissions", result.permissionPenalty)
-                PenaltyRow("Traqueurs", result.trackerPenalty.toDouble())
+                PenaltyRow(stringResource(R.string.detail_permissions), result.permissionPenalty)
+                PenaltyRow(stringResource(R.string.detail_trackers), result.trackerPenalty.toDouble())
             }
         }
 
-        SectionCard(title = "Permissions (${result.permissionFindings.size}) · touchez pour comprendre") {
+        SectionCard(title = stringResource(R.string.detail_permissions_section, result.permissionFindings.size)) {
             if (result.permissionFindings.isEmpty()) {
-                EmptyLine("Aucune permission sensible.")
+                EmptyLine(stringResource(R.string.detail_no_permission))
             } else {
                 result.permissionFindings.forEachIndexed { index, finding ->
                     if (index > 0) HorizontalDivider()
@@ -155,10 +168,10 @@ fun AppDetailScreen(
             }
         }
 
-        SectionCard(title = "Traqueurs (${result.trackerFindings.size})") {
+        SectionCard(title = stringResource(R.string.detail_trackers_section, result.trackerFindings.size)) {
             when {
-                auditedApp.trackerAnalysis !is TrackerAnalysis.Analyzed -> EmptyLine("Non analysés pour l'instant.")
-                result.trackerFindings.isEmpty() -> EmptyLine("Aucun traqueur connu détecté.")
+                auditedApp.trackerAnalysis !is TrackerAnalysis.Analyzed -> EmptyLine(stringResource(R.string.detail_trackers_not_analyzed))
+                result.trackerFindings.isEmpty() -> EmptyLine(stringResource(R.string.detail_no_tracker))
                 else -> result.trackerFindings.forEachIndexed { index, finding ->
                     if (index > 0) HorizontalDivider()
                     TrackerLine(finding)
@@ -166,11 +179,60 @@ fun AppDetailScreen(
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                "Détection locale par signatures de code (base Exodus Privacy) : un SDK obfusqué ou renommé " +
-                    "peut passer inaperçu. Une absence de traqueur n'est donc pas une garantie.",
+                stringResource(R.string.detail_trackers_limit),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+    }
+}
+
+/** Tous les badges de l'app, bonnes pratiques d'abord, chacun avec son explication. */
+@Composable
+private fun BadgesCard(result: ScoreResult) {
+    val resources = LocalResources.current
+    SectionCard(title = stringResource(R.string.badges_title)) {
+        Text(
+            stringResource(R.string.badges_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        listOf(
+            "positive" to R.string.badges_positive,
+            "negative" to R.string.badges_negative,
+            "neutral" to R.string.badges_neutral,
+        ).forEach { (polarity, title) ->
+            val badges = result.badges.filter { it.polarity == polarity }
+            if (badges.isEmpty()) return@forEach
+            Spacer(Modifier.height(10.dp))
+            Text(stringResource(title), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+            badges.forEach { badge ->
+                Column(modifier = Modifier.padding(top = 6.dp)) {
+                    BadgeChip(badge)
+                    resources.badgeDescription(badge)?.let {
+                        Text(it, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(top = 2.dp))
+                    }
+                }
+            }
+        }
+    }
+}
+
+/** Patterns de capacités typiques des logiciels espions, et le plafond qu'ils imposent au score. */
+@Composable
+private fun SecurityCard(result: ScoreResult) {
+    val resources = LocalResources.current
+    VyliaCard(modifier = Modifier.fillMaxWidth(), containerColor = MaterialTheme.colorScheme.errorContainer) {
+        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(stringResource(R.string.security_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            result.securityFindings.forEach { finding ->
+                Text("⚠️ " + resources.securityLabel(finding), fontWeight = FontWeight.Bold)
+                resources.securityDescription(finding)?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
+            }
+            result.securityScoreCap?.let {
+                Text(stringResource(R.string.security_cap, it), style = MaterialTheme.typography.labelLarge)
+            }
+            Text(stringResource(R.string.security_hint), style = MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -186,7 +248,7 @@ private fun SectionCard(title: String, content: @Composable () -> Unit) {
     }
 }
 
-/** Touchez une permission pour lire son explication (lexique de l'onglet Apprendre). */
+/** Touchez une permission pour lire son explication (lexique de l'onglet Comprendre). */
 @Composable
 private fun PermissionLine(finding: PermissionFinding) {
     val info = PermissionGlossary.find(finding.permission)
@@ -200,16 +262,16 @@ private fun PermissionLine(finding: PermissionFinding) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = (info?.title ?: finding.permission) + if (info == null) "" else if (expanded) "  ▲" else "  ▼",
+                    text = (info?.title?.let { stringResource(it) } ?: finding.permission) + if (info == null) "" else if (expanded) "  ▲" else "  ▼",
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    text = "${finding.permission} · ${if (finding.granted) "accordée" else "déclarée seulement"}",
+                    text = "${finding.permission} · ${stringResource(if (finding.granted) R.string.detail_granted else R.string.detail_declared_only)}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Text(
-                    text = finding.context.label,
+                    text = stringResource(finding.context.label),
                     style = MaterialTheme.typography.labelMedium,
                     color = finding.context.tint,
                 )
@@ -242,7 +304,7 @@ private fun PenaltyRow(label: String, penalty: Double) {
 @Composable
 private fun PenaltyText(penalty: Double) {
     Text(
-        text = if (penalty == 0.0) "0" else "−" + String.format(Locale.FRANCE, "%.1f", penalty).removeSuffix(",0"),
+        text = if (penalty == 0.0) "0" else "−" + penalty.formatted(currentLocale(), decimals = 1),
         fontWeight = FontWeight.Bold,
         color = if (penalty == 0.0) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.error,
     )
@@ -260,12 +322,13 @@ private fun AppIcon(drawable: android.graphics.drawable.Drawable) {
     Image(bitmap = bitmap, contentDescription = null, modifier = Modifier.size(48.dp))
 }
 
-private val Context.label: String
+@get:StringRes
+private val Context.label: Int
     get() = when (this) {
-        Context.ALLOWED -> "Justifiée pour cette catégorie"
-        Context.TOLERATED -> "Tolérée pour cette catégorie"
-        Context.UNEXPECTED -> "Inattendue pour cette catégorie"
-        Context.FORBIDDEN -> "Interdite pour cette catégorie"
+        Context.ALLOWED -> R.string.detail_context_allowed
+        Context.TOLERATED -> R.string.detail_context_tolerated
+        Context.UNEXPECTED -> R.string.detail_context_unexpected
+        Context.FORBIDDEN -> R.string.detail_context_forbidden
     }
 
 private val Context.tint: Color

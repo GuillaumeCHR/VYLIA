@@ -1,5 +1,7 @@
 package com.vylia.privacy.domain.rewards
 
+import androidx.annotation.StringRes
+import com.vylia.privacy.R
 import com.vylia.privacy.domain.model.PrivacyScore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -7,13 +9,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.serialization.Serializable
 
 /** Badges débloqués définitivement, une fois la condition remplie. */
-enum class Badge(val emoji: String, val title: String, val description: String) {
-    FIRST_AUDIT("🔍", "Premier audit", "Terminer une première analyse complète"),
-    FIRST_CLEANUP("🧹", "Premier ménage", "Supprimer une application intrusive"),
-    BIG_CLEANUP("🗑️", "Grand nettoyage", "Supprimer 5 applications intrusives"),
-    TRACKER_HUNTER("🎯", "Chasseur de traqueurs", "Éliminer 20 traqueurs en supprimant des apps"),
-    NO_RED_ZONE("🛡️", "Zéro zone rouge", "Aucune app utilisateur sous 50/100"),
-    GREEN_DEVICE("🌿", "Appareil vert", "Score moyen des apps utilisateur d'au moins 80/100"),
+enum class Badge(val emoji: String, @param:StringRes val title: Int, @param:StringRes val description: Int) {
+    FIRST_AUDIT("🔍", R.string.badge_first_audit, R.string.badge_first_audit_description),
+    FIRST_CLEANUP("🧹", R.string.badge_first_cleanup, R.string.badge_first_cleanup_description),
+    BIG_CLEANUP("🗑️", R.string.badge_big_cleanup, R.string.badge_big_cleanup_description),
+    TRACKER_HUNTER("🎯", R.string.badge_tracker_hunter, R.string.badge_tracker_hunter_description),
+    NO_RED_ZONE("🛡️", R.string.badge_no_red_zone, R.string.badge_no_red_zone_description),
+    GREEN_DEVICE("🌿", R.string.badge_green_device, R.string.badge_green_device_description),
 }
 
 /** Dernier état connu d'une app utilisateur, référence pour détecter sa suppression. */

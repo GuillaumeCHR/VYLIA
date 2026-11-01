@@ -2,7 +2,7 @@
 <resources>
     <!-- Thème de fenêtre minimal : tout le style visuel est géré par Compose (VyliaTheme).
          Le fond Slate 900 évite tout flash blanc avant l'affichage du splash Compose. -->
-    <style name="Theme.Vylia" parent="android:Theme.Material.NoActionBar">
+    <style name="Theme.Vylia" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@color/vylia_slate_900</item>
     </style>
 </resources>

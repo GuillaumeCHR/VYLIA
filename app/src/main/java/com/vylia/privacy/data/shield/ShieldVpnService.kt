@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.net.VpnService
 import android.os.Build
 import android.os.ParcelFileDescriptor
@@ -12,6 +14,7 @@ import android.system.Os
 import android.system.OsConstants
 import android.system.StructPollfd
 import android.util.Log
+import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.MainActivity
 import com.vylia.privacy.VyliaApplication
 import com.vylia.privacy.domain.shield.Blocklist
@@ -22,8 +25,10 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
+import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.InetSocketAddress
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -97,7 +102,10 @@ class ShieldVpnService : VpnService() {
             watchNetwork()
             val tunnel = establish() ?: throw IOException("interface VPN refusée (autorisation retirée ?)")
             this.tunnel = tunnel
-            forwarders = ThreadPoolExecutor(0, MAX_FORWARDERS, 30, TimeUnit.SECONDS, LinkedBlockingQueue(MAX_PENDING))
+            // Autant de fils que MAX_FORWARDERS dès que des requêtes attendent (avec un cœur à 0, Java n'en crée qu'un
+            // seul tant que la file n'est pas pleine : les requêtes passeraient l'une après l'autre).
+            forwarders = ThreadPoolExecutor(MAX_FORWARDERS, MAX_FORWARDERS, 30, TimeUnit.SECONDS, LinkedBlockingQueue(MAX_PENDING))
+                .apply { allowCoreThreadTimeOut(true) }
             controller.onStatus(ShieldStatus.ON)
             loop(tunnel, blocklist)
         } catch (e: Exception) {
@@ -128,26 +136,57 @@ class ShieldVpnService : VpnService() {
     }
 
     /**
-     * Suit le réseau par défaut de VYLIA, qui est hors du tunnel : c'est le vrai réseau (Wi-Fi, données mobiles), et
-     * ses serveurs DNS sont ceux à qui transmettre les requêtes non bloquées.
+     * Suit les vrais réseaux (Wi-Fi, Ethernet, données mobiles), jamais un VPN : le réseau par défaut renvoyé par
+     * Android peut être le tunnel du bouclier lui-même, même pour VYLIA qui en est exclue, et ses requêtes
+     * reviendraient alors au serveur virtuel. Le réseau retenu est le Wi-Fi ou l'Ethernet s'il y en a un, sinon les
+     * données mobiles ; ses serveurs DNS sont ceux à qui transmettre les requêtes non bloquées.
      */
     private fun watchNetwork() {
         val connectivity = getSystemService(ConnectivityManager::class.java)
+        val networks = ConcurrentHashMap<Network, Pair<NetworkCapabilities?, LinkProperties?>>()
+
+        fun choose() {
+            val best = networks.entries
+                .filter { (_, info) -> info.second != null && info.first?.hasTransport(NetworkCapabilities.TRANSPORT_VPN) != true }
+                .minByOrNull { (_, info) ->
+                    val caps = info.first
+                    when {
+                        caps == null -> 3
+                        caps.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || caps.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> 0
+                        caps.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> 1
+                        else -> 2
+                    }
+                }
+            underlying = best?.key
+            // IPv4 d'abord : le DNS IPv6 annoncé par certaines box ne répond pas toujours. Jamais le serveur virtuel.
+            upstream = best?.value?.second?.dnsServers.orEmpty()
+                .filter { it.hostAddress != DNS_ADDRESS }
+                .sortedBy { if (it is Inet4Address) 0 else 1 }
+            if (BuildConfig.DEBUG) Log.d(TAG, "Réseau ${best?.key}, DNS ${upstream.joinToString()}")
+            runCatching { setUnderlyingNetworks(best?.key?.let { arrayOf(it) }) }
+        }
+
         val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onCapabilitiesChanged(network: Network, caps: NetworkCapabilities) {
+                networks[network] = caps to networks[network]?.second
+                choose()
+            }
+
             override fun onLinkPropertiesChanged(network: Network, link: LinkProperties) {
-                underlying = network
-                upstream = link.dnsServers.toList()
-                runCatching { setUnderlyingNetworks(arrayOf(network)) }
+                networks[network] = networks[network]?.first to link
+                choose()
             }
 
             override fun onLost(network: Network) {
-                if (network == underlying) {
-                    underlying = null
-                    upstream = emptyList()
-                }
+                networks.remove(network)
+                choose()
             }
         }
-        connectivity.registerDefaultNetworkCallback(callback)
+        val request = NetworkRequest.Builder()
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            .addCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+            .build()
+        connectivity.registerNetworkCallback(request, callback)
         networkCallback = callback
     }
 
@@ -178,19 +217,30 @@ class ShieldVpnService : VpnService() {
 
     private fun forward(output: FileOutputStream, query: DnsQuery) {
         val servers = upstream
-        if (servers.isEmpty()) return // pas de réseau : l'app réessaiera
+        val network = underlying
+        if (servers.isEmpty()) {
+            if (BuildConfig.DEBUG) Log.d(TAG, "Pas de DNS connu, requête ${query.name} abandonnée")
+            return // pas de réseau : l'app réessaiera
+        }
         runCatching {
             forwarders?.execute {
-                for (server in servers.take(2)) {
-                    val response = runCatching { ask(server, query.message) }.getOrNull() ?: continue
+                for (server in servers.take(MAX_SERVERS)) {
+                    val response = try {
+                        ask(network, server, query.message)
+                    } catch (e: IOException) {
+                        if (BuildConfig.DEBUG) Log.d(TAG, "$server sans réponse pour ${query.name} : $e")
+                        continue
+                    }
                     write(output, query.reply(response))
                     return@execute
                 }
             }
-        } // file pleine : la requête est abandonnée, l'app réessaiera
+        }.onFailure { if (BuildConfig.DEBUG) Log.d(TAG, "File pleine, requête ${query.name} abandonnée") }
     }
 
-    private fun ask(server: InetAddress, message: ByteArray): ByteArray = DatagramSocket().use { socket ->
+    private fun ask(network: Network?, server: InetAddress, message: ByteArray): ByteArray = DatagramSocket().use { socket ->
+        // Sur le vrai réseau, explicitement : VYLIA est déjà hors du tunnel, protect() en est une garantie de plus.
+        network?.bindSocket(socket)
         protect(socket)
         socket.soTimeout = UPSTREAM_TIMEOUT_MS
         socket.send(DatagramPacket(message, message.size, InetSocketAddress(server, DnsQuery.DNS_PORT)))
@@ -216,7 +266,9 @@ class ShieldVpnService : VpnService() {
         private const val DNS_ADDRESS = "10.111.222.2"
         private const val MTU = 1500
         private const val POLL_TIMEOUT_MS = 1_000
-        private const val UPSTREAM_TIMEOUT_MS = 5_000
+        /** Android abandonne une requête au bout d'environ 5 s : chaque serveur essayé doit tenir dans ce délai. */
+        private const val UPSTREAM_TIMEOUT_MS = 2_000
+        private const val MAX_SERVERS = 2
         private const val MAX_RESPONSE = 4_096
         private const val MAX_FORWARDERS = 16
         private const val MAX_PENDING = 256

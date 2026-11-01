@@ -1,12 +1,6 @@
 S = [
  ("act_title", "Act", "Agir"),
- ("act_share_title", "Raise awareness", "Sensibiliser"),
- ("act_share_text", "Generate an image of your overall privacy report (100%% offline) to share with friends and family.", "Générez une image de votre bilan global de confidentialité (100 %% hors-ligne) pour la partager avec vos proches."),
- ("act_share_button", "Share my report (Story)", "Partager mon bilan (Story)"),
- ("act_share_chooser", "Share my report", "Partager mon bilan"),
- ("act_story_title", "My VYLIA report", "Mon Bilan VYLIA"),
- ("act_story_footer", "100%% on-device analysis, no server", "Analyse 100 %% locale, sans serveur"),
- ("act_rewards_title", "🏆 Hall of Fame — Rewards", "🏆 Hall of Fame — Récompenses"),
+ ("act_rewards_title", "🏆 Rewards", "🏆 Récompenses"),
  ("act_rewards_text", "Each intrusive app (score below 50) you remove earns 100 minus its score in points.", "Chaque application intrusive (score < 50) que vous supprimez rapporte 100 − son score en points."),
  ("act_badges", "Badges (%1$d/%2$d)", "Badges (%1$d/%2$d)"),
  ("act_removed_title", "Intrusive apps removed", "Applications intrusives supprimées"),
@@ -76,7 +70,6 @@ S = [
  ("act_summary_title", "Average score of your apps", "Score moyen de vos apps"),
  ("act_summary_reachable", "Reachable: %1$d", "Atteignable : %1$d"),
  ("act_summary_nothing", "Nothing urgent: your apps already respect your privacy well.", "Rien d'urgent : vos apps respectent déjà bien votre vie privée."),
- ("act_story_points", "%1$d privacy points", "%1$d points de confidentialité"),
  ("reduce_revoke_hint", "Permissions your apps use without needing them. Each gain is recalculated by the scoring engine. Tap to open the app's Android settings, then Permissions.",
   "Des autorisations dont vos apps se servent sans en avoir besoin. Chaque gain est recalculé par le moteur de score. Touchez pour ouvrir la fiche Android de l'app, puis Autorisations."),
  ("reduce_revoke_empty", "No permission to revoke: every granted permission fits its app's purpose.", "Aucune autorisation à retirer : chaque autorisation accordée sert la finalité de son app."),
@@ -167,7 +160,6 @@ S = [
 ]
 
 P = [
- ("act_story_trophies", ("%1$d trophy", "%1$d trophies"), ("%1$d trophée", "%1$d trophées")),
  ("act_summary_revocations", ("%1$d permission to revoke", "%1$d permissions to revoke"), ("%1$d autorisation à retirer", "%1$d autorisations à retirer")),
  ("act_summary_removals", ("%1$d app to remove", "%1$d apps to remove"), ("%1$d app à supprimer", "%1$d apps à supprimer")),
  ("reduce_revoke_title", ("Revoke %1$d permission", "Revoke %1$d permissions"), ("Retirer %1$d autorisation", "Retirer %1$d autorisations")),

@@ -17,6 +17,9 @@ import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalResources
+import com.vylia.privacy.ui.components.trackerCategoryName
+import com.vylia.privacy.ui.share.ShareContent
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -130,7 +133,18 @@ fun ActScreen(
                 }
             }
             tab == ActTab.ALTERNATIVES -> AlternativesTab(state.scannedApps, actViewModel.catalogue)
-            else -> RewardsTab(state.userAverageScore?.value, rewards, recentRewards, viewModel::dismissRecentRewards)
+            else -> {
+                val history by viewModel.history.collectAsStateWithLifecycle()
+                val shield by actViewModel.shield.collectAsStateWithLifecycle()
+                val resources = LocalResources.current
+                // Calculé à l'ouverture du partage seulement (analyse des traqueurs de toutes les apps).
+                val shareContent = {
+                    state.userAverageScore?.value?.let { score ->
+                        ShareContent.from(score, userApps, history, rewards, shield.blockedTotal) { resources.trackerCategoryName(it) }
+                    }
+                }
+                RewardsTab(shareContent, rewards, recentRewards, viewModel::dismissRecentRewards)
+            }
         }
     }
 }

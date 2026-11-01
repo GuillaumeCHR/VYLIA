@@ -177,13 +177,7 @@
 
     <!-- Agir -->
     <string name="act_title">Act</string>
-    <string name="act_share_title">Raise awareness</string>
-    <string name="act_share_text" formatted="false">Generate an image of your overall privacy report (100% offline) to share with friends and family.</string>
-    <string name="act_share_button">Share my report (Story)</string>
-    <string name="act_share_chooser">Share my report</string>
-    <string name="act_story_title">My VYLIA report</string>
-    <string name="act_story_footer" formatted="false">100% on-device analysis, no server</string>
-    <string name="act_rewards_title">🏆 Hall of Fame — Rewards</string>
+    <string name="act_rewards_title">🏆 Rewards</string>
     <string name="act_rewards_text">Each intrusive app (score below 50) you remove earns 100 minus its score in points.</string>
     <string name="act_badges">Badges (%1$d/%2$d)</string>
     <string name="act_removed_title">Intrusive apps removed</string>
@@ -250,7 +244,6 @@
     <string name="act_summary_title">Average score of your apps</string>
     <string name="act_summary_reachable">Reachable: %1$d</string>
     <string name="act_summary_nothing">Nothing urgent: your apps already respect your privacy well.</string>
-    <string name="act_story_points">%1$d privacy points</string>
     <string name="reduce_revoke_hint">Permissions your apps use without needing them. Each gain is recalculated by the scoring engine. Tap to open the app\'s Android settings, then Permissions.</string>
     <string name="reduce_revoke_empty">No permission to revoke: every granted permission fits its app\'s purpose.</string>
     <string name="reduce_revoke_line">Revoke: %1$s</string>
@@ -316,10 +309,6 @@
     <string name="shield_pause_diagnose">• An app shows an error, a blank page or keeps loading: if the pause fixes it, the Shield was the cause, and the latest blocks show which server.</string>
     <string name="shield_pause_note">Nothing is counted during the pause: the trackers contacted then are not blocked.</string>
     <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0), EasyPrivacy, EasyList and AdGuard Mobile Ads (GPL v3), %1$s tracking and ad domains.</string>
-    <plurals name="act_story_trophies">
-        <item quantity="one">%1$d trophy</item>
-        <item quantity="other">%1$d trophies</item>
-    </plurals>
     <plurals name="act_summary_revocations">
         <item quantity="one">%1$d permission to revoke</item>
         <item quantity="other">%1$d permissions to revoke</item>
@@ -812,4 +801,81 @@
     <string name="security_hint">Capabilities typical of spyware: they describe what the app CAN do, not what it does. VYLIA does not see other apps\' network traffic.</string>
     <string name="security_cap">Score capped at %1$d because of this.</string>
     <string name="app_icon_manage">Manage %1$s in Android settings</string>
+
+    <!-- Partage -->
+    <string name="share_open_title">Share my report</string>
+    <string name="share_open_text">Images and an animated clip made on your phone, ready for a story or a conversation. No app name and no personal data on them: only your figures.</string>
+    <string name="share_open_button">Create my image</string>
+    <string name="share_title">Share</string>
+    <string name="share_back">Back</string>
+    <string name="share_template_hint">Swipe to change the design</string>
+    <string name="share_template_report">Report</string>
+    <string name="share_template_trackers">Trackers</string>
+    <string name="share_template_shield">Shield</string>
+    <string name="share_template_progress">Progress</string>
+    <string name="share_template_trophies">Trophies</string>
+    <string name="share_format_story">Story 9:16</string>
+    <string name="share_format_portrait">Feed 4:5</string>
+    <string name="share_format_square">Square 1:1</string>
+    <string name="share_text_label">Accompanying text</string>
+    <string name="share_button">Share the image</string>
+    <string name="share_whatsapp">WhatsApp</string>
+    <string name="share_save">Save to gallery</string>
+    <string name="share_saved">Saved in Pictures/VYLIA</string>
+    <string name="share_save_failed">Could not save</string>
+    <string name="share_chooser">Share</string>
+    <string name="share_privacy_hint">Made on the phone, without a server. The image carries no app name and no metadata (neither place nor device).</string>
+    <string name="share_clip_title">Animated clip</string>
+    <string name="share_clip_text">Your scan in motion: the magnifier unmasks the spies, then your score and your figures appear (GIF, 8 s).</string>
+    <string name="share_clip_button">Create the clip</string>
+    <string name="share_clip_progress">Creating the clip… %1$d%%</string>
+    <string name="share_clip_share">Share the clip</string>
+    <string name="share_clip_failed">Could not create the clip</string>
+    <string name="card_report_title">My phone, put under the microscope</string>
+    <string name="card_score_label">Privacy score</string>
+    <string name="card_trackers_sub">hidden in %1$d of my %2$d apps</string>
+    <string name="card_trackers_top">What they do</string>
+    <string name="card_shield_title">VYLIA Shield</string>
+    <string name="card_shield_sub">Right on my phone, without a server.</string>
+    <string name="card_progress_title">My privacy is improving</string>
+    <string name="card_progress_points">%1$s pts</string>
+    <string name="card_progress_sub">Score from %1$d to %2$d since %3$s</string>
+    <string name="card_trophies_title">My trophies</string>
+    <string name="card_trophies_sub">%1$d of %2$d · %3$d points</string>
+    <string name="card_footer_cta">What about you, what\'s your score?</string>
+    <string name="card_footer_app" formatted="false">100% on-device analysis with</string>
+    <string name="card_hashtag">#VYLIA #privacy</string>
+    <string name="share_text_report">My phone scores %1$d/100 for privacy with VYLIA. What about yours?</string>
+    <string name="share_text_trackers">VYLIA found %1$d trackers in %2$d of my apps. What about yours?</string>
+    <string name="share_text_shield">The VYLIA Shield has already blocked %1$s tracking requests on my phone.</string>
+    <string name="share_text_progress">My privacy score went from %1$d to %2$d with VYLIA.</string>
+    <string name="share_text_trophies">%1$d VYLIA trophies unlocked to take back control of my data.</string>
+    <plurals name="card_stat_trackers">
+        <item quantity="one">tracker detected</item>
+        <item quantity="other">trackers detected</item>
+    </plurals>
+    <plurals name="card_stat_blocked">
+        <item quantity="one">tracking request blocked</item>
+        <item quantity="other">tracking requests blocked</item>
+    </plurals>
+    <plurals name="card_stat_trophies">
+        <item quantity="one">trophy</item>
+        <item quantity="other">trophies</item>
+    </plurals>
+    <plurals name="card_stat_apps">
+        <item quantity="one">app analysed</item>
+        <item quantity="other">apps analysed</item>
+    </plurals>
+    <plurals name="card_trackers_label">
+        <item quantity="one">tracker unmasked</item>
+        <item quantity="other">trackers unmasked</item>
+    </plurals>
+    <plurals name="card_shield_label">
+        <item quantity="one">tracking request blocked</item>
+        <item quantity="other">tracking requests blocked</item>
+    </plurals>
+    <plurals name="card_apps_count">
+        <item quantity="one">%1$d app</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
 </resources>

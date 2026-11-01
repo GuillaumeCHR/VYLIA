@@ -181,13 +181,7 @@
 
     <!-- Agir -->
     <string name="act_title">Agir</string>
-    <string name="act_share_title">Sensibiliser</string>
-    <string name="act_share_text" formatted="false">Générez une image de votre bilan global de confidentialité (100 % hors-ligne) pour la partager avec vos proches.</string>
-    <string name="act_share_button">Partager mon bilan (Story)</string>
-    <string name="act_share_chooser">Partager mon bilan</string>
-    <string name="act_story_title">Mon Bilan VYLIA</string>
-    <string name="act_story_footer" formatted="false">Analyse 100 % locale, sans serveur</string>
-    <string name="act_rewards_title">🏆 Hall of Fame — Récompenses</string>
+    <string name="act_rewards_title">🏆 Récompenses</string>
     <string name="act_rewards_text">Chaque application intrusive (score &lt; 50) que vous supprimez rapporte 100 − son score en points.</string>
     <string name="act_badges">Badges (%1$d/%2$d)</string>
     <string name="act_removed_title">Applications intrusives supprimées</string>
@@ -254,7 +248,6 @@
     <string name="act_summary_title">Score moyen de vos apps</string>
     <string name="act_summary_reachable">Atteignable : %1$d</string>
     <string name="act_summary_nothing">Rien d\'urgent : vos apps respectent déjà bien votre vie privée.</string>
-    <string name="act_story_points">%1$d points de confidentialité</string>
     <string name="reduce_revoke_hint">Des autorisations dont vos apps se servent sans en avoir besoin. Chaque gain est recalculé par le moteur de score. Touchez pour ouvrir la fiche Android de l\'app, puis Autorisations.</string>
     <string name="reduce_revoke_empty">Aucune autorisation à retirer : chaque autorisation accordée sert la finalité de son app.</string>
     <string name="reduce_revoke_line">Retirer : %1$s</string>
@@ -320,11 +313,6 @@
     <string name="shield_pause_diagnose">• Une app affiche une erreur, une page blanche ou charge sans fin : si la pause règle le problème, le bouclier en était la cause, et les derniers blocages montrent quel serveur.</string>
     <string name="shield_pause_note">Rien n\'est compté pendant la pause : les traqueurs contactés à ce moment-là ne sont pas bloqués.</string>
     <string name="shield_lists">Listes : Exodus Privacy (ODbL 1.0), EasyPrivacy, EasyList et AdGuard Mobile Ads (GPL v3), %1$s domaines de traçage et de pub.</string>
-    <plurals name="act_story_trophies">
-        <item quantity="one">%1$d trophée</item>
-        <item quantity="many">%1$d trophées</item>
-        <item quantity="other">%1$d trophées</item>
-    </plurals>
     <plurals name="act_summary_revocations">
         <item quantity="one">%1$d autorisation à retirer</item>
         <item quantity="many">%1$d autorisations à retirer</item>
@@ -839,4 +827,88 @@
     <string name="security_hint">Capacités typiques des logiciels espions : elles décrivent ce que l\'app PEUT faire, pas ce qu\'elle fait. VYLIA ne voit pas le trafic réseau des autres apps.</string>
     <string name="security_cap">Score plafonné à %1$d pour cette raison.</string>
     <string name="app_icon_manage">Gérer %1$s dans les paramètres d\'Android</string>
+
+    <!-- Partage -->
+    <string name="share_open_title">Partager mon bilan</string>
+    <string name="share_open_text">Des images et un clip animé créés sur votre téléphone, prêts pour une story ou une conversation. Aucun nom d\'app ni donnée personnelle dessus : seulement vos chiffres.</string>
+    <string name="share_open_button">Créer mon image</string>
+    <string name="share_title">Partager</string>
+    <string name="share_back">Retour</string>
+    <string name="share_template_hint">Glissez pour changer de modèle</string>
+    <string name="share_template_report">Bilan</string>
+    <string name="share_template_trackers">Traqueurs</string>
+    <string name="share_template_shield">Bouclier</string>
+    <string name="share_template_progress">Progrès</string>
+    <string name="share_template_trophies">Trophées</string>
+    <string name="share_format_story">Story 9:16</string>
+    <string name="share_format_portrait">Fil 4:5</string>
+    <string name="share_format_square">Carré 1:1</string>
+    <string name="share_text_label">Texte d\'accompagnement</string>
+    <string name="share_button">Partager l\'image</string>
+    <string name="share_whatsapp">WhatsApp</string>
+    <string name="share_save">Enregistrer dans la galerie</string>
+    <string name="share_saved">Enregistrée dans Images/VYLIA</string>
+    <string name="share_save_failed">Enregistrement impossible</string>
+    <string name="share_chooser">Partager</string>
+    <string name="share_privacy_hint">Créée sur le téléphone, sans serveur. L\'image ne contient aucun nom d\'app ni métadonnée (ni lieu ni appareil).</string>
+    <string name="share_clip_title">Clip animé</string>
+    <string name="share_clip_text">Votre scan en animation : la loupe démasque les espions, puis votre score et vos chiffres apparaissent (GIF, 8 s).</string>
+    <string name="share_clip_button">Créer le clip</string>
+    <string name="share_clip_progress">Création du clip… %1$d %%</string>
+    <string name="share_clip_share">Partager le clip</string>
+    <string name="share_clip_failed">Création du clip impossible</string>
+    <string name="card_report_title">Mon téléphone passé au crible</string>
+    <string name="card_score_label">Score de confidentialité</string>
+    <string name="card_trackers_sub">cachés dans %1$d de mes %2$d apps</string>
+    <string name="card_trackers_top">Ce qu\'ils font</string>
+    <string name="card_shield_title">Bouclier VYLIA</string>
+    <string name="card_shield_sub">Directement sur mon téléphone, sans serveur.</string>
+    <string name="card_progress_title">Ma vie privée progresse</string>
+    <string name="card_progress_points">%1$s pts</string>
+    <string name="card_progress_sub">Score passé de %1$d à %2$d depuis le %3$s</string>
+    <string name="card_trophies_title">Mes trophées</string>
+    <string name="card_trophies_sub">%1$d sur %2$d · %3$d points</string>
+    <string name="card_footer_cta">Et vous, quel est votre score ?</string>
+    <string name="card_footer_app" formatted="false">Analyse 100 % locale avec</string>
+    <string name="card_hashtag">#VYLIA #ViePrivée</string>
+    <string name="share_text_report">Mon téléphone obtient %1$d/100 en confidentialité avec VYLIA. Et le vôtre ?</string>
+    <string name="share_text_trackers">VYLIA a trouvé %1$d traqueurs dans %2$d de mes apps. Et chez vous ?</string>
+    <string name="share_text_shield">Le Bouclier VYLIA a déjà bloqué %1$s requêtes de pistage sur mon téléphone.</string>
+    <string name="share_text_progress">Mon score de confidentialité est passé de %1$d à %2$d avec VYLIA.</string>
+    <string name="share_text_trophies">%1$d trophées VYLIA débloqués pour reprendre la main sur mes données.</string>
+    <plurals name="card_stat_trackers">
+        <item quantity="one">traqueur détecté</item>
+        <item quantity="many">traqueurs détectés</item>
+        <item quantity="other">traqueurs détectés</item>
+    </plurals>
+    <plurals name="card_stat_blocked">
+        <item quantity="one">pistage bloqué</item>
+        <item quantity="many">pistages bloqués</item>
+        <item quantity="other">pistages bloqués</item>
+    </plurals>
+    <plurals name="card_stat_trophies">
+        <item quantity="one">trophée</item>
+        <item quantity="many">trophées</item>
+        <item quantity="other">trophées</item>
+    </plurals>
+    <plurals name="card_stat_apps">
+        <item quantity="one">app analysée</item>
+        <item quantity="many">apps analysées</item>
+        <item quantity="other">apps analysées</item>
+    </plurals>
+    <plurals name="card_trackers_label">
+        <item quantity="one">traqueur démasqué</item>
+        <item quantity="many">traqueurs démasqués</item>
+        <item quantity="other">traqueurs démasqués</item>
+    </plurals>
+    <plurals name="card_shield_label">
+        <item quantity="one">requête de pistage bloquée</item>
+        <item quantity="many">requêtes de pistage bloquées</item>
+        <item quantity="other">requêtes de pistage bloquées</item>
+    </plurals>
+    <plurals name="card_apps_count">
+        <item quantity="one">%1$d app</item>
+        <item quantity="many">%1$d apps</item>
+        <item quantity="other">%1$d apps</item>
+    </plurals>
 </resources>

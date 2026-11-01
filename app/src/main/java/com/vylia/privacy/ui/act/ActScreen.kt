@@ -123,6 +123,8 @@ fun ActScreen(
                         onStop = actViewModel::stopShield,
                         onPause = actViewModel::pauseShield,
                         onResume = actViewModel::resumeShield,
+                        onPauseMinutes = actViewModel::setShieldPauseMinutes,
+                        onFilter = actViewModel::setShieldFilter,
                     )
                 }
             }

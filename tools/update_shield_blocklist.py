@@ -11,7 +11,15 @@ Sources, téléchargées sur le poste de dev uniquement (l'app ne télécharge r
   - AdGuard Mobile Ads filter (https://github.com/AdguardTeam/AdguardFilters, GPL v3) : les régies des apps et jeux
     mobiles (ironSource, Meta Audience Network, Pangle, Mintegral, Unity Ads…), qu'EasyList, faite pour le web, ne
     couvre pas ; mêmes règles de domaine entier ;
-  - MOBILE_EXTRA : complément maison, domaine par domaine, pour ce qu'aucune liste ne couvre (avec la raison).
+  - EXTRA : complément maison, domaine par domaine, pour ce qu'aucune liste ne couvre (avec la raison).
+
+Deux groupes, que l'utilisateur active séparément dans l'app :
+  - « mobile » : les régies publicitaires des apps et des jeux, soit le filtre AdGuard Mobile Ads et les traqueurs
+    Exodus de catégorie Advertisement. Les couper laisse passer les vidéos récompensées des jeux ;
+  - « web » : tout le reste (pubs et pistage des sites, mesure d'audience et profilage des apps).
+Un domaine des deux groupes est rangé en mobile : c'est le réglage mobile qui décide pour lui (Google AdMob et
+DoubleClick servent les apps comme les sites). Dans l'app, un domaine dont l'un des parents est mobile suit aussi
+le réglage mobile.
 
 Prudence, pour ne pas casser d'apps :
   - côté Exodus, seuls les traqueurs de catégorie Advertisement, Analytics, Profiling ou Identification sont
@@ -38,12 +46,12 @@ EASYPRIVACY_URL = "https://easylist.to/easylist/easyprivacy.txt"
 EASYLIST_URL = "https://easylist.to/easylist/easylist.txt"
 ADGUARD_MOBILE_URL = "https://filters.adtidy.org/extension/ublock/filters/11.txt"
 
-# Complément maison : domaines de traçage ou de pub des apps mobiles qu'aucune liste ne couvre. Chaque entrée est
+# Complément maison : domaines de traçage ou de pub qu'aucune liste ne couvre, avec leur groupe. Chaque entrée est
 # vérifiée (rôle du domaine, et absence de fonction utile à l'app qui l'appelle) ; le nom est affiché dans l'app.
-MOBILE_EXTRA = {
+EXTRA = {
     # Google Analytics for Firebase : mesure d'audience des apps (événements, sessions, conversions publicitaires).
     # Le bloquer n'empêche ni la connexion, ni les notifications, ni la base de données Firebase.
-    "Google Firebase Analytics": ["app-measurement.com"],
+    "Google Firebase Analytics": ("web", ["app-measurement.com"]),
 }
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "app/src/main/assets/shield_blocklist.json"
@@ -82,7 +90,7 @@ def is_protected(domain):
 
 
 def exodus_domains(api, mapping):
-    """{domaine: nom du traqueur} et la liste des signatures écartées."""
+    """{domaine: (nom du traqueur, groupe)} et la liste des signatures écartées."""
     domains, skipped = {}, []
     for tracker in sorted(api["trackers"].values(), key=lambda t: t["id"]):
         categories = set(tracker.get("categories") or mapping.get(tracker["name"], []))
@@ -94,7 +102,8 @@ def exodus_domains(api, mapping):
             if not DOMAIN.match(domain):
                 skipped.append(f"{tracker['name']} : {part}")
             elif not is_protected(domain):
-                domains.setdefault(domain, tracker["name"])
+                group = "mobile" if "Advertisement" in categories else "web"
+                domains.setdefault(domain, (tracker["name"], group))
     return domains, skipped
 
 
@@ -111,12 +120,14 @@ def adblock_domains(text):
     return kept, exceptions, version
 
 
-def drop_redundant(domains):
-    """Retire les sous-domaines d'un domaine déjà bloqué (la recherche se fait par suffixe)."""
-    def covered(domain):
-        labels = domain.split(".")
-        return any(".".join(labels[i:]) in domains for i in range(1, len(labels) - 1))
-    return {d for d in domains if not covered(d)}
+def parents(domain):
+    labels = domain.split(".")
+    return (".".join(labels[i:]) for i in range(1, len(labels) - 1))
+
+
+def drop_redundant(domains, also_covered_by=frozenset()):
+    """Retire les sous-domaines d'un domaine déjà présent (la recherche se fait par suffixe)."""
+    return {d for d in domains if not any(p in domains or p in also_covered_by for p in parents(d))}
 
 
 def main():
@@ -134,22 +145,34 @@ def main():
     exodus, skipped = exodus_domains(api, overrides())
     easyprivacy, privacy_exceptions, privacy_version = adblock_domains(load_list(args.easyprivacy, EASYPRIVACY_URL))
     easylist, list_exceptions, list_version = adblock_domains(load_list(args.easylist, EASYLIST_URL))
-    mobile, mobile_exceptions, mobile_version = adblock_domains(load_list(args.adguard_mobile, ADGUARD_MOBILE_URL))
-    for name, domains in MOBILE_EXTRA.items():
+    adguard, mobile_exceptions, mobile_version = adblock_domains(load_list(args.adguard_mobile, ADGUARD_MOBILE_URL))
+    for name, (group, domains) in EXTRA.items():
         for domain in domains:
-            assert DOMAIN.match(domain) and not is_protected(domain), domain
-            exodus.setdefault(domain, name)  # même place que les domaines Exodus : le nom est affiché
+            assert group in ("web", "mobile") and DOMAIN.match(domain) and not is_protected(domain), domain
+            exodus.setdefault(domain, (name, group))  # même place que les domaines Exodus : le nom est affiché
     exceptions = privacy_exceptions | list_exceptions | mobile_exceptions
-    lists = (easyprivacy | easylist | mobile) - exceptions
-    kept = drop_redundant(set(exodus) | lists)
-    trackers = {}
-    for domain in sorted(kept):
-        if domain in exodus:
-            trackers.setdefault(exodus[domain], []).append(domain)
-    others = sorted(d for d in kept if d not in exodus)
+    named = {d: v for d, v in exodus.items() if d not in exceptions}
+
+    mobile_all = ({d for d, (_, g) in named.items() if g == "mobile"} | adguard) - exceptions
+    web_all = ({d for d, (_, g) in named.items() if g == "web"} | easyprivacy | easylist) - exceptions - mobile_all
+    mobile = drop_redundant(mobile_all)
+    # Un domaine web sous un domaine mobile suit déjà le réglage mobile dans l'app : inutile de le garder.
+    web = drop_redundant(web_all, also_covered_by=mobile_all)
+
+    def group_file(domains):
+        trackers = {}
+        for domain in sorted(domains):
+            if domain in named:
+                trackers.setdefault(named[domain][0], []).append(domain)
+        return {
+            # nom du traqueur (Exodus ou complément maison) -> domaines (le nom est affiché à chaque blocage)
+            "trackers": trackers,
+            # domaines des listes sans traqueur nommé
+            "domains": sorted(d for d in domains if d not in named),
+        }
 
     snapshot = {
-        "version": 1,
+        "version": 2,
         "generated": datetime.date.today().isoformat(),
         "sources": [
             {"name": "Exodus Privacy", "url": EXODUS_URL, "license": "ODbL 1.0"},
@@ -158,17 +181,15 @@ def main():
             {"name": "AdGuard Mobile Ads filter", "url": ADGUARD_MOBILE_URL, "license": "GPL v3", "version": mobile_version},
             {"name": "VYLIA (complément maison)", "license": "GPL v3"},
         ],
-        # nom du traqueur (Exodus ou complément maison) -> domaines (le nom est affiché dans l'app à chaque blocage)
-        "trackers": trackers,
-        # domaines EasyPrivacy, EasyList et AdGuard sans traqueur nommé
-        "domains": others,
+        "groups": {"web": group_file(web), "mobile": group_file(mobile)},
     }
     OUTPUT.write_text(json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
     print(f"Exodus : {len(exodus)} domaines ({len(skipped)} signatures écartées) ; EasyPrivacy {privacy_version} : "
           f"{len(easyprivacy)} domaines ; EasyList {list_version} : {len(easylist)} domaines ; "
-          f"AdGuard Mobile {mobile_version} : {len(mobile)} domaines ; maison : {sum(map(len, MOBILE_EXTRA.values()))} ; "
+          f"AdGuard Mobile {mobile_version} : {len(adguard)} domaines ; maison : {sum(len(d) for _, d in EXTRA.values())} ; "
           f"{len(exceptions)} exceptions.")
-    print(f"{len(kept)} domaines après fusion -> {OUTPUT.relative_to(ROOT)} ({OUTPUT.stat().st_size // 1024} Ko)")
+    print(f"web : {len(web)} domaines, mobile : {len(mobile)} -> {OUTPUT.relative_to(ROOT)} "
+          f"({OUTPUT.stat().st_size // 1024} Ko)")
     for line in skipped:
         print("  écartée :", line)
 

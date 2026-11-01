@@ -11,6 +11,7 @@ import com.vylia.privacy.data.apps.UsageStatsReader
 import com.vylia.privacy.data.dns.PrivateDnsRepository
 import com.vylia.privacy.data.dns.PrivateDnsStatus
 import com.vylia.privacy.data.shield.ShieldController
+import com.vylia.privacy.domain.shield.ShieldFilter
 import com.vylia.privacy.domain.shield.ShieldState
 import com.vylia.privacy.domain.act.AlternativeCatalogue
 import com.vylia.privacy.domain.act.PrivateDnsCatalogue
@@ -59,6 +60,10 @@ class ActViewModel(
     fun pauseShield() = shieldController.pause()
 
     fun resumeShield() = shieldController.resume()
+
+    fun setShieldPauseMinutes(minutes: Int) = shieldController.setPauseMinutes(minutes)
+
+    fun setShieldFilter(filter: ShieldFilter, enabled: Boolean) = shieldController.setFilter(filter, enabled)
 
     fun refreshShieldContext() {
         _otherVpn.value = shieldController.otherVpnActive()

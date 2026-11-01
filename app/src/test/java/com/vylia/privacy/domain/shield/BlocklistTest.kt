@@ -9,16 +9,18 @@ class BlocklistTest {
 
     private val list = Blocklist.parse(
         """
-        {"version":1,"trackers":{"Google DoubleClick":["doubleclick.net"],"Bad":["not a domain","-x.com"]},
-         "domains":["metrics.example.com","doubleclick.net","com"]}
+        {"version":2,"groups":{
+          "mobile":{"trackers":{"Google DoubleClick":["doubleclick.net"]},"domains":["ads.unity3d.com"]},
+          "web":{"trackers":{"Bad":["not a domain","-x.com"]},
+                 "domains":["metrics.example.com","doubleclick.net","com","unity3d.com","x.ads.unity3d.com"]}}}
         """,
     )
 
     @Test
     fun `bloque le domaine et ses sous-domaines`() {
-        assertEquals(BlockMatch("doubleclick.net", "Google DoubleClick"), list.match("doubleclick.net"))
-        assertEquals(BlockMatch("doubleclick.net", "Google DoubleClick"), list.match("googleads.g.DoubleClick.net."))
-        assertEquals(BlockMatch("metrics.example.com", null), list.match("a.metrics.example.com"))
+        assertEquals(BlockMatch("doubleclick.net", ShieldFilter.MOBILE, "Google DoubleClick"), list.match("doubleclick.net"))
+        assertEquals(BlockMatch("doubleclick.net", ShieldFilter.MOBILE, "Google DoubleClick"), list.match("googleads.g.DoubleClick.net."))
+        assertEquals(BlockMatch("metrics.example.com", ShieldFilter.WEB, null), list.match("a.metrics.example.com"))
     }
 
     @Test
@@ -31,8 +33,30 @@ class BlocklistTest {
     }
 
     @Test
-    fun `ignore les entrees invalides et garde le traqueur Exodus en priorite`() {
-        assertEquals(2, list.size)
+    fun `ignore les entrees invalides`() {
+        assertEquals(6, list.size)
+    }
+
+    @Test
+    fun `chaque filtrage ne bloque que ses domaines`() {
+        val web = setOf(ShieldFilter.WEB)
+        val mobile = setOf(ShieldFilter.MOBILE)
+        assertEquals(ShieldFilter.WEB, list.match("a.metrics.example.com", web)?.filter)
+        assertNull(list.match("a.metrics.example.com", mobile))
+        assertEquals(ShieldFilter.MOBILE, list.match("ads.unity3d.com", mobile)?.filter)
+    }
+
+    @Test
+    fun `le reglage mobile l emporte sur une liste web qui cite le meme domaine ou un parent`() {
+        val web = setOf(ShieldFilter.WEB)
+        // doubleclick.net est dans les deux groupes : filtrage mobile coupé, il passe.
+        assertNull(list.match("googleads.g.doubleclick.net", web))
+        // ads.unity3d.com est mobile, unity3d.com web : le sous-domaine mobile passe, le reste du domaine web est bloqué.
+        assertNull(list.match("ads.unity3d.com", web))
+        assertNull(list.match("x.ads.unity3d.com", web))
+        assertEquals(BlockMatch("unity3d.com", ShieldFilter.WEB, null), list.match("cdn.unity3d.com", web))
+        // Les deux actifs : le domaine le plus précis est retenu.
+        assertEquals(BlockMatch("x.ads.unity3d.com", ShieldFilter.WEB, null), list.match("x.ads.unity3d.com"))
     }
 
     @Test
@@ -57,5 +81,11 @@ class BlocklistTest {
             "ms.applovin.com", // AppLovin
         ).forEach { assert(embedded.match(it) != null) { "$it devrait être bloqué" } }
         assertEquals("Google Firebase Analytics", embedded.match("app-measurement.com")?.trackerName)
+        // Filtrage mobile coupé : les régies des jeux passent, la mesure d'audience reste bloquée.
+        val web = setOf(ShieldFilter.WEB)
+        listOf("ms.applovin.com", "auction.unityads.unity3d.com", "outcome-ssp.supersonicads.com", "googleads.g.doubleclick.net")
+            .forEach { assertNull(it, embedded.match(it, web)) }
+        assertEquals(ShieldFilter.WEB, embedded.match("app-measurement.com", web)?.filter)
+        assertEquals(ShieldFilter.WEB, embedded.match("api2.amplitude.com", web)?.filter)
     }
 }

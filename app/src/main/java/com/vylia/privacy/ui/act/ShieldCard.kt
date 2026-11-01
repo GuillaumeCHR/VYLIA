@@ -14,7 +14,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
@@ -41,6 +46,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
 import com.vylia.privacy.data.dns.PrivateDnsStatus
+import com.vylia.privacy.domain.shield.ShieldFilter
 import com.vylia.privacy.domain.shield.ShieldState
 import com.vylia.privacy.domain.shield.ShieldStatus
 import com.vylia.privacy.ui.components.VyliaCard
@@ -55,8 +61,8 @@ private val Amber = Color(0xFFF59E0B)
 
 /**
  * Réduire › Traçage pub : l'interrupteur du Bouclier VYLIA, le compteur de requêtes bloquées en direct, les derniers
- * blocages (en mémoire seulement), la pause de 5 minutes et quand s'en servir, et ce qui peut l'empêcher de
- * fonctionner (DNS privé réglé sur un service, autre VPN).
+ * blocages (en mémoire seulement), la pause réglable (5 min à 2 h) et quand s'en servir, le choix des filtrages
+ * (web, mobile), et ce qui peut l'empêcher de fonctionner (DNS privé réglé sur un service, autre VPN).
  */
 @Composable
 internal fun ShieldCard(
@@ -69,6 +75,8 @@ internal fun ShieldCard(
     onStop: () -> Unit,
     onPause: () -> Unit,
     onResume: () -> Unit,
+    onPauseMinutes: (Int) -> Unit,
+    onFilter: (ShieldFilter, Boolean) -> Unit,
 ) {
     val context = LocalContext.current
     val format = NumberFormat.getIntegerInstance(currentLocale())
@@ -124,9 +132,20 @@ internal fun ShieldCard(
                 if (paused) {
                     val until = DateFormat.getTimeFormat(context).format(Date(state.pausedUntil!!))
                     Text(stringResource(R.string.shield_paused_until, until), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, color = Amber)
-                    Button(onClick = onResume) { Text(stringResource(R.string.shield_resume)) }
-                } else {
-                    OutlinedButton(onClick = onPause) { Text(stringResource(R.string.shield_pause)) }
+                }
+                // − et + règlent la durée de la prochaine pause, ou prolongent / raccourcissent celle en cours.
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    IconButton(onClick = { onPauseMinutes(ShieldState.shorterPause(state.pauseMinutes)) }, enabled = state.pauseMinutes > ShieldState.PAUSE_STEPS.first()) {
+                        Icon(Icons.Filled.Remove, contentDescription = stringResource(R.string.shield_pause_shorter))
+                    }
+                    if (paused) {
+                        Button(onClick = onResume) { Text(stringResource(R.string.shield_resume)) }
+                    } else {
+                        OutlinedButton(onClick = onPause) { Text(stringResource(R.string.shield_pause, state.pauseMinutes)) }
+                    }
+                    IconButton(onClick = { onPauseMinutes(ShieldState.longerPause(state.pauseMinutes)) }, enabled = state.pauseMinutes < ShieldState.PAUSE_STEPS.last()) {
+                        Icon(Icons.Filled.Add, contentDescription = stringResource(R.string.shield_pause_longer))
+                    }
                 }
             }
             if (state.blockedTotal > 0) {
@@ -136,6 +155,8 @@ internal fun ShieldCard(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+
+            FiltersSection(state.filters, onFilter)
 
             // Avertissements : ce qui empêche le bouclier de fonctionner, ou ce qu'il va remplacer.
             if (privateDns is PrivateDnsStatus.Hostname) {
@@ -192,6 +213,33 @@ internal fun ShieldCard(
             }
         }
     }
+}
+
+/** Que filtrer : web et mobile, avec ce que chacun bloque ; le dernier filtrage actif ne peut pas être coupé. */
+@Composable
+private fun FiltersSection(filters: Set<ShieldFilter>, onFilter: (ShieldFilter, Boolean) -> Unit) {
+    HorizontalDivider(Modifier.padding(vertical = 4.dp))
+    Text(stringResource(R.string.shield_filters_title), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+    listOf(
+        Triple(ShieldFilter.WEB, R.string.shield_filter_web, R.string.shield_filter_web_text),
+        Triple(ShieldFilter.MOBILE, R.string.shield_filter_mobile, R.string.shield_filter_mobile_text),
+    ).forEach { (filter, title, text) ->
+        val on = filter in filters
+        val label = stringResource(title)
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            Column(Modifier.weight(1f)) {
+                Text(label, fontWeight = FontWeight.Bold)
+                Text(stringResource(text), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Switch(
+                checked = on,
+                enabled = !on || filters.size > 1,
+                onCheckedChange = { onFilter(filter, it) },
+                modifier = Modifier.semantics { contentDescription = label },
+            )
+        }
+    }
+    Text(stringResource(R.string.shield_filter_gamer), style = MaterialTheme.typography.bodySmall)
 }
 
 @Composable

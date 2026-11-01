@@ -64,15 +64,28 @@ couverture des principales régies mobiles.
 Les versions de développement journalisent les domaines autorisés (`adb logcat -s VyliaShield`) : c'est ainsi qu'on
 repère une régie oubliée en jouant à un jeu.
 
-## Pause de 5 minutes
+## Filtrage web et filtrage mobile
+
+La liste (format 2) range chaque domaine dans un groupe, activable séparément (au moins un reste actif) :
+
+- **mobile** : régies publicitaires des apps et des jeux (AdGuard Mobile Ads, traqueurs Exodus « Advertisement ») ;
+  les bloquer coupe aussi les vidéos récompensées ;
+- **web** : tout le reste, soit pubs et pistage des sites (EasyList, EasyPrivacy) et mesure d'audience / profilage
+  des apps (Exodus hors publicité, `app-measurement.com`). Gêne rarement les apps.
+
+Le réglage mobile l'emporte : un domaine présent dans les deux (Google AdMob, DoubleClick), ou dont un parent est
+mobile, passe quand le filtrage mobile est coupé. C'est ce qui permet à un joueur de garder le filtrage web sans
+pauses répétées. Au 2026-11-01 : 86 186 domaines web, 1 044 mobile.
+
+## Pause réglable
 
 Les vidéos récompensées sont des pubs servies par les régies bloquées : elles tournent dans le vide (constaté sur
-State.io et Mr Autofire). « Pause 5 min » laisse le VPN en place mais transmet tout, sans rien compter, puis le
-filtrage reprend seul à l'heure dite : rien à relancer (Android limite les démarrages de service en arrière-plan),
-et pas de risque d'oublier de réactiver. L'écran explique quand s'en servir : vidéo récompensée, lien d'e-mail ou
-de pub suivi, code promo / cashback / parrainage, résultat sponsorisé, et diagnostic d'une app qui ne marche plus
-(si la pause règle le problème, les derniers blocages montrent le serveur en cause).
-Le test `BlocklistTest` vérifie que la liste embarquée ne bloque pas les grandes plateformes.
+State.io et Mr Autofire). La pause laisse le VPN en place mais transmet tout, sans rien compter, puis le filtrage
+reprend seul à l'heure dite : rien à relancer (Android limite les démarrages de service en arrière-plan), pas de
+risque d'oublier de réactiver. Durée choisie avec − et + (5, 10, 15, 30, 45, 60, 90, 120 min), mémorisée ; pendant
+une pause, − et + la raccourcissent ou la prolongent. L'écran explique quand s'en servir : vidéo récompensée (dans
+un jeu par exemple), lien d'e-mail ou de pub suivi, code promo / cashback / parrainage, résultat sponsorisé, et
+diagnostic d'une app qui ne marche plus (si la pause règle le problème, les derniers blocages montrent le serveur).
 
 ## Vie privée
 

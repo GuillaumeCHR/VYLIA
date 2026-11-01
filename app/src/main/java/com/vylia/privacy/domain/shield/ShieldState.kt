@@ -26,6 +26,10 @@ data class ShieldState(
     val recent: List<BlockedRequest> = emptyList(),
     /** Pause en cours : rien n'est bloqué jusqu'à cet instant, puis le bouclier reprend seul. */
     val pausedUntil: Long? = null,
+    /** Filtrages actifs (au moins un). */
+    val filters: Set<ShieldFilter> = ShieldFilter.entries.toSet(),
+    /** Durée de la prochaine pause, en minutes : l'une des [PAUSE_STEPS]. */
+    val pauseMinutes: Int = PAUSE_STEPS.first(),
 ) {
     fun isPaused(now: Long): Boolean = pausedUntil != null && now < pausedUntil
 
@@ -38,7 +42,14 @@ data class ShieldState(
     companion object {
         const val MAX_RECENT = 20
 
-        /** Durée de la pause proposée : le temps d'une vidéo récompensée ou d'ouvrir un lien. */
-        const val PAUSE_MS = 5 * 60 * 1000L
+        /**
+         * Durées de pause proposées par « − » et « + » : de quoi regarder une vidéo récompensée ou ouvrir un lien (5 min)
+         * jusqu'à une longue session de jeu (2 h).
+         */
+        val PAUSE_STEPS = listOf(5, 10, 15, 30, 45, 60, 90, 120)
+
+        fun shorterPause(minutes: Int): Int = PAUSE_STEPS.lastOrNull { it < minutes } ?: PAUSE_STEPS.first()
+
+        fun longerPause(minutes: Int): Int = PAUSE_STEPS.firstOrNull { it > minutes } ?: PAUSE_STEPS.last()
     }
 }

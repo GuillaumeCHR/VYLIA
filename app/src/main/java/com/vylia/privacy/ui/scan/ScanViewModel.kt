@@ -12,6 +12,9 @@ import com.vylia.privacy.VyliaApplication
 import com.vylia.privacy.data.apps.PackageRemovalMonitor
 import com.vylia.privacy.data.alternatives.AlternativesRepository
 import com.vylia.privacy.data.export.CsvExporter
+import com.vylia.privacy.domain.history.AppPoint
+import com.vylia.privacy.domain.history.History
+import com.vylia.privacy.domain.history.HistoryRecorder
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.domain.model.AppFilter
@@ -43,6 +46,7 @@ class ScanViewModel(
     private val badgesManager: BadgesManager,
     packageRemovalMonitor: PackageRemovalMonitor,
     private val alternatives: AlternativesRepository,
+    private val historyRecorder: HistoryRecorder,
 ) : ViewModel() {
 
     private sealed interface ScanState {
@@ -65,6 +69,9 @@ class ScanViewModel(
             .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ScanUiState())
 
     val rewards: StateFlow<RewardsState> = badgesManager.state
+
+    /** Suivi longitudinal : courbe du score moyen et événements, enregistrés à chaque scan complet. */
+    val history: StateFlow<History> = historyRecorder.history
 
     /** Suppressions récompensées depuis l'ouverture de l'app, pour l'animation de félicitations. */
     private val _recentRewards = MutableStateFlow<List<RemovedApp>>(emptyList())
@@ -119,6 +126,11 @@ class ScanViewModel(
                     "en ${SystemClock.elapsedRealtime() - listedAt} ms ($unanalyzed non analysées)",
             )
             if (BuildConfig.DEBUG) logScores()
+            historyRecorder.record(
+                currentApps().filter { AppFilter.USER.matches(it.app) }.associate {
+                    it.app.packageName to AppPoint(it.app.label, it.score.value, it.result.permissionFindings.filter { f -> f.granted }.map { f -> f.permission }.toSet())
+                },
+            )
             badgesManager.onScanCompleted(
                 currentApps().filter { AppFilter.USER.matches(it.app) }.toSnapshots(),
                 alternatives.catalogue.packages,
@@ -225,6 +237,7 @@ class ScanViewModel(
                     container.badgesManager,
                     container.packageRemovalMonitor,
                     container.alternativesRepository,
+                    container.historyRecorder,
                 )
             }
         }

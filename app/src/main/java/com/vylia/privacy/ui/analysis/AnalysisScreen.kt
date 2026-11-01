@@ -43,6 +43,8 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.vylia.privacy.R
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ShowChart
 import com.vylia.privacy.ui.components.categoryName
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.components.formatted
@@ -67,15 +69,34 @@ fun AnalysisScreen(
     val settingsState by settingsViewModel.uiState.collectAsStateWithLifecycle()
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val analysis = remember(homeState.scannedApps) { DeviceAnalysis.from(homeState.scannedApps) }
+    val history by homeViewModel.history.collectAsStateWithLifecycle()
+    var tab by rememberSaveable { mutableStateOf(0) }
 
+    Column(modifier = modifier.fillMaxSize()) {
+    Text(
+        text = stringResource(R.string.analysis_title),
+        style = MaterialTheme.typography.headlineMedium,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
+    )
+    // Deux vues : l'état actuel de l'appareil, et son suivi dans le temps (icône de graphique).
+    PrimaryTabRow(selectedTabIndex = tab) {
+        Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text(stringResource(R.string.analysis_tab_overview)) })
+        Tab(
+            selected = tab == 1,
+            onClick = { tab = 1 },
+            text = { Text(stringResource(R.string.analysis_tab_tracking)) },
+            icon = { Icon(Icons.AutoMirrored.Filled.ShowChart, contentDescription = null) },
+        )
+    }
+    if (tab == 1) {
+        TrackingTab(history)
+        return@Column
+    }
     LazyColumn(
-        modifier = modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        item {
-            Text(text = stringResource(R.string.analysis_title), style = MaterialTheme.typography.headlineMedium)
-        }
 
         // Score de confidentialité de l'appareil.
         item {
@@ -135,6 +156,7 @@ fun AnalysisScreen(
             }
         }
     }
+}
 }
 
 // --- Zones de risque -------------------------------------------------------------------------

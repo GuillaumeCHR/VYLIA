@@ -78,7 +78,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 | 2 | Analyse exhaustive des permissions | Fait : toutes les permissions par thème, niveau de protection Android, fiches |
 | 3 | Icône et splash screen | Fait : icône loupe et coche, splash avec petits espions bienveillants qui s'éclipsent |
 | 4 | Écran Scan en 3 onglets | Fait : par risque, par catégorie, par badge ; icône → fiche Android |
-| 5 | Suivi longitudinal | À faire |
+| 5 | Suivi longitudinal | Fait : onglet Analyse › Suivi (courbe moyenne ± écart-type, apps qui pèsent le plus, historique) |
 | 6 | Agir en 3 sous-onglets | Fait : Réduire (gain exact, apps inutilisées), Alternatives (catalogue), Récompenses et partage |
 | 7 | Notifications et scans programmés | À faire |
 |   | Grille de score v3 | Faite et visible dans Paramètres › Règles de score › Voir la grille |
@@ -90,4 +90,5 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 3. ~~§3 Refonte visuelle~~ (fait le 2026-11-01) : nouvelle icône centrée sur l'idée de scan / audit (sans codes agressifs de cybersécurité),
    et splash screen redéfini avec une mascotte ou de petits espions stylisés et bienveillants, dans un registre
    ludique, moderne et rassurant (à la place des bugs rouges expulsés).
-4. §5 Suivi longitudinal et §7 Automatisations (ils partagent le stockage de l'historique).
+4. ~~§5 Suivi~~ (fait le 2026-11-01). Reste §7 Automatisations : notification à l'installation, scans de fond
+   programmés qui alimentent le Suivi (le stockage `history.json` est prêt).

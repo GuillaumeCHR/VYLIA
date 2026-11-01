@@ -13,6 +13,8 @@ import com.vylia.privacy.data.trackers.DexTrackerAnalyzer
 import com.vylia.privacy.data.trackers.TrackerScanCache
 import com.vylia.privacy.data.trackers.TrackerUpdater
 import com.vylia.privacy.domain.rewards.BadgesManager
+import com.vylia.privacy.domain.history.HistoryRecorder
+import com.vylia.privacy.data.history.FileHistoryStore
 import com.vylia.privacy.domain.usecase.AnalyzeTrackersUseCase
 import com.vylia.privacy.domain.usecase.AuditAppsUseCase
 import java.io.File
@@ -26,6 +28,7 @@ class AppContainer(context: Context) {
     val packageRemovalMonitor = PackageRemovalMonitor(context)
     val alternativesRepository = AlternativesRepository(context)
     val usageStatsReader = UsageStatsReader(context)
+    val historyRecorder = HistoryRecorder(FileHistoryStore(File(context.filesDir, "history.json")))
 
     private val scorer = { ruleMatrixRepository.current.value.scorer }
     private val appScanner = AppScanner(context)

@@ -95,6 +95,24 @@
 
     <!-- Analyse -->
     <string name="analysis_title">Analysis</string>
+    <string name="analysis_tab_overview">Overview</string>
+    <string name="analysis_tab_tracking">Tracking</string>
+    <string name="tracking_curve_title">Average score over time</string>
+    <string name="tracking_curve_empty">The tracking starts with your first complete scan.</string>
+    <string name="tracking_curve_now">Today: %1$s on average, spread (standard deviation) %2$s points.</string>
+    <string name="tracking_curve_since">%1$s points since %2$s</string>
+    <string name="tracking_curve_legend">Line: average score of your apps. Band: ± standard deviation, wide when your apps are very unequal. Dotted lines: 50 and 80, the colour zones.</string>
+    <string name="tracking_curve_one_point">One point is recorded per day, at each complete scan: the curve appears from the second day.</string>
+    <string name="tracking_influence_title">Apps that weigh most on the average</string>
+    <string name="tracking_influence_hint">How much your average would move without each app.</string>
+    <string name="tracking_events_title">History</string>
+    <string name="tracking_events_hint">Apps installed or removed and permissions granted or revoked, noticed from one complete scan to the next. Everything stays on your phone.</string>
+    <string name="tracking_events_empty">Nothing yet: changes will appear from your next complete scan.</string>
+    <string name="tracking_event_installed">Installed: %1$s</string>
+    <string name="tracking_event_removed">Removed: %1$s</string>
+    <string name="tracking_event_granted">Granted: %1$s · %2$s</string>
+    <string name="tracking_event_revoked">Revoked: %1$s · %2$s</string>
+    <string name="tracking_event_score">score %1$d</string>
     <string name="analysis_scanning">Scan in progress…</string>
     <string name="analysis_trackers_running">Tracker analysis in progress: results are filling in.</string>
     <string name="analysis_footer">100%% on-device analysis based on the Exodus Privacy database of %1$s.</string>

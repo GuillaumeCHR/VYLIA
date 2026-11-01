@@ -138,6 +138,18 @@ class BadgesManager(
         return state.unlockedBadges + (earned - state.unlockedBadges.keys).associateWith { now }
     }
 
+    /** Efface points, trophées et état des apps (Supprimer mes données). */
+    @Synchronized
+    fun clear() = update(RewardsState())
+
+    /** Remplace les récompenses par le résultat de [transform] (restauration d'une sauvegarde). */
+    @Synchronized
+    fun <T> merge(transform: (RewardsState) -> Pair<RewardsState, T>): T {
+        val (state, result) = transform(_state.value)
+        update(state)
+        return result
+    }
+
     private fun update(state: RewardsState) {
         _state.value = state
         store.save(state)

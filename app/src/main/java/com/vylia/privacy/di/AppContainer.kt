@@ -22,6 +22,8 @@ import com.vylia.privacy.data.automation.BackgroundScanner
 import com.vylia.privacy.data.automation.InstallWatcher
 import com.vylia.privacy.domain.usecase.FullAuditUseCase
 import com.vylia.privacy.ui.notifications.InstallNotifications
+import com.vylia.privacy.data.backup.BackupRepository
+import com.vylia.privacy.ui.settings.AppLanguage
 import java.io.File
 
 /** Injection de dépendances manuelle : suffisante pour la V1, sans framework supplémentaire. */
@@ -39,9 +41,10 @@ class AppContainer(context: Context) {
     private val appScanner = AppScanner(context)
 
     val trackerSignatureRepository = AssetTrackerSignatureRepository(context)
+    private val trackerScanCache = TrackerScanCache(File(context.filesDir, "tracker_scan_cache.json"))
     private val trackerAnalyzer = DexTrackerAnalyzer(
         trackerSignatureRepository,
-        TrackerScanCache(File(context.filesDir, "tracker_scan_cache.json")),
+        trackerScanCache,
         tempDir = context.cacheDir,
     )
 
@@ -52,4 +55,8 @@ class AppContainer(context: Context) {
     val installWatcher = InstallWatcher(context, settingsRepository, fullAuditUseCase, InstallNotifications(context), scorer)
     val backgroundScanner = BackgroundScanner(settingsRepository, fullAuditUseCase, historyRecorder)
     val automationScheduler = AutomationScheduler(context, settingsRepository)
+    val backupRepository = BackupRepository(
+        settingsRepository, historyRecorder, badgesManager, ruleMatrixRepository, trackerScanCache,
+        language = { AppLanguage.current().tag },
+    )
 }

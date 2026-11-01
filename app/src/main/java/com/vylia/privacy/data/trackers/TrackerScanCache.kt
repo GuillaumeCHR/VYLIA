@@ -36,6 +36,12 @@ class TrackerScanCache(private val file: File) {
         content = current.copy(entries = entries).also(::save)
     }
 
+    /** Oublie toutes les analyses : la liste de vos apps n'est plus conservée (Supprimer mes données). */
+    suspend fun clear() = mutex.withLock {
+        content = null
+        file.delete()
+    }
+
     private fun loaded(signatureVersion: String): Content {
         val current = content ?: read()
         return (if (current.signatureVersion == signatureVersion) current else Content(signatureVersion)).also { content = it }

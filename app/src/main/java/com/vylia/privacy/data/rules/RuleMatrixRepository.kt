@@ -48,6 +48,19 @@ class RuleMatrixRepository(private val context: Context) {
         }
     }
 
+    /** Contenu des règles importées, `null` si ce sont les règles intégrées (sauvegarde). */
+    fun importedContent(): String? =
+        if (_current.value.source == Source.IMPORTED && importedFile.exists()) importedFile.readText() else null
+
+    /** Règles d'une sauvegarde, validées comme un import ; renvoie faux si elles sont refusées. */
+    fun restore(content: String): Boolean = runCatching {
+        val rules = parse(content)
+        require("DEFAULT" in rules.categories)
+        val loaded = LoadedRules(rules, Source.IMPORTED)
+        importedFile.writeText(content)
+        _current.value = loaded
+    }.isSuccess
+
     fun resetToBundled() {
         importedFile.delete()
         _current.value = loadBundled()

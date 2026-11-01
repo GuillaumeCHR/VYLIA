@@ -39,6 +39,13 @@ class SettingsRepository(context: Context) {
         _lastUpdateTimestamp.value = timestamp
     }
 
+    /** Supprimer mes données : plus de trace des derniers scans. */
+    fun clearScanTimestamps() {
+        prefs.edit().remove(KEY_LAST_SCAN).remove(KEY_LAST_BACKGROUND_SCAN).apply()
+        _lastScanTimestamp.value = null
+        _lastBackgroundScan.value = null
+    }
+
     /** Vrai une fois la langue par défaut (anglais) appliquée au premier lancement. */
     val languageInitialized: Boolean get() = prefs.getBoolean(KEY_LANGUAGE_INITIALIZED, false)
 

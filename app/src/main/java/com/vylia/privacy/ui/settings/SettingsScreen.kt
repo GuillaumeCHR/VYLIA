@@ -115,7 +115,7 @@ fun SettingsScreen(
         }
         SettingsPage.DATABASE -> DatabasePage(modifier, viewModel, back)
         SettingsPage.AUTOMATION -> AutomationPage(modifier, viewModel, back)
-        SettingsPage.DATA -> DataPage(modifier, homeViewModel, back)
+        SettingsPage.DATA -> DataPage(modifier, viewModel, homeViewModel, back)
         SettingsPage.ABOUT -> AboutScreen(modifier, back)
     }
 }
@@ -375,63 +375,6 @@ fun ExodusCreditsCard() {
 
 private const val EXODUS_URL = "https://exodus-privacy.eu.org/"
 private const val ODBL_URL = "https://opendatacommons.org/licenses/odbl/1-0/"
-
-// --- Données ----------------------------------------------------------------------------------
-
-@Composable
-private fun DataPage(modifier: Modifier, homeViewModel: ScanViewModel, onBack: () -> Unit) {
-    val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val resources = LocalResources.current
-    val coroutineScope = rememberCoroutineScope()
-    val exportLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.CreateDocument("text/csv")
-    ) { uri: Uri? ->
-        uri?.let {
-            coroutineScope.launch {
-                try {
-                    val csvData = homeViewModel.exportCsv(csvLabels(resources))
-                    withContext(Dispatchers.IO) {
-                        context.contentResolver.openOutputStream(it)?.use { outputStream ->
-                            outputStream.write(csvData.toByteArray())
-                        }
-                    }
-                    Toast.makeText(context, resources.getString(R.string.data_export_done), Toast.LENGTH_SHORT).show()
-                } catch (e: Exception) {
-                    Toast.makeText(context, resources.getString(R.string.data_export_failed), Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-    SubPage(modifier, R.string.settings_data_entry, onBack) {
-        InfoCard(R.string.data_export_title) {
-            Text(stringResource(R.string.data_export_text), style = MaterialTheme.typography.bodyMedium)
-            Button(
-                onClick = { exportLauncher.launch(resources.getString(R.string.data_export_file_name)) },
-                enabled = !homeState.isLoading,
-            ) {
-                Text(stringResource(R.string.data_export_button))
-            }
-            if (homeState.isAnalyzingTrackers) Hint(stringResource(R.string.data_export_partial))
-        }
-        InfoCard(R.string.data_local_title) {
-            Text(stringResource(R.string.data_local_text), style = MaterialTheme.typography.bodyMedium)
-        }
-    }
-}
-
-/** En-têtes et valeurs du rapport CSV, dans la langue de l'app. */
-private fun csvLabels(resources: android.content.res.Resources) = CsvExporter.Labels(
-    header = listOf(
-        R.string.csv_app_name, R.string.csv_package, R.string.csv_type, R.string.csv_score, R.string.csv_grade,
-        R.string.csv_confidence, R.string.csv_tracker_count, R.string.csv_trackers, R.string.csv_permissions,
-    ).map(resources::getString),
-    userApp = resources.getString(R.string.csv_user_app),
-    systemApp = resources.getString(R.string.csv_system_app),
-    notAnalyzed = resources.getString(R.string.csv_not_analyzed),
-    analysisFailed = resources.getString(R.string.csv_analysis_failed),
-    permissionTitle = resources::getString,
-)
 
 // --- Briques communes -------------------------------------------------------------------------
 

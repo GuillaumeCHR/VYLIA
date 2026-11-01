@@ -143,9 +143,6 @@ class ScanViewModel(
     /** Toutes les apps du dernier scan (les deux onglets), pour l'export. */
     fun exportCsv(labels: CsvExporter.Labels): String = CsvExporter.export(currentApps(), labels)
 
-    /** Efface la courbe et l'historique ; le prochain scan complet repart de zéro (point de référence). */
-    fun clearHistory() = historyRecorder.clear()
-
     fun dismissRecentRewards() {
         _recentRewards.value = emptyList()
     }

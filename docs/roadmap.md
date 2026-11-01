@@ -83,6 +83,18 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 
 ---
 
+## 9. À propos › Crédits, avec une touche d'humour (sur le modèle de Molkky Board)
+* **Écran Crédits** façon générique de film, ouvert depuis À propos : un faux terminal qui « initialise » l'app
+  (« Recherche de traqueurs… 0 trouvé », clin d'œil au métier de VYLIA), puis la version et le build.
+* **Rôles décalés :** Production Yogi Studio (« effectif total : une personne et un smartphone en méditation »),
+  Développement, design, tests et service après-vente, Pair programming (Claude, via Claude Code), Moteur de score
+  (« une fonction pure, qui n'a jamais rien envoyé sur Internet »), Données (Exodus Privacy), Police (Unbounded).
+* **Compléments d'À propos** repris de Molkky Board : liste des bibliothèques open source et leurs licences,
+  politique de confidentialité et conditions d'utilisation (pages du site), « Envoyer un retour » dans les
+  versions de test.
+
+---
+
 ## Avancement (mis à jour le 2026-11-01)
 
 | § | Chantier | État |
@@ -94,7 +106,8 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 | 5 | Suivi longitudinal | Fait : onglet Analyse › Suivi (courbe moyenne ± écart-type, apps qui pèsent le plus, historique) |
 | 6 | Agir en 3 sous-onglets | Fait : Réduire (gain exact, apps inutilisées), Alternatives (catalogue), Récompenses et partage |
 | 7 | Notifications et scans programmés | Fait, à valider sur téléphone : Paramètres › Automatisations (alerte d'installation toutes les ~15 min, scan de fond hebdomadaire ou mensuel), JobScheduler sans bibliothèque |
-| 8 | Gestion des données (export, import, suppression) | À faire |
+| 8 | Gestion des données (export, import, suppression) | Fait (0.6.0) : Paramètres › Gestion des données, sauvegarde JSON versionnée, import sans écraser avec bilan, suppression confirmée ; export CSV du scan conservé |
+| 9 | À propos › Crédits avec humour | À faire |
 |   | Grille de score v3 | Faite et visible dans Paramètres › Règles de score › Voir la grille |
 
 ### Prochaines actions
@@ -113,5 +126,13 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
      temps réel les requêtes de traçage sortantes sans envoyer aucune donnée vers l'extérieur, activable par un simple
      interrupteur. Attention : demande l'accès Internet et un service au premier plan, à refléter dans l'écran
      « Vie privée » et dans la grille (VYLIA est exclue de son propre score).
-6. §8 Paramètres › Gestion des données : remplacer l'écran « Export et données » par Exporter / Importer / Supprimer
+6. ~~§8~~ (fait en 0.6.0). §8 Paramètres › Gestion des données : remplacer l'écran « Export et données » par Exporter / Importer / Supprimer
    mes données, comme dans Molkky Board, en gardant l'export CSV des résultats du scan (voir §8).
+7. **Bug Analyse en mode avancé :** deux scores de confidentialité s'affichent (apps utilisateur et apps système).
+   N'en garder qu'un seul, qui fusionne les résultats des apps installées par l'utilisateur et des apps système.
+8. §9 À propos › Crédits avec une touche d'humour, comme dans Molkky Board (voir §9).
+
+### Versions
+
+Une version par lot livré (versionName et versionCode dans `app/build.gradle.kts`, tag `vX.Y.0`) :
+0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données ; la suite continue à 0.7.0.

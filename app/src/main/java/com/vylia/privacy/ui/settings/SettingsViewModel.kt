@@ -1,6 +1,14 @@
 package com.vylia.privacy.ui.settings
 
+import android.content.ContentResolver
 import android.net.Uri
+import com.vylia.privacy.data.backup.BackupRepository
+import com.vylia.privacy.domain.backup.RestoreError
+import com.vylia.privacy.domain.backup.RestoreException
+import com.vylia.privacy.domain.backup.RestoreReport
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -44,6 +52,15 @@ data class SettingsUiState(
     val rulesMessage: RulesMessage? = null,
 )
 
+/** Résultat d'une action de Paramètres › Gestion des données, traduit par l'écran. */
+sealed interface DataMessage {
+    data object Exported : DataMessage
+    data object ExportFailed : DataMessage
+    data class Restored(val report: RestoreReport) : DataMessage
+    data class RestoreFailed(val error: RestoreError) : DataMessage
+    data object Deleted : DataMessage
+}
+
 /** Paramètres › Automatisations. */
 data class AutomationUiState(
     val installAlerts: Boolean = false,
@@ -58,7 +75,55 @@ class SettingsViewModel(
     private val ruleMatrixRepository: RuleMatrixRepository,
     private val installWatcher: InstallWatcher,
     private val automationScheduler: AutomationScheduler,
+    private val backupRepository: BackupRepository,
+    private val contentResolver: ContentResolver,
 ) : ViewModel() {
+
+    private val _dataMessage = MutableStateFlow<DataMessage?>(null)
+    val dataMessage: StateFlow<DataMessage?> = _dataMessage
+
+    private val _dataBusy = MutableStateFlow(false)
+    val dataBusy: StateFlow<Boolean> = _dataBusy
+
+    private fun dataAction(block: suspend () -> DataMessage) {
+        viewModelScope.launch {
+            _dataBusy.value = true
+            _dataMessage.value = null
+            _dataMessage.value = block()
+            _dataBusy.value = false
+        }
+    }
+
+    fun exportBackup(uri: Uri) = dataAction {
+        try {
+            withContext(Dispatchers.IO) { contentResolver.openOutputStream(uri) }?.use { backupRepository.export(it) }
+                ?: return@dataAction DataMessage.ExportFailed
+            DataMessage.Exported
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            DataMessage.ExportFailed
+        }
+    }
+
+    fun restoreBackup(uri: Uri) = dataAction {
+        try {
+            val input = withContext(Dispatchers.IO) { contentResolver.openInputStream(uri) }
+                ?: return@dataAction DataMessage.RestoreFailed(RestoreError.UNREADABLE)
+            input.use { DataMessage.Restored(backupRepository.restore(it)) }
+        } catch (e: RestoreException) {
+            DataMessage.RestoreFailed(e.error)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (_: Exception) {
+            DataMessage.RestoreFailed(RestoreError.UNREADABLE)
+        }
+    }
+
+    fun deleteAllData() = dataAction {
+        backupRepository.deleteAll()
+        DataMessage.Deleted
+    }
 
     val automation: StateFlow<AutomationUiState> = combine(
         settingsRepository.installAlerts,
@@ -167,6 +232,8 @@ class SettingsViewModel(
                     container.ruleMatrixRepository,
                     container.installWatcher,
                     container.automationScheduler,
+                    container.backupRepository,
+                    app.contentResolver,
                 )
             }
         }

@@ -69,6 +69,14 @@ class HistoryRecorder(
     @Synchronized
     fun clear() = update(History())
 
+    /** Remplace le suivi par le résultat de [transform] (restauration d'une sauvegarde). */
+    @Synchronized
+    fun <T> merge(transform: (History) -> Pair<History, T>): T {
+        val (history, result) = transform(_history.value)
+        update(history)
+        return result
+    }
+
     private fun diff(before: Map<String, AppPoint>, after: Map<String, AppPoint>, now: Long): List<HistoryEvent> = buildList {
         (after.keys - before.keys).forEach { pkg -> val a = after.getValue(pkg); add(HistoryEvent(now, EventType.INSTALLED, pkg, a.label, score = a.score)) }
         (before.keys - after.keys).forEach { pkg -> val b = before.getValue(pkg); add(HistoryEvent(now, EventType.REMOVED, pkg, b.label, score = b.score)) }

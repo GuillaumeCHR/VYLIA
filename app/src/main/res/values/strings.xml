@@ -439,8 +439,8 @@
     <string name="notif_install_warnings">Warnings: %1$s</string>
     <string name="notif_install_no_warning">No warning badge. Tap to see the details.</string>
     <string name="settings_data">Data</string>
-    <string name="settings_data_entry">Export and data</string>
-    <string name="settings_data_hint">Audit report (CSV), where your data is stored</string>
+    <string name="settings_data_entry">Data management</string>
+    <string name="settings_data_hint">Export, import or delete your data; audit report (CSV)</string>
     <string name="settings_about_section">About</string>
     <string name="settings_about">About VYLIA</string>
     <string name="settings_about_hint">Version %1$s · Yogi Studio · GNU GPL v3</string>
@@ -493,7 +493,30 @@
     <string name="exodus_limit">Limitation: detection relies on known class names. An obfuscated or renamed SDK can go unnoticed (false negative); no tracker detected is not a guarantee.</string>
     <string name="exodus_website">Exodus Privacy</string>
     <string name="exodus_odbl">ODbL licence</string>
-    <string name="data_export_title">Audit report</string>
+    <string name="cancel">Cancel</string>
+    <string name="data_backup_title">My data</string>
+    <string name="data_backup_hint">Tracking (curve and history), rewards, settings and imported scoring rules, in a readable JSON file that you keep wherever you like. It is everything VYLIA stores about you.</string>
+    <string name="data_backup_button">Export my data</string>
+    <string name="data_backup_file_name">vylia-%1$s.json</string>
+    <string name="data_backup_done">Data exported.</string>
+    <string name="data_backup_failed">The file could not be written.</string>
+    <string name="data_restore_hint">Adds the content of an export to this phone. Nothing is overwritten: what is already here is kept, and your current settings stay as they are.</string>
+    <string name="data_restore_button">Import a backup</string>
+    <string name="data_restore_not_backup">This file is not a VYLIA backup.</string>
+    <string name="data_restore_newer">This backup comes from a newer version of VYLIA: update the app first.</string>
+    <string name="data_restore_too_large">File too large (10 MB maximum).</string>
+    <string name="data_restore_unreadable">The file could not be read.</string>
+    <string name="data_restore_added">Backup imported: %1$s added.</string>
+    <string name="data_restore_nothing">Backup imported: nothing new to add.</string>
+    <string name="data_restore_rules">Its scoring rules are now in use.</string>
+    <string name="data_delete_title">Delete my data</string>
+    <string name="data_delete_hint">Tracking, rewards and the analysis cache (which lists your apps). Settings and scoring rules are kept.</string>
+    <string name="data_delete_button">Delete all my data</string>
+    <string name="data_delete_confirm_title">Delete everything?</string>
+    <string name="data_delete_confirm_text">The Tracking curve and history, your points and trophies will be erased from this phone. This cannot be undone: export your data first if you want to keep them.</string>
+    <string name="data_delete_confirm">Delete everything</string>
+    <string name="data_delete_done">All your data has been deleted.</string>
+    <string name="data_export_title">Scan results</string>
     <string name="data_export_text">Every app from the last scan (user and system), with its score, grade, trackers and granted risky permissions, in a CSV file you can open in a spreadsheet.</string>
     <string name="data_export_button">Export the audit report (CSV)</string>
     <string name="data_export_file_name">vylia_audit_report.csv</string>
@@ -522,7 +545,7 @@
     <string name="about_privacy_no_ads">VYLIA contains no ads, no trackers, no audience measurement tools, and sells no data.</string>
     <string name="about_privacy_network">The Internet is only used when you update the tracker database: VYLIA then downloads the public Exodus Privacy list, without sending anything about your apps.</string>
     <string name="about_privacy_automation">Install alerts and background scans are off by default. Once turned on, they run on the phone only, scheduled by Android.</string>
-    <string name="about_privacy_local">Results stay on the phone. You alone decide to export or share them (Settings › Export and data, Act tab).</string>
+    <string name="about_privacy_local">Results stay on the phone. You can export, import or delete them at any time (Settings › Data management), and share your rewards from the Act tab.</string>
     <string name="about_license_title">Licence and source code</string>
     <string name="about_license">VYLIA is free software, licensed under the GNU GPL v3 (or any later version): you may study, modify and redistribute it under its terms. It comes with no warranty.</string>
     <string name="about_license_trademarks">The VYLIA and Yogi Studio names, their logos and the app icon are not covered by the licence. The Exodus Privacy logo belongs to the Exodus Privacy association.</string>
@@ -534,6 +557,26 @@
     <string name="about_contact">A bug, an idea, a question? Write to Yogi Studio: %1$s</string>
     <string name="about_contact_button">Write to Yogi Studio</string>
     <string name="about_contact_subject">VYLIA %1$s</string>
+    <plurals name="data_restore_snapshots">
+        <item quantity="one">%1$d Tracking point</item>
+        <item quantity="other">%1$d Tracking points</item>
+    </plurals>
+    <plurals name="data_restore_events">
+        <item quantity="one">%1$d event</item>
+        <item quantity="other">%1$d events</item>
+    </plurals>
+    <plurals name="data_restore_rewards">
+        <item quantity="one">%1$d reward</item>
+        <item quantity="other">%1$d rewards</item>
+    </plurals>
+    <plurals name="data_restore_present">
+        <item quantity="one">%1$d item already here, ignored.</item>
+        <item quantity="other">%1$d items already here, ignored.</item>
+    </plurals>
+    <plurals name="data_restore_invalid">
+        <item quantity="one">%1$d inconsistent item set aside.</item>
+        <item quantity="other">%1$d inconsistent items set aside.</item>
+    </plurals>
 
     <!-- Badges et sécurité -->
     <string name="badgedef_perm_feather">Featherweight</string>

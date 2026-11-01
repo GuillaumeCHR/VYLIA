@@ -140,6 +140,35 @@ NEW_CATEGORIES = {
                    "RECEIVE_SMS", "SEND_SMS", "READ_CALL_LOG", "READ_CALENDAR", "CAMERA", "GET_ACCOUNTS",
                    "READ_PHONE_STATE"]),
 }
+# Finance : grandes banques et néobanques, paiement, épargne, investissement et crypto (identifiants vérifiés sur le
+# Play Store). Android n'a pas de catégorie « finance » : sans cette liste, une banque tomberait dans la catégorie
+# déclarée par l'éditeur (souvent « productivité »), avec des attentes qui ne sont pas les siennes.
+FINANCE_PACKAGES = [
+    "fr.creditagricole.androidapp",
+    "com.boursorama.android.clients",
+    "net.bnpparibas.mescomptes",
+    "mobi.societegenerale.mobile.lappli",
+    "fr.lcl.android.customerarea",
+    "fr.banquepopulaire.cyberplus",
+    "com.fullsix.android.labanquepostale.accountaccess",
+    "com.cm_prod.bad",
+    "com.cic_prod.bad",
+    "com.fortuneo.android",
+    "com.bforbank.android",
+    "com.ing.mobile",
+    "com.revolut.revolut",
+    "de.number26.android",
+    "com.lydia",
+    "com.transferwise.android",
+    "eu.qonto.qonto",
+    "com.shine.app",
+    "com.amundi_ee.monEpargne",
+    "de.traderepublic.app",
+    "com.coinbase.android",
+    "com.binance.dev",
+    "com.ledger.live",
+]
+
 NEW_OVERRIDES = {
     "de.axelspringer.yana.zeropage": "NEWS_READING",
     "org.eu.exodus_privacy.exodusprivacy": "SECURITY_AUTH",
@@ -235,6 +264,7 @@ def build():
     v3["neutral_permissions"] = NEUTRAL_PERMISSIONS
     v3["categories"].update(copy.deepcopy(NEW_CATEGORIES))
     v3["package_overrides"].update(NEW_OVERRIDES)
+    v3["package_overrides"].update({pkg: "FINANCE_ACCOUNTS" for pkg in FINANCE_PACKAGES})
     v3["excluded_packages"] = sorted(NEW_EXCLUDED)
     groups = v3["permission_rules"]["groups"]
     for g in groups:

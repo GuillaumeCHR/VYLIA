@@ -25,6 +25,7 @@ import com.vylia.privacy.ui.notifications.InstallNotifications
 import com.vylia.privacy.data.backup.BackupRepository
 import com.vylia.privacy.ui.settings.AppLanguage
 import com.vylia.privacy.data.dns.PrivateDnsRepository
+import com.vylia.privacy.data.shield.ShieldController
 import java.io.File
 
 /** Injection de dépendances manuelle : suffisante pour la V1, sans framework supplémentaire. */
@@ -36,6 +37,7 @@ class AppContainer(context: Context) {
     val packageRemovalMonitor = PackageRemovalMonitor(context)
     val alternativesRepository = AlternativesRepository(context)
     val privateDnsRepository = PrivateDnsRepository(context)
+    val shieldController = ShieldController(context, badgesManager)
     val usageStatsReader = UsageStatsReader(context)
     val historyRecorder = HistoryRecorder(FileHistoryStore(File(context.filesDir, "history.json")))
 
@@ -60,5 +62,6 @@ class AppContainer(context: Context) {
     val backupRepository = BackupRepository(
         settingsRepository, historyRecorder, badgesManager, ruleMatrixRepository, trackerScanCache,
         language = { AppLanguage.current().tag },
+        clearShieldCounter = shieldController::clear,
     )
 }

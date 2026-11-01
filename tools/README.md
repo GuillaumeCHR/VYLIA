@@ -26,6 +26,18 @@ Pour réviser : corriger `categories` (ou déplacer un SDK sans finalité de pis
 `./gradlew testDebugUnitTest` (les cas de `PrivacyScorerTest` reposent sur ces catégories).
 Le changement de catégories invalide le cache d'analyse sur les appareils : tout est ré-analysé.
 
+## Liste de blocage du Bouclier VYLIA
+
+```
+python3 tools/update_shield_blocklist.py                                   # télécharge Exodus et EasyPrivacy
+python3 tools/update_shield_blocklist.py --exodus api.json --easyprivacy easyprivacy.txt
+```
+
+Produit `app/src/main/assets/shield_blocklist.json` : domaines de traçage Exodus (pub, analytics, profilage,
+identification ; ODbL) et règles de domaine EasyPrivacy (GPL v3), sans les domaines de plateformes listés dans
+`NEVER_BLOCK`. Après mise à jour : `./gradlew testDebugUnitTest` (`BlocklistTest` contrôle la liste embarquée).
+Détails : `docs/shield.md`.
+
 ## Textes traduits
 
 ```

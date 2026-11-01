@@ -46,6 +46,7 @@ object BackupSanitizer {
             completedScans = r.completedScans.coerceIn(0, MAX_COUNTER),
             revokedPermissions = r.revokedPermissions.coerceIn(0, MAX_COUNTER),
             swaps = swaps,
+            shieldBlocked = r.shieldBlocked,
         )
         // Réglages et règles ne sont jamais appliqués : inutile de garder plus que l'information.
         return Cleaned(file.copy(history = history, rewards = rewards), invalid)

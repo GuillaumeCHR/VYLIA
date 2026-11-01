@@ -380,6 +380,8 @@
     <string name="badge_detox_description">Revoke 3 sensitive permissions an app didn\'t need</string>
     <string name="badge_good_swap">Good swap</string>
     <string name="badge_good_swap_description">Install an alternative from the catalogue</string>
+    <string name="badge_shield_active">Shield on</string>
+    <string name="badge_shield_active_description">Turn on the VYLIA Shield and block a first tracking request</string>
 
     <!-- Permissions à risque (puces des cartes, export CSV) -->
     <string name="risk_access_background_location">Background location</string>

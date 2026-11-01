@@ -61,11 +61,14 @@ internal fun PrivateDnsTab(
     status: PrivateDnsStatus,
     listUpdate: DnsListUpdate?,
     onUpdateList: () -> Unit,
+    shield: @Composable () -> Unit,
 ) {
     val language = currentLocale().language
     // Région du téléphone (réglage de langue et région), jamais sa position.
     val resolvers = catalogue.availableIn(Locale.getDefault().country)
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        // Le bouclier d'abord : un geste suffit. Le DNS privé, alternative sans VPN, vient ensuite.
+        item(key = "shield") { shield() }
         item { StatusCard(status, catalogue) }
         item { WhyCard() }
         item { ExplanationCard() }

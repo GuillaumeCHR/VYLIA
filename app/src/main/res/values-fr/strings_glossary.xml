@@ -380,6 +380,8 @@
     <string name="badge_detox_description">Retirer 3 autorisations sensibles dont une app n\'avait pas besoin</string>
     <string name="badge_good_swap">Bon échange</string>
     <string name="badge_good_swap_description">Installer une alternative du catalogue</string>
+    <string name="badge_shield_active">Bouclier actif</string>
+    <string name="badge_shield_active_description">Activer le Bouclier VYLIA et bloquer une première requête de traçage</string>
 
     <!-- Permissions à risque (puces des cartes, export CSV) -->
     <string name="risk_access_background_location">Géolocalisation en arrière-plan</string>

@@ -18,6 +18,7 @@ enum class Badge(val emoji: String, @param:StringRes val title: Int, @param:Stri
     GREEN_DEVICE("🌿", R.string.badge_green_device, R.string.badge_green_device_description),
     DETOX("💊", R.string.badge_detox, R.string.badge_detox_description),
     GOOD_SWAP("🔄", R.string.badge_good_swap, R.string.badge_good_swap_description),
+    SHIELD_ACTIVE("🧿", R.string.badge_shield_active, R.string.badge_shield_active_description),
 }
 
 /** Dernier état connu d'une app utilisateur, référence pour détecter sa suppression. */
@@ -53,6 +54,8 @@ data class RewardsState(
     val revokedPermissions: Int = 0,
     /** Alternatives du catalogue installées depuis le premier scan (paquets). */
     val swaps: Set<String> = emptySet(),
+    /** Le Bouclier VYLIA a bloqué au moins une requête de traçage. */
+    val shieldBlocked: Boolean = false,
 ) {
     val points: Int get() = removedApps.sumOf { it.points }
 }
@@ -120,6 +123,15 @@ class BadgesManager(
         update(next.copy(unlockedBadges = unlock(next, userApps.values)))
     }
 
+    /** Première requête bloquée par le Bouclier VYLIA (sans effet si c'est déjà arrivé). */
+    @Synchronized
+    fun onShieldBlocked() {
+        val current = _state.value
+        if (current.shieldBlocked) return
+        val next = current.copy(shieldBlocked = true)
+        update(next.copy(unlockedBadges = unlock(next, userApps = null)))
+    }
+
     /** [userApps] `null` : seuls les badges liés aux suppressions sont évalués. */
     private fun unlock(state: RewardsState, userApps: Collection<AppSnapshot>?): Map<Badge, Long> {
         val earned = buildSet {
@@ -129,6 +141,7 @@ class BadgesManager(
             if (state.removedApps.sumOf { it.trackerCount } >= 20) add(Badge.TRACKER_HUNTER)
             if (state.revokedPermissions >= DETOX_REVOCATIONS) add(Badge.DETOX)
             if (state.swaps.isNotEmpty()) add(Badge.GOOD_SWAP)
+            if (state.shieldBlocked) add(Badge.SHIELD_ACTIVE)
             if (!userApps.isNullOrEmpty()) {
                 if (userApps.none { it.score < INTRUSIVE_THRESHOLD }) add(Badge.NO_RED_ZONE)
                 if (userApps.map { it.score }.average() >= 80) add(Badge.GREEN_DEVICE)

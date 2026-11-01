@@ -67,6 +67,7 @@ fun ActScreen(
     LifecycleResumeEffect(Unit) {
         actViewModel.refreshUsage()
         actViewModel.refreshDnsStatus()
+        actViewModel.refreshShieldContext()
         onPauseOrDispose { }
     }
 
@@ -108,7 +109,20 @@ fun ActScreen(
                 val dnsCatalogue by actViewModel.dnsCatalogue.collectAsStateWithLifecycle()
                 val dnsStatus by actViewModel.dnsStatus.collectAsStateWithLifecycle()
                 val dnsListUpdate by actViewModel.dnsListUpdate.collectAsStateWithLifecycle()
-                PrivateDnsTab(dnsCatalogue, dnsStatus, dnsListUpdate, actViewModel::updateDnsList)
+                val shield by actViewModel.shield.collectAsStateWithLifecycle()
+                val blocklistSize by actViewModel.blocklistSize.collectAsStateWithLifecycle()
+                val otherVpn by actViewModel.otherVpn.collectAsStateWithLifecycle()
+                PrivateDnsTab(dnsCatalogue, dnsStatus, dnsListUpdate, actViewModel::updateDnsList) {
+                    ShieldCard(
+                        state = shield,
+                        blocklistSize = blocklistSize,
+                        privateDns = dnsStatus,
+                        otherVpn = otherVpn,
+                        consentIntent = actViewModel::shieldConsentIntent,
+                        onStart = actViewModel::startShield,
+                        onStop = actViewModel::stopShield,
+                    )
+                }
             }
             tab == ActTab.ALTERNATIVES -> AlternativesTab(userApps, state.scannedApps, actViewModel.catalogue)
             else -> RewardsTab(state.userAverageScore?.value, rewards, recentRewards, viewModel::dismissRecentRewards)

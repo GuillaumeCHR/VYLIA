@@ -272,6 +272,23 @@
     <string name="alt_installed">Installed</string>
     <string name="alt_open_source">Open source</string>
     <string name="alt_get">Get it</string>
+    <string name="shield_title">VYLIA Shield</string>
+    <string name="shield_subtitle">Blocks the tracking requests of all your apps, right on the phone.</string>
+    <string name="shield_status_off">Off</string>
+    <string name="shield_status_starting">Starting…</string>
+    <string name="shield_status_on">On</string>
+    <string name="shield_status_revoked">Stopped: another VPN took over. Android only allows one at a time.</string>
+    <string name="shield_status_failed">Could not start. Try again; if it keeps failing, check the VPN screen in Android settings.</string>
+    <string name="shield_blocked_total">%1$s blocked in total</string>
+    <string name="shield_recent_title">Latest blocks</string>
+    <string name="shield_recent_easyprivacy">Tracking server (EasyPrivacy)</string>
+    <string name="shield_how">How it works: VYLIA creates a VPN on the phone itself. Only DNS requests (the Internet\'s directory) go through it: those for known tracking servers are refused, the others go on to your network\'s usual DNS. Nothing is sent to a VYLIA server, and the rest of your traffic does not go through VYLIA.</string>
+    <string name="shield_private_dns_conflict">Private DNS is set to %1$s: Android then sends its requests straight to that service and the Shield sees none of them. Choose one or the other: to use the Shield, set private DNS back to Automatic.</string>
+    <string name="shield_other_vpn">Another VPN is on: turning on the Shield will replace it.</string>
+    <string name="shield_limits">Limits: apps that encrypt their own DNS (some browsers) bypass the Shield, and blocking a tracker can occasionally break a feature: if an app misbehaves, turn the Shield off.</string>
+    <string name="shield_always_on">To keep it on after a restart, turn on “Always-on VPN” for VYLIA in Android\'s VPN settings.</string>
+    <string name="shield_vpn_settings">VPN settings</string>
+    <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0) and EasyPrivacy (GPL v3), %1$s tracking domains.</string>
     <plurals name="act_story_trophies">
         <item quantity="one">%1$d trophy</item>
         <item quantity="other">%1$d trophies</item>
@@ -307,6 +324,10 @@
     <plurals name="act_removed_line">
         <item quantity="one">%1$d tracker eliminated · %2$s</item>
         <item quantity="other">%1$d trackers eliminated · %2$s</item>
+    </plurals>
+    <plurals name="shield_blocked_session">
+        <item quantity="one">%1$s tracking request blocked since it was turned on</item>
+        <item quantity="other">%1$s tracking requests blocked since it was turned on</item>
     </plurals>
 
     <!-- Comprendre -->

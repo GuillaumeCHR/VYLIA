@@ -321,6 +321,7 @@ BADGES = {
  "GREEN_DEVICE": (("Green device", "Appareil vert"), ("Average user app score of at least 80/100", "Score moyen des apps utilisateur d'au moins 80/100")),
  "DETOX": (("Detox", "Désintoxication"), ("Revoke 3 sensitive permissions an app didn't need", "Retirer 3 autorisations sensibles dont une app n'avait pas besoin")),
  "GOOD_SWAP": (("Good swap", "Bon échange"), ("Install an alternative from the catalogue", "Installer une alternative du catalogue")),
+ "SHIELD_ACTIVE": (("Shield on", "Bouclier actif"), ("Turn on the VYLIA Shield and block a first tracking request", "Activer le Bouclier VYLIA et bloquer une première requête de traçage")),
 }
 
 # Paliers Health Connect des règles (ensembles « @… »)

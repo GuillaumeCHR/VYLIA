@@ -104,6 +104,27 @@ S = [
  ("alt_installed", "Installed", "Installée"),
  ("alt_open_source", "Open source", "Libre"),
  ("alt_get", "Get it", "L'obtenir"),
+ # Réduire › Traçage pub : Bouclier VYLIA (VPN local)
+ ("shield_title", "VYLIA Shield", "Bouclier VYLIA"),
+ ("shield_subtitle", "Blocks the tracking requests of all your apps, right on the phone.", "Bloque les requêtes de traçage de toutes vos apps, directement sur le téléphone."),
+ ("shield_status_off", "Off", "Désactivé"),
+ ("shield_status_starting", "Starting…", "Démarrage…"),
+ ("shield_status_on", "On", "Activé"),
+ ("shield_status_revoked", "Stopped: another VPN took over. Android only allows one at a time.", "Arrêté : un autre VPN a pris le relais. Android n'en autorise qu'un à la fois."),
+ ("shield_status_failed", "Could not start. Try again; if it keeps failing, check the VPN screen in Android settings.", "Démarrage impossible. Réessayez ; si cela se reproduit, vérifiez l'écran VPN des paramètres d'Android."),
+ ("shield_blocked_total", "%1$s blocked in total", "%1$s bloquées au total"),
+ ("shield_recent_title", "Latest blocks", "Derniers blocages"),
+ ("shield_recent_easyprivacy", "Tracking server (EasyPrivacy)", "Serveur de traçage (EasyPrivacy)"),
+ ("shield_how", "How it works: VYLIA creates a VPN on the phone itself. Only DNS requests (the Internet's directory) go through it: those for known tracking servers are refused, the others go on to your network's usual DNS. Nothing is sent to a VYLIA server, and the rest of your traffic does not go through VYLIA.",
+  "Comment ça marche : VYLIA crée un VPN sur le téléphone lui-même. Seules les requêtes DNS (l'annuaire d'Internet) y passent : celles qui visent des serveurs de traçage connus sont refusées, les autres continuent vers le DNS habituel de votre réseau. Rien n'est envoyé à un serveur de VYLIA, et le reste de votre trafic ne passe pas par VYLIA."),
+ ("shield_private_dns_conflict", "Private DNS is set to %1$s: Android then sends its requests straight to that service and the Shield sees none of them. Choose one or the other: to use the Shield, set private DNS back to Automatic.",
+  "Le DNS privé est réglé sur %1$s : Android envoie alors ses requêtes directement à ce service, et le bouclier n'en voit aucune. Choisissez l'un ou l'autre : pour utiliser le bouclier, repassez le DNS privé sur Automatique."),
+ ("shield_other_vpn", "Another VPN is on: turning on the Shield will replace it.", "Un autre VPN est actif : activer le bouclier le remplacera."),
+ ("shield_limits", "Limits: apps that encrypt their own DNS (some browsers) bypass the Shield, and blocking a tracker can occasionally break a feature: if an app misbehaves, turn the Shield off.",
+  "Limites : les apps qui chiffrent elles-mêmes leur DNS (certains navigateurs) échappent au bouclier, et bloquer un traqueur peut parfois casser une fonction : si une app se comporte mal, désactivez le bouclier."),
+ ("shield_always_on", "To keep it on after a restart, turn on “Always-on VPN” for VYLIA in Android's VPN settings.", "Pour qu'il reste actif après un redémarrage, activez « VPN permanent » pour VYLIA dans les réglages VPN d'Android."),
+ ("shield_vpn_settings", "VPN settings", "Réglages VPN"),
+ ("shield_lists", "Lists: Exodus Privacy (ODbL 1.0) and EasyPrivacy (GPL v3), %1$s tracking domains.", "Listes : Exodus Privacy (ODbL 1.0) et EasyPrivacy (GPL v3), %1$s domaines de traçage."),
 ]
 
 P = [
@@ -117,5 +138,6 @@ P = [
  ("act_rewards_congrats", ("🎉 Well done! %1$s removed: +%2$d pts", "🎉 Well done! %1$s removed: +%2$d pts"),
   ("🎉 Bravo ! %1$s supprimée : +%2$d pts", "🎉 Bravo ! %1$s supprimées : +%2$d pts")),
  ("act_removed_line", ("%1$d tracker eliminated · %2$s", "%1$d trackers eliminated · %2$s"),
-  ("%1$d traqueur éliminé · %2$s", "%1$d traqueurs éliminés · %2$s")),
+  ("%1$d traqueur éliminé · %2$s", "%1$d traqueurs éliminés · %2$s")), ("shield_blocked_session", ("%1$s tracking request blocked since it was turned on", "%1$s tracking requests blocked since it was turned on"),
+  ("%1$s requête de traçage bloquée depuis l'activation", "%1$s requêtes de traçage bloquées depuis l'activation")),
 ]

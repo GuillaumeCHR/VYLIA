@@ -125,7 +125,8 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 5. §6 Agir › Réduire, deux nouveaux modules (non développés) :
    - ~~**V1 — Guidage DNS privé**~~ (fait en 0.8.0 : Réduire › DNS privé, à côté de Autorisations et Suppressions) : tutoriel pas à pas et bouton d'accès rapide aux paramètres système pour activer un
      DNS chiffré anti-traqueurs (ex. AdGuard, NextDNS), sans code complexe ni impact sur la batterie.
-   - **V2 — Bouclier VYLIA (VPN local)** : interception DNS 100 % locale via l'API `VpnService` d'Android, qui filtre en
+   - **V2 — Bouclier VYLIA (VPN local)** (en cours sur `feature/shield-local-vpn`, architecture et suite dans
+     `docs/shield.md`) : interception DNS 100 % locale via l'API `VpnService` d'Android, qui filtre en
      temps réel les requêtes de traçage sortantes sans envoyer aucune donnée vers l'extérieur, activable par un simple
      interrupteur. Attention : demande l'accès Internet et un service au premier plan, à refléter dans l'écran
      « Vie privée » et dans la grille (VYLIA est exclue de son propre score).

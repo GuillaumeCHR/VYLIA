@@ -57,7 +57,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 
 ### B. Alternatives
 * Catalogue d'alternatives éthiques et open-source pour les applications les plus courantes, regroupées par catégories.
-* Alternatives par famille (lien Play Store par défaut), après une introduction : remplacer n'est pas toujours possible, réduire le risque vient d'abord, pas de téléphone « dégooglisé ». Worst of Fame et Hall of Fame retirés (2026-11-01).
+* Alternatives par catégorie du Play Store (menu), 2 à 3 apps chacune, choisies par `tools/alternatives/build_catalogue.py` depuis le classement AlternativeTo (filtre F-Droid) : gratuites d'abord, puis likes, une app par type, exclusions motivées, fiche Play Store sinon F-Droid. Worst of Fame et Hall of Fame retirés (2026-11-01).
 
 ### C. Récompenses & Partage (Gamification refactorisée)
 * **Hall of Fame / Trophées :** Centralisation de tous les badges de gamification obtenus grâce aux actions de nettoyage (ex: *"Désintoxication"*, *"Chasseur de traqueurs"*).

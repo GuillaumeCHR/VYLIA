@@ -100,9 +100,11 @@ class ReductionAdvisorTest {
         catalogue.groups.forEach { group ->
             assertEquals(group.id, group.alternatives.size, group.alternatives.map { it.packageName }.toSet().size)
             assertTrue(group.id, "en" in group.title && "fr" in group.title)
+            assertTrue(group.id, group.alternatives.size in 2..3)
             group.alternatives.forEach { alt ->
                 assertTrue(alt.name, "en" in alt.pitch && "fr" in alt.pitch)
                 assertTrue(alt.name, alt.fdroid != null || alt.play != null || alt.web != null)
+                assertEquals(alt.name, "Free", alt.cost)
             }
         }
         val categories = TestFixtures.rules.categories.keys

@@ -9,8 +9,9 @@ scanne vos applications pour savoir ce qu'elles font de vos données. Le but est
 compréhension simple des enjeux de vie privée : une note lisible, des explications sans jargon, des bonnes pratiques
 mises en avant autant que les dérives, et des gestes concrets pour reprendre la main.
 
-> Version actuelle : **0.1.0** (en développement). Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus.
-> Anglais par défaut, français disponible dans Paramètres › Langue.
+> Version actuelle : **0.7.0**, première version publiée ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)).
+> Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
+> Paramètres › Langue.
 
 ## Aperçu
 
@@ -38,8 +39,14 @@ mises en avant autant que les dérives, et des gestes concrets pour reprendre la
   l'app pour la désinstaller ou retirer une autorisation.
 - **Agir** : les pires élèves à désinstaller, les meilleures apps à garder, des points et des trophées pour chaque
   app intrusive supprimée, un bilan à partager.
-- **Comprendre** : le calcul du score, le lexique des traqueurs et celui des permissions, avec ce que chacun révèle de
-  vous.
+- **Comprendre** : le calcul du score, les badges, le lexique des traqueurs et celui des permissions, avec ce que
+  chacun révèle de vous et combien de vos apps sont concernées ; une loupe pour chercher dans chaque onglet.
+- **Suivi** : la courbe de votre score moyen dans le temps, les apps qui pèsent le plus, l'historique des
+  installations, suppressions et autorisations.
+- **Automatisations** (désactivées par défaut) : une notification à l'installation d'une app avec son score, et des
+  scans de fond hebdomadaires ou mensuels qui alimentent le Suivi.
+- **Vos données, à vous** : exporter tout ce que VYLIA conserve dans un fichier lisible, l'importer sur un autre
+  téléphone sans rien écraser, ou tout supprimer.
 
 ## Une grille de score transparente
 
@@ -52,8 +59,12 @@ comptées) est consultable dans l'app, **Paramètres › Règles de score › Vo
 - les permissions de ciblage publicitaire ne sont pas comptées : la publicité est déjà sanctionnée par les traqueurs ;
 - des permissions proches ne comptent qu'une fois (position précise et approximative, paliers de santé…).
 
-Les règles peuvent être remplacées par un fichier importé (Paramètres › Règles de score). Leur évolution est
-documentée dans [`docs/scoring/`](docs/scoring/).
+**VYLIA se note elle-même**, avec la même grille et sans exception. Elle a besoin de la liste de vos apps
+(`QUERY_ALL_PACKAGES`) pour les analyser : elle l'assume, et cette permission lui coûte des points comme à n'importe
+quelle app.
+
+Les règles peuvent être remplacées par un fichier importé (Paramètres › Règles de score), qui est vérifié avant usage
+et ne peut exclure aucune app de l'audit. Leur évolution est documentée dans [`docs/scoring/`](docs/scoring/).
 
 ## Vie privée
 
@@ -62,8 +73,21 @@ documentée dans [`docs/scoring/`](docs/scoring/).
 - Aucune publicité, aucun traqueur, aucun outil de mesure d'audience, aucune donnée revendue.
 - Internet ne sert que lorsque vous mettez à jour la base de traqueurs : VYLIA télécharge alors la liste publique
   d'Exodus Privacy, sans rien envoyer sur vos applications.
-- Les résultats, badges et points restent sur le téléphone et sont exclus des sauvegardes Android. L'export CSV et le
-  partage du bilan ne se font qu'à votre demande.
+- Les résultats, badges et points restent sur le téléphone et sont exclus des sauvegardes Android. L'export, l'import
+  et le partage du bilan ne se font qu'à votre demande.
+- Les alertes d'installation et les scans de fond, désactivés par défaut, s'exécutent sur le téléphone uniquement.
+- Tout ce qui vient de l'extérieur (sauvegarde importée, règles importées, base Exodus téléchargée) est vérifié avant
+  usage : voir [`docs/security/donnees-externes.md`](docs/security/donnees-externes.md).
+
+## Installer
+
+Téléchargez `vylia-0.7.0.apk` depuis la [page des versions](https://github.com/GuillaumeCHR/VYLIA/releases/latest),
+puis ouvrez-le sur le téléphone (Android demande d'autoriser l'installation depuis cette source). Empreinte SHA-256 du
+certificat de signature, pour vérifier l'APK avec `apksigner verify --print-certs` :
+
+```
+7f62c73f7ba255eb7de02e40beb22640fd8e9c6f22375d3663d70f6271516c89
+```
 
 ## Construire et lancer
 
@@ -74,7 +98,13 @@ Prérequis : JDK 17 ou plus récent et le SDK Android avec la plateforme `androi
 ./gradlew :app:assembleDebug        # APK : app/build/outputs/apk/debug/app-debug.apk
 ./gradlew :app:testDebugUnitTest    # tests unitaires (score, badges, lexiques, analyse des traqueurs…)
 ./gradlew :app:lintDebug            # lint Android
+./gradlew :app:assembleRelease      # APK release minifié, signé si la clé locale est présente
 ```
+
+La clé de signature release n'est jamais dans le dépôt : ses coordonnées sont lues dans
+`~/.config/vylia/release-key.properties` (ou le fichier désigné par `VYLIA_RELEASE_KEY_PROPERTIES`). Sans elle, la
+release est construite sans signature. Pour essayer une release sur un téléphone qui a déjà la version de
+développement : `./gradlew :app:assembleRelease -Pvylia.idSuffix=.releasetest`.
 
 La version de développement écrit le score de chaque app dans le journal, pour comparer deux versions des règles sur
 un vrai téléphone : `adb logcat -s VyliaScores`.
@@ -87,8 +117,10 @@ Application mono-module en Kotlin et Jetpack Compose (Material 3), sans framewor
 ```
 app/src/main/java/com/vylia/privacy/
 ├── data/         apps installées et signaux de sécurité (apps/), analyse DEX des traqueurs (trackers/),
-│                 règles de score (rules/), préférences, récompenses, export CSV
-├── domain/       moteur de score et badges (scoring/), lexiques (learn/), analyse de l'appareil, modèles
+│                 règles de score (rules/), suivi (history/), tâches de fond (automation/),
+│                 sauvegarde (backup/), préférences, récompenses, export CSV
+├── domain/       moteur de score et badges (scoring/), lexiques (learn/), analyse de l'appareil, suivi,
+│                 sauvegarde et contrôles des données externes (backup/, security/), modèles
 └── ui/           un paquet par écran : scan/, analysis/, act/, understand/, settings/, detail/ ;
                   main/ (navigation), splash/ (intro), components/, theme/
 ```
@@ -103,7 +135,8 @@ Outils du dépôt : voir [`tools/README.md`](tools/README.md). Feuille de route 
 
 ## Crédits
 
-- **Édition, conception et développement** : Yogi Studio.
+- **Édition, conception et développement** : Yogi Studio. Le générique complet, avec un peu d'humour, est à la fin
+  de l'écran À propos.
 - **Programmation en binôme** : Claude (Anthropic), via Claude Code.
 - **Signatures de traqueurs** : [Exodus Privacy](https://exodus-privacy.eu.org/), base sous
   [Open Database License (ODbL 1.0)](https://opendatacommons.org/licenses/odbl/1-0/), contenus sous Database Contents

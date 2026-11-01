@@ -10,3 +10,8 @@
 .externalNativeBuild/
 .cxx/
 __pycache__/
+
+# Clés de signature : jamais dans le dépôt
+*.jks
+*.keystore
+*key.properties

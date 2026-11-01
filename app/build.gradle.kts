@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -16,8 +18,27 @@ android {
         versionName = "0.7.0"
     }
 
+    // Clé de signature release : jamais dans le dépôt. Ses coordonnées sont lues dans un fichier local
+    // (~/.config/vylia/release-key.properties, ou VYLIA_RELEASE_KEY_PROPERTIES) ; sans lui, la release n'est pas signée.
+    val releaseKey = providers.environmentVariable("VYLIA_RELEASE_KEY_PROPERTIES")
+        .orElse(providers.provider { "${System.getProperty("user.home")}/.config/vylia/release-key.properties" })
+        .map { file(it) }
+        .get()
+    if (releaseKey.isFile) {
+        val props = Properties().apply { releaseKey.inputStream().use { load(it) } }
+        signingConfigs.create("release") {
+            storeFile = file(props.getProperty("storeFile"))
+            storePassword = props.getProperty("storePassword")
+            keyAlias = props.getProperty("keyAlias")
+            keyPassword = props.getProperty("keyPassword")
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.findByName("release")
+            // Essai d'une release sur un téléphone qui a déjà la version de développement : -Pvylia.idSuffix=.releasetest
+            providers.gradleProperty("vylia.idSuffix").orNull?.let { applicationIdSuffix = it }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(

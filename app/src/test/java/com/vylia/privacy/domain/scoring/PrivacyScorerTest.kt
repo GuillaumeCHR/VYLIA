@@ -2,6 +2,7 @@ package com.vylia.privacy.domain.scoring
 
 import com.vylia.privacy.domain.scoring.TestFixtures.trackers
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
 /**
@@ -107,8 +108,22 @@ class PrivacyScorerTest {
     }
 
     @Test
-    fun `categorie Android traduite et app VYLIA exclue`() {
+    fun `categorie Android traduite`() {
         assertEquals("GAME", scorer.resolveCategory(scan("org.example.game", emptySet(), null, category = "CATEGORY_GAME")))
-        assertEquals(true, scorer.isExcluded("com.vylia.privacy"))
+    }
+
+    @Test
+    fun `VYLIA se note elle-meme avec la meme grille et assume QUERY_ALL_PACKAGES`() {
+        // Permissions réelles du manifeste ; l'accès aux données d'utilisation reste à accorder par l'utilisateur.
+        val declared = setOf(
+            "QUERY_ALL_PACKAGES", "PACKAGE_USAGE_STATS", "INTERNET", "ACCESS_NETWORK_STATE", "POST_NOTIFICATIONS", "RECEIVE_BOOT_COMPLETED",
+        )
+        val vylia = AppScan("com.vylia.privacy", 37, "CATEGORY_UNDEFINED", declared, declared - "PACKAGE_USAGE_STATS", emptyList())
+        assertEquals(false, scorer.isExcluded("com.vylia.privacy"))
+        val result = scorer.score(vylia)
+        assertEquals("SECURITY_AUTH", result.categoryId)
+        assertTrue(result.permissionFindings.single { it.permission == "QUERY_ALL_PACKAGES" }.counted > 0.0)
+        assertTrue(result.score < 100)
+        println("Score de VYLIA : ${result.score} (${result.grade})")
     }
 }

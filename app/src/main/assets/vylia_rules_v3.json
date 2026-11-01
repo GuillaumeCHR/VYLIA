@@ -1097,10 +1097,7 @@
       ]
     }
   },
-  "excluded_packages": [
-    "com.vipacy.app",
-    "com.vylia.privacy"
-  ],
+  "excluded_packages": [],
   "package_exceptions": {
     "com.shazam.android": {
       "allowed_extra": [
@@ -1189,6 +1186,8 @@
     "com.google.audio.hearing.visualization.accessibility.scribe": "ACCESSIBILITY",
     "de.axelspringer.yana.zeropage": "NEWS_READING",
     "org.eu.exodus_privacy.exodusprivacy": "SECURITY_AUTH",
+    "com.vylia.privacy": "SECURITY_AUTH",
+    "com.vipacy.app": "SECURITY_AUTH",
     "org.futo.inputmethod.latin.playstore": "KEYBOARD"
   },
   "security": {

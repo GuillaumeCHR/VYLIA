@@ -143,9 +143,13 @@ NEW_CATEGORIES = {
 NEW_OVERRIDES = {
     "de.axelspringer.yana.zeropage": "NEWS_READING",
     "org.eu.exodus_privacy.exodusprivacy": "SECURITY_AUTH",
+    # VYLIA se note elle-même, comme Exodus Privacy : même catégorie, même grille, aucune faveur.
+    "com.vylia.privacy": "SECURITY_AUTH",
+    "com.vipacy.app": "SECURITY_AUTH",  # ancien nom de VYLIA
     "org.futo.inputmethod.latin.playstore": "KEYBOARD",
 }
-NEW_EXCLUDED = ["com.vipacy.app"]  # ancien nom de VYLIA
+# Aucune app n'est exclue : VYLIA s'évalue avec les mêmes règles que les autres, QUERY_ALL_PACKAGES comprise.
+NEW_EXCLUDED: list[str] = []
 
 # ---------------------------------------------------------------------------------------------------------------------
 # 4. Badges : nouvelles règles (deux types ajoutés au moteur) et nouveaux badges
@@ -231,7 +235,7 @@ def build():
     v3["neutral_permissions"] = NEUTRAL_PERMISSIONS
     v3["categories"].update(copy.deepcopy(NEW_CATEGORIES))
     v3["package_overrides"].update(NEW_OVERRIDES)
-    v3["excluded_packages"] = sorted(set(v3["excluded_packages"]) | set(NEW_EXCLUDED))
+    v3["excluded_packages"] = sorted(NEW_EXCLUDED)
     groups = v3["permission_rules"]["groups"]
     for g in groups:
         if g["id"] == "media":

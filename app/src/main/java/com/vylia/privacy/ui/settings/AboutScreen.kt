@@ -55,6 +55,7 @@ fun AboutScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             )
             listOf(
                 R.string.about_privacy_no_ads,
+                R.string.about_privacy_self,
                 R.string.about_privacy_network,
                 R.string.about_privacy_automation,
                 R.string.about_privacy_local,
@@ -79,6 +80,8 @@ fun AboutScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         }
 
         ExodusCreditsCard()
+
+        CreditsSection()
     }
 }
 

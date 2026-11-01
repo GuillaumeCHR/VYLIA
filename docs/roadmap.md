@@ -110,7 +110,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 | 6 | Agir en 3 sous-onglets | Fait : Réduire (gain exact, apps inutilisées), Alternatives (catalogue), Récompenses et partage |
 | 7 | Notifications et scans programmés | Fait, à valider sur téléphone : Paramètres › Automatisations (alerte d'installation toutes les ~15 min, scan de fond hebdomadaire ou mensuel), JobScheduler sans bibliothèque |
 | 8 | Gestion des données (export, import, suppression) | Fait (0.6.0) : Paramètres › Gestion des données, sauvegarde JSON versionnée, import sans écraser avec bilan, suppression confirmée ; export CSV du scan conservé |
-| 9 | À propos › Crédits avec humour | À faire |
+| 9 | À propos › Crédits avec humour | Fait (0.7.0) : générique façon Molkky Board (faux terminal, rôles, statistiques de production) ; VYLIA se note elle-même, QUERY_ALL_PACKAGES comprise |
 |   | Grille de score v3 | Faite et visible dans Paramètres › Règles de score › Voir la grille |
 
 ### Prochaines actions
@@ -133,9 +133,9 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
    mes données, comme dans Molkky Board, en gardant l'export CSV des résultats du scan (voir §8).
 7. ~~**Bug Analyse en mode avancé :**~~ (corrigé en 0.6.4) deux scores de confidentialité s'affichent (apps utilisateur et apps système).
    N'en garder qu'un seul, qui fusionne les résultats des apps installées par l'utilisateur et des apps système.
-8. §9 À propos › Crédits avec une touche d'humour, comme dans Molkky Board (voir §9).
+8. ~~§9~~ (fait en 0.7.0). §9 À propos › Crédits avec une touche d'humour, comme dans Molkky Board (voir §9).
 
 ### Versions
 
 Une version par lot livré (versionName et versionCode dans `app/build.gradle.kts`, tag `vX.Y.0`) :
-0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées), 0.6.3 = recherche dans Badges et Traqueurs, 0.6.4 = un seul score dans Analyse en mode Avancé ; la suite continue à 0.7.0.
+0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées), 0.6.3 = recherche dans Badges et Traqueurs, 0.6.4 = un seul score dans Analyse en mode Avancé, 0.7.0 = Crédits et VYLIA notée comme les autres ; la suite continue à 0.8.0.

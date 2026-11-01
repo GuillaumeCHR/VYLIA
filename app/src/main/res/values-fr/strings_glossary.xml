@@ -258,6 +258,9 @@
     <string name="perm_receive_title">Notifications push (Google)</string>
     <string name="perm_receive_allows">Recevoir des messages des serveurs de l\'app via Google, même quand elle est fermée.</string>
     <string name="perm_receive_why">Indispensable aux messageries. Elle permet aussi de réveiller l\'app à distance, et Google voit quand elle reçoit des messages.</string>
+    <string name="perm_read_media_visual_user_selected_title">Photos choisies</string>
+    <string name="perm_read_media_visual_user_selected_allows">Lire seulement les photos et vidéos que vous choisissez, pas toute la galerie.</string>
+    <string name="perm_read_media_visual_user_selected_why">La façon respectueuse de partager des images (Android 14 et plus) : l\'app ne voit que ce que vous sélectionnez, et vous pouvez changer la sélection à tout moment.</string>
     <string name="perm_billing_title">Achats intégrés</string>
     <string name="perm_billing_allows">Proposer des achats et abonnements via Google Play.</string>
     <string name="perm_billing_why">Aucun accès à vos coordonnées bancaires, qui restent chez Google ; le signe d\'achats dans l\'app.</string>
@@ -345,8 +348,20 @@
     <string name="category_game_rationale">Un jeu n\'a besoin d\'aucune permission sensible. Micro et Bluetooth sont tolérés pour le chat vocal et les manettes.</string>
     <string name="category_accessibility">Accessibilité</string>
     <string name="category_accessibility_rationale">Lire l\'écran et agir à votre place, c\'est précisément leur rôle : accessibilité et micro sont justifiés.</string>
+    <string name="category_health_tracking">Suivi de santé (cycle, glycémie, tension)</string>
+    <string name="category_health_tracking_rationale">Suivi médical personnel : il a besoin de données de santé intimes, et de rien d\'autre.</string>
+    <string name="category_dating">Rencontres</string>
+    <string name="category_dating_rationale">Profils, photos et proximité : la ville suffit, et votre carnet d\'adresses n\'a rien à y faire.</string>
+    <string name="category_keyboard">Claviers</string>
+    <string name="category_keyboard_rationale">Un clavier voit tout ce que vous tapez : il ne devrait rien demander d\'autre que le micro, pour la dictée.</string>
     <string name="category_education_family">Scolarité, famille &amp; découverte</string>
     <string name="category_education_family_rationale">Envoyer des devoirs ou des documents en photo. L\'agenda est toléré pour l\'emploi du temps.</string>
+
+    <!-- Paliers Health Connect -->
+    <string name="set_health_intimate">Santé : données intimes</string>
+    <string name="set_health_vitals">Santé : constantes et sommeil</string>
+    <string name="set_health_activity">Santé : activité physique</string>
+    <string name="set_health_background">Santé : historique et arrière-plan</string>
 
     <!-- Badges -->
     <string name="badge_first_audit">Premier audit</string>

@@ -93,7 +93,7 @@ fun AllPermissionsCard(app: InstalledApp, findings: List<PermissionFinding>) {
             var expanded by rememberSaveable(app.packageName) { mutableStateOf<String?>(null) }
             PermissionTheme.entries.forEach { theme ->
                 val items = groups[theme] ?: return@forEach
-                val penalty = items.sumOf { byPermission[it.shortName]?.penalty ?: 0.0 }
+                val penalty = items.sumOf { byPermission[it.shortName]?.counted ?: 0.0 }
                 ThemeHeader(theme, items, penalty, expanded == theme.name) {
                     expanded = if (expanded == theme.name) null else theme.name
                 }
@@ -157,7 +157,7 @@ private fun PermissionRow(permission: DeclaredPermission, granted: Set<String>, 
                 fontWeight = FontWeight.SemiBold,
                 modifier = Modifier.weight(1f),
             )
-            if (finding != null) PenaltyText(finding.penalty)
+            if (finding != null) PenaltyText(finding.counted)
         }
         Text(
             permission.shortName,
@@ -179,6 +179,8 @@ private fun PermissionRow(permission: DeclaredPermission, granted: Set<String>, 
                 )
             }
             if (finding != null) Chip(stringResource(finding.context.label), finding.context.tint)
+            // Une permission plus lourde du même groupe compte déjà (ex. position précise et approximative).
+            if (finding != null && finding.counted < finding.penalty) Chip(stringResource(R.string.perm_grouped), Color(0xFF94A3B8))
         }
         if (open) {
             Spacer(Modifier.height(6.dp))

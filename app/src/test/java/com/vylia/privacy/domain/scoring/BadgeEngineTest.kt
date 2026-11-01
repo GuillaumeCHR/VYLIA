@@ -27,7 +27,7 @@ class BadgeEngineTest {
     @Test
     fun `app sobre et sans traqueur - premier de la classe`() {
         val ids = score().ids()
-        assertEquals(setOf("PERM_FEATHER", "TRK_ORGANIC", "COMBO_TOP_OF_CLASS"), ids)
+        assertEquals(setOf("PERM_FEATHER", "PERM_DORMANT", "TRK_ORGANIC", "COMBO_TOP_OF_CLASS"), ids)
     }
 
     @Test
@@ -108,6 +108,62 @@ class BadgeEngineTest {
         val result = withIoc.score(AppScan("com.spy.app", 35, "CATEGORY_UNDEFINED", emptySet(), emptySet(), emptyList()))
         assertEquals(0, result.score)
         assertTrue("SEC_WANTED" in result.ids())
+    }
+
+    @Test
+    fun `v3 - permissions publicitaires neutralisees - ni penalite ni badge`() {
+        val result = score(declared = setOf("ACCESS_ADSERVICES_TOPICS", "com.google.android.gms.permission.AD_ID"))
+        assertEquals(0.0, result.permissionPenalty, 0.001)
+        assertTrue("PERM_FEATHER" in result.ids())
+        assertTrue("com.google.android.gms.permission.AD_ID" in TestFixtures.rules.neutralPermissions)
+    }
+
+    @Test
+    fun `v3 - capture d ecran - accord a chaque usage, comptee comme seulement declaree`() {
+        val result = scorer.score(
+            AppScan("com.paypal.android.p2pmobile", 35, "CATEGORY_UNDEFINED", setOf("FOREGROUND_SERVICE_MEDIA_PROJECTION"),
+                setOf("FOREGROUND_SERVICE_MEDIA_PROJECTION"), emptyList()),
+        )
+        assertEquals("FINANCE_ACCOUNTS", result.categoryId)
+        assertEquals(4 * 0.25, result.permissionPenalty, 0.001)
+        assertFalse("PERM_ROLLING" in result.ids())
+    }
+
+    @Test
+    fun `v3 - micro en arriere-plan - sans acces au micro seulement declare, avec moteur ca tourne`() {
+        val fgs = "FOREGROUND_SERVICE_MICROPHONE"
+        val withoutMic = score(declared = setOf(fgs), category = "CATEGORY_GAME")
+        assertEquals(6 * 1.6 * 0.25, withoutMic.permissionPenalty, 0.001)
+        assertFalse("PERM_ROLLING" in withoutMic.ids())
+        val withMic = score(declared = setOf(fgs, "RECORD_AUDIO"), category = "CATEGORY_GAME")
+        assertTrue("PERM_ROLLING" in withMic.ids())
+    }
+
+    @Test
+    fun `v3 - micro en arriere-plan pour une messagerie - justifie, pas de badge`() {
+        val result = scorer.score(
+            AppScan("org.thoughtcrime.securesms", 35, "CATEGORY_UNDEFINED", setOf("FOREGROUND_SERVICE_MICROPHONE"),
+                setOf("FOREGROUND_SERVICE_MICROPHONE"), emptyList()),
+        )
+        assertEquals(0.0, result.permissionPenalty, 0.001)
+        assertFalse("PERM_ROLLING" in result.ids())
+        assertFalse("PERM_DORMANT" in result.ids())
+    }
+
+    @Test
+    fun `v3 - deux moyens injustifies de tourner en arriere-plan - insomniaque`() {
+        val ids = score(
+            declared = setOf("FOREGROUND_SERVICE_LOCATION", "ACCESS_COARSE_LOCATION", "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"),
+            category = "CATEGORY_GAME",
+        ).ids()
+        assertTrue("PERM_NIGHT_OWL" in ids)
+    }
+
+    @Test
+    fun `v3 - Health Connect - le palier le plus sensible compte seul`() {
+        // Jeu : données intimes (8) et activité (2), toutes deux interdites (×1,6) → seule l'intime compte.
+        val result = score(declared = setOf("health.READ_MENSTRUATION", "health.READ_STEPS"), category = "CATEGORY_GAME")
+        assertEquals(8 * 1.6, result.permissionPenalty, 0.001)
     }
 
     @Test

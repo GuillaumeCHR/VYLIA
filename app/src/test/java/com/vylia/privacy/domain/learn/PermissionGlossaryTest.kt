@@ -10,7 +10,7 @@ class PermissionGlossaryTest {
 
     @Test
     fun `chaque permission notee par les regles est expliquee`() {
-        val missing = TestFixtures.rules.permissionWeights.keys - PermissionGlossary.entries.map { it.permission }.toSet()
+        val missing = TestFixtures.rules.permissionWeights.keys.filter { PermissionGlossary.find(it) == null }
         assertTrue("Permissions sans explication : $missing", missing.isEmpty())
     }
 

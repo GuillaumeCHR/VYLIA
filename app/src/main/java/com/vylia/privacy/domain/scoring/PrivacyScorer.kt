@@ -7,7 +7,7 @@ import kotlin.math.min
 import kotlin.math.roundToInt
 
 // ---------------------------------------------------------------------------
-// Règles (désérialisées depuis vylia_rules_v2_1.json, embarqué dans assets/)
+// Règles (désérialisées depuis vylia_rules_v3.json, embarqué dans assets/)
 // À charger avec Json { ignoreUnknownKeys = true } : les clés purement
 // documentaires du JSON (description, condition_syntax…) ne sont pas mappées.
 // ---------------------------------------------------------------------------
@@ -26,6 +26,20 @@ data class Rules(
     @SerialName("package_overrides") val packageOverrides: Map<String, String> = emptyMap(),
     val security: SecurityRules = SecurityRules(),
     val badges: BadgeRules = BadgeRules(),
+    /**
+     * Ensembles nommés « @… » (ex. `@HEALTH_INTIMATE`) : utilisables partout où une permission est attendue (poids,
+     * catégories, groupes, badges) et développés par [expandSets] avant le calcul.
+     */
+    @SerialName("permission_sets") val permissionSets: Map<String, List<String>> = emptyMap(),
+    /**
+     * Capacités qui ne servent à rien sans un autre accès : comptées comme seulement déclarées tant qu'aucune des
+     * permissions requises n'est accordée (ex. micro en arrière-plan sans accès au micro).
+     */
+    @SerialName("permission_requires") val permissionRequires: Map<String, List<String>> = emptyMap(),
+    /** Capacités soumises à l'accord de l'utilisateur à chaque usage (capture d'écran) : jamais acquises d'avance. */
+    @SerialName("consent_each_time") val consentEachTime: Set<String> = emptySet(),
+    /** Permissions volontairement non comptées (ex. publicité, déjà sanctionnée par les traqueurs), affichées pour la transparence. */
+    @SerialName("neutral_permissions") val neutralPermissions: List<String> = emptyList(),
 )
 
 @Serializable
@@ -157,6 +171,12 @@ data class BadgeRule(
     val patterns: Set<String> = emptySet(),
     val severity: String? = null,
     @SerialName("axis_groups") val axisGroups: List<List<String>> = emptyList(),
+    /** permission_set_context, permissions_absent : permissions ou ensembles visés. */
+    val permissions: Set<String> = emptySet(),
+    /** permission_set_context : contextes retenus (ALLOWED, TOLERATED, UNEXPECTED, FORBIDDEN). */
+    val contexts: Set<String> = emptySet(),
+    /** permissions_none : groupes de permission_rules ignorés (ex. le ciblage publicitaire). */
+    @SerialName("ignore_groups") val ignoreGroups: Set<String> = emptySet(),
 )
 
 // ---------------------------------------------------------------------------
@@ -201,6 +221,8 @@ data class PermissionFinding(
     val granted: Boolean,
     val context: Context,
     val penalty: Double,
+    /** Part réellement retenue dans le score après les groupes (0 si une permission plus lourde du groupe compte). */
+    val counted: Double = penalty,
 )
 
 data class TrackerFinding(val name: String, val penalty: Int)
@@ -250,9 +272,11 @@ class IocDatabase(private val packages: Set<String>, certificatesSha256: Set<Str
 // ---------------------------------------------------------------------------
 
 class PrivacyScorer(
-    private val rules: Rules,
+    rawRules: Rules,
     private val iocs: IocDatabase = IocDatabase.EMPTY,
 ) {
+    /** Règles avec les ensembles « @… » développés en permissions. */
+    private val rules = rawRules.expandSets()
     private val securityDetector = SecurityPatternDetector(rules)
     private val badgeEngine = BadgeEngine(rules)
 
@@ -287,13 +311,15 @@ class PrivacyScorer(
             }
             .map { perm ->
                 val ctx = contextOf(perm, scan, categoryId)
-                val granted = perm in scan.grantedPermissions
+                val granted = isEffectivelyGranted(perm, scan.grantedPermissions)
                 val grantFactor = if (granted) 1.0 else rules.scoring.declaredOnlyFactor
                 val mult = rules.scoring.contextMultipliers.getValue(ctx.name.lowercase())
                 PermissionFinding(perm, granted, ctx, rules.permissionWeights.getValue(perm) * mult * grantFactor)
             }
 
-        val permissionPenaltyRaw = aggregateWithGroups(findings)
+        val counted = countedPenalties(findings)
+        val permissionFindings = findings.map { it.copy(counted = counted.getValue(it.permission)) }
+        val permissionPenaltyRaw = counted.values.sum()
         val permissionPenalty = min(rules.scoring.permissionCap.toDouble(), permissionPenaltyRaw)
 
         // 2. Traqueurs : poids = max des catégories Exodus du traqueur
@@ -333,7 +359,7 @@ class PrivacyScorer(
         val badges = badgeEngine.award(
             BadgeEngine.Input(
                 trackers = scan.trackers,
-                permissionFindings = findings,
+                permissionFindings = permissionFindings,
                 permissionPenaltyRaw = permissionPenaltyRaw,
                 securityFindings = securityFindings,
             )
@@ -348,7 +374,7 @@ class PrivacyScorer(
             permissionPenaltyRaw = permissionPenaltyRaw,
             trackerPenalty = trackerPenalty,
             securityScoreCap = securityScoreCap,
-            permissionFindings = findings.sortedByDescending { it.penalty },
+            permissionFindings = permissionFindings.sortedByDescending { it.penalty },
             trackerFindings = trackerFindings.sortedByDescending { it.penalty },
             securityFindings = securityFindings,
             badges = badges,
@@ -356,26 +382,53 @@ class PrivacyScorer(
         )
     }
 
-    /** Dans un groupe, la localisation fine+approx. ne compte qu'une fois ; les SMS cumulent à moitié. */
-    private fun aggregateWithGroups(findings: List<PermissionFinding>): Double {
+    /** Accordée, et réellement utilisable : l'accès dont elle dépend est accordé, sans accord à chaque usage. */
+    private fun isEffectivelyGranted(perm: String, granted: Set<String>): Boolean =
+        perm in granted && perm !in rules.consentEachTime &&
+            rules.permissionRequires[perm].let { required -> required.isNullOrEmpty() || required.any { it in granted } }
+
+    /**
+     * Part retenue de chaque pénalité : dans un groupe, seule la plus lourde compte entièrement (« max ») ou les autres
+     * comptent à moitié (« max_plus_half ») ; ex. position précise et approximative ne comptent qu'une fois.
+     */
+    private fun countedPenalties(findings: List<PermissionFinding>): Map<String, Double> {
         val byPerm = findings.associate { it.permission to it.penalty }
-        val grouped = mutableSetOf<String>()
-        var total = 0.0
+        val counted = HashMap(byPerm)
         for (group in rules.permissionRules.groups) {
-            val values = group.members.mapNotNull { byPerm[it] }.sortedDescending()
-            grouped += group.members
-            if (values.isEmpty()) continue
-            total += when (group.mode) {
-                "max" -> values.first()
-                "max_plus_half" -> values.first() + 0.5 * values.drop(1).sum()
-                else -> values.sum()
+            val present = group.members.filter { it in byPerm }.sortedByDescending { byPerm.getValue(it) }
+            present.drop(1).forEach { perm ->
+                counted[perm] = when (group.mode) {
+                    "max" -> 0.0
+                    "max_plus_half" -> byPerm.getValue(perm) * 0.5
+                    else -> byPerm.getValue(perm)
+                }
             }
         }
-        total += byPerm.filterKeys { it !in grouped }.values.sum()
-        return total
+        return counted
     }
 
     companion object {
         const val SIGNAL_IOC_MATCH = "IOC_MATCH"
     }
+}
+
+/** Développe les ensembles « @… » partout où ils servent de permission : poids, catégories, groupes, badges. */
+fun Rules.expandSets(): Rules {
+    if (permissionSets.isEmpty()) return this
+    fun expand(perms: Collection<String>): List<String> = perms.flatMap { permissionSets[it] ?: listOf(it) }
+    return copy(
+        // Un poids explicite sur une permission l'emporte sur celui de son ensemble.
+        permissionWeights = permissionWeights.entries
+            .sortedBy { !it.key.startsWith("@") }
+            .flatMap { (perm, weight) -> (permissionSets[perm] ?: listOf(perm)).map { it to weight } }
+            .toMap(),
+        permissionRules = permissionRules.copy(groups = permissionRules.groups.map { it.copy(members = expand(it.members)) }),
+        categories = categories.mapValues { (_, c) ->
+            c.copy(allowed = expand(c.allowed).toSet(), tolerated = expand(c.tolerated).toSet(), forbidden = expand(c.forbidden).toSet())
+        },
+        badges = badges.copy(
+            definitions = badges.definitions.map { it.copy(rule = it.rule.copy(permissions = expand(it.rule.permissions).toSet())) },
+        ),
+        permissionSets = emptyMap(),
+    )
 }

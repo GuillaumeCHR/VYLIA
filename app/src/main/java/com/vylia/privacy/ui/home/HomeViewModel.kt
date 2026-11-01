@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.VyliaApplication
 import com.vylia.privacy.data.PackageRemovalMonitor
 import com.vylia.privacy.data.export.CsvExporter
@@ -115,6 +116,7 @@ class HomeViewModel(
                 "Scan : ${apps.size} apps listées en ${listedAt - startedAt} ms, traqueurs de ${userApps.size} apps " +
                     "en ${SystemClock.elapsedRealtime() - listedAt} ms ($unanalyzed non analysées)",
             )
+            if (BuildConfig.DEBUG) logScores()
             badgesManager.onScanCompleted(currentApps().filter { AppFilter.USER.matches(it.app) }.toSnapshots())
         }
     }
@@ -185,6 +187,18 @@ class HomeViewModel(
         }
     }
 
+    /**
+     * Version de développement : une ligne par app utilisateur (paquet, score, note, badges), pour comparer deux
+     * versions des règles sur un vrai téléphone (`adb logcat -s VyliaScores`).
+     */
+    private fun logScores() {
+        currentApps().filter { AppFilter.USER.matches(it.app) }.forEach { audited ->
+            val r = audited.result
+            Log.d(SCORES_TAG, "${audited.app.packageName}\t${r.score}\t${r.grade}\t${r.categoryId}\t" +
+                "${"%.1f".format(java.util.Locale.ROOT, r.permissionPenalty)}\t${r.trackerPenalty}\t${r.badges.joinToString(",") { it.id }}")
+        }
+    }
+
     private fun List<AuditedApp>.toSnapshots(): Map<String, AppSnapshot> = associate {
         val trackerCount = (it.trackerAnalysis as? TrackerAnalysis.Analyzed)?.trackers?.size ?: 0
         it.app.packageName to AppSnapshot(it.app.label, it.score.value, trackerCount)
@@ -192,6 +206,7 @@ class HomeViewModel(
 
     companion object {
         private const val TAG = "VyliaScan"
+        private const val SCORES_TAG = "VyliaScores"
 
         val Factory = viewModelFactory {
             initializer {

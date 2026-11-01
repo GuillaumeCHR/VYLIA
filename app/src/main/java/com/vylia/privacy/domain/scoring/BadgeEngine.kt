@@ -8,6 +8,8 @@ package com.vylia.privacy.domain.scoring
  *     (Hors-la-loi remplace Pêche à la ligne, Régie publicitaire remplace Homme-sandwich…) ;
  *  2. badges « combo » (types axes_*), évalués sur le résultat de la passe 1.
  *
+ * Les ensembles « @… » des règles sont déjà développés (voir [expandSets]).
+ *
  * Un type de règle inconnu est ignoré (le badge n'est jamais attribué), ce qui permet
  * d'ajouter un badge dans le JSON avant que l'app sache l'évaluer.
  */
@@ -23,6 +25,7 @@ class BadgeEngine(private val rules: Rules) {
 
     private val defs = rules.badges.definitions
     private val technical = rules.badges.technicalTrackers
+    private val groupMembers = rules.permissionRules.groups.associate { it.id to it.members.toSet() }
 
     init {
         val ids = defs.map { it.id }
@@ -35,6 +38,12 @@ class BadgeEngine(private val rules: Rules) {
                 val missing = d.rule.patterns - rules.security.patterns.keys
                 require(missing.isEmpty()) { "Badge ${d.id} : patterns inconnus $missing" }
             }
+            if (d.rule.type == "permission_set_context") {
+                val invalid = d.rule.contexts.filter { c -> Context.entries.none { it.name == c } }
+                require(d.rule.contexts.isNotEmpty() && invalid.isEmpty()) { "Badge ${d.id} : contexts invalides $invalid" }
+            }
+            val unknownGroups = d.rule.ignoreGroups - groupMembers.keys
+            require(unknownGroups.isEmpty()) { "Badge ${d.id} : groupes inconnus $unknownGroups" }
             if (d.rule.type == "permission_context") {
                 require(d.rule.context != null && Context.entries.any { it.name == d.rule.context }) {
                     "Badge ${d.id} : context invalide « ${d.rule.context} »"
@@ -69,10 +78,22 @@ class BadgeEngine(private val rules: Rules) {
     }
 
     private fun evalBase(r: BadgeRule, i: Input): Boolean {
-        val f = i.permissionFindings
+        // Groupes ignorés (ex. ciblage publicitaire, déjà sanctionné côté traqueurs) : retirés des constats.
+        val ignored = r.ignoreGroups.flatMap { groupMembers.getValue(it) }.toSet()
+        val f = i.permissionFindings.filter { it.permission !in ignored }
         val t = i.trackers
         return when (r.type) {
             "permissions_none" -> f.isEmpty()
+
+            "permission_set_context" -> inRange(
+                f.count {
+                    it.permission in r.permissions && it.context.name in r.contexts &&
+                        (r.granted == null || it.granted == r.granted)
+                },
+                r,
+            )
+
+            "permissions_absent" -> f.none { it.permission in r.permissions }
 
             "permissions_in_purpose" -> f.isNotEmpty() && f.all {
                 it.context == Context.ALLOWED || (it.context == Context.TOLERATED && !it.granted)

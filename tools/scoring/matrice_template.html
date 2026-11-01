@@ -1,0 +1,212 @@
+<title>Grille de score v3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
+<style>
+/* Fiche de relecture : une colonne de texte (~70 caractères), la matrice seule déborde dans son conteneur défilant. */
+:root {
+  --paper: #f5f7f8; --ink: #14202b; --muted: #556270; --line: #d7dde2; --surface: #ffffff; --accent: #0e7490;
+  --j: #0f9f6e; --j-bg: #d9f3e8; --t: #a16207; --t-bg: #fbeccb; --x: #c2410c; --x-bg: #fde0d2; --i: #7b8794; --i-bg: #eef1f3;
+  --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #0f161d; --ink: #e3e9ee; --muted: #94a3b2; --line: #26323d; --surface: #16202a; --accent: #38bdf8;
+  --j: #34d399; --j-bg: #0f3a2b; --t: #fbbf24; --t-bg: #3d2f0b; --x: #fb7a4a; --x-bg: #44210f; --i: #8a98a6; --i-bg: #1c2731;
+  color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #0f161d; --ink: #e3e9ee; --muted: #94a3b2; --line: #26323d; --surface: #16202a; --accent: #38bdf8;
+  --j: #34d399; --j-bg: #0f3a2b; --t: #fbbf24; --t-bg: #3d2f0b; --x: #fb7a4a; --x-bg: #44210f; --i: #8a98a6; --i-bg: #1c2731;
+  color-scheme: dark }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--sans); }
+.wrap { max-width: 72rem; margin: 0 auto; padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px; }
+.prose { max-width: 44rem; display: grid; gap: 10px; min-width: 0; }
+h1 { font-size: 2rem; line-height: 1.15; margin: 0; text-wrap: balance; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.25rem; margin: 0; text-wrap: balance; font-weight: 600; }
+p { margin: 0; }
+.eyebrow { font: 500 12px/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.lede { color: var(--muted); font-size: 1.05rem; }
+code { font: 0.86em var(--mono); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 24px; font-variant-numeric: tabular-nums; color: var(--muted); }
+.facts b { color: var(--ink); font-size: 1.15rem; }
+.decide { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; display: grid; gap: 6px; }
+.decide ol { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; }
+.key { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.key i { font: 600 12px/22px var(--mono); width: 22px; text-align: center; border-radius: 4px; font-style: normal; }
+.J { color: var(--j); background: var(--j-bg); } .T { color: var(--t); background: var(--t-bg); }
+.X { color: var(--x); background: var(--x-bg); } .I { color: var(--i); background: var(--i-bg); }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); }
+table { border-collapse: collapse; font-size: 13px; }
+.list { width: 100%; }
+.list th, .list td { text-align: left; vertical-align: top; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+.list th { font-size: 12px; color: var(--muted); font-weight: 500; }
+.num { font-variant-numeric: tabular-nums; text-align: right; }
+.emoji { font-size: 20px; }
+.pill { display: inline-block; font-size: 11px; padding: 1px 8px; border-radius: 99px; margin-top: 4px; }
+.pill.danger { color: var(--x); background: var(--x-bg); } .pill.warning { color: var(--t); background: var(--t-bg); }
+.pill.success { color: var(--j); background: var(--j-bg); }
+.matrix th, .matrix td { border-bottom: 1px solid var(--line); }
+.matrix thead th { position: sticky; top: 0; background: var(--surface); z-index: 2; }
+.matrix .cat { height: 190px; vertical-align: bottom; padding: 6px 2px; font-weight: 500; color: var(--muted); }
+.matrix .cat span { writing-mode: vertical-rl; transform: rotate(180deg); white-space: nowrap; font-size: 12px; }
+.matrix .newc span { color: var(--accent); font-weight: 600; }
+.matrix .perm { position: sticky; left: 0; background: var(--surface); z-index: 1; text-align: left; padding: 4px 10px;
+  white-space: nowrap; font-weight: 400; border-right: 1px solid var(--line); }
+.matrix .perm .sub { display: block; font-size: 11px; color: var(--muted); }
+.matrix .newp code { color: var(--accent); font-weight: 500; }
+.matrix .newp::before { content: "●"; color: var(--accent); margin-right: 6px; font-size: 9px; vertical-align: middle; }
+.matrix .w { padding: 4px 8px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--muted); }
+.matrix .w b { color: var(--accent); }
+.matrix .c { width: 26px; min-width: 26px; text-align: center; font: 500 11px/24px var(--mono); }
+.matrix .c.newc { box-shadow: inset 0 0 0 1px var(--accent); }
+.matrix .theme th { text-align: left; padding: 10px 10px 4px; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--accent); background: var(--paper); position: sticky; left: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+label { font-size: 14px; display: inline-flex; gap: 8px; align-items: center; }
+select { font: inherit; padding: 6px 8px; border-radius: 4px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); max-width: 100%; }
+input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.bycat { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); }
+.bycat section { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.bycat h3 { margin: 0; font-size: 14px; }
+.bycat ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.bycat li { font: 12px/1.4 var(--mono); padding: 3px 8px; border-radius: 4px; overflow-wrap: anywhere; }
+.bycat li.new::after { content: " · nouveau"; font-family: var(--sans); color: var(--accent); }
+.steps { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+</style>
+
+<div class="wrap">
+  <header class="prose">
+    <span class="eyebrow">VYLIA · proposition à valider</span>
+    <h1>Grille de score v3</h1>
+    <p class="lede">Toutes les permissions qui comptent, leur poids, et ce que chaque catégorie d'app justifie, tolère ou interdit.
+      Générée depuis <code>tools/scoring/propose_v3.py</code> ; le JSON correspondant est prêt dans <code>docs/scoring/</code>.</p>
+    <div class="facts">
+      <span><b>{{N_OLD}}</b> permissions notées en v2.1</span>
+      <span><b>+{{N_NEW}}</b> nouvelles</span>
+      <span><b>{{N_CATS}}</b> catégories</span>
+      <span>plafond permissions <b>{{CAP}}</b> pts (inchangé)</span>
+    </div>
+  </header>
+
+  <section class="prose decide" aria-labelledby="decide">
+    <h2 id="decide">À valider</h2>
+    <ol>
+      <li>Les poids des nouvelles permissions. Le ciblage publicitaire est neutralisé : il est déjà sanctionné par les traqueurs.</li>
+      <li>Les cases de la matrice pour les nouvelles permissions et les trois nouvelles catégories (cadre bleu).</li>
+      <li>Les trois nouveaux badges.</li>
+      <li>Le plafond de {{CAP}} points pour les permissions : gardé, puisque les nouveaux poids sont modérés et regroupés.</li>
+    </ol>
+  </section>
+
+  <section class="prose" aria-labelledby="rules">
+    <h2 id="rules">Comment lire une case</h2>
+    <p>Pénalité d'une permission = poids × contexte de la catégorie × octroi (×0,25 si seulement déclarée). Une permission
+      que la catégorie ne cite pas est inattendue.</p>
+    <div class="legend">
+      <span class="key"><i class="J">J</i>Justifiée ×0</span>
+      <span class="key"><i class="T">T</i>Tolérée ×0,4</span>
+      <span class="key"><i class="I">I</i>Inattendue ×1</span>
+      <span class="key"><i class="X">X</i>Interdite ×1,6</span>
+    </div>
+  </section>
+
+  <section aria-labelledby="new" style="display:grid;gap:12px;min-width:0">
+    <h2 id="new">Nouvelles permissions notées</h2>
+    <div class="scroll"><table class="list">
+      <thead><tr><th>Permission</th><th>Thème</th><th class="num">Poids</th><th>Pourquoi</th></tr></thead>
+      <tbody>{{NEW_ROWS}}</tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="groups" style="display:grid;gap:12px;min-width:0">
+    <h2 id="groups">Groupes : ne pas compter deux fois</h2>
+    <div class="scroll"><table class="list">
+      <thead><tr><th>Groupe</th><th>Règle</th><th>Membres</th></tr></thead>
+      <tbody>{{GROUP_ROWS}}</tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="matrix" style="display:grid;gap:12px;min-width:0">
+    <h2 id="matrix">Matrice permission × catégorie</h2>
+    <div class="toolbar">
+      <label><input type="checkbox" id="only-new"> Nouvelles permissions seulement</label>
+      <span class="key">● nouvelle permission · cadre bleu : nouvelle catégorie · survol : catégorie et contexte</span>
+    </div>
+    <div class="scroll">
+      <table class="matrix">
+        <thead><tr><th class="perm" scope="col">Permission</th><th class="w" scope="col">Poids</th>{{HEAD}}</tr></thead>
+        <tbody>{{ROWS}}</tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="bycat" style="display:grid;gap:12px;min-width:0">
+    <h2 id="bycat">Une catégorie à la fois</h2>
+    <label for="cat-select">Catégorie <select id="cat-select">{{OPTIONS}}</select></label>
+    <div class="bycat" id="bycat-view"></div>
+  </section>
+
+  <section aria-labelledby="badges" style="display:grid;gap:12px;min-width:0">
+    <h2 id="badges">Badges</h2>
+    <p class="prose">Les badges existants se recalculent seuls avec les nouvelles permissions notées (Fouineuse, Hors-la-loi,
+      Pêche à la ligne, Goinfre, Dans le mille). Nouveaux badges :</p>
+    <div class="scroll"><table class="list">
+      <thead><tr><th></th><th>Badge</th><th>Signification</th><th>Règle</th></tr></thead>
+      <tbody>{{BADGE_ROWS}}</tbody>
+    </table></div>
+  </section>
+
+  <section aria-labelledby="cats" style="display:grid;gap:12px;min-width:0">
+    <h2 id="cats">Nouvelles catégories et rattachements</h2>
+    <div class="scroll"><table class="list">
+      <thead><tr><th>Catégorie</th><th>Raison d'être</th></tr></thead>
+      <tbody>{{CAT_ROWS}}</tbody>
+    </table></div>
+    <div class="scroll"><table class="list">
+      <thead><tr><th>App</th><th>Rattachée à</th></tr></thead>
+      <tbody>{{OVERRIDE_ROWS}}</tbody>
+    </table></div>
+  </section>
+
+  <section class="prose" aria-labelledby="next">
+    <h2 id="next">Après validation</h2>
+    <ol class="steps">
+      <li>Moteur : ensembles de permissions (<code>@HEALTH_…</code>), règles de badges <code>permission_set_context</code> et
+        <code>permissions_absent</code>, et pénalité réellement retenue par permission (totaux par thème exacts).</li>
+      <li>Règles v3 embarquées, textes des trois catégories et des trois badges en anglais et en français.</li>
+      <li>Simulation avant / après sur les 100 apps du téléphone, puis mise à jour des tests et de l'onglet Comprendre.</li>
+    </ol>
+  </section>
+</div>
+
+<script>
+const DATA = {{DATA}};
+const LABELS = { J: "Justifiée", T: "Tolérée", I: "Inattendue", X: "Interdite" };
+const select = document.getElementById("cat-select");
+const view = document.getElementById("bycat-view");
+function showCategory(id) {
+  const cat = DATA[id];
+  view.replaceChildren(...["J", "T", "X"].map(ctx => {
+    const section = document.createElement("section");
+    const h = document.createElement("h3");
+    const rows = cat.rows.filter(r => r[1] === ctx);
+    h.textContent = `${LABELS[ctx]} (${rows.length})`;
+    const ul = document.createElement("ul");
+    rows.forEach(([perm, c, isNew]) => {
+      const li = document.createElement("li");
+      li.className = c + (isNew ? " new" : "");
+      li.textContent = perm.replace("com.google.android.gms.permission.", "gms.");
+      ul.append(li);
+    });
+    section.append(h, ul);
+    return section;
+  }));
+}
+select.addEventListener("change", () => showCategory(select.value));
+showCategory(select.value);
+document.getElementById("only-new").addEventListener("change", e => {
+  document.querySelectorAll('.matrix tbody tr[data-new="0"]').forEach(tr => { tr.hidden = e.target.checked; });
+});
+</script>

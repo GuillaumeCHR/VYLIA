@@ -1,0 +1,1748 @@
+{
+  "version": "3.0",
+  "last_update": "2026-11-01",
+  "scoring": {
+    "base": 100,
+    "permission_cap": 50,
+    "tracker_cap": 60,
+    "context_multipliers": {
+      "allowed": 0.0,
+      "tolerated": 0.4,
+      "unexpected": 1.0,
+      "forbidden": 1.6
+    },
+    "declared_only_factor": 0.25,
+    "unanalyzed_policy": {
+      "assumed_tracker_penalty": 12,
+      "confidence": "PARTIAL",
+      "grade_suffix": "?"
+    },
+    "grades": [
+      {
+        "min": 85,
+        "grade": "A"
+      },
+      {
+        "min": 70,
+        "grade": "B"
+      },
+      {
+        "min": 50,
+        "grade": "C"
+      },
+      {
+        "min": 30,
+        "grade": "D"
+      },
+      {
+        "min": 0,
+        "grade": "E"
+      }
+    ]
+  },
+  "permission_weights": {
+    "ACCESS_BACKGROUND_LOCATION": 15,
+    "ACCESS_FINE_LOCATION": 8,
+    "ACCESS_COARSE_LOCATION": 3,
+    "ACCESS_MEDIA_LOCATION": 5,
+    "READ_SMS": 15,
+    "RECEIVE_SMS": 10,
+    "SEND_SMS": 10,
+    "RECEIVE_MMS": 8,
+    "READ_CALL_LOG": 15,
+    "WRITE_CALL_LOG": 6,
+    "PROCESS_OUTGOING_CALLS": 12,
+    "CALL_PHONE": 5,
+    "ANSWER_PHONE_CALLS": 6,
+    "READ_PHONE_STATE": 6,
+    "READ_PHONE_NUMBERS": 6,
+    "READ_CONTACTS": 10,
+    "WRITE_CONTACTS": 4,
+    "GET_ACCOUNTS": 4,
+    "RECORD_AUDIO": 10,
+    "CAMERA": 4,
+    "READ_CALENDAR": 6,
+    "WRITE_CALENDAR": 3,
+    "BODY_SENSORS": 8,
+    "BODY_SENSORS_BACKGROUND": 12,
+    "ACTIVITY_RECOGNITION": 4,
+    "READ_EXTERNAL_STORAGE": 5,
+    "MANAGE_EXTERNAL_STORAGE": 12,
+    "READ_MEDIA_IMAGES": 3,
+    "READ_MEDIA_VIDEO": 3,
+    "READ_MEDIA_AUDIO": 2,
+    "BLUETOOTH_SCAN": 3,
+    "NEARBY_WIFI_DEVICES": 3,
+    "SYSTEM_ALERT_WINDOW": 5,
+    "QUERY_ALL_PACKAGES": 5,
+    "REQUEST_INSTALL_PACKAGES": 5,
+    "PACKAGE_USAGE_STATS": 8,
+    "BIND_ACCESSIBILITY_SERVICE": 15,
+    "BIND_NOTIFICATION_LISTENER_SERVICE": 12,
+    "BIND_DEVICE_ADMIN": 10,
+    "FOREGROUND_SERVICE_MICROPHONE": 6,
+    "FOREGROUND_SERVICE_CAMERA": 6,
+    "FOREGROUND_SERVICE_LOCATION": 6,
+    "FOREGROUND_SERVICE_MEDIA_PROJECTION": 4,
+    "@HEALTH_INTIMATE": 8,
+    "@HEALTH_VITALS": 5,
+    "@HEALTH_ACTIVITY": 2,
+    "@HEALTH_BACKGROUND": 4,
+    "USE_FULL_SCREEN_INTENT": 2,
+    "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS": 2,
+    "WRITE_SETTINGS": 3,
+    "BLUETOOTH_CONNECT": 2,
+    "SCHEDULE_EXACT_ALARM": 1,
+    "READ_MEDIA_VISUAL_USER_SELECTED": 1
+  },
+  "permission_rules": {
+    "ignore_unlisted": true,
+    "read_external_storage_max_target_sdk": 32,
+    "groups": [
+      {
+        "id": "location_foreground",
+        "mode": "max",
+        "members": [
+          "ACCESS_FINE_LOCATION",
+          "ACCESS_COARSE_LOCATION"
+        ]
+      },
+      {
+        "id": "sms",
+        "mode": "max_plus_half",
+        "members": [
+          "READ_SMS",
+          "RECEIVE_SMS",
+          "SEND_SMS",
+          "RECEIVE_MMS"
+        ]
+      },
+      {
+        "id": "media",
+        "mode": "max",
+        "members": [
+          "READ_EXTERNAL_STORAGE",
+          "READ_MEDIA_IMAGES",
+          "READ_MEDIA_VIDEO",
+          "READ_MEDIA_AUDIO",
+          "READ_MEDIA_VISUAL_USER_SELECTED"
+        ]
+      },
+      {
+        "id": "location_background",
+        "mode": "max",
+        "members": [
+          "ACCESS_BACKGROUND_LOCATION",
+          "FOREGROUND_SERVICE_LOCATION"
+        ]
+      },
+      {
+        "id": "health_connect",
+        "mode": "max",
+        "members": [
+          "@HEALTH_INTIMATE",
+          "@HEALTH_VITALS",
+          "@HEALTH_ACTIVITY",
+          "@HEALTH_BACKGROUND"
+        ]
+      }
+    ]
+  },
+  "tracker_rules": {
+    "category_weights": {
+      "Advertisement": 12,
+      "Profiling": 10,
+      "Location": 10,
+      "Identification": 6,
+      "Analytics": 5,
+      "Crash reporting": 2
+    },
+    "default_weight": 5,
+    "overrides": {
+      "Didomi": 1
+    }
+  },
+  "category_resolution": {
+    "order": [
+      "excluded_packages",
+      "package_overrides",
+      "app_info_category",
+      "DEFAULT"
+    ],
+    "app_info_category_map": {
+      "CATEGORY_GAME": "GAME",
+      "CATEGORY_AUDIO": "MEDIA_PLAYER",
+      "CATEGORY_VIDEO": "MEDIA_PLAYER",
+      "CATEGORY_IMAGE": "PHOTO_VIDEO",
+      "CATEGORY_SOCIAL": "SOCIAL",
+      "CATEGORY_NEWS": "NEWS_READING",
+      "CATEGORY_MAPS": "NAVIGATION",
+      "CATEGORY_PRODUCTIVITY": "PRODUCTIVITY_CLOUD",
+      "CATEGORY_ACCESSIBILITY": "ACCESSIBILITY",
+      "CATEGORY_UNDEFINED": "DEFAULT"
+    }
+  },
+  "categories": {
+    "DEFAULT": {
+      "display_name": "Non catégorisée",
+      "description": "Aucune hypothèse : toute permission sensible est « inattendue » (×1.0).",
+      "allowed": [],
+      "tolerated": [],
+      "forbidden": []
+    },
+    "NAVIGATION": {
+      "display_name": "Navigation & Cartographie",
+      "allowed": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "FOREGROUND_SERVICE_LOCATION"
+      ],
+      "tolerated": [
+        "ACCESS_BACKGROUND_LOCATION",
+        "RECORD_AUDIO",
+        "READ_CONTACTS",
+        "BLUETOOTH_SCAN",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "BLUETOOTH_CONNECT"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "BODY_SENSORS",
+        "FOREGROUND_SERVICE_CAMERA",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "TRANSPORT": {
+      "display_name": "Transports & Mobilité",
+      "allowed": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "tolerated": [
+        "CAMERA",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "READ_MEDIA_IMAGES",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_LOCATION",
+        "SCHEDULE_EXACT_ALARM",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "forbidden": [
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "RECORD_AUDIO",
+        "FOREGROUND_SERVICE_CAMERA",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "VEHICLE": {
+      "display_name": "Véhicule connecté",
+      "allowed": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "BLUETOOTH_SCAN",
+        "FOREGROUND_SERVICE_LOCATION",
+        "BLUETOOTH_CONNECT"
+      ],
+      "tolerated": [
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CONTACTS",
+        "READ_CALENDAR",
+        "RECORD_AUDIO",
+        "CAMERA",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "WRITE_SETTINGS"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "READ_CALL_LOG",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "WEATHER": {
+      "display_name": "Météo",
+      "allowed": [
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "tolerated": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE_LOCATION"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "RECORD_AUDIO",
+        "CAMERA",
+        "READ_CALENDAR",
+        "READ_CALL_LOG",
+        "READ_PHONE_STATE",
+        "GET_ACCOUNTS",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "UTILITY": {
+      "display_name": "Outils simples",
+      "description": "Lampe, calculatrice, boussole. setTorchMode() ne requiert pas CAMERA depuis Android 6.",
+      "allowed": [],
+      "tolerated": [
+        "CAMERA",
+        "WRITE_SETTINGS"
+      ],
+      "forbidden": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "RECORD_AUDIO",
+        "READ_CALL_LOG",
+        "READ_PHONE_STATE",
+        "GET_ACCOUNTS",
+        "READ_CALENDAR",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "MESSAGING": {
+      "display_name": "Messagerie & Appels",
+      "allowed": [
+        "READ_CONTACTS",
+        "WRITE_CONTACTS",
+        "RECORD_AUDIO",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO",
+        "READ_MEDIA_AUDIO",
+        "READ_PHONE_NUMBERS",
+        "GET_ACCOUNTS",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "USE_FULL_SCREEN_INTENT",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECEIVE_SMS",
+        "READ_PHONE_STATE",
+        "CALL_PHONE",
+        "ANSWER_PHONE_CALLS",
+        "FOREGROUND_SERVICE_LOCATION",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "BLUETOOTH_CONNECT",
+        "SCHEDULE_EXACT_ALARM"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "PROCESS_OUTGOING_CALLS",
+        "ACCESS_BACKGROUND_LOCATION",
+        "BODY_SENSORS",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "EMAIL": {
+      "display_name": "E-mail",
+      "allowed": [
+        "READ_CONTACTS",
+        "GET_ACCOUNTS",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO",
+        "READ_MEDIA_AUDIO",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "WRITE_CONTACTS",
+        "RECORD_AUDIO"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "SOCIAL": {
+      "display_name": "Réseaux sociaux",
+      "allowed": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO",
+        "READ_MEDIA_AUDIO",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "READ_CONTACTS",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "GET_ACCOUNTS",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+        "USE_FULL_SCREEN_INTENT"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CALENDAR",
+        "BODY_SENSORS",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND",
+        "WRITE_SETTINGS"
+      ]
+    },
+    "MEDIA_PLAYER": {
+      "display_name": "Audio, vidéo & streaming",
+      "allowed": [
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_AUDIO",
+        "READ_MEDIA_VIDEO",
+        "BLUETOOTH_CONNECT"
+      ],
+      "tolerated": [
+        "RECORD_AUDIO",
+        "BLUETOOTH_SCAN",
+        "READ_MEDIA_IMAGES",
+        "ACCESS_COARSE_LOCATION",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "forbidden": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "CAMERA",
+        "READ_CALL_LOG",
+        "READ_CALENDAR",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "NEWS_READING": {
+      "display_name": "Presse & Lecture",
+      "allowed": [],
+      "tolerated": [
+        "ACCESS_COARSE_LOCATION",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "forbidden": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "RECORD_AUDIO",
+        "CAMERA",
+        "READ_CALENDAR",
+        "READ_CALL_LOG",
+        "GET_ACCOUNTS",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND",
+        "USE_FULL_SCREEN_INTENT",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "WRITE_SETTINGS"
+      ]
+    },
+    "ECOMMERCE": {
+      "display_name": "E-commerce & Achats",
+      "allowed": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "RECORD_AUDIO",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_PHONE_STATE",
+        "GET_ACCOUNTS",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND",
+        "USE_FULL_SCREEN_INTENT",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "WRITE_SETTINGS"
+      ]
+    },
+    "FINANCE_ACCOUNTS": {
+      "display_name": "Banque, paiement & comptes clients",
+      "description": "OTP par SMS : la SMS Retriever API rend READ_SMS inutile.",
+      "allowed": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "READ_CONTACTS",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "READ_PHONE_STATE",
+        "RECEIVE_SMS"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "RECORD_AUDIO",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CALENDAR",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND",
+        "WRITE_SETTINGS"
+      ]
+    },
+    "HEALTH_ADMIN": {
+      "display_name": "Santé (administratif, RDV, assurance)",
+      "allowed": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "RECORD_AUDIO",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "USE_FULL_SCREEN_INTENT",
+        "SCHEDULE_EXACT_ALARM"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "WEARABLE_COMPANION": {
+      "display_name": "Compagnon de montre / objet connecté",
+      "description": "Google Play prévoit une exception SMS/journal d'appels pour les apps compagnon d'objets connectés : toléré, pas autorisé.",
+      "allowed": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "BLUETOOTH_SCAN",
+        "NEARBY_WIFI_DEVICES",
+        "ACTIVITY_RECOGNITION",
+        "BODY_SENSORS",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "BLUETOOTH_CONNECT"
+      ],
+      "tolerated": [
+        "ACCESS_BACKGROUND_LOCATION",
+        "BODY_SENSORS_BACKGROUND",
+        "READ_CONTACTS",
+        "READ_CALENDAR",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_PHONE_STATE",
+        "READ_CALL_LOG",
+        "ANSWER_PHONE_CALLS",
+        "CAMERA",
+        "BIND_NOTIFICATION_LISTENER_SERVICE",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "@HEALTH_INTIMATE",
+        "USE_FULL_SCREEN_INTENT",
+        "SCHEDULE_EXACT_ALARM"
+      ],
+      "forbidden": [
+        "RECORD_AUDIO",
+        "FOREGROUND_SERVICE_CAMERA"
+      ]
+    },
+    "FITNESS": {
+      "display_name": "Sport & Fitness",
+      "allowed": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACTIVITY_RECOGNITION",
+        "BODY_SENSORS",
+        "BLUETOOTH_SCAN",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "BLUETOOTH_CONNECT"
+      ],
+      "tolerated": [
+        "ACCESS_BACKGROUND_LOCATION",
+        "CAMERA",
+        "READ_MEDIA_IMAGES",
+        "READ_CONTACTS",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_BACKGROUND",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "SCHEDULE_EXACT_ALARM",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "RECORD_AUDIO",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA"
+      ]
+    },
+    "SECURITY_AUTH": {
+      "display_name": "Sécurité, authentification & identité",
+      "allowed": [
+        "CAMERA"
+      ],
+      "tolerated": [
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "BIND_ACCESSIBILITY_SERVICE",
+        "USE_FULL_SCREEN_INTENT",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "forbidden": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "RECORD_AUDIO",
+        "READ_CALL_LOG",
+        "READ_CALENDAR",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "BROWSER": {
+      "display_name": "Navigateur web",
+      "allowed": [],
+      "tolerated": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CALENDAR",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "AI_ASSISTANT": {
+      "display_name": "Assistants IA",
+      "allowed": [
+        "RECORD_AUDIO",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "READ_CONTACTS",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+        "BLUETOOTH_CONNECT"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "PRODUCTIVITY_CLOUD": {
+      "display_name": "Bureautique, cloud & dev",
+      "allowed": [
+        "CAMERA",
+        "GET_ACCOUNTS",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO",
+        "READ_MEDIA_AUDIO",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "READ_CONTACTS",
+        "RECORD_AUDIO",
+        "READ_CALENDAR",
+        "MANAGE_EXTERNAL_STORAGE",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+        "USE_FULL_SCREEN_INTENT",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "BLUETOOTH_CONNECT",
+        "SCHEDULE_EXACT_ALARM"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "PHOTO_VIDEO": {
+      "display_name": "Photo, vidéo & galeries",
+      "allowed": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VIDEO",
+        "BLUETOOTH_SCAN",
+        "NEARBY_WIFI_DEVICES",
+        "BLUETOOTH_CONNECT",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_MEDIA_LOCATION",
+        "RECORD_AUDIO",
+        "MANAGE_EXTERNAL_STORAGE",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CALENDAR",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "TRAVEL_LEISURE": {
+      "display_name": "Voyage, sorties & événements",
+      "allowed": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION"
+      ],
+      "tolerated": [
+        "CAMERA",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_ACTIVITY",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "RECORD_AUDIO",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "GAME": {
+      "display_name": "Jeux",
+      "allowed": [],
+      "tolerated": [
+        "RECORD_AUDIO",
+        "BLUETOOTH_SCAN",
+        "READ_EXTERNAL_STORAGE",
+        "MANAGE_EXTERNAL_STORAGE",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+        "@HEALTH_ACTIVITY",
+        "BLUETOOTH_CONNECT"
+      ],
+      "forbidden": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "CAMERA",
+        "READ_CALL_LOG",
+        "READ_CALENDAR",
+        "READ_PHONE_STATE",
+        "GET_ACCOUNTS",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_BACKGROUND",
+        "USE_FULL_SCREEN_INTENT",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "WRITE_SETTINGS"
+      ]
+    },
+    "ACCESSIBILITY": {
+      "display_name": "Accessibilité",
+      "allowed": [
+        "RECORD_AUDIO",
+        "BIND_ACCESSIBILITY_SERVICE",
+        "FOREGROUND_SERVICE_MICROPHONE"
+      ],
+      "tolerated": [
+        "CAMERA",
+        "SYSTEM_ALERT_WINDOW",
+        "READ_CONTACTS",
+        "CALL_PHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "WRITE_SETTINGS",
+        "BLUETOOTH_CONNECT"
+      ],
+      "forbidden": [
+        "READ_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "EDUCATION_FAMILY": {
+      "display_name": "Scolarité, famille & découverte",
+      "allowed": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "ACCESS_COARSE_LOCATION",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_LOCATION",
+        "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+        "USE_FULL_SCREEN_INTENT",
+        "SCHEDULE_EXACT_ALARM"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "RECORD_AUDIO",
+        "FOREGROUND_SERVICE_CAMERA",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "HEALTH_TRACKING": {
+      "display_name": "Suivi de santé (cycle, glycémie, tension)",
+      "description": "Apps de suivi médical personnel : elles ont besoin de données de santé intimes, pas du reste.",
+      "allowed": [
+        "ACTIVITY_RECOGNITION",
+        "BODY_SENSORS",
+        "BLUETOOTH_SCAN",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "BLUETOOTH_CONNECT"
+      ],
+      "tolerated": [
+        "CAMERA",
+        "READ_MEDIA_IMAGES",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "ACCESS_COARSE_LOCATION",
+        "BODY_SENSORS_BACKGROUND",
+        "@HEALTH_BACKGROUND",
+        "USE_FULL_SCREEN_INTENT",
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "SCHEDULE_EXACT_ALARM",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "RECORD_AUDIO",
+        "ACCESS_BACKGROUND_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "GET_ACCOUNTS",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION"
+      ]
+    },
+    "DATING": {
+      "display_name": "Rencontres",
+      "description": "Profils, photos et proximité : la ville suffit, le carnet d'adresses n'a rien à y faire.",
+      "allowed": [
+        "CAMERA",
+        "READ_MEDIA_IMAGES",
+        "READ_EXTERNAL_STORAGE",
+        "ACCESS_COARSE_LOCATION",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "ACCESS_FINE_LOCATION",
+        "RECORD_AUDIO",
+        "READ_MEDIA_VIDEO",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "USE_FULL_SCREEN_INTENT"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_CALENDAR",
+        "BODY_SENSORS",
+        "GET_ACCOUNTS",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "KEYBOARD": {
+      "display_name": "Claviers",
+      "description": "Un clavier voit tout ce que vous tapez : il ne doit rien demander d'autre que le micro (dictée).",
+      "allowed": [],
+      "tolerated": [
+        "RECORD_AUDIO",
+        "READ_CONTACTS",
+        "FOREGROUND_SERVICE_MICROPHONE"
+      ],
+      "forbidden": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "READ_CALENDAR",
+        "CAMERA",
+        "GET_ACCOUNTS",
+        "READ_PHONE_STATE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
+        "@HEALTH_BACKGROUND"
+      ]
+    }
+  },
+  "excluded_packages": [
+    "com.vipacy.app",
+    "com.vylia.privacy"
+  ],
+  "package_exceptions": {
+    "com.shazam.android": {
+      "allowed_extra": [
+        "RECORD_AUDIO"
+      ]
+    }
+  },
+  "package_overrides": {
+    "fr.ign.geoportail": "NAVIGATION",
+    "com.vsct.vsc.mobile.horaireetresa.android": "TRANSPORT",
+    "com.sncf.digitalfactory.AppliGares": "TRANSPORT",
+    "com.applidium.vianavigo": "TRANSPORT",
+    "com.ubercab": "TRANSPORT",
+    "fr.meteo": "WEATHER",
+    "com.weather.Weather": "WEATHER",
+    "com.lachainemeteo.androidapp": "WEATHER",
+    "com.whatsapp": "MESSAGING",
+    "org.thoughtcrime.securesms": "MESSAGING",
+    "org.telegram.messenger": "MESSAGING",
+    "com.viber.voip": "MESSAGING",
+    "com.facebook.orca": "MESSAGING",
+    "com.google.android.apps.dynamite": "MESSAGING",
+    "com.microsoft.office.outlook": "EMAIL",
+    "com.infomaniak.mail": "EMAIL",
+    "com.facebook.katana": "SOCIAL",
+    "com.instagram.android": "SOCIAL",
+    "com.instagram.barcelona": "SOCIAL",
+    "com.twitter.android": "SOCIAL",
+    "xyz.blueskyweb.app": "SOCIAL",
+    "com.linkedin.android": "SOCIAL",
+    "com.substack.app": "SOCIAL",
+    "org.videolan.vlc": "MEDIA_PLAYER",
+    "com.soundcloud.android": "MEDIA_PLAYER",
+    "com.radiofrance.radio.radiofrance.android": "MEDIA_PLAYER",
+    "fr.francetv.pluzz": "MEDIA_PLAYER",
+    "tv.arte.plus7": "MEDIA_PLAYER",
+    "com.shazam.android": "MEDIA_PLAYER",
+    "com.lemonde.androidapp": "NEWS_READING",
+    "com.lemonde.morning": "NEWS_READING",
+    "com.visuamobile.liberation": "NEWS_READING",
+    "com.mediapart.app": "NEWS_READING",
+    "fr.francetv.apps.info": "NEWS_READING",
+    "fr.leboncoin": "ECOMMERCE",
+    "com.venteprivee": "ECOMMERCE",
+    "com.decathlon.app": "ECOMMERCE",
+    "io.yuka.android": "ECOMMERCE",
+    "com.paypal.android.p2pmobile": "FINANCE_ACCOUNTS",
+    "com.tribab.tricount.android": "FINANCE_ACCOUNTS",
+    "com.google.android.apps.walletnfcrel": "FINANCE_ACCOUNTS",
+    "fr.doctolib.www": "HEALTH_ADMIN",
+    "fr.cnamts.it.activity": "HEALTH_ADMIN",
+    "com.garmin.android.apps.connectmobile": "WEARABLE_COMPANION",
+    "com.strava": "FITNESS",
+    "com.popularapp.thirtydayfitnesschallenge": "FITNESS",
+    "com.azure.authenticator": "SECURITY_AUTH",
+    "com.google.android.apps.authenticator2": "SECURITY_AUTH",
+    "com.infomaniak.auth": "SECURITY_AUTH",
+    "com.beemdevelopment.aegis": "SECURITY_AUTH",
+    "com.x8bit.bitwarden": "SECURITY_AUTH",
+    "fr.gouv.franceidentite": "SECURITY_AUTH",
+    "com.duckduckgo.mobile.android": "BROWSER",
+    "com.anthropic.claude": "AI_ASSISTANT",
+    "com.openai.chatgpt": "AI_ASSISTANT",
+    "com.google.android.apps.googleassistant": "AI_ASSISTANT",
+    "com.google.ar.lens": "AI_ASSISTANT",
+    "com.microsoft.office.word": "PRODUCTIVITY_CLOUD",
+    "com.google.android.apps.docs.editors.sheets": "PRODUCTIVITY_CLOUD",
+    "com.microsoft.skydrive": "PRODUCTIVITY_CLOUD",
+    "com.nextcloud.client": "PRODUCTIVITY_CLOUD",
+    "com.adobe.reader": "PRODUCTIVITY_CLOUD",
+    "com.github.android": "PRODUCTIVITY_CLOUD",
+    "com.google.android.apps.playconsole": "PRODUCTIVITY_CLOUD",
+    "com.gopro.smarty": "PHOTO_VIDEO",
+    "com.airbnb.android": "TRAVEL_LEISURE",
+    "com.tripadvisor.tripadvisor": "TRAVEL_LEISURE",
+    "com.bandsintown": "TRAVEL_LEISURE",
+    "com.block.juggle": "GAME",
+    "games.lightheart.mrautofire": "GAME",
+    "io.state.fight": "GAME",
+    "com.n3twork.tetris": "GAME",
+    "org.lichess.mobileV2": "GAME",
+    "com.swordfish.lemuroid": "GAME",
+    "com.yogistudio.molkkyboard": "GAME",
+    "com.yogistudio.molkkyboard.debug": "GAME",
+    "com.google.android.apps.accessibility.voiceaccess": "ACCESSIBILITY",
+    "com.google.audio.hearing.visualization.accessibility.scribe": "ACCESSIBILITY",
+    "de.axelspringer.yana.zeropage": "NEWS_READING",
+    "org.eu.exodus_privacy.exodusprivacy": "SECURITY_AUTH",
+    "org.futo.inputmethod.latin.playstore": "KEYBOARD"
+  },
+  "security": {
+    "description": "Patterns de capacités typiques des logiciels espions. Ils décrivent ce qu'une app PEUT faire, pas ce qu'elle fait : VYLIA ne voit pas le trafic réseau des autres apps.",
+    "signals": {
+      "INTERNET": "Permission INTERNET déclarée.",
+      "BOOT_COMPLETED": "Démarre automatiquement au boot (RECEIVE_BOOT_COMPLETED déclarée).",
+      "A11Y_TEXT_EVENTS": "Service d'accessibilité ACTIVÉ abonné aux événements de saisie (TYPE_VIEW_TEXT_CHANGED, TYPE_VIEW_TEXT_SELECTION_CHANGED).",
+      "A11Y_WINDOW_CONTENT": "Service d'accessibilité ACTIVÉ capable de lire le contenu des fenêtres (CAPABILITY_CAN_RETRIEVE_WINDOW_CONTENT).",
+      "IME_ENABLED": "Clavier (IME) non système activé : il voit toutes les frappes.",
+      "FGS_MICROPHONE": "Déclare un service au premier plan de type microphone.",
+      "FGS_CAMERA": "Déclare un service au premier plan de type caméra.",
+      "NO_LAUNCHER_ICON": "Aucune activité de lancement : l'app n'a pas d'icône dans le tiroir d'apps.",
+      "SIDELOADED": "Installée hors store connu (Play Store, F-Droid, Accrescent…). Disponible pour de futurs patterns.",
+      "IOC_MATCH": "Package ou certificat de signature présent dans la base d'indicateurs. Calculé par le moteur, pas par le collecteur."
+    },
+    "condition_syntax": "Atomes : SIGNAL, granted:PERM, declared:PERM, suspicious:PERM (accordée et INATTENDUE ou INTERDITE pour la catégorie), category:ID. Opérateurs : & | ! ( ) et atleast(n: a, b, c).",
+    "severity_effects": {
+      "certain": {
+        "score_cap": 0
+      },
+      "critical": {
+        "score_cap": 29
+      },
+      "high": {
+        "score_cap": 49
+      },
+      "medium": {}
+    },
+    "patterns": {
+      "KNOWN_STALKERWARE": {
+        "label": "Stalkerware connu",
+        "severity": "certain",
+        "description": "Le package ou le certificat de signature figure dans une base publique d'indicateurs de stalkerwares.",
+        "when": "IOC_MATCH"
+      },
+      "KEYLOGGER_CAPABLE": {
+        "label": "Capacité de type keylogger",
+        "severity": "critical",
+        "description": "Peut lire ce que vous tapez (service d'accessibilité ou clavier tiers) et dispose d'un accès Internet.",
+        "when": "INTERNET & ((suspicious:BIND_ACCESSIBILITY_SERVICE & A11Y_TEXT_EVENTS) | IME_ENABLED)",
+        "exempt_packages": [
+          "com.google.android.inputmethod.latin"
+        ]
+      },
+      "COVERT_RECORDING": {
+        "label": "Enregistrement en arrière-plan",
+        "severity": "critical",
+        "description": "Peut enregistrer le micro ou la caméra en arrière-plan, démarre au boot et dispose d'un accès Internet, sans que la finalité de l'app le justifie.",
+        "when": "INTERNET & BOOT_COMPLETED & ((suspicious:RECORD_AUDIO & FGS_MICROPHONE) | (suspicious:CAMERA & FGS_CAMERA))"
+      },
+      "STALKERWARE_PROFILE": {
+        "label": "Profil de logiciel de surveillance",
+        "severity": "critical",
+        "description": "Icône cachée et au moins deux accès très sensibles accordés : profil typique d'un logiciel de surveillance.",
+        "when": "NO_LAUNCHER_ICON & atleast(2: granted:ACCESS_BACKGROUND_LOCATION, granted:READ_SMS, granted:READ_CALL_LOG, granted:RECORD_AUDIO, granted:BIND_NOTIFICATION_LISTENER_SERVICE, granted:BIND_ACCESSIBILITY_SERVICE, granted:BIND_DEVICE_ADMIN)"
+      },
+      "OVERLAY_TROJAN": {
+        "label": "Combinaison lecture d'écran + superposition",
+        "severity": "high",
+        "description": "Peut lire l'écran (accessibilité) et dessiner par-dessus les autres apps : combinaison utilisée par les chevaux de Troie bancaires.",
+        "when": "suspicious:BIND_ACCESSIBILITY_SERVICE & granted:SYSTEM_ALERT_WINDOW"
+      }
+    }
+  },
+  "badges": {
+    "display": {
+      "max_shown": 3,
+      "severity_order": [
+        "danger",
+        "warning",
+        "pro",
+        "success",
+        "neutral"
+      ],
+      "axis_order": [
+        "security",
+        "combo",
+        "permissions",
+        "trackers"
+      ]
+    },
+    "technical_trackers": {
+      "description": "Traqueurs considérés comme techniques pour le badge Mécano.",
+      "categories": [
+        "Crash reporting"
+      ],
+      "names": [
+        "Didomi"
+      ]
+    },
+    "definitions": [
+      {
+        "id": "PERM_FEATHER",
+        "label": "Poids plume",
+        "icon": "ic_badge_feather",
+        "axis": "permissions",
+        "polarity": "positive",
+        "severity": "success",
+        "description": "Aucune permission sensible déclarée.",
+        "rule": {
+          "type": "permissions_none"
+        }
+      },
+      {
+        "id": "PERM_ON_TARGET",
+        "label": "Dans le mille",
+        "icon": "ic_badge_target",
+        "axis": "permissions",
+        "polarity": "positive",
+        "severity": "success",
+        "description": "Toutes les permissions sensibles accordées collent à la finalité de l'app.",
+        "rule": {
+          "type": "permissions_in_purpose"
+        }
+      },
+      {
+        "id": "PERM_NOSY",
+        "label": "Fouineuse",
+        "icon": "ic_badge_nosy",
+        "axis": "permissions",
+        "polarity": "negative",
+        "severity": "warning",
+        "description": "Au moins une permission inattendue pour ce type d'app est accordée.",
+        "rule": {
+          "type": "permission_context",
+          "context": "UNEXPECTED",
+          "granted": true,
+          "min": 1
+        }
+      },
+      {
+        "id": "PERM_FISHING",
+        "label": "Pêche à la ligne",
+        "icon": "ic_badge_fishhook",
+        "axis": "permissions",
+        "polarity": "negative",
+        "severity": "warning",
+        "description": "Demande des permissions interdites pour ce type d'app, que vous avez refusées.",
+        "rule": {
+          "type": "permission_context",
+          "context": "FORBIDDEN",
+          "granted": false,
+          "min": 1
+        }
+      },
+      {
+        "id": "PERM_OUTLAW",
+        "label": "Hors-la-loi",
+        "icon": "ic_badge_mask",
+        "axis": "permissions",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Au moins une permission interdite pour ce type d'app est accordée.",
+        "rule": {
+          "type": "permission_context",
+          "context": "FORBIDDEN",
+          "granted": true,
+          "min": 1
+        },
+        "supersedes": [
+          "PERM_FISHING"
+        ]
+      },
+      {
+        "id": "PERM_GLUTTON",
+        "label": "Goinfre",
+        "icon": "ic_badge_glutton",
+        "axis": "permissions",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Tellement de permissions que le plafond de pénalité est atteint.",
+        "rule": {
+          "type": "permission_penalty_at_cap"
+        }
+      },
+      {
+        "id": "SEC_WANTED",
+        "label": "Avis de recherche",
+        "icon": "ic_badge_spy",
+        "axis": "security",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Référencée dans une base publique de stalkerwares.",
+        "rule": {
+          "type": "security_pattern",
+          "patterns": [
+            "KNOWN_STALKERWARE"
+          ]
+        }
+      },
+      {
+        "id": "SEC_BIG_EARS",
+        "label": "Grandes oreilles",
+        "icon": "ic_badge_ear",
+        "axis": "security",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Peut enregistrer le micro ou la caméra en arrière-plan.",
+        "rule": {
+          "type": "security_pattern",
+          "patterns": [
+            "COVERT_RECORDING"
+          ]
+        }
+      },
+      {
+        "id": "SEC_SPY_PIANIST",
+        "label": "Pianiste espion",
+        "icon": "ic_badge_keyboard",
+        "axis": "security",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Peut lire ce que vous tapez et l'envoyer sur Internet.",
+        "rule": {
+          "type": "security_pattern",
+          "patterns": [
+            "KEYLOGGER_CAPABLE"
+          ]
+        }
+      },
+      {
+        "id": "SEC_MOLOTOV",
+        "label": "Cocktail Molotov",
+        "icon": "ic_badge_flask",
+        "axis": "security",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Combinaison de capacités typique d'un logiciel malveillant.",
+        "rule": {
+          "type": "security_pattern",
+          "patterns": [
+            "OVERLAY_TROJAN",
+            "STALKERWARE_PROFILE"
+          ]
+        }
+      },
+      {
+        "id": "TRK_ORGANIC",
+        "label": "Bio",
+        "icon": "ic_badge_leaf",
+        "axis": "trackers",
+        "polarity": "positive",
+        "severity": "success",
+        "description": "Analysée : aucun traqueur.",
+        "rule": {
+          "type": "trackers_none"
+        }
+      },
+      {
+        "id": "TRK_MECHANIC",
+        "label": "Mécano",
+        "icon": "ic_badge_wrench",
+        "axis": "trackers",
+        "polarity": "positive",
+        "severity": "success",
+        "description": "Uniquement des traqueurs techniques (rapports de plantage, consentement).",
+        "rule": {
+          "type": "trackers_technical_only"
+        }
+      },
+      {
+        "id": "TRK_SANDWICH",
+        "label": "Homme-sandwich",
+        "icon": "ic_badge_megaphone",
+        "axis": "trackers",
+        "polarity": "negative",
+        "severity": "warning",
+        "description": "Embarque un ou deux traqueurs publicitaires ou de profilage.",
+        "rule": {
+          "type": "trackers_in_categories",
+          "categories": [
+            "Advertisement",
+            "Profiling"
+          ],
+          "min": 1
+        }
+      },
+      {
+        "id": "TRK_AD_NETWORK",
+        "label": "Régie publicitaire",
+        "icon": "ic_badge_tower",
+        "axis": "trackers",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Embarque au moins trois traqueurs publicitaires ou de profilage.",
+        "rule": {
+          "type": "trackers_in_categories",
+          "categories": [
+            "Advertisement",
+            "Profiling"
+          ],
+          "min": 3
+        },
+        "supersedes": [
+          "TRK_SANDWICH"
+        ]
+      },
+      {
+        "id": "TRK_GPS_SNITCH",
+        "label": "Mouchard GPS",
+        "icon": "ic_badge_pin",
+        "axis": "trackers",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Embarque un traqueur spécialisé dans la localisation.",
+        "rule": {
+          "type": "trackers_in_categories",
+          "categories": [
+            "Location"
+          ],
+          "min": 1
+        }
+      },
+      {
+        "id": "TRK_FULL_HOUSE",
+        "label": "Carton plein",
+        "icon": "ic_badge_confetti",
+        "axis": "trackers",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Ses traqueurs couvrent au moins 4 des 5 catégories intrusives.",
+        "rule": {
+          "type": "tracker_category_coverage",
+          "categories": [
+            "Advertisement",
+            "Profiling",
+            "Location",
+            "Identification",
+            "Analytics"
+          ],
+          "min": 4
+        }
+      },
+      {
+        "id": "TRK_HORNET_NEST",
+        "label": "Nid à mouchards",
+        "icon": "ic_badge_bug",
+        "axis": "trackers",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Embarque 10 traqueurs ou plus.",
+        "rule": {
+          "type": "trackers_count",
+          "min": 10
+        }
+      },
+      {
+        "id": "TRK_BLACK_BOX",
+        "label": "Boîte noire",
+        "icon": "ic_badge_box",
+        "axis": "trackers",
+        "polarity": "neutral",
+        "severity": "neutral",
+        "description": "Traqueurs pas encore analysés.",
+        "rule": {
+          "type": "trackers_unanalyzed"
+        }
+      },
+      {
+        "id": "PERM_ROLLING",
+        "label": "Moteur, ça tourne !",
+        "icon": "ic_badge_clapper",
+        "axis": "permissions",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Peut filmer ou enregistrer le son en arrière-plan, accès accordé, sans que sa finalité le justifie.",
+        "rule": {
+          "type": "permission_set_context",
+          "permissions": [
+            "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+            "FOREGROUND_SERVICE_CAMERA",
+            "FOREGROUND_SERVICE_MICROPHONE"
+          ],
+          "contexts": [
+            "UNEXPECTED",
+            "FORBIDDEN"
+          ],
+          "granted": true,
+          "min": 1
+        }
+      },
+      {
+        "id": "PERM_NIGHT_OWL",
+        "label": "Insomniaque",
+        "icon": "ic_badge_owl",
+        "axis": "permissions",
+        "polarity": "negative",
+        "severity": "warning",
+        "description": "Au moins deux moyens actifs de tourner en arrière-plan (position, micro, réveils, batterie…) que sa finalité ne justifie pas.",
+        "rule": {
+          "type": "permission_set_context",
+          "permissions": [
+            "ACCESS_BACKGROUND_LOCATION",
+            "FOREGROUND_SERVICE_LOCATION",
+            "FOREGROUND_SERVICE_MICROPHONE",
+            "FOREGROUND_SERVICE_CAMERA",
+            "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+            "BODY_SENSORS_BACKGROUND",
+            "@HEALTH_BACKGROUND",
+            "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+            "USE_FULL_SCREEN_INTENT",
+            "SCHEDULE_EXACT_ALARM"
+          ],
+          "contexts": [
+            "UNEXPECTED",
+            "FORBIDDEN"
+          ],
+          "granted": true,
+          "min": 2
+        }
+      },
+      {
+        "id": "PERM_DORMANT",
+        "label": "Sait se faire oublier",
+        "icon": "ic_badge_moon",
+        "axis": "permissions",
+        "polarity": "positive",
+        "severity": "success",
+        "description": "Ne déclare aucun moyen de capter ou de tourner en arrière-plan : quand vous la fermez, elle s'arrête.",
+        "rule": {
+          "type": "permissions_absent",
+          "permissions": [
+            "ACCESS_BACKGROUND_LOCATION",
+            "FOREGROUND_SERVICE_LOCATION",
+            "FOREGROUND_SERVICE_MICROPHONE",
+            "FOREGROUND_SERVICE_CAMERA",
+            "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+            "BODY_SENSORS_BACKGROUND",
+            "@HEALTH_BACKGROUND",
+            "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+            "USE_FULL_SCREEN_INTENT",
+            "SCHEDULE_EXACT_ALARM"
+          ]
+        }
+      },
+      {
+        "id": "COMBO_TOP_OF_CLASS",
+        "label": "Premier de la classe",
+        "icon": "ic_badge_trophy",
+        "axis": "combo",
+        "polarity": "positive",
+        "severity": "pro",
+        "description": "Positive sur les permissions et les traqueurs, sans aucun badge négatif.",
+        "rule": {
+          "type": "axes_all_positive",
+          "axis_groups": [
+            [
+              "permissions"
+            ],
+            [
+              "trackers"
+            ]
+          ]
+        }
+      },
+      {
+        "id": "COMBO_DOUBLE_TROUBLE",
+        "label": "Double peine",
+        "icon": "ic_badge_skull",
+        "axis": "combo",
+        "polarity": "negative",
+        "severity": "danger",
+        "description": "Badge rouge à la fois côté permissions ou sécurité et côté traqueurs.",
+        "rule": {
+          "type": "axes_all_severity",
+          "severity": "danger",
+          "axis_groups": [
+            [
+              "permissions",
+              "security"
+            ],
+            [
+              "trackers"
+            ]
+          ]
+        }
+      }
+    ]
+  },
+  "permission_sets": {
+    "@HEALTH_INTIMATE": [
+      "health.READ_MENSTRUATION",
+      "health.READ_OVULATION_TEST",
+      "health.READ_SEXUAL_ACTIVITY",
+      "health.READ_CERVICAL_MUCUS",
+      "health.READ_INTERMENSTRUAL_BLEEDING",
+      "health.READ_BLOOD_GLUCOSE",
+      "health.READ_BLOOD_PRESSURE",
+      "health.READ_BASAL_BODY_TEMPERATURE",
+      "health.READ_BODY_TEMPERATURE",
+      "health.READ_SKIN_TEMPERATURE"
+    ],
+    "@HEALTH_VITALS": [
+      "health.READ_HEART_RATE",
+      "health.READ_HEART_RATE_VARIABILITY",
+      "health.READ_RESTING_HEART_RATE",
+      "health.READ_OXYGEN_SATURATION",
+      "health.READ_RESPIRATORY_RATE",
+      "health.READ_SLEEP",
+      "health.READ_WEIGHT",
+      "health.READ_BODY_FAT",
+      "health.READ_LEAN_BODY_MASS",
+      "health.READ_BONE_MASS",
+      "health.READ_BODY_WATER_MASS",
+      "health.READ_BASAL_METABOLIC_RATE",
+      "health.READ_HEIGHT",
+      "health.READ_NUTRITION",
+      "health.READ_HYDRATION",
+      "health.READ_VO2_MAX",
+      "health.READ_MINDFULNESS"
+    ],
+    "@HEALTH_ACTIVITY": [
+      "health.READ_STEPS",
+      "health.READ_DISTANCE",
+      "health.READ_EXERCISE",
+      "health.READ_ACTIVE_CALORIES_BURNED",
+      "health.READ_TOTAL_CALORIES_BURNED",
+      "health.READ_SPEED",
+      "health.READ_POWER",
+      "health.READ_ELEVATION_GAINED",
+      "health.READ_FLOORS_CLIMBED",
+      "health.READ_STEPS_CADENCE",
+      "health.READ_CYCLING_PEDALING_CADENCE",
+      "health.READ_WHEELCHAIR_PUSHES",
+      "health.READ_PLANNED_EXERCISE",
+      "health.READ_EXERCISE_ROUTES"
+    ],
+    "@HEALTH_BACKGROUND": [
+      "health.READ_HEALTH_DATA_HISTORY",
+      "health.READ_HEALTH_DATA_IN_BACKGROUND"
+    ]
+  },
+  "permission_requires": {
+    "FOREGROUND_SERVICE_MICROPHONE": [
+      "RECORD_AUDIO"
+    ],
+    "FOREGROUND_SERVICE_CAMERA": [
+      "CAMERA"
+    ],
+    "FOREGROUND_SERVICE_LOCATION": [
+      "ACCESS_FINE_LOCATION",
+      "ACCESS_COARSE_LOCATION"
+    ]
+  },
+  "consent_each_time": [
+    "FOREGROUND_SERVICE_MEDIA_PROJECTION"
+  ],
+  "neutral_permissions": [
+    "ACCESS_ADSERVICES_TOPICS",
+    "ACCESS_ADSERVICES_CUSTOM_AUDIENCE",
+    "ACCESS_ADSERVICES_ATTRIBUTION",
+    "ACCESS_ADSERVICES_AD_ID",
+    "com.google.android.gms.permission.AD_ID",
+    "AD_SERVICES_CONFIG"
+  ]
+}

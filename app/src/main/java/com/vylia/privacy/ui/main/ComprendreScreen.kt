@@ -211,7 +211,7 @@ private fun PermissionScoring(rules: Rules) {
         val lightest = weights.minByOrNull { it.value }
         val heaviest = weights.values.maxOrNull()
         val resources = LocalResources.current
-        fun title(permission: String) = PermissionGlossary.find(permission)?.title?.let(resources::getString) ?: permission
+        fun title(permission: String) = PermissionGlossary.titleOf(permission)?.let(resources::getString) ?: permission
         if (lightest != null && heaviest != null) {
             val heaviestTitles = weights.filterValues { it == heaviest }.keys.map(::title)
             Paragraph(
@@ -244,6 +244,9 @@ private fun PermissionScoring(rules: Rules) {
         BulletLine(stringResource(R.string.learn_no_double_location))
         BulletLine(stringResource(R.string.learn_no_double_media))
         BulletLine(stringResource(R.string.learn_no_double_sms))
+        BulletLine(stringResource(R.string.learn_no_double_ads))
+        BulletLine(stringResource(R.string.learn_no_double_background))
+        BulletLine(stringResource(R.string.learn_no_double_health))
         BulletLine(stringResource(R.string.learn_no_double_storage))
     }
 }

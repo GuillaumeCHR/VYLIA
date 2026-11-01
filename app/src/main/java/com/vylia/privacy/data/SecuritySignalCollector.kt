@@ -12,7 +12,7 @@ import android.view.accessibility.AccessibilityManager
 import android.view.inputmethod.InputMethodManager
 
 /**
- * Collecte les signaux de sécurité (ids de `security.signals` dans vylia_rules_v2_1.json) qui alimentent
+ * Collecte les signaux de sécurité (ids de `security.signals` dans vylia_rules_v3.json) qui alimentent
  * `AppScan.signals`. Tout passe par des API publiques, sans root ; `QUERY_ALL_PACKAGES` est nécessaire,
  * sans quoi Android 11+ masque les services et claviers des autres apps.
  *

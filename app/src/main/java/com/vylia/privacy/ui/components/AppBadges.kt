@@ -46,6 +46,9 @@ private val BadgeTexts = mapOf(
         "TRK_FULL_HOUSE" to (R.string.badgedef_trk_full_house to R.string.badgedef_trk_full_house_description),
         "TRK_HORNET_NEST" to (R.string.badgedef_trk_hornet_nest to R.string.badgedef_trk_hornet_nest_description),
         "TRK_BLACK_BOX" to (R.string.badgedef_trk_black_box to R.string.badgedef_trk_black_box_description),
+        "PERM_ROLLING" to (R.string.badgedef_perm_rolling to R.string.badgedef_perm_rolling_description),
+        "PERM_NIGHT_OWL" to (R.string.badgedef_perm_night_owl to R.string.badgedef_perm_night_owl_description),
+        "PERM_DORMANT" to (R.string.badgedef_perm_dormant to R.string.badgedef_perm_dormant_description),
         "COMBO_TOP_OF_CLASS" to (R.string.badgedef_combo_top_of_class to R.string.badgedef_combo_top_of_class_description),
         "COMBO_DOUBLE_TROUBLE" to (R.string.badgedef_combo_double_trouble to R.string.badgedef_combo_double_trouble_description),
 )
@@ -91,6 +94,9 @@ fun badgeEmoji(badge: BadgeDef): String = when (badge.icon) {
     "ic_badge_box" -> "📦"
     "ic_badge_trophy" -> "🏆"
     "ic_badge_skull" -> "💀"
+    "ic_badge_clapper" -> "🎬"
+    "ic_badge_owl" -> "🦉"
+    "ic_badge_moon" -> "🌙"
     else -> "🏷️"
 }
 

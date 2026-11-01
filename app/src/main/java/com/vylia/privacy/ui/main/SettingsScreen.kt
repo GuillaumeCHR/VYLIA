@@ -88,7 +88,7 @@ private class OpenFromDownloads : ActivityResultContracts.OpenDocument() {
 private val RuleFileMimeTypes = arrayOf("application/json", "text/plain", "application/octet-stream")
 
 /** Sous-menus des Paramètres : une page par grande entrée du menu principal. */
-private enum class SettingsPage { MAIN, RULES, DATABASE, DATA, ABOUT }
+private enum class SettingsPage { MAIN, RULES, GRID, DATABASE, DATA, ABOUT }
 
 /**
  * Paramètres : réglages généraux (langue, mode d'analyse) en tête, puis une entrée par sous-menu
@@ -102,11 +102,16 @@ fun SettingsScreen(
     homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
 ) {
     var page by rememberSaveable { mutableStateOf(SettingsPage.MAIN) }
-    BackHandler(enabled = page != SettingsPage.MAIN) { page = SettingsPage.MAIN }
-    val back = { page = SettingsPage.MAIN }
+    // La grille est un sous-menu des règles de score : Retour y ramène.
+    val back = { page = if (page == SettingsPage.GRID) SettingsPage.RULES else SettingsPage.MAIN }
+    BackHandler(enabled = page != SettingsPage.MAIN) { back() }
     when (page) {
         SettingsPage.MAIN -> SettingsHome(modifier, viewModel, onOpen = { page = it })
-        SettingsPage.RULES -> RulesPage(modifier, viewModel, homeViewModel, onOpenLearn, back)
+        SettingsPage.RULES -> RulesPage(modifier, viewModel, homeViewModel, onOpenLearn, { page = SettingsPage.GRID }, back)
+        SettingsPage.GRID -> {
+            val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
+            ScoringGridScreen(modifier, loadedRules.rules, back)
+        }
         SettingsPage.DATABASE -> DatabasePage(modifier, viewModel, back)
         SettingsPage.DATA -> DataPage(modifier, homeViewModel, back)
         SettingsPage.ABOUT -> AboutScreen(modifier, back)
@@ -213,6 +218,7 @@ private fun RulesPage(
     viewModel: SettingsViewModel,
     homeViewModel: HomeViewModel,
     onOpenLearn: () -> Unit,
+    onOpenGrid: () -> Unit,
     onBack: () -> Unit,
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -260,7 +266,10 @@ private fun RulesPage(
                     style = MaterialTheme.typography.bodySmall
                 )
             }
-            OutlinedButton(onClick = onOpenLearn) { Text(stringResource(R.string.rules_open_learn)) }
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = onOpenGrid) { Text(stringResource(R.string.rules_open_grid)) }
+                OutlinedButton(onClick = onOpenLearn) { Text(stringResource(R.string.rules_open_learn)) }
+            }
         }
     }
 }

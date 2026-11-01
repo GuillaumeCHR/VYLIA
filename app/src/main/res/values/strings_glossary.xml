@@ -258,6 +258,9 @@
     <string name="perm_receive_title">Push notifications (Google)</string>
     <string name="perm_receive_allows">Receive messages from the app\'s servers through Google, even when it is closed.</string>
     <string name="perm_receive_why">Essential for messaging. It also lets the app wake up remotely, and Google sees when it gets messages.</string>
+    <string name="perm_read_media_visual_user_selected_title">Selected photos</string>
+    <string name="perm_read_media_visual_user_selected_allows">Read only the photos and videos you pick, not the whole gallery.</string>
+    <string name="perm_read_media_visual_user_selected_why">The privacy-friendly way to share pictures (Android 14+): the app sees only what you select, and you can change the selection at any time.</string>
     <string name="perm_billing_title">In-app purchases</string>
     <string name="perm_billing_allows">Offer purchases and subscriptions through Google Play.</string>
     <string name="perm_billing_why">No access to your bank details, which stay with Google; a sign of in-app purchases.</string>
@@ -345,8 +348,20 @@
     <string name="category_game_rationale">A game needs no sensitive permission. Microphone and Bluetooth are tolerated for voice chat and controllers.</string>
     <string name="category_accessibility">Accessibility</string>
     <string name="category_accessibility_rationale">Reading the screen and acting for you is precisely their job: accessibility and microphone are justified.</string>
+    <string name="category_health_tracking">Health tracking (cycle, glucose, blood pressure)</string>
+    <string name="category_health_tracking_rationale">Personal medical tracking: it needs intimate health data, and nothing else.</string>
+    <string name="category_dating">Dating</string>
+    <string name="category_dating_rationale">Profiles, photos and proximity: the city is enough, and your address book has no business here.</string>
+    <string name="category_keyboard">Keyboards</string>
+    <string name="category_keyboard_rationale">A keyboard sees everything you type: it should ask for nothing more than the microphone, for dictation.</string>
     <string name="category_education_family">School, family &amp; discovery</string>
     <string name="category_education_family_rationale">Send homework or documents as photos. The calendar is tolerated for the timetable.</string>
+
+    <!-- Paliers Health Connect -->
+    <string name="set_health_intimate">Health: intimate data</string>
+    <string name="set_health_vitals">Health: vital signs and sleep</string>
+    <string name="set_health_activity">Health: physical activity</string>
+    <string name="set_health_background">Health: history and background access</string>
 
     <!-- Badges -->
     <string name="badge_first_audit">First audit</string>

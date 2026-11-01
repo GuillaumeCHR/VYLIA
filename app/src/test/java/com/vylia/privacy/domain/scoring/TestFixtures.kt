@@ -6,7 +6,7 @@ import java.io.File
 
 /** Fichiers réellement embarqués dans l'app (les tests JVM s'exécutent depuis le module `app`). */
 object TestFixtures {
-    val rules: Rules by lazy { RuleMatrixRepository.parse(File("src/main/assets/vylia_rules_v2_1.json").readText()) }
+    val rules: Rules by lazy { RuleMatrixRepository.parse(File("src/main/assets/vylia_rules_v3.json").readText()) }
 
     /** Catégories Exodus par nom de traqueur, depuis le snapshot embarqué. */
     val exodusCategories: Map<String, Set<String>> by lazy {

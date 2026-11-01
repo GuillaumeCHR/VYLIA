@@ -5,7 +5,7 @@ import com.vylia.privacy.R
 
 /**
  * Nom traduit d'une catégorie d'app et pourquoi, en une phrase, elle justifie ou tolère certaines permissions
- * (voir `allowed` / `tolerated` dans vylia_rules_v2_1.json). Une catégorie ajoutée par import n'y figure pas :
+ * (voir `allowed` / `tolerated` dans vylia_rules_v3.json). Une catégorie ajoutée par import n'y figure pas :
  * on affiche alors le `display_name` et la `description` des règles.
  */
 object CategoryRationale {
@@ -37,6 +37,9 @@ object CategoryRationale {
         "TRAVEL_LEISURE" to Texts(R.string.category_travel_leisure, R.string.category_travel_leisure_rationale),
         "GAME" to Texts(R.string.category_game, R.string.category_game_rationale),
         "ACCESSIBILITY" to Texts(R.string.category_accessibility, R.string.category_accessibility_rationale),
+        "HEALTH_TRACKING" to Texts(R.string.category_health_tracking, R.string.category_health_tracking_rationale),
+        "DATING" to Texts(R.string.category_dating, R.string.category_dating_rationale),
+        "KEYBOARD" to Texts(R.string.category_keyboard, R.string.category_keyboard_rationale),
         "EDUCATION_FAMILY" to Texts(R.string.category_education_family, R.string.category_education_family_rationale),
     )
 

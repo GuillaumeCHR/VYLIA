@@ -42,7 +42,7 @@ data class PermissionInfo(
 )
 
 /**
- * Lexique des permissions : une entrée pour chaque permission notée dans vylia_rules_v2_1.json, plus les
+ * Lexique des permissions : une entrée pour chaque permission notée dans vylia_rules_v3.json, plus les
  * permissions courantes non notées qu'il faut comprendre (Internet, identifiant publicitaire, démarrage au boot…).
  */
 object PermissionGlossary {
@@ -125,6 +125,7 @@ object PermissionGlossary {
         info("USE_FULL_SCREEN_INTENT", PermissionTheme.SYSTEM, GrantMode.SPECIAL, R.string.perm_use_full_screen_intent_title, R.string.perm_use_full_screen_intent_allows, R.string.perm_use_full_screen_intent_why),
         info("RUN_USER_INITIATED_JOBS", PermissionTheme.SYSTEM, GrantMode.INSTALL, R.string.perm_run_user_initiated_jobs_title, R.string.perm_run_user_initiated_jobs_allows, R.string.perm_run_user_initiated_jobs_why),
         info("com.google.android.c2dm.permission.RECEIVE", PermissionTheme.SYSTEM, GrantMode.INSTALL, R.string.perm_receive_title, R.string.perm_receive_allows, R.string.perm_receive_why),
+        info("READ_MEDIA_VISUAL_USER_SELECTED", PermissionTheme.FILES, GrantMode.RUNTIME, R.string.perm_read_media_visual_user_selected_title, R.string.perm_read_media_visual_user_selected_allows, R.string.perm_read_media_visual_user_selected_why),
         info("com.android.vending.BILLING", PermissionTheme.OTHER, GrantMode.INSTALL, R.string.perm_billing_title, R.string.perm_billing_allows, R.string.perm_billing_why),
         info("USE_FINGERPRINT", PermissionTheme.CONTACTS, GrantMode.INSTALL, R.string.perm_use_fingerprint_title, R.string.perm_use_fingerprint_allows, R.string.perm_use_fingerprint_why),
         info("MANAGE_ACCOUNTS", PermissionTheme.CONTACTS, GrantMode.INSTALL, R.string.perm_manage_accounts_title, R.string.perm_manage_accounts_allows, R.string.perm_manage_accounts_why),
@@ -139,8 +140,23 @@ object PermissionGlossary {
     /** Fiche d'une permission (nom court ou complet) ; toutes les permissions Health Connect partagent une fiche. */
     fun find(permission: String): PermissionInfo? {
         val short = permission.removePrefix("android.permission.")
-        return byPermission[short] ?: if (short.startsWith("health.")) byPermission[HEALTH_CONNECT] else null
+        return byPermission[short]
+            ?: if (short.startsWith("health.") || short.startsWith("@HEALTH_")) byPermission[HEALTH_CONNECT] else null
     }
+
+    /** Nom d'un ensemble « @… » des règles (paliers Health Connect), ou `null` pour une permission ordinaire. */
+    @StringRes
+    fun setTitle(key: String): Int? = when (key) {
+        "@HEALTH_INTIMATE" -> R.string.set_health_intimate
+        "@HEALTH_VITALS" -> R.string.set_health_vitals
+        "@HEALTH_ACTIVITY" -> R.string.set_health_activity
+        "@HEALTH_BACKGROUND" -> R.string.set_health_background
+        else -> null
+    }
+
+    /** Titre d'une clé des règles : ensemble, fiche du lexique, ou `null` (afficher le nom technique). */
+    @StringRes
+    fun titleOf(key: String): Int? = setTitle(key) ?: find(key)?.title
 
     private const val HEALTH_CONNECT = "health.*"
 

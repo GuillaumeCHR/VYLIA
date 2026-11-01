@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.Uri
 import android.util.Log
 import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.domain.scoring.RulesValidator
 import com.vylia.privacy.domain.scoring.Rules
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,10 +37,10 @@ class RuleMatrixRepository(private val context: Context) {
     /** Valide le fichier choisi avant de remplacer la copie importée ; renvoie le nombre de catégories. */
     suspend fun import(uri: Uri): Result<Int> = withContext(Dispatchers.IO) {
         runCatching {
-            val content = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+            val content = context.contentResolver.openInputStream(uri)?.use { readBounded(it, RulesValidator.MAX_BYTES) }
                 ?: error("Fichier illisible")
             val rules = parse(content)
-            require("DEFAULT" in rules.categories) { "Catégorie DEFAULT absente" }
+            RulesValidator.validate(rules, allowedExclusions = loadBundled().rules.excludedPackages)
             // Le moteur valide badges et patterns de sécurité à la construction : avant d'écraser la copie.
             val loaded = LoadedRules(rules, Source.IMPORTED)
             importedFile.writeText(content)
@@ -52,15 +53,6 @@ class RuleMatrixRepository(private val context: Context) {
     fun importedContent(): String? =
         if (_current.value.source == Source.IMPORTED && importedFile.exists()) importedFile.readText() else null
 
-    /** Règles d'une sauvegarde, validées comme un import ; renvoie faux si elles sont refusées. */
-    fun restore(content: String): Boolean = runCatching {
-        val rules = parse(content)
-        require("DEFAULT" in rules.categories)
-        val loaded = LoadedRules(rules, Source.IMPORTED)
-        importedFile.writeText(content)
-        _current.value = loaded
-    }.isSuccess
-
     fun resetToBundled() {
         importedFile.delete()
         _current.value = loadBundled()
@@ -69,7 +61,11 @@ class RuleMatrixRepository(private val context: Context) {
     private fun load(): LoadedRules {
         if (importedFile.exists()) {
             try {
-                return LoadedRules(parse(importedFile.readText()), Source.IMPORTED)
+                // Revalidé à chaque lancement : la copie a pu être importée par une version moins stricte.
+                val rules = parse(importedFile.readText())
+                val bundled = loadBundled()
+                RulesValidator.validate(rules, allowedExclusions = bundled.rules.excludedPackages)
+                return LoadedRules(rules, Source.IMPORTED)
             } catch (e: Exception) {
                 Log.w(TAG, "Règles importées invalides, retour aux règles intégrées", e)
             }
@@ -87,6 +83,19 @@ class RuleMatrixRepository(private val context: Context) {
         private const val IMPORTED_FILE_NAME = "imported_vylia_rules_v2.json"
         private val json = Json { ignoreUnknownKeys = true }
 
-        fun parse(content: String): Rules = json.decodeFromString(content)
+        fun parse(content: String): Rules = json.decodeFromString(content.removePrefix("\uFEFF"))
+
+        /** Lecture bornée : un fichier trop gros est refusé avant d'être chargé en entier. */
+        fun readBounded(input: java.io.InputStream, maxBytes: Int): String {
+            val out = java.io.ByteArrayOutputStream()
+            val buffer = ByteArray(8 * 1024)
+            while (true) {
+                val n = input.read(buffer)
+                if (n < 0) break
+                out.write(buffer, 0, n)
+                require(out.size() <= maxBytes) { "fichier trop volumineux (${maxBytes / 1024 / 1024} Mo au maximum)" }
+            }
+            return out.toString(Charsets.UTF_8.name())
+        }
     }
 }

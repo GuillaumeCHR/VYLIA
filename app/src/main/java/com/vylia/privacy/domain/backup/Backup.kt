@@ -50,7 +50,8 @@ data class RestoreReport(
     val alreadyThere: Int,
     /** Éléments incohérents (dates ou scores hors bornes), écartés. */
     val invalid: Int,
-    val rulesRestored: Boolean,
+    /** La sauvegarde contenait des règles de score : jamais appliquées d'office, à importer soi-même. */
+    val rulesIgnored: Boolean,
 )
 
 /** Fichier refusé, sans rien avoir écrit. */

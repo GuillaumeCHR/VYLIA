@@ -2,6 +2,7 @@ package com.vylia.privacy.data.trackers
 
 import com.vylia.privacy.domain.model.Tracker
 import com.vylia.privacy.domain.model.TrackerSignature
+import com.vylia.privacy.domain.security.Untrusted
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -28,15 +29,36 @@ class ExodusTrackerParser {
 
     private val json = Json { ignoreUnknownKeys = true }
 
+    /**
+     * La base peut être téléchargée : elle est traitée comme hostile. Seules les signatures faites de noms de paquets
+     * séparés par « | » sont gardées (c'est le cas de toute la base Exodus) : une expression régulière piégée
+     * (quantificateurs imbriqués) pourrait sinon bloquer l'analyse de chaque app. Textes et listes sont bornés.
+     */
     fun parse(content: String): List<TrackerSignature> =
-        json.decodeFromString<ExodusFile>(content).trackers.values
-            .filter { it.codeSignature.isNotBlank() }
+        json.decodeFromString<ExodusFile>(content.removePrefix("\uFEFF")).trackers.values
+            .asSequence()
+            .take(MAX_TRACKERS)
+            .filter { SIGNATURE.matches(it.codeSignature) && it.codeSignature.length <= MAX_SIGNATURE }
             .mapNotNull { tracker ->
                 val regex = runCatching { Regex(tracker.codeSignature) }.getOrNull() ?: return@mapNotNull null
+                val website = tracker.website?.takeIf { it.length <= 300 && it.startsWith("https://") }
                 TrackerSignature(
-                    tracker = Tracker(tracker.id, tracker.name, tracker.website?.ifBlank { null }, tracker.categories),
+                    tracker = Tracker(
+                        tracker.id,
+                        Untrusted.text(tracker.name, 100),
+                        website,
+                        tracker.categories.take(10).map { Untrusted.text(it, 50) },
+                    ),
                     codeSignature = regex,
                 )
             }
+            .toList()
             .sortedBy { it.tracker.id }
+
+    companion object {
+        /** Noms de paquets (ou débuts de noms) séparés par « | ». */
+        private val SIGNATURE = Regex("[A-Za-z0-9_.|-]+")
+        private const val MAX_SIGNATURE = 2_000
+        private const val MAX_TRACKERS = 5_000
+    }
 }

@@ -508,7 +508,7 @@
     <string name="data_restore_unreadable">The file could not be read.</string>
     <string name="data_restore_added">Backup imported: %1$s added.</string>
     <string name="data_restore_nothing">Backup imported: nothing new to add.</string>
-    <string name="data_restore_rules">Its scoring rules are now in use.</string>
+    <string name="data_restore_rules_ignored">Its scoring rules were not applied: import them yourself from Scoring rules if you trust them.</string>
     <string name="data_delete_title">Delete my data</string>
     <string name="data_delete_hint">Tracking, rewards and the analysis cache (which lists your apps). Settings and scoring rules are kept.</string>
     <string name="data_delete_button">Delete all my data</string>

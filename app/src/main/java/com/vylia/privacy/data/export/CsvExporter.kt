@@ -45,8 +45,17 @@ object CsvExporter {
         TrackerAnalysis.Failed -> labels.analysisFailed
     }
 
+    /**
+     * Le nom d'une app est choisi par son éditeur : « =HYPERLINK(…) » deviendrait une formule dans un tableur
+     * (injection CSV). Un champ qui commence par = + - @ tabulation ou retour chariot est précédé d'une apostrophe.
+     */
+    internal fun neutralize(field: String): String =
+        if (field.isNotEmpty() && field[0] in FORMULA_PREFIXES) "'$field" else field
+
+    private const val FORMULA_PREFIXES = "=+-@\t\r"
+
     private fun StringBuilder.appendRow(fields: List<String>) {
-        fields.joinTo(this, separator = ",") { "\"" + it.replace("\"", "\"\"") + "\"" }
+        fields.joinTo(this, separator = ",") { "\"" + neutralize(it).replace("\"", "\"\"") + "\"" }
         append("\r\n")
     }
 }

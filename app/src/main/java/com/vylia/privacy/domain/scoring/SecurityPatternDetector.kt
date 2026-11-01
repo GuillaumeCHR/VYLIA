@@ -91,8 +91,11 @@ sealed interface Cond {
 
 class ConditionParser(private val src: String, private val knownSignals: Set<String>) {
     private var pos = 0
+    private var depth = 0
 
     fun parse(): Cond {
+        // Condition venue d'un fichier de règles importé : bornée, pour ne pas épuiser la pile.
+        require(src.length <= MAX_LENGTH) { "condition trop longue (${src.length} caractères)" }
         val c = parseOr()
         skipWs()
         require(pos == src.length) { "caractère inattendu « ${src[pos]} » en position $pos dans « $src »" }
@@ -112,6 +115,16 @@ class ConditionParser(private val src: String, private val knownSignals: Set<Str
     }
 
     private fun parseUnary(): Cond {
+        depth++
+        require(depth <= MAX_DEPTH) { "condition trop imbriquée dans « ${src.take(80)} »" }
+        try {
+            return parseUnaryAt()
+        } finally {
+            depth--
+        }
+    }
+
+    private fun parseUnaryAt(): Cond {
         if (accept('!')) return Cond.Not(parseUnary())
         if (accept('(')) {
             val c = parseOr()
@@ -169,5 +182,7 @@ class ConditionParser(private val src: String, private val knownSignals: Set<Str
 
     companion object {
         val PREFIXES = setOf("granted", "declared", "suspicious", "category")
+        private const val MAX_LENGTH = 2_000
+        private const val MAX_DEPTH = 32
     }
 }

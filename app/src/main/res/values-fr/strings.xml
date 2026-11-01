@@ -527,7 +527,7 @@
     <string name="data_restore_unreadable">Le fichier n\'a pas pu être lu.</string>
     <string name="data_restore_added">Sauvegarde importée : ajout de %1$s.</string>
     <string name="data_restore_nothing">Sauvegarde importée : rien de nouveau à ajouter.</string>
-    <string name="data_restore_rules">Ses règles de score sont désormais en vigueur.</string>
+    <string name="data_restore_rules_ignored">Ses règles de score n\'ont pas été appliquées : importez-les vous-même depuis Règles de score si vous leur faites confiance.</string>
     <string name="data_delete_title">Supprimer mes données</string>
     <string name="data_delete_hint">Suivi, récompenses et cache d\'analyse (qui contient la liste de vos apps). Les réglages et les règles de score sont conservés.</string>
     <string name="data_delete_button">Supprimer toutes mes données</string>

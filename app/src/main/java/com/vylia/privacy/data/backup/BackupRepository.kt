@@ -6,6 +6,7 @@ import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.TrackerScanCache
 import com.vylia.privacy.domain.backup.BackupFile
 import com.vylia.privacy.domain.backup.BackupMerge
+import com.vylia.privacy.domain.backup.BackupSanitizer
 import com.vylia.privacy.domain.backup.BackupSettings
 import com.vylia.privacy.domain.backup.RestoreError
 import com.vylia.privacy.domain.backup.RestoreException
@@ -53,20 +54,19 @@ class BackupRepository(
 
     /** Ajoute le contenu d'une sauvegarde. Lève [RestoreException] si le fichier est refusé, sans rien avoir écrit. */
     suspend fun restore(input: InputStream): RestoreReport {
-        val file = withContext(Dispatchers.IO) { parse(read(input)) }
+        val raw = withContext(Dispatchers.IO) { parse(read(input)) }
+        val (file, rejected) = BackupSanitizer.clean(raw)
         val now = clock()
         val h = history.merge { current -> BackupMerge.history(current, file.history, now).let { it.value to it } }
         val r = rewards.merge { current -> BackupMerge.rewards(current, file.rewards, now).let { it.value to it } }
-        // Des règles déjà importées sur ce téléphone ne sont pas remplacées.
-        val rulesRestored = file.importedRules != null && rules.importedContent() == null &&
-            withContext(Dispatchers.IO) { rules.restore(file.importedRules) }
         return RestoreReport(
             snapshotsAdded = h.added,
             eventsAdded = h.addedEvents,
             rewardsAdded = r.added,
             alreadyThere = h.alreadyThere + r.alreadyThere,
-            invalid = h.invalid + r.invalid,
-            rulesRestored = rulesRestored,
+            invalid = rejected + h.invalid + r.invalid,
+            // Une sauvegarde ne change jamais la façon dont les apps sont jugées : les règles s'importent à part.
+            rulesIgnored = file.importedRules != null,
         )
     }
 
@@ -91,7 +91,7 @@ class BackupRepository(
         } catch (_: IOException) {
             throw RestoreException(RestoreError.UNREADABLE)
         }
-        return out.toString(Charsets.UTF_8.name())
+        return out.toString(Charsets.UTF_8.name()).removePrefix("\uFEFF")
     }
 
     companion object {

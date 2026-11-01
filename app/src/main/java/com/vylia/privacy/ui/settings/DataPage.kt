@@ -163,7 +163,7 @@ private fun Resources.dataMessage(message: DataMessage): String = when (message)
             if (added.isEmpty()) getString(R.string.data_restore_nothing) else getString(R.string.data_restore_added, added.joinToString(", ")),
             r.alreadyThere.takeIf { it > 0 }?.let { getQuantityString(R.plurals.data_restore_present, it, it) },
             r.invalid.takeIf { it > 0 }?.let { getQuantityString(R.plurals.data_restore_invalid, it, it) },
-            if (r.rulesRestored) getString(R.string.data_restore_rules) else null,
+            if (r.rulesIgnored) getString(R.string.data_restore_rules_ignored) else null,
         ).joinToString(" ")
     }
 }

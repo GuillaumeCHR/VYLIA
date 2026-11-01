@@ -1,0 +1,13 @@
+# Données venues de l'extérieur : contrôles en place
+
+Tout ce qui entre dans VYLIA sans avoir été produit par l'app elle-même est traité comme hostile : validé, borné,
+et refusé sans rien écrire en cas de doute. Les contrôles sont testés dans
+`app/src/test/.../domain/security/ExternalDataSecurityTest.kt` et `domain/backup/BackupMergeTest.kt`.
+
+| Entrée | Origine | Risques | Contrôles |
+|---|---|---|---|
+| Sauvegarde (Paramètres › Gestion des données › Importer) | fichier choisi par l'utilisateur, potentiellement reçu d'un tiers | fichier énorme, JSON piégé, noms trompeurs (inversion du sens d'écriture), identifiants forgés, gonflage des récompenses, modification des règles de score | lecture bornée à 10 Mo avant décodage ; format et version vérifiés (`vylia-backup`, version ≤ celle de l'app) ; JSON strict (pas de NaN) ; noms nettoyés (caractères de contrôle et de mise en forme invisibles retirés, 100 caractères max) ; paquets et permissions validés par motif ; listes et compteurs bornés ; dates et scores dans leurs bornes ; ajout sans écrasement ; l'état des apps du téléphone n'est jamais repris ; **réglages et règles de score jamais appliqués** |
+| Règles de score importées (Paramètres › Règles de score) | fichier choisi par l'utilisateur | exclusion d'une app espion de l'audit, poids ou plafonds absurdes, condition imbriquée qui épuise la pile, fichier énorme | lecture bornée à 2 Mo ; `RulesValidator` : bornes de tous les nombres, tailles des listes et des textes, catégorie DEFAULT, **aucune exclusion d'app hors celles des règles intégrées** ; conditions de sécurité limitées à 2 000 caractères et 32 niveaux ; revalidées à chaque lancement ; affichées comme « Règles importées » |
+| Base Exodus Privacy (mise à jour manuelle) | réseau, `https://reports.exodus-privacy.eu.org/api/trackers` | serveur compromis ou intercepté, base tronquée, expression régulière piégée (blocage de l'analyse, ReDoS), réponse énorme | HTTPS seul, sans redirection ; taille bornée à 5 Mo ; téléchargée dans un fichier temporaire, analysée puis installée seulement si elle contient au moins 100 traqueurs valides ; signatures limitées aux noms de paquets séparés par « \| » (aucun quantificateur) ; noms nettoyés, sites web en `https://` uniquement |
+| Noms des apps installées | éditeurs des apps | injection de formules dans l'export CSV (`=HYPERLINK(…)`) | champ commençant par `= + - @`, tabulation ou retour chariot précédé d'une apostrophe ; échappement RFC 4180 |
+| Paquets modifiés (alerte d'installation) | Android (`getChangedPackages`) | — | données système ; app relue par le PackageManager avant analyse |

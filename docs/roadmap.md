@@ -80,6 +80,9 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 * **Supprimer mes données :** effacement de tout ce que VYLIA a stocké (Suivi, récompenses, cache d'analyse), après
   confirmation ; les réglages sont conservés.
 * **Conservé à part :** l'export spécifique des résultats du scan (rapport d'audit CSV).
+* **Sécurité des données externes :** sauvegardes, règles importées et base Exodus téléchargée sont traitées comme
+  hostiles (bornes, validation, aucun écrasement, règles jamais appliquées depuis une sauvegarde), et l'export CSV
+  neutralise les formules. Détail : `docs/security/donnees-externes.md`.
 
 ---
 
@@ -135,4 +138,4 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 ### Versions
 
 Une version par lot livré (versionName et versionCode dans `app/build.gradle.kts`, tag `vX.Y.0`) :
-0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données ; la suite continue à 0.7.0.
+0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes ; la suite continue à 0.7.0.

@@ -122,7 +122,7 @@ S = [
  ("data_restore_unreadable", "The file could not be read.", "Le fichier n'a pas pu être lu."),
  ("data_restore_added", "Backup imported: %1$s added.", "Sauvegarde importée : ajout de %1$s."),
  ("data_restore_nothing", "Backup imported: nothing new to add.", "Sauvegarde importée : rien de nouveau à ajouter."),
- ("data_restore_rules", "Its scoring rules are now in use.", "Ses règles de score sont désormais en vigueur."),
+ ("data_restore_rules_ignored", "Its scoring rules were not applied: import them yourself from Scoring rules if you trust them.", "Ses règles de score n'ont pas été appliquées : importez-les vous-même depuis Règles de score si vous leur faites confiance."),
  ("data_delete_title", "Delete my data", "Supprimer mes données"),
  ("data_delete_hint", "Tracking, rewards and the analysis cache (which lists your apps). Settings and scoring rules are kept.", "Suivi, récompenses et cache d'analyse (qui contient la liste de vos apps). Les réglages et les règles de score sont conservés."),
  ("data_delete_button", "Delete all my data", "Supprimer toutes mes données"),

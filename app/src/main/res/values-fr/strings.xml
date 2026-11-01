@@ -19,6 +19,7 @@
     <string name="header_title">Score de confidentialité</string>
     <string name="header_subtitle_user">Moyenne de vos %1$d applications</string>
     <string name="header_subtitle_system">Moyenne des %1$d applications système</string>
+    <string name="header_subtitle_all">Moyenne de vos %1$d applications, dont %2$d système</string>
     <string name="risk_low">Faible risque</string>
     <string name="risk_medium">Risque modéré</string>
     <string name="risk_high">Risque élevé</string>

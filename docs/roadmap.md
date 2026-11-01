@@ -131,11 +131,11 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
      « Vie privée » et dans la grille (VYLIA est exclue de son propre score).
 6. ~~§8~~ (fait en 0.6.0). §8 Paramètres › Gestion des données : remplacer l'écran « Export et données » par Exporter / Importer / Supprimer
    mes données, comme dans Molkky Board, en gardant l'export CSV des résultats du scan (voir §8).
-7. **Bug Analyse en mode avancé :** deux scores de confidentialité s'affichent (apps utilisateur et apps système).
+7. ~~**Bug Analyse en mode avancé :**~~ (corrigé en 0.6.4) deux scores de confidentialité s'affichent (apps utilisateur et apps système).
    N'en garder qu'un seul, qui fusionne les résultats des apps installées par l'utilisateur et des apps système.
 8. §9 À propos › Crédits avec une touche d'humour, comme dans Molkky Board (voir §9).
 
 ### Versions
 
 Une version par lot livré (versionName et versionCode dans `app/build.gradle.kts`, tag `vX.Y.0`) :
-0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées), 0.6.3 = recherche dans Badges et Traqueurs ; la suite continue à 0.7.0.
+0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées), 0.6.3 = recherche dans Badges et Traqueurs, 0.6.4 = un seul score dans Analyse en mode Avancé ; la suite continue à 0.7.0.

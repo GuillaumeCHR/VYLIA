@@ -21,6 +21,7 @@
     <string name="header_title">Privacy score</string>
     <string name="header_subtitle_user">Average of your %1$d apps</string>
     <string name="header_subtitle_system">Average of the %1$d system apps</string>
+    <string name="header_subtitle_all">Average of your %1$d apps, %2$d of them system apps</string>
     <string name="risk_low">Low risk</string>
     <string name="risk_medium">Moderate risk</string>
     <string name="risk_high">High risk</string>

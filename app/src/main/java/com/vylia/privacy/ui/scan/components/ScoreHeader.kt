@@ -36,6 +36,8 @@ fun ScoreHeader(
     appCount: Int,
     filter: AppFilter,
     modifier: Modifier = Modifier,
+    /** Pour [AppFilter.ALL] : nombre d'apps système comprises dans [appCount]. */
+    systemAppCount: Int = 0,
 ) {
     VyliaCard(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -57,10 +59,11 @@ fun ScoreHeader(
                     )
                 }
                 Text(
-                    text = stringResource(
-                        if (filter == AppFilter.SYSTEM) R.string.header_subtitle_system else R.string.header_subtitle_user,
-                        appCount,
-                    ),
+                    text = when (filter) {
+                        AppFilter.ALL -> stringResource(R.string.header_subtitle_all, appCount, systemAppCount)
+                        AppFilter.SYSTEM -> stringResource(R.string.header_subtitle_system, appCount)
+                        else -> stringResource(R.string.header_subtitle_user, appCount)
+                    },
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

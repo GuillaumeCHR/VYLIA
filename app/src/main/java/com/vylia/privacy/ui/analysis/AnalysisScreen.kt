@@ -98,20 +98,21 @@ fun AnalysisScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-        // Score de confidentialité de l'appareil.
+        // Un seul score de confidentialité pour l'appareil : en mode Avancé, il fusionne apps utilisateur et système,
+        // comme le reste de l'analyse (zones, traqueurs, anomalies).
         item {
-            ScoreHeader(
-                averageScore = homeState.userAverageScore,
-                appCount = homeState.userAppCount,
-                filter = AppFilter.USER
-            )
-        }
-        if (homeState.advancedMode) {
-            item {
+            if (homeState.advancedMode) {
                 ScoreHeader(
-                    averageScore = homeState.systemAverageScore,
-                    appCount = homeState.systemAppCount,
-                    filter = AppFilter.SYSTEM
+                    averageScore = homeState.allAverageScore,
+                    appCount = homeState.userAppCount + homeState.systemAppCount,
+                    filter = AppFilter.ALL,
+                    systemAppCount = homeState.systemAppCount,
+                )
+            } else {
+                ScoreHeader(
+                    averageScore = homeState.userAverageScore,
+                    appCount = homeState.userAppCount,
+                    filter = AppFilter.USER,
                 )
             }
         }

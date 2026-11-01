@@ -15,6 +15,7 @@ S = [
  ("header_title", "Privacy score", "Score de confidentialité"),
  ("header_subtitle_user", "Average of your %1$d apps", "Moyenne de vos %1$d applications"),
  ("header_subtitle_system", "Average of the %1$d system apps", "Moyenne des %1$d applications système"),
+ ("header_subtitle_all", "Average of your %1$d apps, %2$d of them system apps", "Moyenne de vos %1$d applications, dont %2$d système"),
  ("risk_low", "Low risk", "Faible risque"),
  ("risk_medium", "Moderate risk", "Risque modéré"),
  ("risk_high", "High risk", "Risque élevé"),

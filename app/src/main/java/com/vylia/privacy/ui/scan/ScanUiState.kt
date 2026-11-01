@@ -18,6 +18,8 @@ data class ScanUiState(
     /** Score moyen par type d'apps, quel que soit l'onglet (écran Analyse). */
     val userAverageScore: PrivacyScore? = null,
     val systemAverageScore: PrivacyScore? = null,
+    /** Score moyen de toutes les apps scannées : celui de l'écran Analyse (apps système comprises en mode Avancé). */
+    val allAverageScore: PrivacyScore? = null,
     val userAppCount: Int = 0,
     val systemAppCount: Int = 0,
     /** Analyse DEX des traqueurs encore en cours (les scores peuvent encore baisser). */

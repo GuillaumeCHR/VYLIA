@@ -55,12 +55,23 @@ requêtes DNS vers les serveurs de traçage, avec un compteur en direct. Débloq
 Au 2026-11-01 : 540 domaines Exodus, 43 318 EasyPrivacy, 42 851 EasyList, 86 431 après fusion, environ 1,9 Mo
 (compressé dans l'APK).
 
-EasyList vise le web : elle ne couvre pas plusieurs régies des jeux mobiles (ironSource `supersonicads.com`, Meta
-Audience Network `an.facebook.com`, Pangle, Mintegral `mtgglobals.com`, Unity Ads `unityads.unity3d.com`) ni
-Firebase Analytics (`app-measurement.com`). À combler par une liste maison des SDK publicitaires mobiles.
+EasyList vise le web et ne couvre pas les régies des jeux mobiles : elles viennent du filtre **AdGuard Mobile Ads**
+(GPL v3, 924 domaines : ironSource, Meta Audience Network, Pangle, Mintegral, Unity Ads…). Ce qu'aucune liste ne
+couvre est ajouté domaine par domaine dans `MOBILE_EXTRA` du script, avec la raison (aujourd'hui
+`app-measurement.com`, Firebase Analytics). Total au 2026-11-01 : 87 191 domaines. `BlocklistTest` vérifie la
+couverture des principales régies mobiles.
 
-Vidéos récompensées : ce sont des pubs servies par les mêmes régies ; bloquées, elles tournent dans le vide (constaté
-sur State.io et Mr Autofire). Piste : une pause du bouclier de quelques minutes, d'un geste.
+Les versions de développement journalisent les domaines autorisés (`adb logcat -s VyliaShield`) : c'est ainsi qu'on
+repère une régie oubliée en jouant à un jeu.
+
+## Pause de 5 minutes
+
+Les vidéos récompensées sont des pubs servies par les régies bloquées : elles tournent dans le vide (constaté sur
+State.io et Mr Autofire). « Pause 5 min » laisse le VPN en place mais transmet tout, sans rien compter, puis le
+filtrage reprend seul à l'heure dite : rien à relancer (Android limite les démarrages de service en arrière-plan),
+et pas de risque d'oublier de réactiver. L'écran explique quand s'en servir : vidéo récompensée, lien d'e-mail ou
+de pub suivi, code promo / cashback / parrainage, résultat sponsorisé, et diagnostic d'une app qui ne marche plus
+(si la pause règle le problème, les derniers blocages montrent le serveur en cause).
 Le test `BlocklistTest` vérifie que la liste embarquée ne bloque pas les grandes plateformes.
 
 ## Vie privée
@@ -96,7 +107,7 @@ tests unitaires (liste, paquets, badge), essai sur téléphone (accord VPN, dém
    renvoyait le tunnel lui-même) : blocage, résolution, State.io et Mr Autofire OK. Reste : consommation sur une
    journée, passage Wi-Fi ↔ 4G, `app-measurement.com` (Firebase Analytics) absent des listes.
 2. Liste d'exceptions par l'utilisateur (« ne plus bloquer ce domaine ») depuis les derniers blocages.
-3. Crédits : ajouter EasyPrivacy et EasyList (GPL v3) dans À propos à côté d'Exodus ; mentionner le bouclier dans la politique
+3. Crédits : ajouter EasyPrivacy, EasyList et AdGuard Mobile Ads (GPL v3) dans À propos à côté d'Exodus ; mentionner le bouclier dans la politique
    de confidentialité.
-4. ~~EasyList~~ (fait). Liste maison des régies mobiles ; mise à jour de la liste sur demande, comme la liste DNS.
+4. ~~EasyList~~, ~~régies mobiles~~, ~~pause~~ (faits). Mise à jour de la liste sur demande, comme la liste DNS.
 5. Version 0.9.0 une fois validé.

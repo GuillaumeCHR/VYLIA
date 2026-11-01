@@ -62,11 +62,14 @@ PLAY = [
      ["Encyclopedia", "PDF Reader", "Ebook Reader", "Flashcard Learning Tool", "Dictionary", "Translator", "Comic and Manga Reader"]),
     ("news", "News & Magazines", "Actualités et magazines", ["RSS Reader", "Read It Later Tool"]),
     ("personalization", "Personalization", "Personnalisation", ["Application Launcher", "Wallpapers Hub"]),
+    ("ai", "AI", "Intelligence artificielle",
+     ["AI Chatbot", "Large Language Model (LLM) Tool", "AI Image Generator", "Virtual Assistant", "Audio Transcription Tool"]),
 ]
 
 # Apps écartées, avec la raison (montrée dans le récapitulatif du script).
 EXCLUSIONS = {
     "Nextcloud": "serveur à héberger soi-même",
+    "Ollama App": "serveur Ollama à héberger soi-même",
     "Immich": "serveur à héberger soi-même",
     "selfoss": "serveur à héberger soi-même",
     "Magisk": "demande le root",
@@ -126,6 +129,9 @@ PACKAGES = {
     "Lawnchair": ("app.lawnchair.play", None),
     "Paperize": (None, "com.anthonyla.paperize"),
     "Kvæsitso": (None, "de.mm20.launcher2.release"),
+    "FUTO Voice Input": ("org.futo.voiceinput", None),
+    "Dicio": (None, "org.stypox.dicio"),
+    "Maid (AI)": ("com.danemadsen.maid", "com.danemadsen.maid"),
 }
 
 # Présentation courte, rédigée pour VYLIA (aucun texte d'AlternativeTo n'est repris).
@@ -174,6 +180,9 @@ PITCH = {
     "FeedFlow": ("RSS reader that syncs without a dedicated account.", "Lecteur RSS synchronisable sans compte dédié."),
     "Lawnchair": ("Customisable home screen close to the Pixel one.", "Écran d'accueil personnalisable, proche de celui des Pixel."),
     "Paperize": ("Rotates your wallpapers automatically.", "Change vos fonds d'écran automatiquement."),
+    "FUTO Voice Input": ("Voice typing recognised on the phone itself, nothing sent online.", "Dictée vocale reconnue sur le téléphone même, rien n'est envoyé en ligne."),
+    "Dicio": ("Voice assistant that works offline.", "Assistant vocal qui fonctionne hors ligne."),
+    "Maid (AI)": ("Chat with AI models that can run on the phone itself.", "Discuter avec des modèles d'IA qui peuvent tourner sur le téléphone même."),
     "Kvæsitso": ("Search-centred launcher, everything one swipe away.", "Lanceur centré sur la recherche, tout à portée d'un geste."),
 }
 

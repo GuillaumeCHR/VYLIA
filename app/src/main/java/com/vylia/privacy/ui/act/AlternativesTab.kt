@@ -2,9 +2,10 @@ package com.vylia.privacy.ui.act
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -34,6 +36,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -51,8 +55,8 @@ import java.text.NumberFormat
 
 /**
  * Alternatives : une introduction (remplacer n'est pas toujours possible, réduire le risque vient d'abord, pas de
- * téléphone « dégooglisé »), un menu des catégories du Play Store, deux ou trois apps pour la catégorie choisie, et la
- * façon dont la liste est construite. Les alternatives déjà installées sont repérées.
+ * téléphone « dégooglisé »), un menu des catégories du Play Store, deux ou trois apps (avec leur logo) pour la catégorie
+ * choisie, et en deux phrases la façon dont la liste est construite. Les alternatives déjà installées sont repérées.
  */
 @Composable
 internal fun AlternativesTab(allApps: List<AuditedApp>, catalogue: AlternativeCatalogue) {
@@ -68,7 +72,7 @@ internal fun AlternativesTab(allApps: List<AuditedApp>, catalogue: AlternativeCa
                 AlternativeCard(alt, alt.packageName in installed, language)
             }
         }
-        item { MethodCard() }
+        item { MethodNote() }
     }
 }
 
@@ -117,7 +121,8 @@ private fun AlternativeCard(alt: Alternative, isInstalled: Boolean, language: St
     val context = LocalContext.current
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                AltIcon(alt.packageName)
                 Text(alt.name + if (isInstalled) "  ✓" else "", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             }
             Text(alt.pitch.localized(language), style = MaterialTheme.typography.bodyMedium)
@@ -147,23 +152,24 @@ private fun AlternativeCard(alt: Alternative, isInstalled: Boolean, language: St
     }
 }
 
-/** Comment la liste est construite : source, tri, exclusions, limites. Repliée par défaut. */
+/** Comment la liste est construite, en quelques mots. */
 @Composable
-private fun MethodCard() {
-    var open by rememberSaveable { mutableStateOf(false) }
-    VyliaCard(modifier = Modifier.fillMaxWidth().padding(top = 6.dp).clickable { open = !open }) {
-        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(stringResource(R.string.alt_method_title), fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                Text(if (open) "▲" else "▼", color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            if (open) {
-                listOf(R.string.alt_method_source, R.string.alt_method_ranking, R.string.alt_method_exclusions).forEach {
-                    Text(stringResource(it), style = MaterialTheme.typography.bodyMedium)
-                }
-                Text(stringResource(R.string.alt_method_limits), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
+private fun MethodNote() {
+    Column(Modifier.padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(stringResource(R.string.alt_method_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.alt_method_text), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/** Icône de l'alternative, embarquée dans l'app (assets/alt_icons, voir tools/alternatives/fetch_icons.py). */
+@Composable
+private fun AltIcon(packageName: String) {
+    val context = LocalContext.current
+    val bitmap = remember(packageName) {
+        runCatching { context.assets.open("alt_icons/$packageName.webp").use { BitmapFactory.decodeStream(it) }?.asImageBitmap() }.getOrNull()
+    }
+    if (bitmap != null) {
+        Image(bitmap, contentDescription = null, modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)))
     }
 }
 

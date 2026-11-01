@@ -202,6 +202,18 @@
         {"name": "Kvæsitso", "package": "de.mm20.launcher2.release", "fdroid": "de.mm20.launcher2.release", "open_source": true, "cost": "Free", "likes": 99,
          "pitch": {"en": "Search-centred launcher, everything one swipe away.", "fr": "Lanceur centré sur la recherche, tout à portée d'un geste."}}
       ]
+    },
+    {
+      "id": "ai",
+      "title": {"en": "AI", "fr": "Intelligence artificielle"},
+      "alternatives": [
+        {"name": "FUTO Voice Input", "package": "org.futo.voiceinput", "play": "org.futo.voiceinput", "open_source": false, "cost": "Free", "likes": 44,
+         "pitch": {"en": "Voice typing recognised on the phone itself, nothing sent online.", "fr": "Dictée vocale reconnue sur le téléphone même, rien n'est envoyé en ligne."}},
+        {"name": "Dicio", "package": "org.stypox.dicio", "fdroid": "org.stypox.dicio", "open_source": true, "cost": "Free", "likes": 22,
+         "pitch": {"en": "Voice assistant that works offline.", "fr": "Assistant vocal qui fonctionne hors ligne."}},
+        {"name": "Maid (AI)", "package": "com.danemadsen.maid", "fdroid": "com.danemadsen.maid", "play": "com.danemadsen.maid", "open_source": true, "cost": "Free", "likes": 20,
+         "pitch": {"en": "Chat with AI models that can run on the phone itself.", "fr": "Discuter avec des modèles d'IA qui peuvent tourner sur le téléphone même."}}
+      ]
     }
   ]
 }

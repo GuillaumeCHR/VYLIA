@@ -4,6 +4,11 @@
 de [Yogi Studio](#crédits) qui note chaque app installée de 0 à 100 selon les permissions qu'elle demande et les
 traqueurs qu'elle embarque, explique pourquoi, et aide à faire le ménage.
 
+**L'idée de départ : être le Yuka de la vie privée.** Comme on scanne un produit pour savoir ce qu'il contient, VYLIA
+scanne vos applications pour savoir ce qu'elles font de vos données. Le but est de mettre à la portée de tous une
+compréhension simple des enjeux de vie privée : une note lisible, des explications sans jargon, des bonnes pratiques
+mises en avant autant que les dérives, et des gestes concrets pour reprendre la main.
+
 > Version actuelle : **0.1.0** (en développement). Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus.
 > Anglais par défaut, français disponible dans Paramètres › Langue.
 

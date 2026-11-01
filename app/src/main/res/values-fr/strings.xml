@@ -374,6 +374,9 @@
     <string name="learn_none_on_device">Aucun sur votre téléphone</string>
     <string name="learn_tracker_risk">Le risque pour votre vie privée</string>
     <string name="learn_tracker_examples">Les plus répandus</string>
+    <string name="learn_perm_no_app">Aucune de vos apps ne la demande</string>
+    <string name="learn_perm_app_granted">%1$s · %2$d · accordée</string>
+    <string name="learn_perm_app_refused">%1$s · %2$d · demandée, non accordée</string>
     <string name="learn_tracker_on_device">Sur votre téléphone</string>
     <string name="learn_weight">Poids %1$d</string>
     <string name="learn_not_scored">Non comptée dans le score</string>
@@ -410,6 +413,16 @@
         <item quantity="one">%1$s · %2$d app</item>
         <item quantity="many">%1$s · %2$d apps</item>
         <item quantity="other">%1$s · %2$d apps</item>
+    </plurals>
+    <plurals name="learn_perm_on_device">
+        <item quantity="one">%1$d app la demande · accordée à %2$d</item>
+        <item quantity="many">%1$d apps la demandent · accordée à %2$d</item>
+        <item quantity="other">%1$d apps la demandent · accordée à %2$d</item>
+    </plurals>
+    <plurals name="learn_perm_more">
+        <item quantity="one">… et %1$d autre.</item>
+        <item quantity="many">… et %1$d autres.</item>
+        <item quantity="other">… et %1$d autres.</item>
     </plurals>
     <plurals name="learn_tracker_more">
         <item quantity="one">… et %1$d autre, voir l\'onglet Analyse.</item>

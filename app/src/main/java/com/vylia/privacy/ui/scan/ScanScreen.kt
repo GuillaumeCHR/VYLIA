@@ -1,7 +1,22 @@
 package com.vylia.privacy.ui.scan
 
-import android.Manifest
 import android.graphics.Color as AndroidColor
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import android.Manifest
 import android.graphics.drawable.ColorDrawable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,25 +40,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.text.input.ImeAction
 import java.text.Normalizer
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,8 +65,6 @@ import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.domain.scoring.PermissionRegistry
 import com.vylia.privacy.domain.scoring.Confidence
 import com.vylia.privacy.domain.scoring.ScoreResult
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.material3.TextButton
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.domain.scoring.Rules
@@ -85,6 +85,7 @@ import com.vylia.privacy.ui.components.BadgeChip
 import com.vylia.privacy.ui.components.badgeDescription
 import com.vylia.privacy.ui.components.badgeEmoji
 import com.vylia.privacy.ui.components.badgeLabel
+import com.vylia.privacy.ui.components.SearchField
 import com.vylia.privacy.ui.components.VyliaLogotype
 import androidx.compose.ui.platform.LocalResources
 import com.vylia.privacy.ui.components.categoryName
@@ -151,7 +152,7 @@ fun ScanContent(
             TopAppBar(
                 // Même logotype que l'intro, qui vient s'y poser à la fin de l'animation.
                 title = {
-                    if (searchOpen) SearchField(query, onQueryChange) else VyliaLogotype()
+                    if (searchOpen) SearchField(query, onQueryChange, stringResource(R.string.home_search_hint)) else VyliaLogotype()
                 },
                 actions = {
                     if (searchOpen) {
@@ -375,29 +376,6 @@ private fun CategoryHeader(name: String, count: Int, expanded: Boolean, onToggle
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
-}
-
-/** Champ de recherche de la barre d'en-tête : nom ou paquet, sans tenir compte de la casse ni des accents. */
-@Composable
-private fun SearchField(query: String, onQueryChange: (String) -> Unit) {
-    val focusManager = LocalFocusManager.current
-    val focusRequester = remember { FocusRequester() }
-    LaunchedEffect(Unit) { focusRequester.requestFocus() }
-    TextField(
-        value = query,
-        onValueChange = onQueryChange,
-        modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
-        placeholder = { Text(stringResource(R.string.home_search_hint)) },
-        singleLine = true,
-        colors = TextFieldDefaults.colors(
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            focusedIndicatorColor = Color.Transparent,
-            unfocusedIndicatorColor = Color.Transparent,
-        ),
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = { focusManager.clearFocus() }),
-    )
 }
 
 private fun AuditedApp.matches(query: String): Boolean {

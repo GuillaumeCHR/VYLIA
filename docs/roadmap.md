@@ -138,4 +138,4 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 ### Versions
 
 Une version par lot livré (versionName et versionCode dans `app/build.gradle.kts`, tag `vX.Y.0`) :
-0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes ; la suite continue à 0.7.0.
+0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées) ; la suite continue à 0.7.0.

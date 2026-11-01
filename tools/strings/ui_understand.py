@@ -126,6 +126,9 @@ S = [
  ("learn_none_on_device", "None on your phone", "Aucun sur votre téléphone"),
  ("learn_tracker_risk", "The risk to your privacy", "Le risque pour votre vie privée"),
  ("learn_tracker_examples", "Most common", "Les plus répandus"),
+ ("learn_perm_no_app", "None of your apps asks for it", "Aucune de vos apps ne la demande"),
+ ("learn_perm_app_granted", "%1$s · %2$d · granted", "%1$s · %2$d · accordée"),
+ ("learn_perm_app_refused", "%1$s · %2$d · asked, not granted", "%1$s · %2$d · demandée, non accordée"),
  ("learn_tracker_on_device", "On your phone", "Sur votre téléphone"),
  ("learn_weight", "Weight %1$d", "Poids %1$d"),
  ("learn_not_scored", "Not counted in the score", "Non comptée dans le score"),
@@ -149,5 +152,7 @@ P = [
  ("badge_on_device", ("%1$d of your apps", "%1$d of your apps"), ("%1$d de vos apps", "%1$d de vos apps")),
  ("learn_detected_on_device", ("%1$d detected on your phone", "%1$d detected on your phone"), ("%1$d détecté chez vous", "%1$d détectés chez vous")),
  ("learn_tracker_apps", ("%1$s · %2$d app", "%1$s · %2$d apps"), ("%1$s · %2$d app", "%1$s · %2$d apps")),
+ ("learn_perm_on_device", ("%1$d app asks for it · %2$d granted", "%1$d apps ask for it · %2$d granted"), ("%1$d app la demande · accordée à %2$d", "%1$d apps la demandent · accordée à %2$d")),
+ ("learn_perm_more", ("… and %1$d other.", "… and %1$d others."), ("… et %1$d autre.", "… et %1$d autres.")),
  ("learn_tracker_more", ("… and %1$d other, see the Analysis tab.", "… and %1$d others, see the Analysis tab."), ("… et %1$d autre, voir l'onglet Analyse.", "… et %1$d autres, voir l'onglet Analyse.")),
 ]

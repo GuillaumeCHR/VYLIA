@@ -361,6 +361,9 @@
     <string name="learn_none_on_device">None on your phone</string>
     <string name="learn_tracker_risk">The risk to your privacy</string>
     <string name="learn_tracker_examples">Most common</string>
+    <string name="learn_perm_no_app">None of your apps asks for it</string>
+    <string name="learn_perm_app_granted">%1$s · %2$d · granted</string>
+    <string name="learn_perm_app_refused">%1$s · %2$d · asked, not granted</string>
     <string name="learn_tracker_on_device">On your phone</string>
     <string name="learn_weight">Weight %1$d</string>
     <string name="learn_not_scored">Not counted in the score</string>
@@ -392,6 +395,14 @@
     <plurals name="learn_tracker_apps">
         <item quantity="one">%1$s · %2$d app</item>
         <item quantity="other">%1$s · %2$d apps</item>
+    </plurals>
+    <plurals name="learn_perm_on_device">
+        <item quantity="one">%1$d app asks for it · %2$d granted</item>
+        <item quantity="other">%1$d apps ask for it · %2$d granted</item>
+    </plurals>
+    <plurals name="learn_perm_more">
+        <item quantity="one">… and %1$d other.</item>
+        <item quantity="other">… and %1$d others.</item>
     </plurals>
     <plurals name="learn_tracker_more">
         <item quantity="one">… and %1$d other, see the Analysis tab.</item>

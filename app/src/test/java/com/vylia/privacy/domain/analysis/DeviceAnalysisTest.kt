@@ -117,4 +117,20 @@ class DeviceAnalysisTest {
         assertEquals(2, analysis.appsWithTrackers)
         assertTrue(analysis.anomalies.isEmpty())
     }
+
+    @Test
+    fun `apps concernees par une permission - accordees d abord, plus intrusives en tete, familles health`() {
+        val apps = listOf(
+            app("a", 80, declared = setOf("CAMERA"), granted = setOf("CAMERA")),
+            app("b", 20, declared = setOf("CAMERA"), granted = setOf("CAMERA")),
+            app("c", 50, declared = setOf("CAMERA", "health.READ_STEPS")),
+            app("d", 90),
+        )
+        val usages = GlossaryUsages.of(listOf("CAMERA", "health.*", "READ_SMS"), apps)
+        assertEquals(listOf("b", "a"), usages.getValue("CAMERA").granted.map { it.app.label })
+        assertEquals(listOf("c"), usages.getValue("CAMERA").refused.map { it.app.label })
+        assertEquals(3, usages.getValue("CAMERA").declared)
+        assertEquals(1, usages.getValue("health.*").declared)
+        assertEquals(0, usages.getValue("READ_SMS").declared)
+    }
 }

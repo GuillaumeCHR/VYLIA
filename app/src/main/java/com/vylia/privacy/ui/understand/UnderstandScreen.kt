@@ -29,6 +29,9 @@ import androidx.compose.ui.graphics.Color
 import com.vylia.privacy.domain.learn.GradeBand
 import com.vylia.privacy.domain.analysis.DeviceAnalysis
 import com.vylia.privacy.domain.analysis.TrackerUsage
+import com.vylia.privacy.domain.analysis.GlossaryUsage
+import com.vylia.privacy.domain.analysis.GlossaryUsages
+import com.vylia.privacy.ui.components.SearchField
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.domain.learn.TrackerCategoryInfo
 import com.vylia.privacy.domain.learn.TrackerGlossary
@@ -78,10 +81,32 @@ fun UnderstandScreen(
     val rules = loadedRules.rules
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     var tab by rememberSaveable { mutableStateOf(UnderstandTab.SCORE) }
+    var query by rememberSaveable { mutableStateOf("") }
+    var searchOpen by rememberSaveable { mutableStateOf(false) }
 
     Column(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)) {
-            Text(stringResource(R.string.learn_title), style = MaterialTheme.typography.headlineMedium)
+            // Recherche des permissions repliée en loupe, comme sur l'écran Scan ; ouverte, elle remplace le titre.
+            Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.heightIn(min = 48.dp)) {
+                Box(modifier = Modifier.weight(1f)) {
+                    if (searchOpen && tab == UnderstandTab.PERMISSIONS) {
+                        SearchField(query, { query = it }, stringResource(R.string.learn_search_hint))
+                    } else {
+                        Text(stringResource(R.string.learn_title), style = MaterialTheme.typography.headlineMedium)
+                    }
+                }
+                if (tab == UnderstandTab.PERMISSIONS) {
+                    if (searchOpen) {
+                        IconButton(onClick = { query = ""; searchOpen = false }) {
+                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.home_search_clear))
+                        }
+                    } else {
+                        IconButton(onClick = { searchOpen = true }) {
+                            Icon(Icons.Default.Search, contentDescription = stringResource(R.string.learn_search_hint))
+                        }
+                    }
+                }
+            }
             Text(
                 stringResource(R.string.learn_subtitle),
                 style = MaterialTheme.typography.bodyMedium,
@@ -109,7 +134,7 @@ fun UnderstandScreen(
             UnderstandTab.SCORE -> ScoreTab(rules)
             UnderstandTab.BADGES -> BadgesTab(rules, homeState.scannedApps)
             UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps)
-            UnderstandTab.PERMISSIONS -> PermissionsTab(rules)
+            UnderstandTab.PERMISSIONS -> PermissionsTab(rules, homeState.scannedApps, query)
         }
     }
 }
@@ -151,9 +176,9 @@ private fun TrackersTab(rules: Rules, scannedApps: List<AuditedApp>) {
 }
 
 @Composable
-private fun PermissionsTab(rules: Rules) {
-    var query by rememberSaveable { mutableStateOf("") }
+private fun PermissionsTab(rules: Rules, scannedApps: List<AuditedApp>, query: String) {
     val resources = LocalResources.current
+    val usages = remember(scannedApps) { GlossaryUsages.of(PermissionGlossary.entries.map { it.permission }, scannedApps) }
     val glossary = remember(query, resources) {
         PermissionGlossary.entries.filter { it.matches(query, resources) }.groupBy { it.theme }
     }
@@ -163,23 +188,6 @@ private fun PermissionsTab(rules: Rules) {
                 stringResource(R.string.learn_permissions_glossary_hint),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Spacer(Modifier.height(8.dp))
-            OutlinedTextField(
-                value = query,
-                onValueChange = { query = it },
-                modifier = Modifier.fillMaxWidth(),
-                placeholder = { Text(stringResource(R.string.learn_search_hint)) },
-                leadingIcon = { Icon(Icons.Default.Search, contentDescription = null) },
-                trailingIcon = {
-                    if (query.isNotEmpty()) {
-                        IconButton(onClick = { query = "" }) {
-                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.home_search_clear))
-                        }
-                    }
-                },
-                singleLine = true,
-                shape = RoundedCornerShape(16.dp)
             )
         }
         if (glossary.isEmpty()) {
@@ -193,7 +201,7 @@ private fun PermissionsTab(rules: Rules) {
                 Text(stringResource(theme.title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 8.dp))
             }
             items(infos, key = { it.permission }) { info ->
-                PermissionCard(info, weight = rules.permissionWeights[info.permission])
+                PermissionCard(info, weight = rules.permissionWeights[info.permission], usage = usages.getValue(info.permission))
             }
         }
     }
@@ -438,8 +446,12 @@ private fun riskLevelColor(weight: Int?): Color =
 
 // --- 2. Lexique -------------------------------------------------------------------------------
 
+/** Apps listées dans une fiche de permission ouverte (accordées d'abord, les plus intrusives en tête). */
+private const val PERMISSION_APPS_SHOWN = 8
+
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun PermissionCard(info: PermissionInfo, weight: Int?) {
+private fun PermissionCard(info: PermissionInfo, weight: Int?, usage: GlossaryUsage) {
     var expanded by rememberSaveable(info.permission) { mutableStateOf(false) }
     VyliaCard(modifier = Modifier.fillMaxWidth().clickable { expanded = !expanded }) {
         Column(modifier = Modifier.padding(14.dp)) {
@@ -456,13 +468,41 @@ private fun PermissionCard(info: PermissionInfo, weight: Int?) {
                 Text(if (expanded) "▲" else "▼", color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(Modifier.height(6.dp))
-            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 TransparencyBadge(stringResource(info.grant.label))
                 TransparencyBadge(if (weight != null) stringResource(R.string.learn_weight, weight) else stringResource(R.string.learn_not_scored))
+                // Comme pour les traqueurs : combien de vos apps sont concernées.
+                TransparencyBadge(
+                    if (usage.declared == 0) stringResource(R.string.learn_perm_no_app)
+                    else pluralStringResource(R.plurals.learn_perm_on_device, usage.declared, usage.declared, usage.granted.size)
+                )
             }
             if (expanded) {
                 Spacer(Modifier.height(8.dp))
                 PermissionExplanation(info)
+                if (usage.declared > 0) {
+                    Spacer(Modifier.height(6.dp))
+                    Text(stringResource(R.string.learn_tracker_on_device), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+                    val shown = (usage.granted.map { it to true } + usage.refused.map { it to false }).take(PERMISSION_APPS_SHOWN)
+                    shown.forEach { (app, granted) ->
+                        Text(
+                            stringResource(
+                                if (granted) R.string.learn_perm_app_granted else R.string.learn_perm_app_refused,
+                                app.app.label,
+                                app.score.value,
+                            ),
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                    if (usage.declared > PERMISSION_APPS_SHOWN) {
+                        val more = usage.declared - PERMISSION_APPS_SHOWN
+                        Text(
+                            pluralStringResource(R.plurals.learn_perm_more, more, more),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
             }
         }
     }

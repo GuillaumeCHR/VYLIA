@@ -204,10 +204,9 @@
     <string name="dns_status_automatic">Automatique : chiffré seulement quand votre réseau le permet, sans service choisi.</string>
     <string name="dns_status_hostname">Actif, avec %1$s</string>
     <string name="dns_status_shield">Bouclier VYLIA : vos requêtes DNS sont filtrées sur le téléphone, puis celles qui sont autorisées partent en clair vers le DNS de votre réseau.</string>
-    <string name="dns_why_title">Pourquoi un DNS privé réduit le traçage publicitaire</string>
-    <string name="dns_why_block">Les traqueurs intégrés à vos apps envoient ce que vous faites aux serveurs des régies publicitaires et des courtiers en données. Un DNS qui filtre refuse de donner l\'adresse de ces serveurs : la requête n\'aboutit pas, et les données ne partent pas. Cela vaut pour toutes les apps à la fois, y compris les traqueurs que VYLIA détecte.</string>
-    <string name="dns_why_encrypt">Le chiffrement empêche aussi votre fournisseur d\'accès, ou le Wi-Fi public sur lequel vous êtes, de voir la liste des services que contacte votre téléphone, une liste qui en dit long sur vous.</string>
-    <string name="dns_why_limits">Limites : le blocage ne marche que si le service filtre les traqueurs (ce n\'est pas le cas de tous, voir ci-dessous). Un traqueur qui partage le serveur de l\'app elle-même ne peut pas être bloqué sans casser l\'app, et le DNS n\'empêche pas le suivi par un compte auquel vous êtes connecté.</string>
+    <string name="dns_why_title">Ce qu\'apporte un DNS privé</string>
+    <string name="dns_why_encrypt">Le chiffrement empêche votre fournisseur d\'accès, ou le Wi-Fi public sur lequel vous êtes, de voir la liste des services que contacte votre téléphone, une liste qui en dit long sur vous.</string>
+    <string name="dns_why_limits">Limites, pour le bouclier comme pour le DNS privé : un traqueur qui partage le serveur de l\'app elle-même ne peut pas être bloqué sans casser l\'app, et aucun des deux n\'empêche le suivi par un compte auquel vous êtes connecté.</string>
     <string name="dns_what_title">Le DNS privé, c\'est quoi ?</string>
     <string name="dns_what_directory">Le DNS est l\'annuaire d\'Internet : il traduit le nom d\'un site, comme exemple.org, en adresse à laquelle votre téléphone se connecte.</string>
     <string name="dns_what_clear">Par défaut, ces requêtes passent en clair par votre fournisseur d\'accès : il peut voir quels sites et services vos apps contactent.</string>

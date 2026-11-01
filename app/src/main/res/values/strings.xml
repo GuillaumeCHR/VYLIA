@@ -200,10 +200,9 @@
     <string name="dns_status_automatic">Automatic: encrypted only when your network allows it, with no service chosen.</string>
     <string name="dns_status_hostname">Active, with %1$s</string>
     <string name="dns_status_shield">VYLIA Shield: your DNS requests are filtered on the phone, then the allowed ones go unencrypted to your network\'s DNS.</string>
-    <string name="dns_why_title">Why private DNS reduces ad tracking</string>
-    <string name="dns_why_block">The trackers inside your apps send what you do to the servers of ad networks and data brokers. A filtering DNS refuses to give the address of those servers: the request goes nowhere, and the data is not sent. It works for every app at once, including the trackers VYLIA detects.</string>
-    <string name="dns_why_encrypt">Encryption also stops your Internet provider, or the public Wi-Fi you are on, from seeing the list of services your phone contacts, a list that says a lot about you.</string>
-    <string name="dns_why_limits">Limits: blocking only works if the service filters trackers (not every one does, see below). A tracker that shares its server with the app itself cannot be blocked without breaking the app, and DNS does not stop tracking through an account you are signed in to.</string>
+    <string name="dns_why_title">What private DNS adds</string>
+    <string name="dns_why_encrypt">Encryption stops your Internet provider, or the public Wi-Fi you are on, from seeing the list of services your phone contacts, a list that says a lot about you.</string>
+    <string name="dns_why_limits">Limits, for the Shield as for private DNS: a tracker that shares its server with the app itself cannot be blocked without breaking the app, and neither stops tracking through an account you are signed in to.</string>
     <string name="dns_what_title">What is private DNS?</string>
     <string name="dns_what_directory">DNS is the Internet\'s directory: it turns a site name, like example.org, into the address your phone connects to.</string>
     <string name="dns_what_clear">By default these requests go through your Internet provider unencrypted, so it can see which sites and services your apps contact.</string>

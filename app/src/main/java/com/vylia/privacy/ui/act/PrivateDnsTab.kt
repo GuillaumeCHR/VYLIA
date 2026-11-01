@@ -130,13 +130,12 @@ private fun IntroCard() {
     }
 }
 
-/** Le lien avec le reste de VYLIA : les traqueurs détectés dans vos apps, et ce qu'un DNS filtrant y change. */
+/** Ce que le DNS privé ajoute au filtrage décrit dans [IntroCard] : le chiffrement ; et les limites communes. */
 @Composable
 private fun WhyCard() {
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(stringResource(R.string.dns_why_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            Text(stringResource(R.string.dns_why_block), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.dns_why_encrypt), style = MaterialTheme.typography.bodyMedium)
             Text(stringResource(R.string.dns_why_limits), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }

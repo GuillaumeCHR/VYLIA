@@ -85,6 +85,5 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 
 ### Prochaines actions
 
-1. **Comprendre** : ajouter un sous-onglet **Badges** (chaque badge, sa règle, son pictogramme) et relire tous les
-   textes pour les aligner sur la grille v3 (capacités conditionnelles, publicité neutralisée, nouveaux thèmes).
+1. ~~Comprendre : sous-onglet Badges et relecture des textes pour la grille v3~~ (fait le 2026-11-01).
 2. §6 Agir, puis §5 Suivi longitudinal et §7 Automatisations (ils partagent le stockage de l'historique).

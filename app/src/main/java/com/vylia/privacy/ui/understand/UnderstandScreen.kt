@@ -44,11 +44,15 @@ import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.vylia.privacy.R
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.ui.unit.sp
 import androidx.annotation.StringRes
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.components.formatted
 import com.vylia.privacy.ui.components.trackerCategoryName
+import com.vylia.privacy.ui.components.securityLabel
+import com.vylia.privacy.domain.scoring.SecurityFinding
 import android.content.res.Resources
 import java.text.Normalizer
 import java.util.Locale
@@ -56,6 +60,7 @@ import java.util.Locale
 /** Onglets de l'écran Comprendre : chaque contenu est à un toucher, sans long défilement. */
 private enum class UnderstandTab(@param:StringRes val title: Int) {
     SCORE(R.string.understand_tab_score),
+    BADGES(R.string.understand_tab_badges),
     TRACKERS(R.string.understand_tab_trackers),
     PERMISSIONS(R.string.understand_tab_permissions),
 }
@@ -85,11 +90,24 @@ fun UnderstandScreen(
         }
         PrimaryTabRow(selectedTabIndex = tab.ordinal) {
             UnderstandTab.entries.forEach { entry ->
-                Tab(selected = tab == entry, onClick = { tab = entry }, text = { Text(stringResource(entry.title)) })
+                Tab(
+                    selected = tab == entry,
+                    onClick = { tab = entry },
+                    // Une ligne par onglet : le libellé rétrécit plutôt que de se couper.
+                    text = {
+                        Text(
+                            stringResource(entry.title),
+                            maxLines = 1,
+                            softWrap = false,
+                            autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = LocalTextStyle.current.fontSize),
+                        )
+                    },
+                )
             }
         }
         when (tab) {
             UnderstandTab.SCORE -> ScoreTab(rules)
+            UnderstandTab.BADGES -> BadgesTab(rules, homeState.scannedApps)
             UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps)
             UnderstandTab.PERMISSIONS -> PermissionsTab(rules)
         }
@@ -105,6 +123,8 @@ private fun ScoreTab(rules: Rules) {
         item { PermissionScoring(rules) }
         item { TrackerScoring(rules) }
         item { CategoryResolution(rules) }
+        item { SecurityCapabilities(rules) }
+        item { BadgesSummary() }
     }
 }
 
@@ -229,6 +249,10 @@ private fun PermissionScoring(rules: Rules) {
         BulletLine(stringResource(R.string.learn_context_forbidden, multipliers["forbidden"].formatted(locale)))
         Subtitle(stringResource(R.string.learn_grant_title))
         Paragraph(stringResource(R.string.learn_grant_text, rules.scoring.declaredOnlyFactor.formatted(locale)))
+        if (rules.permissionRequires.isNotEmpty() || rules.consentEachTime.isNotEmpty()) {
+            Subtitle(stringResource(R.string.learn_conditional_title))
+            Paragraph(stringResource(R.string.learn_conditional_text, rules.scoring.declaredOnlyFactor.formatted(locale)))
+        }
         val fine = rules.permissionWeights["ACCESS_FINE_LOCATION"]
         val forbidden = multipliers["forbidden"]
         if (fine != null && forbidden != null) {
@@ -244,10 +268,10 @@ private fun PermissionScoring(rules: Rules) {
         BulletLine(stringResource(R.string.learn_no_double_location))
         BulletLine(stringResource(R.string.learn_no_double_media))
         BulletLine(stringResource(R.string.learn_no_double_sms))
-        BulletLine(stringResource(R.string.learn_no_double_ads))
         BulletLine(stringResource(R.string.learn_no_double_background))
         BulletLine(stringResource(R.string.learn_no_double_health))
         BulletLine(stringResource(R.string.learn_no_double_storage))
+        if (rules.neutralPermissions.isNotEmpty()) Paragraph(stringResource(R.string.learn_ads_neutral))
     }
 }
 
@@ -259,6 +283,7 @@ private fun TrackerScoring(rules: Rules) {
     LearnCard(stringResource(R.string.learn_trackers_title)) {
         Paragraph(stringResource(R.string.learn_trackers_what))
         Paragraph(stringResource(R.string.learn_trackers_how))
+        if (rules.neutralPermissions.isNotEmpty()) Paragraph(stringResource(R.string.learn_trackers_ads))
         trackerRules.categoryWeights.entries.sortedByDescending { it.value }.forEach { (category, weight) ->
             WeightLine(resources.trackerCategoryName(category), weight, "")
         }
@@ -269,6 +294,31 @@ private fun TrackerScoring(rules: Rules) {
         Paragraph(stringResource(R.string.learn_trackers_unanalyzed_text, policy.assumedTrackerPenalty, policy.gradeSuffix))
         Subtitle(stringResource(R.string.learn_limit_title))
         Paragraph(stringResource(R.string.learn_limit_text))
+    }
+}
+
+/** Patterns de sécurité des règles et le plafond qu'ils imposent au score. */
+@Composable
+private fun SecurityCapabilities(rules: Rules) {
+    val security = rules.security
+    if (security.patterns.isEmpty()) return
+    val resources = LocalResources.current
+    LearnCard(stringResource(R.string.learn_security_title)) {
+        Paragraph(stringResource(R.string.learn_security_text))
+        security.patterns.entries
+            .mapNotNull { (id, pattern) -> security.severityEffects[pattern.severity]?.scoreCap?.let { Triple(id, pattern, it) } }
+            .sortedBy { it.third }
+            .forEach { (id, pattern, cap) ->
+                val label = resources.securityLabel(SecurityFinding(id, pattern.label, pattern.severity, pattern.description))
+                BulletLine(stringResource(R.string.learn_security_line, label, cap))
+            }
+    }
+}
+
+@Composable
+private fun BadgesSummary() {
+    LearnCard(stringResource(R.string.learn_badges_title)) {
+        Paragraph(stringResource(R.string.learn_badges_text))
     }
 }
 

@@ -62,8 +62,6 @@
     <string name="detail_trackers_pending">Analyse des traqueurs pas encore faite : une pénalité forfaitaire de %1$d pts est appliquée en attendant.</string>
     <string name="detail_permissions">Permissions</string>
     <string name="detail_trackers">Traqueurs</string>
-    <string name="detail_permissions_section">Permissions (%1$d) · touchez pour comprendre</string>
-    <string name="detail_no_permission">Aucune permission sensible.</string>
     <string name="detail_trackers_section">Traqueurs (%1$d)</string>
     <string name="detail_trackers_not_analyzed">Non analysés pour l\'instant.</string>
     <string name="detail_no_tracker">Aucun traqueur connu détecté.</string>
@@ -74,6 +72,24 @@
     <string name="detail_context_tolerated">Tolérée pour cette catégorie</string>
     <string name="detail_context_unexpected">Inattendue pour cette catégorie</string>
     <string name="detail_context_forbidden">Interdite pour cette catégorie</string>
+    <string name="perms_all_title">Permissions (%1$d) · touchez pour comprendre</string>
+    <string name="perms_all_hint">Toutes les permissions déclarées par l\'app, regroupées par thème, avec leur niveau de protection Android comme sur Exodus Privacy. Celles qui comptent dans le score indiquent leur contexte et les points qu\'elles coûtent.</string>
+    <string name="protection_dangerous">Dangereuse</string>
+    <string name="protection_special">Accès spécial</string>
+    <string name="protection_system">Système</string>
+    <string name="protection_normal">Normale</string>
+    <string name="protection_undefined">Propre à l\'app</string>
+    <string name="perm_status_granted">Accordée</string>
+    <string name="perm_status_refused">Non accordée</string>
+    <string name="perm_no_description">Android ne fournit pas de description pour cette permission.</string>
+    <string name="perm_undefined_description">Permission propre à une app ou à un service, qui n\'existe pas sur votre téléphone : Android n\'en sait rien, et elle ne donne à elle seule aucun accès à vos données.</string>
+    <string name="launcher_group_title">Badges et raccourcis des lanceurs (%1$d)</string>
+    <string name="launcher_group_description">Permissions de lanceurs d\'autres marques (Samsung, Huawei, HTC…) pour afficher un compteur sur l\'icône ou créer des raccourcis. Sans enjeu pour la vie privée.</string>
+    <plurals name="perms_sensitive_count">
+        <item quantity="one">⚠ %1$d sensible</item>
+        <item quantity="many">⚠ %1$d sensibles</item>
+        <item quantity="other">⚠ %1$d sensibles</item>
+    </plurals>
 
     <!-- Analyse -->
     <string name="analysis_title">Analyse</string>
@@ -238,6 +254,7 @@
     <string name="learn_tracker_examples">Les plus répandus</string>
     <string name="learn_tracker_on_device">Sur votre téléphone</string>
     <string name="learn_weight">Poids %1$d</string>
+    <string name="learn_not_scored">Non comptée dans le score</string>
     <string name="learn_perm_allows">Ce que ça permet</string>
     <string name="learn_perm_why">Pourquoi c\'est sensible</string>
     <string name="learn_perm_grant">Comment elle est accordée</string>

@@ -405,7 +405,7 @@ private fun PermissionCard(info: PermissionInfo, weight: Int?) {
             Spacer(Modifier.height(6.dp))
             Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
                 TransparencyBadge(stringResource(info.grant.label))
-                if (weight != null) TransparencyBadge(stringResource(R.string.learn_weight, weight))
+                TransparencyBadge(if (weight != null) stringResource(R.string.learn_weight, weight) else stringResource(R.string.learn_not_scored))
             }
             if (expanded) {
                 Spacer(Modifier.height(8.dp))

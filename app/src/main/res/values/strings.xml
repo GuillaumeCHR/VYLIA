@@ -63,8 +63,6 @@
     <string name="detail_trackers_pending">Tracker analysis not done yet: a flat penalty of %1$d pts is applied in the meantime.</string>
     <string name="detail_permissions">Permissions</string>
     <string name="detail_trackers">Trackers</string>
-    <string name="detail_permissions_section">Permissions (%1$d) · tap to learn more</string>
-    <string name="detail_no_permission">No sensitive permission.</string>
     <string name="detail_trackers_section">Trackers (%1$d)</string>
     <string name="detail_trackers_not_analyzed">Not analysed yet.</string>
     <string name="detail_no_tracker">No known tracker detected.</string>
@@ -75,6 +73,23 @@
     <string name="detail_context_tolerated">Tolerated for this category</string>
     <string name="detail_context_unexpected">Unexpected for this category</string>
     <string name="detail_context_forbidden">Forbidden for this category</string>
+    <string name="perms_all_title">Permissions (%1$d) · tap to learn more</string>
+    <string name="perms_all_hint">Every permission declared by the app, grouped by theme, with its Android protection level as on Exodus Privacy. Those counted in the score show their context and the points they cost.</string>
+    <string name="protection_dangerous">Dangerous</string>
+    <string name="protection_special">Special access</string>
+    <string name="protection_system">System</string>
+    <string name="protection_normal">Normal</string>
+    <string name="protection_undefined">App-specific</string>
+    <string name="perm_status_granted">Granted</string>
+    <string name="perm_status_refused">Not granted</string>
+    <string name="perm_no_description">Android provides no description for this permission.</string>
+    <string name="perm_undefined_description">A permission specific to an app or a service, which does not exist on your phone: Android knows nothing about it, and it grants no access to your data on its own.</string>
+    <string name="launcher_group_title">Launcher badges and shortcuts (%1$d)</string>
+    <string name="launcher_group_description">Permissions from other brands\' launchers (Samsung, Huawei, HTC…) to show a counter on the icon or create shortcuts. No privacy stake.</string>
+    <plurals name="perms_sensitive_count">
+        <item quantity="one">⚠ %1$d sensitive</item>
+        <item quantity="other">⚠ %1$d sensitive</item>
+    </plurals>
 
     <!-- Analyse -->
     <string name="analysis_title">Analysis</string>
@@ -233,6 +248,7 @@
     <string name="learn_tracker_examples">Most common</string>
     <string name="learn_tracker_on_device">On your phone</string>
     <string name="learn_weight">Weight %1$d</string>
+    <string name="learn_not_scored">Not counted in the score</string>
     <string name="learn_perm_allows">What it allows</string>
     <string name="learn_perm_why">Why it is sensitive</string>
     <string name="learn_perm_grant">How it is granted</string>

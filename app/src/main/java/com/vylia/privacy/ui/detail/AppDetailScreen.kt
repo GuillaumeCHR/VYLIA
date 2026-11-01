@@ -157,16 +157,7 @@ fun AppDetailScreen(
             }
         }
 
-        SectionCard(title = stringResource(R.string.detail_permissions_section, result.permissionFindings.size)) {
-            if (result.permissionFindings.isEmpty()) {
-                EmptyLine(stringResource(R.string.detail_no_permission))
-            } else {
-                result.permissionFindings.forEachIndexed { index, finding ->
-                    if (index > 0) HorizontalDivider()
-                    PermissionLine(finding)
-                }
-            }
-        }
+        AllPermissionsCard(app, result.permissionFindings)
 
         SectionCard(title = stringResource(R.string.detail_trackers_section, result.trackerFindings.size)) {
             when {
@@ -248,43 +239,6 @@ private fun SectionCard(title: String, content: @Composable () -> Unit) {
     }
 }
 
-/** Touchez une permission pour lire son explication (lexique de l'onglet Comprendre). */
-@Composable
-private fun PermissionLine(finding: PermissionFinding) {
-    val info = PermissionGlossary.find(finding.permission)
-    var expanded by rememberSaveable(finding.permission) { mutableStateOf(false) }
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(enabled = info != null) { expanded = !expanded }
-            .padding(vertical = 8.dp)
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = (info?.title?.let { stringResource(it) } ?: finding.permission) + if (info == null) "" else if (expanded) "  ▲" else "  ▼",
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    text = "${finding.permission} · ${stringResource(if (finding.granted) R.string.detail_granted else R.string.detail_declared_only)}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text(
-                    text = stringResource(finding.context.label),
-                    style = MaterialTheme.typography.labelMedium,
-                    color = finding.context.tint,
-                )
-            }
-            PenaltyText(finding.penalty)
-        }
-        if (expanded && info != null) {
-            Spacer(Modifier.height(8.dp))
-            PermissionExplanation(info)
-        }
-    }
-}
-
 @Composable
 private fun TrackerLine(finding: TrackerFinding) {
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -302,7 +256,7 @@ private fun PenaltyRow(label: String, penalty: Double) {
 }
 
 @Composable
-private fun PenaltyText(penalty: Double) {
+internal fun PenaltyText(penalty: Double) {
     Text(
         text = if (penalty == 0.0) "0" else "−" + penalty.formatted(currentLocale(), decimals = 1),
         fontWeight = FontWeight.Bold,
@@ -323,7 +277,7 @@ private fun AppIcon(drawable: android.graphics.drawable.Drawable) {
 }
 
 @get:StringRes
-private val Context.label: Int
+internal val Context.label: Int
     get() = when (this) {
         Context.ALLOWED -> R.string.detail_context_allowed
         Context.TOLERATED -> R.string.detail_context_tolerated
@@ -331,7 +285,7 @@ private val Context.label: Int
         Context.FORBIDDEN -> R.string.detail_context_forbidden
     }
 
-private val Context.tint: Color
+internal val Context.tint: Color
     @Composable get() = when (this) {
         Context.ALLOWED, Context.TOLERATED -> MaterialTheme.colorScheme.primary
         Context.UNEXPECTED -> Color(0xFFF59E0B)

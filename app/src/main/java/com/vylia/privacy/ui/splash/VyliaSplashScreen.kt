@@ -23,15 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.withFrameMillis
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.TransformOrigin
-import androidx.compose.ui.graphics.drawscope.DrawScope
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.input.pointer.pointerInput
@@ -39,6 +33,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -52,14 +47,13 @@ import com.vylia.privacy.ui.components.HeaderLogotypeSize
 import com.vylia.privacy.ui.components.VyliaLogotype
 import com.vylia.privacy.ui.components.drawYogiStudioMark
 import com.vylia.privacy.ui.theme.CyanAccent
-import com.vylia.privacy.ui.theme.Emerald
 import com.vylia.privacy.ui.theme.Slate300
 import com.vylia.privacy.ui.theme.Slate900
 
 /**
  * Intro « scan » (≈ 4,6 s), sur le schéma de celle de Molkky Board : une grille d'applis apparaît, une loupe la
  * traverse et démasque les applis intrusives (petits espions bienveillants) qui s'éclipsent, tandis que les applis saines
- * (icônes vertes à orange) restent ; signature Yogi Studio ; puis le logo VYLIA claque (la chaîne se brise) et le
+ * (icônes vertes à orange) restent ; signature Yogi Studio ; puis le logo VYLIA (l'icône de l'app) claque et le
  * logotype glisse en haut à gauche, à la place exacte du titre de l'écran Scan. Un tap passe au logo. Avec
  * « Réduire les animations », simple fondu du logo.
  *
@@ -143,7 +137,7 @@ private fun ScanSceneCanvas(elapsed: MutableLongState) {
 }
 
 /**
- * Le logo VYLIA claque au centre (ressort) et la chaîne se brise ; puis le logo et la baseline s'effacent pendant
+ * Le logo VYLIA (l'icône de l'app) claque au centre (ressort) ; puis le logo et la baseline s'effacent pendant
  * que le logotype glisse et se réduit jusqu'au titre de l'écran Scan (en haut à gauche, sous la barre d'état).
  */
 @Composable
@@ -162,7 +156,6 @@ private fun LogoReveal(elapsed: MutableLongState) {
         // Logo et baseline : entrée en claquant, sortie en fondu au début du glissement.
         val fadeOut = { 1f - progress(elapsed.longValue, SplashTimeline.MOVE_START, SplashTimeline.MOVE_START + 150) }
         VyliaLogo(
-            breakProgress = { appear() },
             modifier = Modifier
                 .size(112.dp)
                 .graphicsLayer {
@@ -234,50 +227,20 @@ private fun rememberReducedMotion(): Boolean {
 private val SPLASH_LOGOTYPE_SIZE = 44.sp
 private const val START_SCALE = 1.6f
 
-private val sparks = listOf(
-    Offset(0f, -14f) to Offset(0f, -20f),
-    Offset(-4f, -13f) to Offset(-7f, -18f),
-    Offset(4f, -13f) to Offset(7f, -18f),
-    Offset(0f, 14f) to Offset(0f, 20f),
-    Offset(-4f, 13f) to Offset(-7f, 18f),
-    Offset(4f, 13f) to Offset(7f, 18f),
-)
+/** Part de l'icône adaptative occupée par le dessin (zone sûre de 66dp sur 108dp). */
+private const val ICON_SAFE_ZONE = 66f / 108f
 
 /**
- * Logo de la chaîne brisée, même géométrie que `ic_launcher_foreground.xml` (unités du viewport,
- * relatives au centre). [breakProgress] : 0 = maillons emboîtés, 1 = chaîne brisée.
+ * Logo VYLIA : c'est l'avant-plan de l'icône de l'app (`ic_launcher_foreground.xml`) lui-même, agrandi pour que sa
+ * zone sûre remplisse [modifier]. Changer l'icône de l'app change donc aussi ce logo (intro, À propos).
  */
 @Composable
-fun VyliaLogo(modifier: Modifier = Modifier, breakProgress: () -> Float = { 1f }) {
+fun VyliaLogo(modifier: Modifier = Modifier) {
+    val icon = painterResource(R.drawable.ic_launcher_foreground)
     Canvas(modifier) {
-        val unit = size.minDimension / 72f
-        val progress = breakProgress()
-        val shift = (1f - progress) * 8f
-        rotate(-45f) {
-            drawLink(left = -30f + shift, unit = unit, color = Emerald)
-            drawLink(left = 6f - shift, unit = unit, color = CyanAccent)
-            val sparkAlpha = progress.coerceIn(0f, 1f)
-            if (sparkAlpha > 0f) {
-                sparks.forEach { (start, end) ->
-                    drawLine(
-                        color = Slate300.copy(alpha = sparkAlpha),
-                        start = center + start * unit,
-                        end = center + end * unit,
-                        strokeWidth = 2.5f * unit,
-                        cap = StrokeCap.Round,
-                    )
-                }
-            }
+        val side = size.minDimension / ICON_SAFE_ZONE
+        translate((size.width - side) / 2, (size.height - side) / 2) {
+            with(icon) { draw(Size(side, side)) }
         }
     }
-}
-
-private fun DrawScope.drawLink(left: Float, unit: Float, color: Color) {
-    drawRoundRect(
-        color = color,
-        topLeft = center + Offset(left, -8f) * unit,
-        size = Size(24f, 16f) * unit,
-        cornerRadius = CornerRadius(8f * unit),
-        style = Stroke(width = 6f * unit),
-    )
 }

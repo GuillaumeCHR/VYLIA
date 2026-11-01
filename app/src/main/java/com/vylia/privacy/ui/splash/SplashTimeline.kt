@@ -21,7 +21,7 @@ internal object SplashTimeline {
     /** 4. La signature Yogi Studio. */
     const val SIGNATURE_END = 3_600L
 
-    /** 5. Le logo VYLIA claque au centre (la chaîne se brise), puis le logotype glisse vers l'en-tête. */
+    /** 5. Le logo VYLIA (l'icône de l'app) claque au centre, puis le logotype glisse vers l'en-tête. */
     const val LOGO_IN = 3_600L
     const val LOGO_SHOWN = 3_950L
     const val MOVE_START = 4_150L

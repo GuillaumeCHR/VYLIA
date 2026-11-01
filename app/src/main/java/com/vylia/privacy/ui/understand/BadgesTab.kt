@@ -50,13 +50,21 @@ private val AxisTitles = listOf(
  * de la règle, donc juste même pour des règles importées), badges remplacés, et nombre de vos apps qui l'ont.
  */
 @Composable
-internal fun BadgesTab(rules: Rules, scannedApps: List<AuditedApp>) {
+internal fun BadgesTab(rules: Rules, scannedApps: List<AuditedApp>, query: String) {
+    val resources = LocalResources.current
     val counts = remember(scannedApps) {
         scannedApps.filter { AppFilter.USER.matches(it.app) }
             .flatMap { app -> app.result.badges.map { it.id } }
             .groupingBy { it }.eachCount()
     }
-    val byAxis = rules.badges.definitions.groupBy { it.axis }
+    // Recherche dans le nom, la signification et la règle en clair de chaque badge.
+    val byAxis = remember(rules, query, resources) {
+        rules.badges.definitions
+            .filter { badge ->
+                query.matchesAny(listOfNotNull(resources.badgeLabel(badge), resources.badgeDescription(badge), resources.ruleText(badge.rule, rules)))
+            }
+            .groupBy { it.axis }
+    }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
             Text(
@@ -64,6 +72,9 @@ internal fun BadgesTab(rules: Rules, scannedApps: List<AuditedApp>) {
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+        }
+        if (byAxis.isEmpty()) {
+            item { Text(stringResource(R.string.learn_search_empty_badges, query.trim()), color = MaterialTheme.colorScheme.onSurfaceVariant) }
         }
         AxisTitles.forEach { (axis, title) ->
             val badges = byAxis[axis] ?: return@forEach

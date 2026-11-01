@@ -277,6 +277,10 @@
     <string name="learn_trackers_glossary_hint">Les grandes familles de traqueurs, ce qu\'elles font de vos données et les plus répandues. Un traqueur peut appartenir à plusieurs familles : c\'est la plus grave qui compte dans le score.</string>
     <string name="learn_permissions_glossary_hint">Touchez une permission pour savoir ce qu\'elle permet, pourquoi c\'est sensible et comment elle est accordée.</string>
     <string name="learn_search_hint">Rechercher (ex. SMS, READ_PHONE_STATE, position)</string>
+    <string name="learn_search_badges_hint">Rechercher (ex. arrière-plan, micro, publicité)</string>
+    <string name="learn_search_trackers_hint">Rechercher (ex. Facebook, audience, localisation)</string>
+    <string name="learn_search_empty_badges">Aucun badge ne correspond à « %1$s ».</string>
+    <string name="learn_search_empty_trackers">Aucun traqueur ne correspond à « %1$s ».</string>
     <string name="learn_search_empty">Aucune permission ne correspond à « %1$s ».</string>
     <string name="learn_overview_title">Le Privacy Score en bref</string>
     <string name="learn_overview_intro">Chaque application part de %1$d points. Elle en perd selon les autorisations qu\'elle demande et les traqueurs qu\'elle embarque, et des capacités d\'espionnage peuvent plafonner son score. Tout est calculé sur votre téléphone, sans connexion.</string>

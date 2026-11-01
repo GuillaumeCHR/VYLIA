@@ -264,6 +264,10 @@
     <string name="learn_trackers_glossary_hint">The main families of trackers, what they do with your data and the most common ones. A tracker can belong to several families: the most serious one counts in the score.</string>
     <string name="learn_permissions_glossary_hint">Tap a permission to see what it allows, why it is sensitive and how it is granted.</string>
     <string name="learn_search_hint">Search (e.g. SMS, READ_PHONE_STATE, location)</string>
+    <string name="learn_search_badges_hint">Search (e.g. background, microphone, advertising)</string>
+    <string name="learn_search_trackers_hint">Search (e.g. Facebook, analytics, location)</string>
+    <string name="learn_search_empty_badges">No badge matches “%1$s”.</string>
+    <string name="learn_search_empty_trackers">No tracker matches “%1$s”.</string>
     <string name="learn_search_empty">No permission matches “%1$s”.</string>
     <string name="learn_overview_title">The Privacy Score at a glance</string>
     <string name="learn_overview_intro">Every app starts with %1$d points. It loses points for the permissions it requests and the trackers it embeds, and spying capabilities can cap its score. Everything is computed on your phone, offline.</string>

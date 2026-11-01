@@ -12,8 +12,8 @@ android {
         applicationId = "com.vylia.privacy"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 8
-        versionName = "0.6.2"
+        versionCode = 9
+        versionName = "0.6.3"
     }
 
     buildTypes {

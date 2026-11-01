@@ -61,11 +61,12 @@ import java.text.Normalizer
 import java.util.Locale
 
 /** Onglets de l'écran Comprendre : chaque contenu est à un toucher, sans long défilement. */
-private enum class UnderstandTab(@param:StringRes val title: Int) {
-    SCORE(R.string.understand_tab_score),
-    BADGES(R.string.understand_tab_badges),
-    TRACKERS(R.string.understand_tab_trackers),
-    PERMISSIONS(R.string.understand_tab_permissions),
+/** [searchHint] : texte du champ de recherche ; `null` pour un onglet sans recherche (Score). */
+private enum class UnderstandTab(@param:StringRes val title: Int, @param:StringRes val searchHint: Int?) {
+    SCORE(R.string.understand_tab_score, null),
+    BADGES(R.string.understand_tab_badges, R.string.learn_search_badges_hint),
+    TRACKERS(R.string.understand_tab_trackers, R.string.learn_search_trackers_hint),
+    PERMISSIONS(R.string.understand_tab_permissions, R.string.learn_search_hint),
 }
 
 /**
@@ -83,26 +84,27 @@ fun UnderstandScreen(
     var tab by rememberSaveable { mutableStateOf(UnderstandTab.SCORE) }
     var query by rememberSaveable { mutableStateOf("") }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
+    val searchHint = tab.searchHint?.let { stringResource(it) }
 
     Column(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)) {
             // Recherche des permissions repliée en loupe, comme sur l'écran Scan ; ouverte, elle remplace le titre.
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.heightIn(min = 48.dp)) {
                 Box(modifier = Modifier.weight(1f)) {
-                    if (searchOpen && tab == UnderstandTab.PERMISSIONS) {
-                        SearchField(query, { query = it }, stringResource(R.string.learn_search_hint))
+                    if (searchOpen && searchHint != null) {
+                        SearchField(query, { query = it }, searchHint)
                     } else {
                         Text(stringResource(R.string.learn_title), style = MaterialTheme.typography.headlineMedium)
                     }
                 }
-                if (tab == UnderstandTab.PERMISSIONS) {
+                if (searchHint != null) {
                     if (searchOpen) {
                         IconButton(onClick = { query = ""; searchOpen = false }) {
                             Icon(Icons.Default.Close, contentDescription = stringResource(R.string.home_search_clear))
                         }
                     } else {
                         IconButton(onClick = { searchOpen = true }) {
-                            Icon(Icons.Default.Search, contentDescription = stringResource(R.string.learn_search_hint))
+                            Icon(Icons.Default.Search, contentDescription = searchHint)
                         }
                     }
                 }
@@ -117,7 +119,14 @@ fun UnderstandScreen(
             UnderstandTab.entries.forEach { entry ->
                 Tab(
                     selected = tab == entry,
-                    onClick = { tab = entry },
+                    // Chaque onglet a sa propre recherche : on repart d'un champ vide.
+                    onClick = {
+                        if (tab != entry) {
+                            query = ""
+                            searchOpen = false
+                        }
+                        tab = entry
+                    },
                     // Une ligne par onglet : le libellé rétrécit plutôt que de se couper.
                     text = {
                         Text(
@@ -132,8 +141,8 @@ fun UnderstandScreen(
         }
         when (tab) {
             UnderstandTab.SCORE -> ScoreTab(rules)
-            UnderstandTab.BADGES -> BadgesTab(rules, homeState.scannedApps)
-            UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps)
+            UnderstandTab.BADGES -> BadgesTab(rules, homeState.scannedApps, query)
+            UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps, query)
             UnderstandTab.PERMISSIONS -> PermissionsTab(rules, homeState.scannedApps, query)
         }
     }
@@ -154,8 +163,21 @@ private fun ScoreTab(rules: Rules) {
 }
 
 @Composable
-private fun TrackersTab(rules: Rules, scannedApps: List<AuditedApp>) {
+private fun TrackersTab(rules: Rules, scannedApps: List<AuditedApp>, query: String) {
+    val resources = LocalResources.current
     val detected = remember(scannedApps) { DeviceAnalysis.from(scannedApps).trackers }
+    fun onDevice(info: TrackerCategoryInfo) = detected.filter { usage ->
+        usage.tracker.categories.ifEmpty { listOf(TrackerGlossary.UNCATEGORIZED) }.contains(info.category)
+    }
+    // Recherche dans la catégorie, ses exemples et les traqueurs trouvés chez vous (ex. « Facebook »).
+    val entries = remember(query, detected, resources) {
+        TrackerGlossary.entries.filter { info ->
+            query.matchesAny(
+                listOf(resources.getString(info.name), resources.getString(info.riskLevel), resources.getString(info.risk)) +
+                    info.examples + onDevice(info).map { it.tracker.name }
+            )
+        }
+    }
     LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
             Text(
@@ -164,13 +186,13 @@ private fun TrackersTab(rules: Rules, scannedApps: List<AuditedApp>) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        items(TrackerGlossary.entries, key = { "tracker-${it.category}" }) { info ->
+        if (entries.isEmpty()) {
+            item { Text(stringResource(R.string.learn_search_empty_trackers, query.trim()), color = MaterialTheme.colorScheme.onSurfaceVariant) }
+        }
+        items(entries, key = { "tracker-${it.category}" }) { info ->
             val weight = if (info.category == TrackerGlossary.UNCATEGORIZED) rules.trackerRules.defaultWeight
             else rules.trackerRules.categoryWeights[info.category]
-            val onDevice = detected.filter { usage ->
-                usage.tracker.categories.ifEmpty { listOf(TrackerGlossary.UNCATEGORIZED) }.contains(info.category)
-            }
-            TrackerCategoryCard(info, weight, onDevice)
+            TrackerCategoryCard(info, weight, onDevice(info))
         }
     }
 }
@@ -527,15 +549,19 @@ private fun LabeledText(label: String, text: String) {
 }
 
 /** Recherche dans les textes de la langue affichée, ainsi que dans le nom technique de la permission. */
-private fun PermissionInfo.matches(query: String, resources: Resources): Boolean {
-    val needle = query.trim().normalized()
-    return needle.isEmpty() ||
-        listOf(resources.getString(title), permission, resources.getString(allows), resources.getString(theme.title))
-            .any { needle in it.normalized() }
+private fun PermissionInfo.matches(query: String, resources: Resources): Boolean =
+    query.matchesAny(listOf(resources.getString(title), permission, resources.getString(allows), resources.getString(theme.title)))
+
+/** Vrai si la recherche est vide ou figure dans l'un des [texts], sans tenir compte de la casse ni des accents. */
+internal fun String.matchesAny(texts: List<String>): Boolean {
+    val needle = trim().normalized()
+    return needle.isEmpty() || texts.any { needle in it.normalized() }
 }
 
+private val Diacritics = Regex("\\p{Mn}+")
+
 private fun String.normalized(): String =
-    Normalizer.normalize(this, Normalizer.Form.NFD).replace(Regex("\\p{Mn}+"), "").lowercase()
+    Normalizer.normalize(this, Normalizer.Form.NFD).replace(Diacritics, "").lowercase()
 
 // --- Briques communes -------------------------------------------------------------------------
 

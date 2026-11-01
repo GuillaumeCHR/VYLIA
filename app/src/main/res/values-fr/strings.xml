@@ -271,9 +271,6 @@
     <string name="reduce_usage_title">Repérer les apps que vous n\'utilisez plus</string>
     <string name="reduce_usage_text">Android peut indiquer à VYLIA quand chaque app a été ouverte pour la dernière fois. Cet accès aux données d\'utilisation est lu sur votre téléphone et n\'en sort jamais. Vous pouvez le retirer à tout moment dans le même écran.</string>
     <string name="reduce_usage_button">Autoriser l\'accès aux données d\'utilisation</string>
-    <string name="alt_worst_title">Worst of Fame : à remplacer</string>
-    <string name="alt_worst_hint">Vos apps les moins respectueuses qui ont une alternative éthique ou libre. Touchez-en une pour l\'obtenir.</string>
-    <string name="alt_worst_empty">Aucune de vos apps mal notées n\'a d\'alternative répertoriée.</string>
     <string name="alt_hall_title">Hall of Fame : les alternatives à adopter</string>
     <string name="alt_hall_hint">Des apps libres ou respectueuses, par famille. En installer une débloque le trophée Bon échange.</string>
     <string name="alt_installed">Installée</string>

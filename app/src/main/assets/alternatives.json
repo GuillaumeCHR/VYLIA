@@ -1,7 +1,7 @@
 {
   "version": "1.0",
   "last_update": "2026-11-01",
-  "description": "Alternatives éthiques ou libres aux apps courantes. Une famille remplace des apps par paquet (replaces) ou par catégorie de règles (categories). fdroid / play : identifiant sur le magasin, absent s'il n'y est pas.",
+  "description": "Alternatives éthiques ou libres aux apps courantes. Une famille remplace des apps par paquet (replaces) ou par catégorie de règles (categories). fdroid / play : identifiant sur le magasin, absent s'il n'y est pas. Le lien ouvert par défaut est celui du Play Store.",
   "groups": [
     {
       "id": "messaging",
@@ -14,7 +14,9 @@
         {"name": "Olvid", "package": "io.olvid.messenger", "play": "io.olvid.messenger", "open_source": true,
          "pitch": {"en": "French messaging app with no phone number or directory, certified by ANSSI.", "fr": "Messagerie française sans numéro de téléphone ni annuaire, certifiée par l'ANSSI."}},
         {"name": "Element", "package": "im.vector.app", "fdroid": "im.vector.app", "play": "im.vector.app", "open_source": true,
-         "pitch": {"en": "Decentralised Matrix messaging, encrypted, used by many public bodies.", "fr": "Messagerie décentralisée Matrix, chiffrée, utilisée par de nombreuses administrations."}}
+         "pitch": {"en": "Decentralised Matrix messaging, encrypted, used by many public bodies.", "fr": "Messagerie décentralisée Matrix, chiffrée, utilisée par de nombreuses administrations."}},
+        {"name": "SimpleX Chat", "package": "chat.simplex.app", "play": "chat.simplex.app", "open_source": true,
+         "pitch": {"en": "Encrypted messaging with no user identifier at all, not even a phone number.", "fr": "Messagerie chiffrée sans aucun identifiant d'utilisateur, pas même un numéro de téléphone."}}
       ]
     },
     {
@@ -25,8 +27,10 @@
       "alternatives": [
         {"name": "Mastodon", "package": "org.joinmastodon.android", "fdroid": "org.joinmastodon.android", "play": "org.joinmastodon.android", "open_source": true,
          "pitch": {"en": "Decentralised social network with a chronological feed and no advertising.", "fr": "Réseau social décentralisé, fil chronologique, sans publicité."}},
-        {"name": "PixelDroid (Pixelfed)", "package": "org.pixeldroid.app", "fdroid": "org.pixeldroid.app", "play": "org.pixeldroid.app", "open_source": true,
-         "pitch": {"en": "Photo sharing on Pixelfed, a decentralised Instagram without ads.", "fr": "Partage de photos sur Pixelfed, un Instagram décentralisé sans publicité."}}
+        {"name": "PixelDroid (Pixelfed)", "package": "org.pixeldroid.app", "fdroid": "org.pixeldroid.app", "open_source": true,
+         "pitch": {"en": "Photo sharing on Pixelfed, a decentralised Instagram without ads.", "fr": "Partage de photos sur Pixelfed, un Instagram décentralisé sans publicité."}},
+        {"name": "Bluesky", "package": "xyz.blueskyweb.app", "play": "xyz.blueskyweb.app", "open_source": true,
+         "pitch": {"en": "Open social network, close to X/Twitter: your account can move to another server, and you choose your feeds and moderation.", "fr": "Réseau social ouvert, proche de X/Twitter : votre compte peut changer de serveur, et vous choisissez vos fils et votre modération."}}
       ]
     },
     {
@@ -40,7 +44,11 @@
         {"name": "Fennec F-Droid", "package": "org.mozilla.fennec_fdroid", "fdroid": "org.mozilla.fennec_fdroid", "open_source": true,
          "pitch": {"en": "Firefox without Mozilla's telemetry, built by F-Droid.", "fr": "Firefox sans la télémétrie de Mozilla, compilé par F-Droid."}},
         {"name": "DuckDuckGo", "package": "com.duckduckgo.mobile.android", "fdroid": "com.duckduckgo.mobile.android", "play": "com.duckduckgo.mobile.android", "open_source": true,
-         "pitch": {"en": "Private search and browser that blocks trackers in pages and other apps.", "fr": "Recherche et navigateur privés qui bloquent les traqueurs des pages et des autres apps."}}
+         "pitch": {"en": "Private search and browser that blocks trackers in pages and other apps.", "fr": "Recherche et navigateur privés qui bloquent les traqueurs des pages et des autres apps."}},
+        {"name": "Brave", "package": "com.brave.browser", "play": "com.brave.browser", "open_source": true,
+         "pitch": {"en": "Chromium-based browser that blocks ads and trackers by default.", "fr": "Navigateur basé sur Chromium qui bloque pubs et traqueurs par défaut."}},
+        {"name": "Firefox Focus", "package": "org.mozilla.focus", "play": "org.mozilla.focus", "open_source": true,
+         "pitch": {"en": "Private browser by Mozilla: blocks trackers and erases your history with one tap.", "fr": "Navigateur privé de Mozilla : bloque les traqueurs et efface votre historique d'un geste."}}
       ]
     },
     {
@@ -100,7 +108,11 @@
         {"name": "AntennaPod", "package": "de.danoeh.antennapod", "fdroid": "de.danoeh.antennapod", "play": "de.danoeh.antennapod", "open_source": true,
          "pitch": {"en": "Podcast player with no account and no tracking.", "fr": "Lecteur de podcasts sans compte et sans pistage."}},
         {"name": "VLC", "package": "org.videolan.vlc", "fdroid": "org.videolan.vlc", "play": "org.videolan.vlc", "open_source": true,
-         "pitch": {"en": "Your own music files, no account needed.", "fr": "Vos propres fichiers musicaux, sans compte."}}
+         "pitch": {"en": "Your own music files, no account needed.", "fr": "Vos propres fichiers musicaux, sans compte."}},
+        {"name": "Retro Music Player", "package": "code.name.monkey.retromusic", "play": "code.name.monkey.retromusic", "open_source": true,
+         "pitch": {"en": "Polished player for the music stored on your phone, free software, no account, no ads.", "fr": "Lecteur soigné pour la musique enregistrée sur votre téléphone, libre, sans compte ni publicité."}},
+        {"name": "Fossify Music Player", "package": "org.fossify.musicplayer", "fdroid": "org.fossify.musicplayer", "play": "org.fossify.musicplayer", "open_source": true,
+         "pitch": {"en": "Simple music player for your local files, free software, no trackers.", "fr": "Lecteur de musique simple pour vos fichiers, libre et sans traqueur."}}
       ]
     },
     {
@@ -115,6 +127,30 @@
          "pitch": {"en": "Customisable keyboard with no Internet access.", "fr": "Clavier personnalisable sans accès à Internet."}},
         {"name": "FlorisBoard", "package": "dev.patrickgold.florisboard", "fdroid": "dev.patrickgold.florisboard", "open_source": true,
          "pitch": {"en": "Modern open-source keyboard, no data collected.", "fr": "Clavier libre moderne, aucune donnée collectée."}}
+      ]
+    },
+    {
+      "id": "notes",
+      "title": {"en": "Notes", "fr": "Notes"},
+      "replaces": ["com.google.android.keep", "com.evernote", "com.microsoft.office.onenote"],
+      "alternatives": [
+        {"name": "Joplin", "package": "net.cozic.joplin", "play": "net.cozic.joplin", "open_source": true,
+         "pitch": {"en": "Notes and to-do lists in Markdown, synced through the cloud of your choice, encrypted.", "fr": "Notes et listes de tâches en Markdown, synchronisées par le cloud de votre choix, chiffrées."}},
+        {"name": "Standard Notes", "package": "com.standardnotes", "play": "com.standardnotes", "open_source": true,
+         "pitch": {"en": "End-to-end encrypted notes, simple and long-lasting.", "fr": "Notes chiffrées de bout en bout, simples et pérennes."}},
+        {"name": "Fossify Notes", "package": "org.fossify.notes", "fdroid": "org.fossify.notes", "play": "org.fossify.notes", "open_source": true,
+         "pitch": {"en": "Quick notes kept on your phone, free software, no account.", "fr": "Notes rapides gardées sur votre téléphone, libre et sans compte."}}
+      ]
+    },
+    {
+      "id": "calendar",
+      "title": {"en": "Calendar", "fr": "Agenda"},
+      "replaces": ["com.google.android.calendar", "com.microsoft.office.outlook"],
+      "alternatives": [
+        {"name": "Proton Calendar", "package": "me.proton.android.calendar", "play": "me.proton.android.calendar", "open_source": true,
+         "pitch": {"en": "End-to-end encrypted calendar, by Proton (Switzerland).", "fr": "Agenda chiffré de bout en bout, par Proton (Suisse)."}},
+        {"name": "Fossify Calendar", "package": "org.fossify.calendar", "fdroid": "org.fossify.calendar", "play": "org.fossify.calendar", "open_source": true,
+         "pitch": {"en": "Calendar kept on your phone or synced with your own server, free software.", "fr": "Agenda gardé sur votre téléphone ou synchronisé avec votre propre serveur, libre."}}
       ]
     },
     {
@@ -141,8 +177,10 @@
          "pitch": {"en": "Two-factor codes in an encrypted vault, no Internet access at all.", "fr": "Codes de double authentification dans un coffre chiffré, sans aucun accès à Internet."}},
         {"name": "Bitwarden", "package": "com.x8bit.bitwarden", "fdroid": "com.x8bit.bitwarden", "play": "com.x8bit.bitwarden", "open_source": true,
          "pitch": {"en": "Open-source password manager, audited.", "fr": "Gestionnaire de mots de passe libre et audité."}},
-        {"name": "KeePassDX", "package": "com.kunzisoft.keepass.libre", "fdroid": "com.kunzisoft.keepass.libre", "play": "com.kunzisoft.keepass.libre", "open_source": true,
-         "pitch": {"en": "Passwords in a local KeePass file, no account.", "fr": "Mots de passe dans un fichier KeePass local, sans compte."}}
+        {"name": "KeePassDX", "package": "com.kunzisoft.keepass.libre", "fdroid": "com.kunzisoft.keepass.libre", "play": "com.kunzisoft.keepass.free", "open_source": true,
+         "pitch": {"en": "Passwords in a local KeePass file, no account.", "fr": "Mots de passe dans un fichier KeePass local, sans compte."}},
+        {"name": "Proton Pass", "package": "proton.android.pass", "play": "proton.android.pass", "open_source": true,
+         "pitch": {"en": "End-to-end encrypted password manager with email aliases, by Proton (Switzerland).", "fr": "Gestionnaire de mots de passe chiffré de bout en bout, avec des alias e-mail, par Proton (Suisse)."}}
       ]
     },
     {
@@ -163,7 +201,7 @@
       "replaces": [],
       "categories": ["NEWS_READING"],
       "alternatives": [
-        {"name": "Feeder", "package": "com.nononsenseapps.feeder", "fdroid": "com.nononsenseapps.feeder", "play": "com.nononsenseapps.feeder", "open_source": true,
+        {"name": "Feeder", "package": "com.nononsenseapps.feeder", "fdroid": "com.nononsenseapps.feeder", "play": "com.nononsenseapps.feeder.play", "open_source": true,
          "pitch": {"en": "Read your news sites through their RSS feeds, without their apps' trackers.", "fr": "Lisez vos sites d'actualité par leurs flux RSS, sans les traqueurs de leurs apps."}}
       ]
     },

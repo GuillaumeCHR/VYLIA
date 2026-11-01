@@ -267,9 +267,6 @@
     <string name="reduce_usage_title">Find the apps you no longer use</string>
     <string name="reduce_usage_text">Android can tell VYLIA when each app was last opened. This usage access is read on your phone only and never leaves it. You can withdraw it at any time in the same screen.</string>
     <string name="reduce_usage_button">Allow usage access</string>
-    <string name="alt_worst_title">Worst of Fame: what to replace</string>
-    <string name="alt_worst_hint">Your least respectful apps that have an ethical or free alternative. Tap one to get it.</string>
-    <string name="alt_worst_empty">None of your poorly rated apps has a listed alternative.</string>
     <string name="alt_hall_title">Hall of Fame: alternatives to adopt</string>
     <string name="alt_hall_hint">Free or privacy-respecting apps, by family. Installing one earns the Good swap trophy.</string>
     <string name="alt_installed">Installed</string>

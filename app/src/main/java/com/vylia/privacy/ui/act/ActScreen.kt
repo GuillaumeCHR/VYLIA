@@ -129,7 +129,7 @@ fun ActScreen(
                     )
                 }
             }
-            tab == ActTab.ALTERNATIVES -> AlternativesTab(userApps, state.scannedApps, actViewModel.catalogue)
+            tab == ActTab.ALTERNATIVES -> AlternativesTab(state.scannedApps, actViewModel.catalogue)
             else -> RewardsTab(state.userAverageScore?.value, rewards, recentRewards, viewModel::dismissRecentRewards)
         }
     }

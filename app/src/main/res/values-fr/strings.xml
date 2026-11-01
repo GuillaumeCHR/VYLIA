@@ -290,7 +290,7 @@
     <string name="shield_private_dns_conflict">Le DNS privé est réglé sur %1$s : Android envoie alors ses requêtes directement à ce service, et le bouclier n\'en voit aucune. Choisissez l\'un ou l\'autre : pour utiliser le bouclier, repassez le DNS privé sur Automatique.</string>
     <string name="shield_other_vpn">Un autre VPN est actif : activer le bouclier le remplacera.</string>
     <string name="shield_limits">Limites : les apps qui chiffrent elles-mêmes leur DNS (certains navigateurs) échappent au bouclier, et bloquer un traqueur peut parfois casser une fonction : si une app se comporte mal, désactivez le bouclier.</string>
-    <string name="shield_always_on">Pour qu\'il reste actif après un redémarrage, activez « VPN permanent » pour VYLIA dans les réglages VPN d\'Android.</string>
+    <string name="shield_always_on">Pour qu\'il reste actif après un redémarrage, activez « VPN permanent » pour VYLIA dans les réglages VPN d\'Android, mais laissez « Bloquer les connexions sans VPN » décoché : le bouclier ne transporte que le DNS, cette option couperait Internet.</string>
     <string name="shield_vpn_settings">Réglages VPN</string>
     <string name="shield_lists">Listes : Exodus Privacy (ODbL 1.0) et EasyPrivacy (GPL v3), %1$s domaines de traçage.</string>
     <plurals name="act_story_trophies">

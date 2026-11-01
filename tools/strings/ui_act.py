@@ -122,7 +122,7 @@ S = [
  ("shield_other_vpn", "Another VPN is on: turning on the Shield will replace it.", "Un autre VPN est actif : activer le bouclier le remplacera."),
  ("shield_limits", "Limits: apps that encrypt their own DNS (some browsers) bypass the Shield, and blocking a tracker can occasionally break a feature: if an app misbehaves, turn the Shield off.",
   "Limites : les apps qui chiffrent elles-mêmes leur DNS (certains navigateurs) échappent au bouclier, et bloquer un traqueur peut parfois casser une fonction : si une app se comporte mal, désactivez le bouclier."),
- ("shield_always_on", "To keep it on after a restart, turn on “Always-on VPN” for VYLIA in Android's VPN settings.", "Pour qu'il reste actif après un redémarrage, activez « VPN permanent » pour VYLIA dans les réglages VPN d'Android."),
+ ("shield_always_on", "To keep it on after a restart, turn on “Always-on VPN” for VYLIA in Android's VPN settings, but leave “Block connections without VPN” off: the Shield only carries DNS, so that option would cut off the Internet.", "Pour qu'il reste actif après un redémarrage, activez « VPN permanent » pour VYLIA dans les réglages VPN d'Android, mais laissez « Bloquer les connexions sans VPN » décoché : le bouclier ne transporte que le DNS, cette option couperait Internet."),
  ("shield_vpn_settings", "VPN settings", "Réglages VPN"),
  ("shield_lists", "Lists: Exodus Privacy (ODbL 1.0) and EasyPrivacy (GPL v3), %1$s tracking domains.", "Listes : Exodus Privacy (ODbL 1.0) et EasyPrivacy (GPL v3), %1$s domaines de traçage."),
 ]

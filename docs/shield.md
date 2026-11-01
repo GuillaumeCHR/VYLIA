@@ -73,6 +73,8 @@ Le test `BlocklistTest` vérifie que la liste embarquée ne bloque pas les grand
 - Les apps qui font leur propre DNS chiffré (DoH de certains navigateurs) ou visent une IP en dur y échappent.
 - Le repli TCP du DNS (réponses tronquées) n'est pas transmis.
 - Redémarrage : le bouclier ne se relance pas seul ; « VPN permanent » d'Android le fait (`SUPPORTS_ALWAYS_ON`).
+  « Bloquer les connexions sans VPN » doit rester décoché : seul le DNS passe par le tunnel, tout le reste serait
+  coupé (et VYLIA, exclue du tunnel, ne joindrait plus le DNS du réseau). L'écran le dit.
 
 ## État et suite
 
@@ -81,8 +83,9 @@ tests unitaires (liste, paquets, badge), essai sur téléphone (accord VPN, dém
 
 À faire :
 
-1. **Validation sur téléphone avec le DNS privé en Automatique** : vérifier blocage (`ad.doubleclick.net` doit
-   échouer, `example.com` répondre), compteur, badge, consommation sur une journée, passage Wi-Fi ↔ 4G.
+1. ~~Validation sur téléphone~~ (fait le 2026-11-01, après correction de la transmission : le réseau par défaut
+   renvoyait le tunnel lui-même) : blocage, résolution, State.io et Mr Autofire OK. Reste : consommation sur une
+   journée, passage Wi-Fi ↔ 4G, `app-measurement.com` (Firebase Analytics) absent des listes.
 2. Liste d'exceptions par l'utilisateur (« ne plus bloquer ce domaine ») depuis les derniers blocages.
 3. Crédits : ajouter EasyPrivacy (GPL v3) dans À propos à côté d'Exodus ; mentionner le bouclier dans la politique
    de confidentialité.

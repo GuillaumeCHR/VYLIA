@@ -18,8 +18,8 @@ S = [
  ("act_tab_rewards", "Rewards", "Récompenses"),
  # Réduire : sous-onglets
  ("reduce_tab_permissions", "Permissions", "Autorisations"),
- ("reduce_tab_removals", "Removals", "Suppressions"),
- ("reduce_tab_private_dns", "Private DNS", "DNS privé"),
+ ("reduce_tab_removals", "Apps", "Apps"),
+ ("reduce_tab_private_dns", "Ad tracking", "Traçage pub"),
  # Réduire › DNS privé
  ("dns_status_title", "Private DNS on this phone", "DNS privé sur ce téléphone"),
  ("dns_status_unsupported", "Not available: private DNS requires Android 9 or later.", "Indisponible : le DNS privé demande Android 9 ou plus récent."),
@@ -27,6 +27,10 @@ S = [
  ("dns_status_off", "Off: your DNS requests go through your Internet provider unencrypted.", "Désactivé : vos requêtes DNS passent en clair par votre fournisseur d'accès."),
  ("dns_status_automatic", "Automatic: encrypted only when your network allows it, with no service chosen.", "Automatique : chiffré seulement quand votre réseau le permet, sans service choisi."),
  ("dns_status_hostname", "Active, with %1$s", "Actif, avec %1$s"),
+ ("dns_why_title", "Why private DNS reduces ad tracking", "Pourquoi un DNS privé réduit le traçage publicitaire"),
+ ("dns_why_block", "The trackers inside your apps send what you do to the servers of ad networks and data brokers. A filtering DNS refuses to give the address of those servers: the request goes nowhere, and the data is not sent. It works for every app at once, including the trackers VYLIA detects.", "Les traqueurs intégrés à vos apps envoient ce que vous faites aux serveurs des régies publicitaires et des courtiers en données. Un DNS qui filtre refuse de donner l'adresse de ces serveurs : la requête n'aboutit pas, et les données ne partent pas. Cela vaut pour toutes les apps à la fois, y compris les traqueurs que VYLIA détecte."),
+ ("dns_why_encrypt", "Encryption also stops your Internet provider, or the public Wi-Fi you are on, from seeing the list of services your phone contacts, a list that says a lot about you.", "Le chiffrement empêche aussi votre fournisseur d'accès, ou le Wi-Fi public sur lequel vous êtes, de voir la liste des services que contacte votre téléphone, une liste qui en dit long sur vous."),
+ ("dns_why_limits", "Limits: blocking only works if the service filters trackers (not every one does, see below). A tracker that shares its server with the app itself cannot be blocked without breaking the app, and DNS does not stop tracking through an account you are signed in to.", "Limites : le blocage ne marche que si le service filtre les traqueurs (ce n'est pas le cas de tous, voir ci-dessous). Un traqueur qui partage le serveur de l'app elle-même ne peut pas être bloqué sans casser l'app, et le DNS n'empêche pas le suivi par un compte auquel vous êtes connecté."),
  ("dns_what_title", "What is private DNS?", "Le DNS privé, c'est quoi ?"),
  ("dns_what_directory", "DNS is the Internet's directory: it turns a site name, like example.org, into the address your phone connects to.", "Le DNS est l'annuaire d'Internet : il traduit le nom d'un site, comme exemple.org, en adresse à laquelle votre téléphone se connecte."),
  ("dns_what_clear", "By default these requests go through your Internet provider unencrypted, so it can see which sites and services your apps contact.", "Par défaut, ces requêtes passent en clair par votre fournisseur d'accès : il peut voir quels sites et services vos apps contactent."),

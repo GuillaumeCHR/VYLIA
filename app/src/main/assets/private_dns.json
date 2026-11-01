@@ -18,8 +18,16 @@
         "fr": "Gratuit, géré par une fondation à but non lucratif, sans compte ni inscription."
       },
       "points": {
-        "en": ["Encrypts your DNS requests (DNS-over-TLS and DNS-over-HTTPS).", "Blocks known malicious domains."],
-        "fr": ["Chiffre vos requêtes DNS (DNS-over-TLS et DNS-over-HTTPS).", "Bloque les domaines malveillants connus."]
+        "en": [
+          "Encrypts your DNS requests (DNS-over-TLS and DNS-over-HTTPS).",
+          "Blocks known malicious domains (malware, phishing).",
+          "Does not block ad trackers: it hides your requests from your Internet provider, but lets ad networks through."
+        ],
+        "fr": [
+          "Chiffre vos requêtes DNS (DNS-over-TLS et DNS-over-HTTPS).",
+          "Bloque les domaines malveillants connus (virus, hameçonnage).",
+          "Ne bloque pas les traqueurs publicitaires : il cache vos requêtes à votre fournisseur d'accès, mais laisse passer les régies."
+        ]
       }
     },
     {
@@ -39,8 +47,16 @@
         "fr": "Offre gratuite avec un quota mensuel de requêtes, payante au-delà ; un compte est nécessaire."
       },
       "points": {
-        "en": ["You choose what to filter (trackers, ads, malicious domains…).", "Statistics on the requests of your devices, in your account."],
-        "fr": ["Vous choisissez ce qui est filtré (traqueurs, publicités, domaines malveillants…).", "Des statistiques sur les requêtes de vos appareils, dans votre compte."]
+        "en": [
+          "Can block ad trackers: in your configuration, turn on a block list for trackers and ads.",
+          "You choose what to filter (trackers, ads, malicious domains…).",
+          "Statistics on the requests of your devices, in your account."
+        ],
+        "fr": [
+          "Peut bloquer les traqueurs publicitaires : dans votre configuration, activez une liste de blocage des traqueurs et des publicités.",
+          "Vous choisissez ce qui est filtré (traqueurs, publicités, domaines malveillants…).",
+          "Des statistiques sur les requêtes de vos appareils, dans votre compte."
+        ]
       }
     }
   ]

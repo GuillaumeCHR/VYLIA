@@ -67,6 +67,7 @@ internal fun PrivateDnsTab(
     val resolvers = catalogue.availableIn(Locale.getDefault().country)
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item { StatusCard(status, catalogue) }
+        item { WhyCard() }
         item { ExplanationCard() }
         if (status != PrivateDnsStatus.Unsupported) {
             item { SectionHeader(stringResource(R.string.dns_services_title), stringResource(R.string.dns_services_hint), Modifier.padding(top = 8.dp)) }
@@ -97,6 +98,19 @@ private fun StatusCard(status: PrivateDnsStatus, catalogue: PrivateDnsCatalogue)
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
             Text(stringResource(R.string.dns_status_title), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
             Text(text, fontWeight = FontWeight.Bold, color = color)
+        }
+    }
+}
+
+/** Le lien avec le reste de VYLIA : les traqueurs détectés dans vos apps, et ce qu'un DNS filtrant y change. */
+@Composable
+private fun WhyCard() {
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.dns_why_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.dns_why_block), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.dns_why_encrypt), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.dns_why_limits), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
 }

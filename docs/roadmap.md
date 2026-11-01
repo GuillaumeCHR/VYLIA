@@ -68,3 +68,23 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 ## 7. Paramètres & Automatisations
 * **Notification à l'installation :** Alerte en temps réel dans la barre de notifications lorsqu'une nouvelle application est installée, affichant un résumé de son score et de ses badges.
 * **Scans de fond programmés :** Option d'audit périodique (hebdomadaire ou mensuel) pour alimenter le graphique du suivi longitudinal (fonctionnalité désactivable à tout moment).
+---
+
+## Avancement (mis à jour le 2026-11-01)
+
+| § | Chantier | État |
+|---|---|---|
+| 1 | Scoring et badges de qualification | Fait : badges v2.1 puis v3 (capture, arrière-plan), patterns de sécurité |
+| 2 | Analyse exhaustive des permissions | Fait : toutes les permissions par thème, niveau de protection Android, fiches |
+| 3 | Icône et splash screen | Splash « scan » fait ; icône à revoir ; mascottes bienveillantes à arbitrer |
+| 4 | Écran Scan en 3 onglets | Fait : par risque, par catégorie, par badge ; icône → fiche Android |
+| 5 | Suivi longitudinal | À faire |
+| 6 | Agir en 3 sous-onglets | À faire |
+| 7 | Notifications et scans programmés | À faire |
+|   | Grille de score v3 | Faite et visible dans Paramètres › Règles de score › Voir la grille |
+
+### Prochaines actions
+
+1. **Comprendre** : ajouter un sous-onglet **Badges** (chaque badge, sa règle, son pictogramme) et relire tous les
+   textes pour les aligner sur la grille v3 (capacités conditionnelles, publicité neutralisée, nouveaux thèmes).
+2. §6 Agir, puis §5 Suivi longitudinal et §7 Automatisations (ils partagent le stockage de l'historique).

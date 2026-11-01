@@ -45,7 +45,7 @@ import com.vylia.privacy.domain.learn.PermissionGlossary
 import com.vylia.privacy.domain.learn.gradeRiskLabel
 import com.vylia.privacy.ui.components.GradeScale
 import com.vylia.privacy.ui.components.scoreGradientColor
-import com.vylia.privacy.ui.main.PermissionExplanation
+import com.vylia.privacy.ui.understand.PermissionExplanation
 import com.vylia.privacy.domain.scoring.TrackerFinding
 import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.BadgeChip

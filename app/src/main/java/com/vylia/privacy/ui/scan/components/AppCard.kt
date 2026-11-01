@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.home.components
+package com.vylia.privacy.ui.scan.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

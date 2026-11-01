@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.home.components
+package com.vylia.privacy.ui.scan.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box

@@ -1,5 +1,9 @@
 package com.vylia.privacy.ui.main
 
+import com.vylia.privacy.ui.act.ActScreen
+import com.vylia.privacy.ui.analysis.AnalysisScreen
+import com.vylia.privacy.ui.settings.SettingsScreen
+import com.vylia.privacy.ui.understand.UnderstandScreen
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -35,19 +39,19 @@ import com.vylia.privacy.ui.components.categoryName
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.ui.detail.AppDetailScreen
-import com.vylia.privacy.ui.home.HomeScreen
-import com.vylia.privacy.ui.home.HomeViewModel
+import com.vylia.privacy.ui.scan.ScanScreen
+import com.vylia.privacy.ui.scan.ScanViewModel
 
 enum class AppTab(@param:StringRes val title: Int, val icon: ImageVector) {
     SCAN(R.string.tab_scan, Icons.Default.Search),
     ANALYZE(R.string.tab_analyze, Icons.Default.List),
-    AGIR(R.string.tab_act, Icons.Default.Star),
-    LEARN(R.string.tab_learn, Icons.Default.Info),
+    ACT(R.string.tab_act, Icons.Default.Star),
+    UNDERSTAND(R.string.tab_learn, Icons.Default.Info),
     SETTINGS(R.string.tab_settings, Icons.Default.Settings)
 }
 
 @Composable
-fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)) {
+fun MainScreen(homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
     var currentTab by rememberSaveable { mutableStateOf(AppTab.SCAN) }
     var detailPackage by rememberSaveable { mutableStateOf<String?>(null) }
@@ -95,24 +99,14 @@ fun MainScreen(homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.
         }
         when (currentTab) {
             // L'écran Scan a sa propre barre d'en-tête (sous la barre d'état) : seule la marge du bas lui est utile.
-            AppTab.SCAN -> HomeScreen(
+            AppTab.SCAN -> ScanScreen(
                 Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
                 onAppClick = { detailPackage = it.app.packageName },
             )
-            AppTab.ANALYZE -> AnalyseScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
-            AppTab.AGIR -> AgirScreen(modifier)
-            AppTab.LEARN -> ComprendreScreen(modifier)
-            AppTab.SETTINGS -> SettingsScreen(modifier, onOpenLearn = { currentTab = AppTab.LEARN })
+            AppTab.ANALYZE -> AnalysisScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
+            AppTab.ACT -> ActScreen(modifier)
+            AppTab.UNDERSTAND -> UnderstandScreen(modifier)
+            AppTab.SETTINGS -> SettingsScreen(modifier, onOpenLearn = { currentTab = AppTab.UNDERSTAND })
         }
-    }
-}
-
-@Composable
-fun PlaceholderScreen(title: String, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(text = title)
     }
 }

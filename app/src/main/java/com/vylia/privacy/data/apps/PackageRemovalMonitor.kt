@@ -1,4 +1,4 @@
-package com.vylia.privacy.data
+package com.vylia.privacy.data.apps
 
 import android.content.BroadcastReceiver
 import android.content.Context

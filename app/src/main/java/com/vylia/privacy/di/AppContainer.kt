@@ -1,8 +1,8 @@
 package com.vylia.privacy.di
 
 import android.content.Context
-import com.vylia.privacy.data.AppScanner
-import com.vylia.privacy.data.PackageRemovalMonitor
+import com.vylia.privacy.data.apps.AppScanner
+import com.vylia.privacy.data.apps.PackageRemovalMonitor
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rewards.PrefsRewardsStore
 import com.vylia.privacy.data.rules.RuleMatrixRepository

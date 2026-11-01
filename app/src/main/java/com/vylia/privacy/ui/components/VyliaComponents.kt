@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.model.PrivacyScore
-import com.vylia.privacy.ui.home.components.labelRes
+import com.vylia.privacy.ui.scan.components.labelRes
 import com.vylia.privacy.ui.theme.Slate800
 import com.vylia.privacy.ui.theme.WhiteTranslucent
 import com.vylia.privacy.ui.theme.color

@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.main
+package com.vylia.privacy.ui.settings
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -105,7 +105,7 @@ class SettingsViewModel(
         _updateSuccess.value = false
     }
 
-    /** Le changement de mode relance automatiquement le scan (observé par HomeViewModel). */
+    /** Le changement de mode relance automatiquement le scan (observé par ScanViewModel). */
     fun setAdvancedMode(enabled: Boolean) {
         settingsRepository.setAdvancedMode(enabled)
     }

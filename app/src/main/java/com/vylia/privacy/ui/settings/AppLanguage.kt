@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.main
+package com.vylia.privacy.ui.settings
 
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate

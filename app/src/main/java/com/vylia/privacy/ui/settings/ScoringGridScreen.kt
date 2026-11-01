@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.main
+package com.vylia.privacy.ui.settings
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable

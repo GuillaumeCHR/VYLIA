@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.main
+package com.vylia.privacy.ui.settings
 
 import android.content.Context
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.home.components
+package com.vylia.privacy.ui.scan.components
 
 import android.text.format.DateUtils
 import androidx.compose.foundation.horizontalScroll

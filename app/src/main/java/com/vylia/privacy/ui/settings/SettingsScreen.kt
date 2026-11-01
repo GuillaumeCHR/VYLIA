@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.main
+package com.vylia.privacy.ui.settings
 
 import android.content.Context
 import android.content.Intent
@@ -68,7 +68,7 @@ import com.vylia.privacy.R
 import com.vylia.privacy.data.export.CsvExporter
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.currentLocale
-import com.vylia.privacy.ui.home.HomeViewModel
+import com.vylia.privacy.ui.scan.ScanViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -99,7 +99,7 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     onOpenLearn: () -> Unit = {},
     viewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
-    homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+    homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
     var page by rememberSaveable { mutableStateOf(SettingsPage.MAIN) }
     // La grille est un sous-menu des règles de score : Retour y ramène.
@@ -216,7 +216,7 @@ private fun LanguageCard() {
 private fun RulesPage(
     modifier: Modifier,
     viewModel: SettingsViewModel,
-    homeViewModel: HomeViewModel,
+    homeViewModel: ScanViewModel,
     onOpenLearn: () -> Unit,
     onOpenGrid: () -> Unit,
     onBack: () -> Unit,
@@ -363,7 +363,7 @@ private const val ODBL_URL = "https://opendatacommons.org/licenses/odbl/1-0/"
 // --- Données ----------------------------------------------------------------------------------
 
 @Composable
-private fun DataPage(modifier: Modifier, homeViewModel: HomeViewModel, onBack: () -> Unit) {
+private fun DataPage(modifier: Modifier, homeViewModel: ScanViewModel, onBack: () -> Unit) {
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
     val resources = LocalResources.current

@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.main
+package com.vylia.privacy.ui.understand
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -39,7 +39,7 @@ import com.vylia.privacy.ui.components.GradeScale
 import com.vylia.privacy.ui.components.scoreGradientColor
 import com.vylia.privacy.ui.components.TransparencyBadge
 import com.vylia.privacy.ui.components.VyliaCard
-import com.vylia.privacy.ui.home.HomeViewModel
+import com.vylia.privacy.ui.scan.ScanViewModel
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
@@ -65,9 +65,9 @@ private enum class UnderstandTab(@param:StringRes val title: Int) {
  * 2/ lexique des traqueurs, 3/ lexique des permissions sensibles et de leurs impacts.
  */
 @Composable
-fun ComprendreScreen(
+fun UnderstandScreen(
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+    homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
     val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
     val rules = loadedRules.rules

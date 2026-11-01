@@ -34,9 +34,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
-import com.vylia.privacy.data.AndroidPermission
-import com.vylia.privacy.data.PermissionCatalog
-import com.vylia.privacy.data.Protection
+import com.vylia.privacy.data.apps.AndroidPermission
+import com.vylia.privacy.data.apps.PermissionCatalog
+import com.vylia.privacy.data.apps.Protection
 import com.vylia.privacy.domain.learn.PermissionClassifier
 import com.vylia.privacy.domain.learn.PermissionGlossary
 import com.vylia.privacy.domain.learn.PermissionTheme
@@ -44,7 +44,7 @@ import com.vylia.privacy.domain.model.InstalledApp
 import com.vylia.privacy.domain.scoring.PermissionFinding
 import androidx.compose.foundation.layout.width
 import com.vylia.privacy.ui.components.VyliaCard
-import com.vylia.privacy.ui.main.PermissionExplanation
+import com.vylia.privacy.ui.understand.PermissionExplanation
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

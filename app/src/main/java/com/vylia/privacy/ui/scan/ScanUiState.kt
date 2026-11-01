@@ -1,10 +1,10 @@
-package com.vylia.privacy.ui.home
+package com.vylia.privacy.ui.scan
 
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.PrivacyScore
 
-data class HomeUiState(
+data class ScanUiState(
     val isLoading: Boolean = true,
     /** Mode Basique (`false`) : seules les apps utilisateur sont scannées et l'onglet Système est masqué. */
     val advancedMode: Boolean = false,

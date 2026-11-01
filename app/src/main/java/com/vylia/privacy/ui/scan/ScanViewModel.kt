@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.home
+package com.vylia.privacy.ui.scan
 
 import android.os.SystemClock
 import android.util.Log
@@ -9,7 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.VyliaApplication
-import com.vylia.privacy.data.PackageRemovalMonitor
+import com.vylia.privacy.data.apps.PackageRemovalMonitor
 import com.vylia.privacy.data.export.CsvExporter
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
@@ -34,7 +34,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
-class HomeViewModel(
+class ScanViewModel(
     private val auditApps: AuditAppsUseCase,
     private val analyzeTrackers: AnalyzeTrackersUseCase,
     private val settingsRepository: SettingsRepository,
@@ -58,9 +58,9 @@ class HomeViewModel(
      * Le scan complet n'est fait qu'une fois ; changer d'onglet filtre simplement
      * le résultat en mémoire, sans relancer de requête au PackageManager.
      */
-    val uiState: StateFlow<HomeUiState> =
+    val uiState: StateFlow<ScanUiState> =
         combine(scanState, selectedFilter, settingsRepository.advancedMode, isAnalyzingTrackers, settingsRepository.lastScanTimestamp, ::reduce)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())
+            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ScanUiState())
 
     val rewards: StateFlow<RewardsState> = badgesManager.state
 
@@ -155,11 +155,11 @@ class HomeViewModel(
         scanState.value = ScanState.Success(apps)
     }
 
-    private fun reduce(scan: ScanState, selected: AppFilter, advanced: Boolean, analyzing: Boolean, lastScanAt: Long?): HomeUiState {
+    private fun reduce(scan: ScanState, selected: AppFilter, advanced: Boolean, analyzing: Boolean, lastScanAt: Long?): ScanUiState {
         val filter = if (advanced) selected else AppFilter.USER
         return when (scan) {
-            ScanState.Loading -> HomeUiState(isLoading = true, advancedMode = advanced, selectedFilter = filter, lastScanAt = lastScanAt)
-            is ScanState.Failure -> HomeUiState(
+            ScanState.Loading -> ScanUiState(isLoading = true, advancedMode = advanced, selectedFilter = filter, lastScanAt = lastScanAt)
+            is ScanState.Failure -> ScanUiState(
                 isLoading = false,
                 advancedMode = advanced,
                 selectedFilter = filter,
@@ -169,7 +169,7 @@ class HomeViewModel(
             is ScanState.Success -> {
                 // Le tri par risque croissant est préservé par filter().
                 val visible = scan.apps.filter { filter.matches(it.app) }
-                HomeUiState(
+                ScanUiState(
                     isLoading = false,
                     advancedMode = advanced,
                     selectedFilter = filter,
@@ -211,7 +211,7 @@ class HomeViewModel(
         val Factory = viewModelFactory {
             initializer {
                 val container = (this[APPLICATION_KEY] as VyliaApplication).container
-                HomeViewModel(
+                ScanViewModel(
                     container.auditAppsUseCase,
                     container.analyzeTrackersUseCase,
                     container.settingsRepository,

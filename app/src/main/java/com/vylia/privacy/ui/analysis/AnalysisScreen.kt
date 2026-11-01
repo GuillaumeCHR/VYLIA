@@ -1,5 +1,6 @@
-package com.vylia.privacy.ui.main
+package com.vylia.privacy.ui.analysis
 
+import com.vylia.privacy.ui.settings.SettingsViewModel
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -34,8 +35,8 @@ import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.ScoreRating
 import com.vylia.privacy.domain.scoring.Context
 import com.vylia.privacy.ui.components.VyliaCard
-import com.vylia.privacy.ui.home.HomeViewModel
-import com.vylia.privacy.ui.home.components.ScoreHeader
+import com.vylia.privacy.ui.scan.ScanViewModel
+import com.vylia.privacy.ui.scan.components.ScoreHeader
 import com.vylia.privacy.ui.theme.color
 import androidx.annotation.StringRes
 import androidx.compose.ui.platform.LocalResources
@@ -57,11 +58,11 @@ private const val PreviewCount = 5
  * apps par permission sensible et cartographie des traqueurs.
  */
 @Composable
-fun AnalyseScreen(
+fun AnalysisScreen(
     modifier: Modifier = Modifier,
     onAppClick: (AuditedApp) -> Unit = {},
     settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
-    homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+    homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
     val settingsState by settingsViewModel.uiState.collectAsStateWithLifecycle()
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()

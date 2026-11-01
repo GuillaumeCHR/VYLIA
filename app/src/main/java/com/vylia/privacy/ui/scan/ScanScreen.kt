@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.home
+package com.vylia.privacy.ui.scan
 
 import android.Manifest
 import android.graphics.Color as AndroidColor
@@ -68,11 +68,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.TextButton
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.domain.scoring.Rules
-import com.vylia.privacy.ui.home.components.AppCard
-import com.vylia.privacy.ui.home.components.CategoryExpectationsCard
-import com.vylia.privacy.ui.home.components.GradeFilterRow
-import com.vylia.privacy.ui.home.components.GradeFilterSummary
-import com.vylia.privacy.ui.home.components.LastScanLine
+import com.vylia.privacy.ui.scan.components.AppCard
+import com.vylia.privacy.ui.scan.components.CategoryExpectationsCard
+import com.vylia.privacy.ui.scan.components.GradeFilterRow
+import com.vylia.privacy.ui.scan.components.GradeFilterSummary
+import com.vylia.privacy.ui.scan.components.LastScanLine
 import com.vylia.privacy.ui.theme.VyliaTheme
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -92,10 +92,10 @@ import com.vylia.privacy.ui.components.categoryName
 private val Tabs = listOf(AppFilter.USER, AppFilter.SYSTEM)
 
 @Composable
-fun HomeScreen(
+fun ScanScreen(
     modifier: Modifier = Modifier,
     onAppClick: (AuditedApp) -> Unit = {},
-    viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory),
+    viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loadedRules by viewModel.rules.collectAsStateWithLifecycle()
@@ -103,7 +103,7 @@ fun HomeScreen(
     var gradeFilter by rememberSaveable { mutableStateOf<String?>(null) }
     var scanTab by rememberSaveable { mutableStateOf(ScanTab.RISK) }
     var badgeFilter by rememberSaveable { mutableStateOf<String?>(null) }
-    HomeContent(
+    ScanContent(
         modifier = modifier,
         state = state,
         rules = loadedRules.rules,
@@ -124,9 +124,9 @@ fun HomeScreen(
 /** Version sans ViewModel, pour les previews et les tests d'UI. */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeContent(
+fun ScanContent(
     modifier: Modifier = Modifier,
-    state: HomeUiState,
+    state: ScanUiState,
     rules: Rules? = null,
     query: String = "",
     onQueryChange: (String) -> Unit = {},
@@ -455,7 +455,7 @@ private fun CenteredMessage(
 
 @Preview(showBackground = true)
 @Composable
-private fun HomeContentPreview() {
+private fun ScanContentPreview() {
     fun fakeApp(label: String, color: Int, score: Int, vararg permissions: Pair<String, Boolean>): AuditedApp {
         val app = InstalledApp(
             label = label,
@@ -485,9 +485,9 @@ private fun HomeContentPreview() {
     ).sortedBy { it.score.value }
 
     VyliaTheme(dynamicColor = false) {
-        HomeContent(
+        ScanContent(
         modifier = Modifier,
-            state = HomeUiState(
+            state = ScanUiState(
                 isLoading = false,
                 advancedMode = true,
                 apps = apps,

@@ -1,4 +1,4 @@
-package com.vylia.privacy.data
+package com.vylia.privacy.data.apps
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.Context

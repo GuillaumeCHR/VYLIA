@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.home.components
+package com.vylia.privacy.ui.scan.components
 
 import androidx.annotation.StringRes
 import com.vylia.privacy.R

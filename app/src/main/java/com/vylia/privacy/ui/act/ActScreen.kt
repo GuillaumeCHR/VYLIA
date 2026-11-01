@@ -1,4 +1,4 @@
-package com.vylia.privacy.ui.main
+package com.vylia.privacy.ui.act
 
 import android.content.Context
 import android.content.Intent
@@ -54,7 +54,7 @@ import com.vylia.privacy.domain.rewards.RewardsState
 import com.vylia.privacy.ui.components.ScoreAnimationMillis
 import com.vylia.privacy.ui.theme.CyanAccent
 import java.text.DateFormat
-import com.vylia.privacy.ui.home.HomeViewModel
+import com.vylia.privacy.ui.scan.ScanViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -66,9 +66,9 @@ import com.vylia.privacy.R
 import com.vylia.privacy.ui.components.currentLocale
 
 @Composable
-fun AgirScreen(
+fun ActScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+    viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val rewards by viewModel.rewards.collectAsStateWithLifecycle()

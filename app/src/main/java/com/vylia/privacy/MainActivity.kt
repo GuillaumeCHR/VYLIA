@@ -11,8 +11,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.vylia.privacy.ui.home.HomeViewModel
-import com.vylia.privacy.ui.main.AppLanguage
+import com.vylia.privacy.ui.scan.ScanViewModel
+import com.vylia.privacy.ui.settings.AppLanguage
 import com.vylia.privacy.ui.main.MainScreen
 import com.vylia.privacy.ui.splash.VyliaSplashScreen
 import com.vylia.privacy.ui.theme.VyliaTheme
@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             VyliaTheme {
                 // Instancié dès le splash : le scan démarre pendant l'animation. Même instance que l'écran Scan.
-                viewModel<HomeViewModel>(factory = HomeViewModel.Factory)
+                viewModel<ScanViewModel>(factory = ScanViewModel.Factory)
                 var showSplash by rememberSaveable { mutableStateOf(true) }
                 // Fondu court : le logotype de l'intro est déjà à la place du titre de l'écran Scan.
                 Crossfade(targetState = showSplash, animationSpec = tween(250), label = "splash") { splash ->

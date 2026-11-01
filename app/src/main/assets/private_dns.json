@@ -1,0 +1,47 @@
+{
+  "format": "vylia-private-dns",
+  "version": 1,
+  "updated": "2026-11-01",
+  "resolvers": [
+    {
+      "id": "quad9",
+      "name": "Quad9",
+      "recommended": true,
+      "available": true,
+      "hostname": "dns.quad9.net",
+      "requires_account": false,
+      "website": "https://quad9.net/",
+      "privacy_policy": "https://quad9.net/privacy/policy/",
+      "unavailable_countries": [],
+      "summary": {
+        "en": "Free, run by a non-profit foundation, no account or sign-up.",
+        "fr": "Gratuit, géré par une fondation à but non lucratif, sans compte ni inscription."
+      },
+      "points": {
+        "en": ["Encrypts your DNS requests (DNS-over-TLS and DNS-over-HTTPS).", "Blocks known malicious domains."],
+        "fr": ["Chiffre vos requêtes DNS (DNS-over-TLS et DNS-over-HTTPS).", "Bloque les domaines malveillants connus."]
+      }
+    },
+    {
+      "id": "nextdns",
+      "name": "NextDNS",
+      "recommended": false,
+      "available": true,
+      "hostname_template": "{id}.dns.nextdns.io",
+      "id_pattern": "[a-f0-9]{6}",
+      "requires_account": true,
+      "website": "https://nextdns.io/",
+      "pricing": "https://nextdns.io/pricing",
+      "privacy_policy": "https://nextdns.io/privacy",
+      "unavailable_countries": [],
+      "summary": {
+        "en": "Free plan with a monthly request quota, paid beyond it; an account is required.",
+        "fr": "Offre gratuite avec un quota mensuel de requêtes, payante au-delà ; un compte est nécessaire."
+      },
+      "points": {
+        "en": ["You choose what to filter (trackers, ads, malicious domains…).", "Statistics on the requests of your devices, in your account."],
+        "fr": ["Vous choisissez ce qui est filtré (traqueurs, publicités, domaines malveillants…).", "Des statistiques sur les requêtes de vos appareils, dans votre compte."]
+      }
+    }
+  ]
+}

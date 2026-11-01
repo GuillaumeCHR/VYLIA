@@ -12,7 +12,13 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.annotation.StringRes
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.TextAutoSize
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.Tab
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -49,10 +55,49 @@ private const val PreviewCount = 8
  * Réduire : les actions à fort impact. D'abord les autorisations injustifiées à retirer (gain exact recalculé par le
  * moteur de score), puis les apps à supprimer, inutilisées ou intrusives.
  */
+/** Sous-onglets de Réduire : retirer des autorisations, supprimer des apps, chiffrer ses requêtes DNS. */
+private enum class ReduceSection(@param:StringRes val title: Int) {
+    PERMISSIONS(R.string.reduce_tab_permissions),
+    REMOVALS(R.string.reduce_tab_removals),
+    PRIVATE_DNS(R.string.reduce_tab_private_dns),
+}
+
 @Composable
-internal fun ReduceTab(revocations: List<RevokeSuggestion>, removals: List<RemovalSuggestion>, usage: UsageState) {
+internal fun ReduceTab(
+    revocations: List<RevokeSuggestion>,
+    removals: List<RemovalSuggestion>,
+    usage: UsageState,
+    privateDns: @Composable () -> Unit,
+) {
+    var section by rememberSaveable { mutableStateOf(ReduceSection.PERMISSIONS) }
+    Column {
+        SecondaryTabRow(selectedTabIndex = section.ordinal) {
+            ReduceSection.entries.forEach { entry ->
+                Tab(
+                    selected = section == entry,
+                    onClick = { section = entry },
+                    text = {
+                        Text(
+                            stringResource(entry.title),
+                            maxLines = 1,
+                            softWrap = false,
+                            autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = LocalTextStyle.current.fontSize),
+                        )
+                    },
+                )
+            }
+        }
+        when (section) {
+            ReduceSection.PERMISSIONS -> RevocationsList(revocations)
+            ReduceSection.REMOVALS -> RemovalsList(removals, usage)
+            ReduceSection.PRIVATE_DNS -> privateDns()
+        }
+    }
+}
+
+@Composable
+private fun RevocationsList(revocations: List<RevokeSuggestion>) {
     var allRevocations by rememberSaveable { mutableStateOf(false) }
-    var allRemovals by rememberSaveable { mutableStateOf(false) }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item { SectionHeader(pluralStringResource(R.plurals.reduce_revoke_title, revocations.size, revocations.size), stringResource(R.string.reduce_revoke_hint)) }
         if (revocations.isEmpty()) item { Empty(stringResource(R.string.reduce_revoke_empty)) }
@@ -60,12 +105,17 @@ internal fun ReduceTab(revocations: List<RevokeSuggestion>, removals: List<Remov
             RevokeRow(it)
         }
         if (revocations.size > PreviewCount) item { ShowAll(allRevocations, revocations.size) { allRevocations = !allRevocations } }
+    }
+}
 
+@Composable
+private fun RemovalsList(removals: List<RemovalSuggestion>, usage: UsageState) {
+    var allRemovals by rememberSaveable { mutableStateOf(false) }
+    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item {
             SectionHeader(
                 pluralStringResource(R.plurals.reduce_remove_title, removals.size, removals.size),
                 stringResource(if (usage.hasAccess) R.string.reduce_remove_hint else R.string.reduce_remove_hint_no_usage),
-                Modifier.padding(top = 12.dp),
             )
         }
         if (!usage.hasAccess) item { UsageAccessCard() }

@@ -123,7 +123,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 4. ~~§5 Suivi~~ (fait le 2026-11-01). ~~§7 Automatisations~~ (fait le 2026-11-01) : notification à l'installation,
    scans de fond programmés qui alimentent le Suivi. L'effacement du Suivi rejoint « Supprimer mes données » (§8).
 5. §6 Agir › Réduire, deux nouveaux modules (non développés) :
-   - **V1 — Guidage DNS privé** : tutoriel pas à pas et bouton d'accès rapide aux paramètres système pour activer un
+   - ~~**V1 — Guidage DNS privé**~~ (fait en 0.8.0 : Réduire › DNS privé, à côté de Autorisations et Suppressions) : tutoriel pas à pas et bouton d'accès rapide aux paramètres système pour activer un
      DNS chiffré anti-traqueurs (ex. AdGuard, NextDNS), sans code complexe ni impact sur la batterie.
    - **V2 — Bouclier VYLIA (VPN local)** : interception DNS 100 % locale via l'API `VpnService` d'Android, qui filtre en
      temps réel les requêtes de traçage sortantes sans envoyer aucune donnée vers l'extérieur, activable par un simple
@@ -138,4 +138,4 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 ### Versions
 
 Une version par lot livré (versionName et versionCode dans `app/build.gradle.kts`, tag `vX.Y.0`) :
-0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées), 0.6.3 = recherche dans Badges et Traqueurs, 0.6.4 = un seul score dans Analyse en mode Avancé, 0.7.0 = Crédits et VYLIA notée comme les autres (première release publiée), 0.7.1 = accès rapide par catégorie dans Scan, 0.7.2 = apps de finance reconnues ; la suite continue à 0.8.0.
+0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées), 0.6.3 = recherche dans Badges et Traqueurs, 0.6.4 = un seul score dans Analyse en mode Avancé, 0.7.0 = Crédits et VYLIA notée comme les autres (première release publiée), 0.7.1 = accès rapide par catégorie dans Scan, 0.7.2 = apps de finance reconnues, 0.8.0 = guide DNS privé ; la suite continue à 0.9.0.

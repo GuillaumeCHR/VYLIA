@@ -24,6 +24,7 @@ import com.vylia.privacy.domain.usecase.FullAuditUseCase
 import com.vylia.privacy.ui.notifications.InstallNotifications
 import com.vylia.privacy.data.backup.BackupRepository
 import com.vylia.privacy.ui.settings.AppLanguage
+import com.vylia.privacy.data.dns.PrivateDnsRepository
 import java.io.File
 
 /** Injection de dépendances manuelle : suffisante pour la V1, sans framework supplémentaire. */
@@ -34,6 +35,7 @@ class AppContainer(context: Context) {
     val badgesManager = BadgesManager(PrefsRewardsStore(context))
     val packageRemovalMonitor = PackageRemovalMonitor(context)
     val alternativesRepository = AlternativesRepository(context)
+    val privateDnsRepository = PrivateDnsRepository(context)
     val usageStatsReader = UsageStatsReader(context)
     val historyRecorder = HistoryRecorder(FileHistoryStore(File(context.filesDir, "history.json")))
 

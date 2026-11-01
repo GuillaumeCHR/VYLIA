@@ -66,6 +66,7 @@ fun ActScreen(
     // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
     LifecycleResumeEffect(Unit) {
         actViewModel.refreshUsage()
+        actViewModel.refreshDnsStatus()
         onPauseOrDispose { }
     }
 
@@ -103,7 +104,12 @@ fun ActScreen(
         }
         when {
             state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-            tab == ActTab.REDUCE -> ReduceTab(revocations, removals, usage)
+            tab == ActTab.REDUCE -> ReduceTab(revocations, removals, usage) {
+                val dnsCatalogue by actViewModel.dnsCatalogue.collectAsStateWithLifecycle()
+                val dnsStatus by actViewModel.dnsStatus.collectAsStateWithLifecycle()
+                val dnsListUpdate by actViewModel.dnsListUpdate.collectAsStateWithLifecycle()
+                PrivateDnsTab(dnsCatalogue, dnsStatus, dnsListUpdate, actViewModel::updateDnsList)
+            }
             tab == ActTab.ALTERNATIVES -> AlternativesTab(userApps, state.scannedApps, actViewModel.catalogue)
             else -> RewardsTab(state.userAverageScore?.value, rewards, recentRewards, viewModel::dismissRecentRewards)
         }

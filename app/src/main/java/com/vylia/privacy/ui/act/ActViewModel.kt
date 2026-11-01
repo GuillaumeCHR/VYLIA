@@ -8,7 +8,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vylia.privacy.VyliaApplication
 import com.vylia.privacy.data.alternatives.AlternativesRepository
 import com.vylia.privacy.data.apps.UsageStatsReader
+import com.vylia.privacy.data.dns.PrivateDnsRepository
+import com.vylia.privacy.data.dns.PrivateDnsStatus
 import com.vylia.privacy.domain.act.AlternativeCatalogue
+import com.vylia.privacy.domain.act.PrivateDnsCatalogue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,10 +23,38 @@ import kotlinx.coroutines.withContext
 data class UsageState(val hasAccess: Boolean = false, val lastUsed: Map<String, Long>? = null)
 
 /** Données propres à l'onglet Agir ; les apps, les règles et les récompenses viennent de ScanViewModel. */
+/** Résultat de « Mettre à jour la liste » des services DNS. */
+enum class DnsListUpdate { RUNNING, UPDATED, UNCHANGED, FAILED }
+
 class ActViewModel(
     private val usageStatsReader: UsageStatsReader,
     private val alternatives: AlternativesRepository,
+    private val privateDns: PrivateDnsRepository,
 ) : ViewModel() {
+
+    val dnsCatalogue: StateFlow<PrivateDnsCatalogue> = privateDns.catalogue
+
+    private val _dnsStatus = MutableStateFlow<PrivateDnsStatus>(PrivateDnsStatus.NoNetwork)
+    val dnsStatus: StateFlow<PrivateDnsStatus> = _dnsStatus.asStateFlow()
+
+    private val _dnsListUpdate = MutableStateFlow<DnsListUpdate?>(null)
+    val dnsListUpdate: StateFlow<DnsListUpdate?> = _dnsListUpdate.asStateFlow()
+
+    /** Au retour des réglages Android : le DNS privé vient peut-être d'être activé ou désactivé. */
+    fun refreshDnsStatus() {
+        _dnsStatus.value = privateDns.status()
+    }
+
+    fun updateDnsList() {
+        if (_dnsListUpdate.value == DnsListUpdate.RUNNING) return
+        viewModelScope.launch {
+            _dnsListUpdate.value = DnsListUpdate.RUNNING
+            _dnsListUpdate.value = privateDns.update().fold(
+                onSuccess = { changed -> if (changed) DnsListUpdate.UPDATED else DnsListUpdate.UNCHANGED },
+                onFailure = { DnsListUpdate.FAILED },
+            )
+        }
+    }
 
     private val _usage = MutableStateFlow(UsageState())
     val usage: StateFlow<UsageState> = _usage.asStateFlow()
@@ -44,7 +75,7 @@ class ActViewModel(
         val Factory = viewModelFactory {
             initializer {
                 val container = (this[APPLICATION_KEY] as VyliaApplication).container
-                ActViewModel(container.usageStatsReader, container.alternativesRepository)
+                ActViewModel(container.usageStatsReader, container.alternativesRepository, container.privateDnsRepository)
             }
         }
     }

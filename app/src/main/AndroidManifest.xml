@@ -16,6 +16,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <!-- Paramètres › Automatisations, désactivées par défaut : notification à l'installation d'une app, et
+         reprogrammation des tâches de fond après un redémarrage du téléphone. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application
         android:name=".VyliaApplication"
         android:allowBackup="false"
@@ -47,6 +52,12 @@
                 android:name="autoStoreLocales"
                 android:value="true" />
         </service>
+
+        <!-- Tâches de fond (contrôle des installations, scan programmé), lancées par le planificateur d'Android. -->
+        <service
+            android:name=".data.automation.AutomationJobService"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

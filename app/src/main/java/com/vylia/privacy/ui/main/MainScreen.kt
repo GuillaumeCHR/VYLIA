@@ -51,10 +51,13 @@ enum class AppTab(@param:StringRes val title: Int, val icon: ImageVector) {
 }
 
 @Composable
-fun MainScreen(homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)) {
+fun MainScreen(
+    initialPackage: String? = null,
+    homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
+) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
     var currentTab by rememberSaveable { mutableStateOf(AppTab.SCAN) }
-    var detailPackage by rememberSaveable { mutableStateOf<String?>(null) }
+    var detailPackage by rememberSaveable { mutableStateOf(initialPackage) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val rules by homeViewModel.rules.collectAsStateWithLifecycle()
     // Toujours la version la plus récente de l'app (le score évolue pendant l'analyse des traqueurs).

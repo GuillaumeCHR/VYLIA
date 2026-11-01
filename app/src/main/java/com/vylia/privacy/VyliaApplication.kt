@@ -10,5 +10,6 @@ class VyliaApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         container = AppContainer(this)
+        container.automationScheduler.sync()
     }
 }

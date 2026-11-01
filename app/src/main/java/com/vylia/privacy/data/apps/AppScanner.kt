@@ -49,7 +49,7 @@ class AppScanner(
     private val appOps = context.getSystemService(AppOpsManager::class.java)
     private val securitySignals = SecuritySignalCollector(context)
 
-    override suspend fun getInstalledApps(filter: AppFilter): List<InstalledApp> =
+    override suspend fun getInstalledApps(filter: AppFilter, only: Set<String>?): List<InstalledApp> =
         withContext(ioDispatcher) {
             val launcherPackages = queryLauncherActivities().mapTo(HashSet()) { it.activityInfo.packageName }
             val specialAccess = SpecialAccess(
@@ -60,6 +60,7 @@ class AppScanner(
             val signalSnapshot = securitySignals.snapshot()
             getInstalledPackages().mapNotNull { packageInfo ->
                 ensureActive()
+                if (only != null && packageInfo.packageName !in only) return@mapNotNull null
                 val appInfo = packageInfo.applicationInfo ?: return@mapNotNull null
                 val isSystemApp = appInfo.isSystemApp()
                 // Filtrage avant loadApp() : on ne charge pas d'icône pour un paquet écarté.

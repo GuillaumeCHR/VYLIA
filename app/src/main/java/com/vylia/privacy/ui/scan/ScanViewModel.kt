@@ -12,7 +12,6 @@ import com.vylia.privacy.VyliaApplication
 import com.vylia.privacy.data.apps.PackageRemovalMonitor
 import com.vylia.privacy.data.alternatives.AlternativesRepository
 import com.vylia.privacy.data.export.CsvExporter
-import com.vylia.privacy.domain.history.AppPoint
 import com.vylia.privacy.domain.history.History
 import com.vylia.privacy.domain.history.HistoryRecorder
 import com.vylia.privacy.data.preferences.SettingsRepository
@@ -28,6 +27,7 @@ import com.vylia.privacy.domain.rewards.RewardsState
 import com.vylia.privacy.domain.usecase.AnalyzeTrackersUseCase
 import com.vylia.privacy.domain.usecase.AuditAppsUseCase
 import com.vylia.privacy.domain.usecase.RiskFirstOrder
+import com.vylia.privacy.domain.usecase.historyPoint
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -127,9 +127,7 @@ class ScanViewModel(
             )
             if (BuildConfig.DEBUG) logScores()
             historyRecorder.record(
-                currentApps().filter { AppFilter.USER.matches(it.app) }.associate {
-                    it.app.packageName to AppPoint(it.app.label, it.score.value, it.result.permissionFindings.filter { f -> f.granted }.map { f -> f.permission }.toSet())
-                },
+                currentApps().filter { AppFilter.USER.matches(it.app) }.associate { it.app.packageName to it.historyPoint() },
             )
             badgesManager.onScanCompleted(
                 currentApps().filter { AppFilter.USER.matches(it.app) }.toSnapshots(),
@@ -144,6 +142,9 @@ class ScanViewModel(
 
     /** Toutes les apps du dernier scan (les deux onglets), pour l'export. */
     fun exportCsv(labels: CsvExporter.Labels): String = CsvExporter.export(currentApps(), labels)
+
+    /** Efface la courbe et l'historique ; le prochain scan complet repart de zéro (point de référence). */
+    fun clearHistory() = historyRecorder.clear()
 
     fun dismissRecentRewards() {
         _recentRewards.value = emptyList()

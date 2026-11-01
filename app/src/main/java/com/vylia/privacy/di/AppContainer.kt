@@ -17,6 +17,11 @@ import com.vylia.privacy.domain.history.HistoryRecorder
 import com.vylia.privacy.data.history.FileHistoryStore
 import com.vylia.privacy.domain.usecase.AnalyzeTrackersUseCase
 import com.vylia.privacy.domain.usecase.AuditAppsUseCase
+import com.vylia.privacy.data.automation.AutomationScheduler
+import com.vylia.privacy.data.automation.BackgroundScanner
+import com.vylia.privacy.data.automation.InstallWatcher
+import com.vylia.privacy.domain.usecase.FullAuditUseCase
+import com.vylia.privacy.ui.notifications.InstallNotifications
 import java.io.File
 
 /** Injection de dépendances manuelle : suffisante pour la V1, sans framework supplémentaire. */
@@ -42,4 +47,9 @@ class AppContainer(context: Context) {
 
     val auditAppsUseCase = AuditAppsUseCase(appScanner, scorer)
     val analyzeTrackersUseCase = AnalyzeTrackersUseCase(trackerAnalyzer, scorer = scorer)
+
+    private val fullAuditUseCase = FullAuditUseCase(auditAppsUseCase, analyzeTrackersUseCase)
+    val installWatcher = InstallWatcher(context, settingsRepository, fullAuditUseCase, InstallNotifications(context), scorer)
+    val backgroundScanner = BackgroundScanner(settingsRepository, fullAuditUseCase, historyRecorder)
+    val automationScheduler = AutomationScheduler(context, settingsRepository)
 }

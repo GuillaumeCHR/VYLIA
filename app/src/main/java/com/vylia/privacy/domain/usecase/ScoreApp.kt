@@ -32,6 +32,13 @@ internal fun InstalledApp.toAppScan(analysis: TrackerAnalysis): AppScan = AppSca
 fun PrivacyScorer.scoreWithout(audited: AuditedApp, revoked: Set<String>) =
     score(audited.app.toAppScan(audited.trackerAnalysis).let { it.copy(grantedPermissions = it.grantedPermissions - revoked) })
 
+/**
+ * Score qu'aurait l'app si toutes les permissions qu'elle déclare lui étaient accordées : à l'installation, rien ne
+ * l'est encore, et le score du moment est donc optimiste.
+ */
+fun PrivacyScorer.scoreIfAllGranted(audited: AuditedApp) =
+    score(audited.app.toAppScan(audited.trackerAnalysis).let { it.copy(grantedPermissions = it.grantedPermissions + it.declaredPermissions) })
+
 /** Ordre d'affichage : les plus à risque d'abord, puis par nom. */
 internal val RiskFirstOrder: Comparator<AuditedApp> =
     compareBy<AuditedApp> { it.score.value }.thenBy(String.CASE_INSENSITIVE_ORDER) { it.app.label }

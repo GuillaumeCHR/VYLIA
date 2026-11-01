@@ -27,12 +27,19 @@ class MainActivity : AppCompatActivity() {
             VyliaTheme {
                 // Instancié dès le splash : le scan démarre pendant l'animation. Même instance que l'écran Scan.
                 viewModel<ScanViewModel>(factory = ScanViewModel.Factory)
-                var showSplash by rememberSaveable { mutableStateOf(true) }
+                // Ouverte depuis une notification d'installation : directement la fiche de l'app, sans splash.
+                val openPackage = intent.getStringExtra(EXTRA_OPEN_PACKAGE)
+                var showSplash by rememberSaveable { mutableStateOf(openPackage == null) }
                 // Fondu court : le logotype de l'intro est déjà à la place du titre de l'écran Scan.
                 Crossfade(targetState = showSplash, animationSpec = tween(250), label = "splash") { splash ->
-                    if (splash) VyliaSplashScreen(onFinished = { showSplash = false }) else MainScreen()
+                    if (splash) VyliaSplashScreen(onFinished = { showSplash = false }) else MainScreen(initialPackage = openPackage)
                 }
             }
         }
+    }
+
+    companion object {
+        /** Paquet dont la fiche s'ouvre au lancement (notification d'installation). */
+        const val EXTRA_OPEN_PACKAGE = "com.vylia.privacy.OPEN_PACKAGE"
     }
 }

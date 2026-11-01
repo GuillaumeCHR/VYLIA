@@ -8,6 +8,9 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vylia.privacy.VyliaApplication
+import com.vylia.privacy.data.automation.AutomationScheduler
+import com.vylia.privacy.data.automation.InstallWatcher
+import com.vylia.privacy.data.preferences.BackgroundScan
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
@@ -41,12 +44,40 @@ data class SettingsUiState(
     val rulesMessage: RulesMessage? = null,
 )
 
+/** Paramètres › Automatisations. */
+data class AutomationUiState(
+    val installAlerts: Boolean = false,
+    val backgroundScan: BackgroundScan = BackgroundScan.OFF,
+    val lastBackgroundScan: Long? = null,
+)
+
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
     private val trackerUpdater: TrackerUpdater,
     private val trackerSignatureRepository: AssetTrackerSignatureRepository,
     private val ruleMatrixRepository: RuleMatrixRepository,
+    private val installWatcher: InstallWatcher,
+    private val automationScheduler: AutomationScheduler,
 ) : ViewModel() {
+
+    val automation: StateFlow<AutomationUiState> = combine(
+        settingsRepository.installAlerts,
+        settingsRepository.backgroundScan,
+        settingsRepository.lastBackgroundScan,
+        ::AutomationUiState,
+    ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AutomationUiState())
+
+    /** Seules les apps installées après l'activation seront signalées. */
+    fun setInstallAlerts(enabled: Boolean) {
+        if (enabled && !settingsRepository.installAlerts.value) installWatcher.start()
+        settingsRepository.setInstallAlerts(enabled)
+        automationScheduler.sync()
+    }
+
+    fun setBackgroundScan(frequency: BackgroundScan) {
+        settingsRepository.setBackgroundScan(frequency)
+        automationScheduler.sync()
+    }
 
     private val _isUpdating = MutableStateFlow(false)
     private val _updateError = MutableStateFlow<String?>(null)
@@ -133,7 +164,9 @@ class SettingsViewModel(
                     container.settingsRepository,
                     container.trackerUpdater,
                     container.trackerSignatureRepository,
-                    container.ruleMatrixRepository
+                    container.ruleMatrixRepository,
+                    container.installWatcher,
+                    container.automationScheduler,
                 )
             }
         }

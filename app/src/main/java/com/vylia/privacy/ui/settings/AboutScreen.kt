@@ -56,6 +56,7 @@ fun AboutScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             listOf(
                 R.string.about_privacy_no_ads,
                 R.string.about_privacy_network,
+                R.string.about_privacy_automation,
                 R.string.about_privacy_local,
             ).forEach {
                 Text(stringResource(it), style = MaterialTheme.typography.bodyMedium)

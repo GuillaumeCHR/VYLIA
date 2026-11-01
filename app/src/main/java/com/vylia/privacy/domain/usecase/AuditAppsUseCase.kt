@@ -15,9 +15,9 @@ class AuditAppsUseCase(
     /** Lu à chaque scan : des règles importées s'appliquent sans redémarrage. */
     private val scorer: () -> PrivacyScorer,
 ) {
-    suspend operator fun invoke(filter: AppFilter = AppFilter.ALL): List<AuditedApp> {
+    suspend operator fun invoke(filter: AppFilter = AppFilter.ALL, only: Set<String>? = null): List<AuditedApp> {
         val scorer = scorer()
-        return repository.getInstalledApps(filter)
+        return repository.getInstalledApps(filter, only)
             .filterNot { scorer.isExcluded(it.packageName) }
             .map { scorer.scoreApp(it, TrackerAnalysis.NotAnalyzed) }
             .sortedWith(RiskFirstOrder)

@@ -68,6 +68,19 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 ## 7. Paramètres & Automatisations
 * **Notification à l'installation :** Alerte en temps réel dans la barre de notifications lorsqu'une nouvelle application est installée, affichant un résumé de son score et de ses badges.
 * **Scans de fond programmés :** Option d'audit périodique (hebdomadaire ou mensuel) pour alimenter le graphique du suivi longitudinal (fonctionnalité désactivable à tout moment).
+
+---
+
+## 8. Paramètres › Gestion des données (sur le modèle de Molkky Board)
+* **Exporter mes données :** une sauvegarde complète en un fichier (Suivi : courbe et historique, récompenses et
+  points, réglages, règles de score importées), versionnée, qui sert aussi d'export RGPD.
+* **Importer une sauvegarde :** restauration qui **ajoute sans jamais écraser** (points de courbe et événements déjà
+  présents ou invalides écartés), avec un bilan affiché ; fichier refusé sans rien écrire s'il n'est pas une
+  sauvegarde VYLIA, s'il vient d'une version plus récente, s'il est trop gros ou illisible.
+* **Supprimer mes données :** effacement de tout ce que VYLIA a stocké (Suivi, récompenses, cache d'analyse), après
+  confirmation ; les réglages sont conservés.
+* **Conservé à part :** l'export spécifique des résultats du scan (rapport d'audit CSV).
+
 ---
 
 ## Avancement (mis à jour le 2026-11-01)
@@ -80,7 +93,8 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 | 4 | Écran Scan en 3 onglets | Fait : par risque, par catégorie, par badge ; icône → fiche Android |
 | 5 | Suivi longitudinal | Fait : onglet Analyse › Suivi (courbe moyenne ± écart-type, apps qui pèsent le plus, historique) |
 | 6 | Agir en 3 sous-onglets | Fait : Réduire (gain exact, apps inutilisées), Alternatives (catalogue), Récompenses et partage |
-| 7 | Notifications et scans programmés | À faire |
+| 7 | Notifications et scans programmés | Fait, à valider sur téléphone : Paramètres › Automatisations (alerte d'installation toutes les ~15 min, scan de fond hebdomadaire ou mensuel), JobScheduler sans bibliothèque |
+| 8 | Gestion des données (export, import, suppression) | À faire |
 |   | Grille de score v3 | Faite et visible dans Paramètres › Règles de score › Voir la grille |
 
 ### Prochaines actions
@@ -90,8 +104,8 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 3. ~~§3 Refonte visuelle~~ (fait le 2026-11-01) : nouvelle icône centrée sur l'idée de scan / audit (sans codes agressifs de cybersécurité),
    et splash screen redéfini avec une mascotte ou de petits espions stylisés et bienveillants, dans un registre
    ludique, moderne et rassurant (à la place des bugs rouges expulsés).
-4. ~~§5 Suivi~~ (fait le 2026-11-01). Reste §7 Automatisations : notification à l'installation, scans de fond
-   programmés qui alimentent le Suivi (le stockage `history.json` est prêt).
+4. ~~§5 Suivi~~ (fait le 2026-11-01). ~~§7 Automatisations~~ (fait le 2026-11-01) : notification à l'installation,
+   scans de fond programmés qui alimentent le Suivi. L'effacement du Suivi rejoint « Supprimer mes données » (§8).
 5. §6 Agir › Réduire, deux nouveaux modules (non développés) :
    - **V1 — Guidage DNS privé** : tutoriel pas à pas et bouton d'accès rapide aux paramètres système pour activer un
      DNS chiffré anti-traqueurs (ex. AdGuard, NextDNS), sans code complexe ni impact sur la batterie.
@@ -99,3 +113,5 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
      temps réel les requêtes de traçage sortantes sans envoyer aucune donnée vers l'extérieur, activable par un simple
      interrupteur. Attention : demande l'accès Internet et un service au premier plan, à refléter dans l'écran
      « Vie privée » et dans la grille (VYLIA est exclue de son propre score).
+6. §8 Paramètres › Gestion des données : remplacer l'écran « Export et données » par Exporter / Importer / Supprimer
+   mes données, comme dans Molkky Board, en gardant l'export CSV des résultats du scan (voir §8).

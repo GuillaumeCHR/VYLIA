@@ -66,6 +66,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.R
 import com.vylia.privacy.data.export.CsvExporter
+import com.vylia.privacy.data.preferences.BackgroundScan
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.scan.ScanViewModel
@@ -88,7 +89,7 @@ private class OpenFromDownloads : ActivityResultContracts.OpenDocument() {
 private val RuleFileMimeTypes = arrayOf("application/json", "text/plain", "application/octet-stream")
 
 /** Sous-menus des Paramètres : une page par grande entrée du menu principal. */
-private enum class SettingsPage { MAIN, RULES, GRID, DATABASE, DATA, ABOUT }
+private enum class SettingsPage { MAIN, RULES, GRID, DATABASE, AUTOMATION, DATA, ABOUT }
 
 /**
  * Paramètres : réglages généraux (langue, mode d'analyse) en tête, puis une entrée par sous-menu
@@ -113,6 +114,7 @@ fun SettingsScreen(
             ScoringGridScreen(modifier, loadedRules.rules, back)
         }
         SettingsPage.DATABASE -> DatabasePage(modifier, viewModel, back)
+        SettingsPage.AUTOMATION -> AutomationPage(modifier, viewModel, back)
         SettingsPage.DATA -> DataPage(modifier, homeViewModel, back)
         SettingsPage.ABOUT -> AboutScreen(modifier, back)
     }
@@ -123,6 +125,7 @@ fun SettingsScreen(
 @Composable
 private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpen: (SettingsPage) -> Unit) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val automation by viewModel.automation.collectAsStateWithLifecycle()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -156,6 +159,19 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
             else stringResource(R.string.settings_database_hint, formatDate(state.lastUpdateTimestamp)),
             hintColor = if (state.isObsolete) MaterialTheme.colorScheme.error else Color.Unspecified,
             onClick = { onOpen(SettingsPage.DATABASE) },
+        )
+
+        SettingsLink(
+            title = stringResource(R.string.settings_automation),
+            hint = stringResource(
+                when {
+                    automation.installAlerts && automation.backgroundScan != BackgroundScan.OFF -> R.string.settings_automation_both
+                    automation.installAlerts -> R.string.settings_automation_install
+                    automation.backgroundScan != BackgroundScan.OFF -> R.string.settings_automation_scan
+                    else -> R.string.settings_automation_off
+                }
+            ),
+            onClick = { onOpen(SettingsPage.AUTOMATION) },
         )
 
         SectionTitle(R.string.settings_data)

@@ -205,11 +205,14 @@ class ShieldVpnService : VpnService() {
             if (length <= 0) continue
             // Le reste (TCP vers le port 53 ou 853, autres paquets) est abandonné : Android repasse en UDP.
             val query = DnsQuery.parse(buffer, length) ?: continue
-            val match = blocklist.match(query.name)
+            // En pause : tout est transmis, rien n'est compté.
+            val match = if (controller.isPaused()) null else blocklist.match(query.name)
             if (match != null) {
                 write(output, query.reply(query.blockedResponse()))
                 controller.onBlocked(query.name, match)
             } else {
+                // Version de développement seulement : ce qui passe, pour repérer les régies que la liste oublie.
+                if (BuildConfig.DEBUG) Log.d(TAG, "Autorisé ${query.name}")
                 forward(output, query)
             }
         }

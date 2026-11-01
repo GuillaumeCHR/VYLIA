@@ -121,6 +121,8 @@ fun ActScreen(
                         consentIntent = actViewModel::shieldConsentIntent,
                         onStart = actViewModel::startShield,
                         onStop = actViewModel::stopShield,
+                        onPause = actViewModel::pauseShield,
+                        onResume = actViewModel::resumeShield,
                     )
                 }
             }

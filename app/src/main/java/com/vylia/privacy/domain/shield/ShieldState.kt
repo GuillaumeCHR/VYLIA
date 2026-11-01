@@ -24,7 +24,11 @@ data class ShieldState(
     val blockedTotal: Long = 0,
     /** Du plus récent au plus ancien, au plus [MAX_RECENT]. */
     val recent: List<BlockedRequest> = emptyList(),
+    /** Pause en cours : rien n'est bloqué jusqu'à cet instant, puis le bouclier reprend seul. */
+    val pausedUntil: Long? = null,
 ) {
+    fun isPaused(now: Long): Boolean = pausedUntil != null && now < pausedUntil
+
     fun onBlocked(request: BlockedRequest): ShieldState = copy(
         blockedSession = blockedSession + 1,
         blockedTotal = blockedTotal + 1,
@@ -33,5 +37,8 @@ data class ShieldState(
 
     companion object {
         const val MAX_RECENT = 20
+
+        /** Durée de la pause proposée : le temps d'une vidéo récompensée ou d'ouvrir un lien. */
+        const val PAUSE_MS = 5 * 60 * 1000L
     }
 }

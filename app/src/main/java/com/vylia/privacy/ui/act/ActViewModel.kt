@@ -56,6 +56,10 @@ class ActViewModel(
 
     fun stopShield() = shieldController.stop()
 
+    fun pauseShield() = shieldController.pause()
+
+    fun resumeShield() = shieldController.resume()
+
     fun refreshShieldContext() {
         _otherVpn.value = shieldController.otherVpnActive()
     }

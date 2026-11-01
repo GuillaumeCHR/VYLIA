@@ -59,8 +59,29 @@ class ShieldController(
         context.startService(Intent(context, ShieldVpnService::class.java).setAction(ShieldVpnService.ACTION_STOP))
     }
 
+    /**
+     * Met le bouclier en pause pour [ShieldState.PAUSE_MS] : le VPN reste en place mais laisse tout passer, puis le
+     * filtrage reprend seul à l'heure dite, sans rien relancer (Android limite les démarrages en arrière-plan).
+     */
+    fun pause(now: Long = System.currentTimeMillis()) {
+        _state.update { if (it.status == ShieldStatus.ON) it.copy(pausedUntil = now + ShieldState.PAUSE_MS) else it }
+    }
+
+    fun resume() {
+        _state.update { it.copy(pausedUntil = null) }
+    }
+
+    /** Lu par le VPN à chaque requête. */
+    internal fun isPaused(): Boolean = _state.value.isPaused(System.currentTimeMillis())
+
     internal fun onStatus(status: ShieldStatus) {
-        _state.update { if (status == ShieldStatus.ON && it.status != ShieldStatus.ON) it.copy(status = status, blockedSession = 0) else it.copy(status = status) }
+        _state.update {
+            when {
+                status == ShieldStatus.ON && it.status != ShieldStatus.ON -> it.copy(status = status, blockedSession = 0, pausedUntil = null)
+                status != ShieldStatus.ON -> it.copy(status = status, pausedUntil = null)
+                else -> it.copy(status = status)
+            }
+        }
         if (status != ShieldStatus.ON && status != ShieldStatus.STARTING) flush()
     }
 

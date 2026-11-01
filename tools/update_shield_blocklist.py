@@ -7,7 +7,11 @@ Sources, téléchargées sur le poste de dev uniquement (l'app ne télécharge r
   - EasyPrivacy (pistage) et EasyList (publicité) (https://easylist.to, GPL v3 ou CC BY-SA 3.0, au choix ; VYLIA
     étant sous GPL v3, c'est elle qui s'applique) : seules les règles qui visent un domaine entier, « ||domaine^ »
     sans chemin ni option, ont un sens au niveau DNS ; pour EasyList, ce sont surtout ses serveurs de publicité.
-    Les exceptions de même forme (« @@||domaine^ ») de l'une ou l'autre liste sont respectées.
+    Les exceptions de même forme (« @@||domaine^ ») de l'une ou l'autre liste sont respectées ;
+  - AdGuard Mobile Ads filter (https://github.com/AdguardTeam/AdguardFilters, GPL v3) : les régies des apps et jeux
+    mobiles (ironSource, Meta Audience Network, Pangle, Mintegral, Unity Ads…), qu'EasyList, faite pour le web, ne
+    couvre pas ; mêmes règles de domaine entier ;
+  - MOBILE_EXTRA : complément maison, domaine par domaine, pour ce qu'aucune liste ne couvre (avec la raison).
 
 Prudence, pour ne pas casser d'apps :
   - côté Exodus, seuls les traqueurs de catégorie Advertisement, Analytics, Profiling ou Identification sont
@@ -19,7 +23,7 @@ Prudence, pour ne pas casser d'apps :
     sont écartées et listées.
 
 Usage : python3 tools/update_shield_blocklist.py [--exodus api.json] [--easyprivacy easyprivacy.txt]
-                                                  [--easylist easylist.txt]
+                                                  [--easylist easylist.txt] [--adguard-mobile 11.txt]
 Produit app/src/main/assets/shield_blocklist.json.
 """
 import argparse
@@ -32,6 +36,15 @@ import urllib.request
 EXODUS_URL = "https://reports.exodus-privacy.eu.org/api/trackers"
 EASYPRIVACY_URL = "https://easylist.to/easylist/easyprivacy.txt"
 EASYLIST_URL = "https://easylist.to/easylist/easylist.txt"
+ADGUARD_MOBILE_URL = "https://filters.adtidy.org/extension/ublock/filters/11.txt"
+
+# Complément maison : domaines de traçage ou de pub des apps mobiles qu'aucune liste ne couvre. Chaque entrée est
+# vérifiée (rôle du domaine, et absence de fonction utile à l'app qui l'appelle) ; le nom est affiché dans l'app.
+MOBILE_EXTRA = {
+    # Google Analytics for Firebase : mesure d'audience des apps (événements, sessions, conversions publicitaires).
+    # Le bloquer n'empêche ni la connexion, ni les notifications, ni la base de données Firebase.
+    "Google Firebase Analytics": ["app-measurement.com"],
+}
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "app/src/main/assets/shield_blocklist.json"
 OVERRIDES = ROOT / "tools/exodus_category_overrides.json"
@@ -111,6 +124,7 @@ def main():
     parser.add_argument("--exodus", help="réponse de l'API Exodus déjà téléchargée")
     parser.add_argument("--easyprivacy", help="easyprivacy.txt déjà téléchargé")
     parser.add_argument("--easylist", help="easylist.txt déjà téléchargé")
+    parser.add_argument("--adguard-mobile", help="filtre AdGuard Mobile Ads (11.txt) déjà téléchargé")
     args = parser.parse_args()
 
     api = json.loads(pathlib.Path(args.exodus).read_text(encoding="utf-8") if args.exodus else fetch(EXODUS_URL, "application/json"))
@@ -120,8 +134,13 @@ def main():
     exodus, skipped = exodus_domains(api, overrides())
     easyprivacy, privacy_exceptions, privacy_version = adblock_domains(load_list(args.easyprivacy, EASYPRIVACY_URL))
     easylist, list_exceptions, list_version = adblock_domains(load_list(args.easylist, EASYLIST_URL))
-    exceptions = privacy_exceptions | list_exceptions
-    lists = (easyprivacy | easylist) - exceptions
+    mobile, mobile_exceptions, mobile_version = adblock_domains(load_list(args.adguard_mobile, ADGUARD_MOBILE_URL))
+    for name, domains in MOBILE_EXTRA.items():
+        for domain in domains:
+            assert DOMAIN.match(domain) and not is_protected(domain), domain
+            exodus.setdefault(domain, name)  # même place que les domaines Exodus : le nom est affiché
+    exceptions = privacy_exceptions | list_exceptions | mobile_exceptions
+    lists = (easyprivacy | easylist | mobile) - exceptions
     kept = drop_redundant(set(exodus) | lists)
     trackers = {}
     for domain in sorted(kept):
@@ -136,15 +155,18 @@ def main():
             {"name": "Exodus Privacy", "url": EXODUS_URL, "license": "ODbL 1.0"},
             {"name": "EasyPrivacy", "url": EASYPRIVACY_URL, "license": "GPL v3", "version": privacy_version},
             {"name": "EasyList", "url": EASYLIST_URL, "license": "GPL v3", "version": list_version},
+            {"name": "AdGuard Mobile Ads filter", "url": ADGUARD_MOBILE_URL, "license": "GPL v3", "version": mobile_version},
+            {"name": "VYLIA (complément maison)", "license": "GPL v3"},
         ],
-        # nom du traqueur Exodus -> domaines (le nom est affiché dans l'app à chaque blocage)
+        # nom du traqueur (Exodus ou complément maison) -> domaines (le nom est affiché dans l'app à chaque blocage)
         "trackers": trackers,
-        # domaines EasyPrivacy et EasyList sans traqueur Exodus correspondant
+        # domaines EasyPrivacy, EasyList et AdGuard sans traqueur nommé
         "domains": others,
     }
     OUTPUT.write_text(json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
     print(f"Exodus : {len(exodus)} domaines ({len(skipped)} signatures écartées) ; EasyPrivacy {privacy_version} : "
           f"{len(easyprivacy)} domaines ; EasyList {list_version} : {len(easylist)} domaines ; "
+          f"AdGuard Mobile {mobile_version} : {len(mobile)} domaines ; maison : {sum(map(len, MOBILE_EXTRA.values()))} ; "
           f"{len(exceptions)} exceptions.")
     print(f"{len(kept)} domaines après fusion -> {OUTPUT.relative_to(ROOT)} ({OUTPUT.stat().st_size // 1024} Ko)")
     for line in skipped:

@@ -12,12 +12,22 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,14 +45,18 @@ import com.vylia.privacy.domain.shield.ShieldState
 import com.vylia.privacy.domain.shield.ShieldStatus
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.currentLocale
+import android.text.format.DateFormat
+import kotlinx.coroutines.delay
 import java.text.NumberFormat
+import java.util.Date
 
 private val Green = Color(0xFF10B981)
 private val Amber = Color(0xFFF59E0B)
 
 /**
  * Réduire › Traçage pub : l'interrupteur du Bouclier VYLIA, le compteur de requêtes bloquées en direct, les derniers
- * blocages (en mémoire seulement), et ce qui peut l'empêcher de fonctionner (DNS privé réglé sur un service, autre VPN).
+ * blocages (en mémoire seulement), la pause de 5 minutes et quand s'en servir, et ce qui peut l'empêcher de
+ * fonctionner (DNS privé réglé sur un service, autre VPN).
  */
 @Composable
 internal fun ShieldCard(
@@ -53,6 +67,8 @@ internal fun ShieldCard(
     consentIntent: () -> Intent?,
     onStart: () -> Unit,
     onStop: () -> Unit,
+    onPause: () -> Unit,
+    onResume: () -> Unit,
 ) {
     val context = LocalContext.current
     val format = NumberFormat.getIntegerInstance(currentLocale())
@@ -60,6 +76,18 @@ internal fun ShieldCard(
         if (result.resultCode == Activity.RESULT_OK) onStart()
     }
     val active = state.status == ShieldStatus.ON || state.status == ShieldStatus.STARTING
+    // Horloge de l'écran, pour que la fin de la pause s'affiche sans attendre un autre événement.
+    var now by remember { mutableLongStateOf(System.currentTimeMillis()) }
+    LaunchedEffect(state.pausedUntil) {
+        now = System.currentTimeMillis()
+        val until = state.pausedUntil ?: return@LaunchedEffect
+        while (now < until) {
+            delay(1_000)
+            now = System.currentTimeMillis()
+        }
+    }
+    val paused = state.status == ShieldStatus.ON && state.isPaused(now)
+    var pauseHelp by rememberSaveable { mutableStateOf(false) }
 
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -92,6 +120,15 @@ internal fun ShieldCard(
                     color = Green,
                 )
             }
+            if (state.status == ShieldStatus.ON) {
+                if (paused) {
+                    val until = DateFormat.getTimeFormat(context).format(Date(state.pausedUntil!!))
+                    Text(stringResource(R.string.shield_paused_until, until), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold, color = Amber)
+                    Button(onClick = onResume) { Text(stringResource(R.string.shield_resume)) }
+                } else {
+                    OutlinedButton(onClick = onPause) { Text(stringResource(R.string.shield_pause)) }
+                }
+            }
             if (state.blockedTotal > 0) {
                 Text(
                     stringResource(R.string.shield_blocked_total, format.format(state.blockedTotal)),
@@ -120,6 +157,24 @@ internal fun ShieldCard(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
+                }
+            }
+
+            // Quand faire une pause : repliée par défaut, la carte est déjà longue.
+            TextButton(onClick = { pauseHelp = !pauseHelp }, contentPadding = PaddingValues(0.dp)) {
+                Text(stringResource(R.string.shield_pause_title) + if (pauseHelp) "  ▴" else "  ▾")
+            }
+            if (pauseHelp) {
+                Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    Text(stringResource(R.string.shield_pause_intro), style = MaterialTheme.typography.bodySmall)
+                    listOf(
+                        R.string.shield_pause_reward,
+                        R.string.shield_pause_links,
+                        R.string.shield_pause_offers,
+                        R.string.shield_pause_sponsored,
+                        R.string.shield_pause_diagnose,
+                    ).forEach { Text(stringResource(it), style = MaterialTheme.typography.bodySmall) }
+                    Text(stringResource(R.string.shield_pause_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
             }
 

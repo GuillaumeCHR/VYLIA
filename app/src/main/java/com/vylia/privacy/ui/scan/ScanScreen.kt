@@ -100,7 +100,6 @@ fun ScanScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loadedRules by viewModel.rules.collectAsStateWithLifecycle()
-    var query by rememberSaveable { mutableStateOf("") }
     var gradeFilter by rememberSaveable { mutableStateOf<String?>(null) }
     var scanTab by rememberSaveable { mutableStateOf(ScanTab.RISK) }
     var badgeFilter by rememberSaveable { mutableStateOf<String?>(null) }
@@ -109,8 +108,6 @@ fun ScanScreen(
         modifier = modifier,
         state = state,
         rules = loadedRules.rules,
-        query = query,
-        onQueryChange = { query = it },
         gradeFilter = gradeFilter,
         onGradeFilter = { gradeFilter = it },
         scanTab = scanTab,
@@ -132,8 +129,6 @@ fun ScanContent(
     modifier: Modifier = Modifier,
     state: ScanUiState,
     rules: Rules? = null,
-    query: String = "",
-    onQueryChange: (String) -> Unit = {},
     gradeFilter: String? = null,
     onGradeFilter: (String?) -> Unit = {},
     scanTab: ScanTab = ScanTab.RISK,
@@ -146,90 +141,57 @@ fun ScanContent(
     onRefresh: () -> Unit,
     onAppClick: (AuditedApp) -> Unit = {},
 ) {
-    Scaffold(
-        // [modifier] porte la place de la barre de navigation de l'app ; la barre d'état est gérée par la TopAppBar,
-        // et les insets système sont déjà comptés par l'écran parent : on ne les ajoute pas une seconde fois.
-        modifier = modifier,
-        contentWindowInsets = WindowInsets(0),
-        topBar = {
-            // Recherche repliée en loupe, à côté du bouton rafraîchir ; ouverte, elle remplace le logotype.
-            var searchOpen by rememberSaveable { mutableStateOf(query.isNotEmpty()) }
-            TopAppBar(
-                // Même logotype que l'intro, qui vient s'y poser à la fin de l'animation.
-                title = {
-                    if (searchOpen) SearchField(query, onQueryChange, stringResource(R.string.home_search_hint)) else VyliaLogotype()
-                },
-                actions = {
-                    if (searchOpen) {
-                        IconButton(onClick = { onQueryChange(""); searchOpen = false }) {
-                            Icon(Icons.Default.Close, contentDescription = stringResource(R.string.home_search_clear))
-                        }
-                    } else {
-                        IconButton(onClick = { searchOpen = true }) {
-                            Icon(Icons.Default.Search, contentDescription = stringResource(R.string.home_search_hint))
-                        }
-                    }
-                    IconButton(onClick = onRefresh, enabled = !state.isLoading) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_refresh),
-                            contentDescription = stringResource(R.string.home_refresh),
-                        )
-                    }
-                },
-            )
-        },
-    ) { innerPadding ->
-        Column(modifier = Modifier.padding(top = innerPadding.calculateTopPadding())) {
-            PrimaryTabRow(selectedTabIndex = scanTab.ordinal) {
-                ScanTab.entries.forEach { tab ->
-                    Tab(selected = scanTab == tab, onClick = { onScanTab(tab) }, text = { Text(stringResource(tab.title)) })
+    // La barre d'en-tête (logotype, bouclier, recherche globale) est celle de l'écran principal.
+    Column(modifier = modifier) {
+        PrimaryTabRow(selectedTabIndex = scanTab.ordinal) {
+            ScanTab.entries.forEach { tab ->
+                Tab(selected = scanTab == tab, onClick = { onScanTab(tab) }, text = { Text(stringResource(tab.title)) })
+            }
+        }
+
+        LastScanLine(
+            lastScanAt = state.lastScanAt,
+            scanning = state.isLoading || state.isAnalyzingTrackers,
+            onRefresh = onRefresh,
+            refreshEnabled = !state.isLoading,
+            modifier = Modifier.padding(start = 16.dp, end = 4.dp),
+        )
+
+        // Mode Avancé : choix entre apps utilisateur et apps système.
+        if (state.advancedMode) {
+            Row(
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                Tabs.forEach { filter ->
+                    FilterChip(
+                        selected = filter == state.selectedFilter,
+                        onClick = { onFilterSelected(filter) },
+                        label = {
+                            Text(
+                                when (filter) {
+                                    AppFilter.SYSTEM -> stringResource(R.string.tab_system_apps, state.systemAppCount)
+                                    else -> stringResource(R.string.tab_user_apps, state.userAppCount)
+                                }
+                            )
+                        },
+                    )
                 }
             }
+        }
 
-            LastScanLine(
-                lastScanAt = state.lastScanAt,
-                scanning = state.isLoading || state.isAnalyzingTrackers,
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp),
+        val contentPadding = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 16.dp)
+        when {
+            state.isLoading -> CenteredMessage(stringResource(R.string.home_scanning), showProgress = true)
+            state.errorMessage != null -> CenteredMessage(
+                message = stringResource(R.string.home_error, state.errorMessage),
+                actionLabel = stringResource(R.string.home_retry),
+                onAction = onRefresh,
             )
-
-            // Mode Avancé : choix entre apps utilisateur et apps système.
-            if (state.advancedMode) {
-                Row(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Tabs.forEach { filter ->
-                        FilterChip(
-                            selected = filter == state.selectedFilter,
-                            onClick = { onFilterSelected(filter) },
-                            label = {
-                                Text(
-                                    when (filter) {
-                                        AppFilter.SYSTEM -> stringResource(R.string.tab_system_apps, state.systemAppCount)
-                                        else -> stringResource(R.string.tab_user_apps, state.userAppCount)
-                                    }
-                                )
-                            },
-                        )
-                    }
-                }
-            }
-
-            val searched = remember(state.apps, query) { state.apps.filter { it.matches(query) } }
-            val contentPadding = PaddingValues(start = 16.dp, top = 12.dp, end = 16.dp, bottom = innerPadding.calculateBottomPadding() + 16.dp)
-            when {
-                state.isLoading -> CenteredMessage(stringResource(R.string.home_scanning), showProgress = true)
-                state.errorMessage != null -> CenteredMessage(
-                    message = stringResource(R.string.home_error, state.errorMessage),
-                    actionLabel = stringResource(R.string.home_retry),
-                    onAction = onRefresh,
-                )
-                state.apps.isEmpty() -> CenteredMessage(stringResource(R.string.home_empty))
-                searched.isEmpty() -> CenteredMessage(stringResource(R.string.home_search_empty, query.trim()))
-                scanTab == ScanTab.RISK -> RiskTab(searched, rules, gradeFilter, onGradeFilter, onAppClick, contentPadding)
-                scanTab == ScanTab.CATEGORY -> CategoryTab(searched, rules, categoryFilter, onCategoryFilter, onAppClick, contentPadding)
-                else -> BadgeTab(searched, rules, badgeFilter, onBadgeFilter, onAppClick, contentPadding)
-            }
+            state.apps.isEmpty() -> CenteredMessage(stringResource(R.string.home_empty))
+            scanTab == ScanTab.RISK -> RiskTab(state.apps, rules, gradeFilter, onGradeFilter, onAppClick, contentPadding)
+            scanTab == ScanTab.CATEGORY -> CategoryTab(state.apps, rules, categoryFilter, onCategoryFilter, onAppClick, contentPadding)
+            else -> BadgeTab(state.apps, rules, badgeFilter, onBadgeFilter, onAppClick, contentPadding)
         }
     }
 }
@@ -403,16 +365,6 @@ private fun CategoryHeader(name: String, count: Int, expanded: Boolean, onToggle
         )
     }
 }
-
-private fun AuditedApp.matches(query: String): Boolean {
-    val needle = query.trim().normalizedForSearch()
-    return needle.isEmpty() || needle in app.label.normalizedForSearch() || needle in app.packageName.lowercase()
-}
-
-private fun String.normalizedForSearch(): String =
-    Normalizer.normalize(this, Normalizer.Form.NFD).replace(DiacriticalMarks, "").lowercase()
-
-private val DiacriticalMarks = Regex("\\p{Mn}+")
 
 @Composable
 private fun AppList(

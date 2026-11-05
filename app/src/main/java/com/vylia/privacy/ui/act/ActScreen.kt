@@ -26,6 +26,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -43,19 +45,20 @@ import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.scan.ScanViewModel
 
-/** Les trois modules pratiques de l'onglet Agir. */
-private enum class ActTab(@param:StringRes val title: Int) {
-    REDUCE(R.string.act_tab_reduce),
-    ALTERNATIVES(R.string.act_tab_alternatives),
-    REWARDS(R.string.act_tab_rewards),
+/** Les trois écrans issus de l'ancien onglet Agir, chacun dans la barre de navigation. */
+enum class ActSection(@param:StringRes val title: Int) {
+    REDUCE(R.string.reduce_title),
+    ALTERNATIVES(R.string.replace_title),
+    REWARDS(R.string.celebrate_title),
 }
 
 /**
- * Agir : en tête, l'analyse globale (score moyen de vos apps et score atteignable en suivant les propositions), puis
- * trois modules : Réduire (autorisations à retirer, apps à supprimer), Alternatives, Récompenses et partage.
+ * Réduire (avec en tête l'analyse globale : score moyen et score atteignable), Remplacer (alternatives) ou Célébrer
+ * (récompenses et partage), selon [section]. Étape provisoire avant des écrans propres à chacun.
  */
 @Composable
 fun ActScreen(
+    section: ActSection,
     modifier: Modifier = Modifier,
     viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
     actViewModel: ActViewModel = viewModel(factory = ActViewModel.Factory),
@@ -65,7 +68,7 @@ fun ActScreen(
     val rewards by viewModel.rewards.collectAsStateWithLifecycle()
     val recentRewards by viewModel.recentRewards.collectAsStateWithLifecycle()
     val usage by actViewModel.usage.collectAsStateWithLifecycle()
-    var tab by rememberSaveable { mutableStateOf(ActTab.REDUCE) }
+    val tab = section
 
     // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
     LifecycleResumeEffect(Unit) {
@@ -88,28 +91,12 @@ fun ActScreen(
             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Text(stringResource(R.string.act_title), style = MaterialTheme.typography.headlineMedium)
-            if (!state.isLoading) SummaryCard(state.userAverageScore, projected, revocations.size, removals.size)
-        }
-        PrimaryTabRow(selectedTabIndex = tab.ordinal) {
-            ActTab.entries.forEach { entry ->
-                Tab(
-                    selected = tab == entry,
-                    onClick = { tab = entry },
-                    text = {
-                        Text(
-                            stringResource(entry.title),
-                            maxLines = 1,
-                            softWrap = false,
-                            autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = LocalTextStyle.current.fontSize),
-                        )
-                    },
-                )
-            }
+            Text(stringResource(section.title), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
+            if (!state.isLoading && section == ActSection.REDUCE) SummaryCard(state.userAverageScore, projected, revocations.size, removals.size)
         }
         when {
             state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-            tab == ActTab.REDUCE -> ReduceTab(revocations, removals, usage) {
+            tab == ActSection.REDUCE -> ReduceTab(revocations, removals, usage) {
                 val dnsCatalogue by actViewModel.dnsCatalogue.collectAsStateWithLifecycle()
                 val dnsStatus by actViewModel.dnsStatus.collectAsStateWithLifecycle()
                 val dnsListUpdate by actViewModel.dnsListUpdate.collectAsStateWithLifecycle()
@@ -132,7 +119,7 @@ fun ActScreen(
                     )
                 }
             }
-            tab == ActTab.ALTERNATIVES -> AlternativesTab(state.scannedApps, actViewModel.catalogue)
+            tab == ActSection.ALTERNATIVES -> AlternativesTab(state.scannedApps, actViewModel.catalogue)
             else -> {
                 val history by viewModel.history.collectAsStateWithLifecycle()
                 val shield by actViewModel.shield.collectAsStateWithLifecycle()

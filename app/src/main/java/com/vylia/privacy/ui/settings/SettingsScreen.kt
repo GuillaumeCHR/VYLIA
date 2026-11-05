@@ -28,12 +28,10 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
@@ -133,8 +131,7 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineMedium)
-
+        // Titre et retour : barre d'en-tête de l'écran principal.
         SectionTitle(R.string.settings_general)
         LanguageCard()
         SettingsSwitch(
@@ -378,7 +375,11 @@ private const val ODBL_URL = "https://opendatacommons.org/licenses/odbl/1-0/"
 
 // --- Briques communes -------------------------------------------------------------------------
 
-/** Sous-menu : flèche de retour, titre, puis contenu défilant. */
+/**
+ * Sous-menu : titre, puis contenu défilant. Le retour passe par la flèche de la barre d'en-tête et le geste retour
+ * d'Android, tous deux reçus par le [BackHandler] de [SettingsScreen] ; [onBack] reste pour les appelants.
+ */
+@Suppress("UNUSED_PARAMETER")
 @Composable
 internal fun SubPage(modifier: Modifier, @StringRes title: Int, onBack: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
     Column(
@@ -388,12 +389,7 @@ internal fun SubPage(modifier: Modifier, @StringRes title: Int, onBack: () -> Un
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-            }
-            Text(stringResource(title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
-        }
+        Text(stringResource(title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         content()
     }
 }

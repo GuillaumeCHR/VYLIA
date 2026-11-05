@@ -34,9 +34,29 @@
     <!-- Navigation, Scan et détail d'une app -->
     <string name="tab_scan">Scan</string>
     <string name="tab_analyze">Analyse</string>
-    <string name="tab_act">Agir</string>
-    <string name="tab_learn">Comprendre</string>
-    <string name="tab_settings">Paramètres</string>
+    <string name="tab_reduce">Réduire</string>
+    <string name="tab_replace">Remplacer</string>
+    <string name="tab_celebrate">Célébrer</string>
+    <string name="topbar_help">Aide sur cet écran</string>
+    <string name="help_title">Aide</string>
+    <string name="search_prompt">Tapez le nom d\'une app pour ouvrir sa fiche.</string>
+    <string name="reduce_title">Réduire l\'exposition</string>
+    <string name="replace_title">Choisir une alternative</string>
+    <string name="celebrate_title">Vos progrès</string>
+    <string name="shield_pill_active">Actif</string>
+    <string name="shield_pill_inactive">Inactif</string>
+    <string name="shield_pill_starting">Activation</string>
+    <string name="shield_pill_bypassed">Contourné</string>
+    <string name="shield_pill_desc_active">Bouclier actif. Désactiver</string>
+    <string name="shield_pill_desc_inactive">Bouclier inactif. Activer</string>
+    <string name="shield_pill_desc_starting">Activation du bouclier en cours</string>
+    <string name="shield_pill_desc_bypassed">Bouclier contourné. Voir le motif</string>
+    <string name="shield_bypass_title">Bouclier contourné</string>
+    <string name="shield_bypass_dns">Un service de DNS privé est réglé sur ce téléphone : Android lui envoie directement ses requêtes, et le bouclier ne les filtre plus. Désactivez le DNS privé, ou passez-le en Automatique, dans les réglages réseau d\'Android.</string>
+    <string name="shield_bypass_vpn">Le VPN d\'une autre app a pris la place du bouclier : Android n\'en garde qu\'un actif à la fois. Reprenez la main pour filtrer à nouveau ; l\'autre VPN sera déconnecté.</string>
+    <string name="shield_bypass_open_network">Ouvrir les réglages réseau</string>
+    <string name="shield_turn_off">Désactiver le bouclier</string>
+    <string name="shield_take_over">Reprendre la main</string>
     <string name="back">Retour</string>
     <string name="label_colon">%1$s : </string>
     <string name="score_description">%1$d/100, %2$s</string>
@@ -180,7 +200,6 @@
     </plurals>
 
     <!-- Agir -->
-    <string name="act_title">Agir</string>
     <string name="act_rewards_title">🏆 Récompenses</string>
     <string name="act_rewards_text">Chaque application intrusive (score &lt; 50) que vous supprimez rapporte 100 − son score en points.</string>
     <string name="act_badges">Badges (%1$d/%2$d)</string>
@@ -188,9 +207,6 @@
     <string name="act_removed_empty">Aucune pour l\'instant. Rendez-vous dans « Assainir » ci-dessous pour commencer.</string>
     <string name="act_points">points de confidentialité</string>
     <string name="ok">OK</string>
-    <string name="act_tab_reduce">Réduire</string>
-    <string name="act_tab_alternatives">Alternatives</string>
-    <string name="act_tab_rewards">Récompenses</string>
     <string name="reduce_tab_permissions">Autorisations</string>
     <string name="reduce_tab_removals">Apps</string>
     <string name="reduce_tab_private_dns">Traçage pub</string>

@@ -1,54 +1,53 @@
 package com.vylia.privacy.ui.main
 
-import com.vylia.privacy.ui.act.ActScreen
-import com.vylia.privacy.ui.analysis.AnalysisScreen
-import com.vylia.privacy.ui.settings.SettingsScreen
-import com.vylia.privacy.ui.understand.UnderstandScreen
+import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
+import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
-import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
-import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.compose.ui.platform.LocalResources
-import androidx.compose.ui.res.stringResource
-import com.vylia.privacy.ui.components.categoryName
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.learn.GradeBands
+import com.vylia.privacy.ui.act.ActScreen
+import com.vylia.privacy.ui.act.ActSection
+import com.vylia.privacy.ui.analysis.AnalysisScreen
+import com.vylia.privacy.ui.components.categoryName
 import com.vylia.privacy.ui.detail.AppDetailScreen
 import com.vylia.privacy.ui.scan.ScanScreen
 import com.vylia.privacy.ui.scan.ScanViewModel
+import com.vylia.privacy.ui.search.GlobalSearchScreen
+import com.vylia.privacy.ui.settings.SettingsScreen
+import com.vylia.privacy.ui.understand.UnderstandScreen
 
-enum class AppTab(@param:StringRes val title: Int, val icon: ImageVector) {
-    SCAN(R.string.tab_scan, Icons.Default.Search),
-    ANALYZE(R.string.tab_analyze, Icons.Default.List),
-    ACT(R.string.tab_act, Icons.Default.Star),
-    UNDERSTAND(R.string.tab_learn, Icons.Default.Info),
-    SETTINGS(R.string.tab_settings, Icons.Default.Settings)
+/** Les cinq destinations de la barre du bas (icônes Material Symbols embarquées). */
+enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: Int) {
+    SCAN(R.string.tab_scan, R.drawable.ic_sym_radar),
+    ANALYZE(R.string.tab_analyze, R.drawable.ic_sym_bar_chart),
+    REDUCE(R.string.tab_reduce, R.drawable.ic_sym_tune),
+    REPLACE(R.string.tab_replace, R.drawable.ic_sym_swap_horiz),
+    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration),
 }
+
+/** Écrans ouverts par-dessus l'onglet en cours depuis la barre du haut. */
+private enum class Overlay { SEARCH, HELP, SETTINGS }
 
 @Composable
 fun MainScreen(
@@ -57,24 +56,50 @@ fun MainScreen(
 ) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
     var currentTab by rememberSaveable { mutableStateOf(AppTab.SCAN) }
+    var overlay by rememberSaveable { mutableStateOf<Overlay?>(null) }
+    var query by rememberSaveable { mutableStateOf("") }
     var detailPackage by rememberSaveable { mutableStateOf(initialPackage) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val rules by homeViewModel.rules.collectAsStateWithLifecycle()
     // Toujours la version la plus récente de l'app (le score évolue pendant l'analyse des traqueurs).
     val detailApp = detailPackage?.let { pkg -> homeState.scannedApps.find { it.app.packageName == pkg } }
 
+    val closeOverlay = {
+        overlay = null
+        query = ""
+    }
+    // Fiche d'une app d'abord (son propre BackHandler), puis l'écran superposé (les sous-pages des paramètres ont le leur).
+    BackHandler(enabled = overlay != null && detailApp == null) { closeOverlay() }
+    // La flèche de la barre fait exactement comme le geste retour d'Android.
+    val dispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
+    val back: () -> Unit = { dispatcher?.onBackPressed() }
+
     Scaffold(
+        topBar = {
+            when {
+                detailApp != null -> BackTopBar(R.string.detail_title, back)
+                overlay == Overlay.SEARCH -> SearchTopBar(query, { query = it }, back)
+                overlay == Overlay.HELP -> BackTopBar(R.string.help_title, back)
+                overlay == Overlay.SETTINGS -> BackTopBar(R.string.settings_title, back)
+                else -> MainTopBar(
+                    onSearch = { overlay = Overlay.SEARCH },
+                    onHelp = { overlay = Overlay.HELP },
+                    onSettings = { overlay = Overlay.SETTINGS },
+                )
+            }
+        },
         bottomBar = {
             NavigationBar {
                 AppTab.entries.forEach { tab ->
                     NavigationBarItem(
-                        selected = currentTab == tab,
+                        selected = currentTab == tab && overlay == null,
                         onClick = {
                             currentTab = tab
                             detailPackage = null
+                            closeOverlay()
                         },
-                        icon = { Icon(tab.icon, contentDescription = null) },
-                        // Une seule ligne : le libellé rétrécit plutôt que de se couper (« Comprendre », grande police).
+                        icon = { Icon(painterResource(tab.icon), contentDescription = null) },
+                        // Une seule ligne : le libellé rétrécit plutôt que de se couper (« Remplacer », grande police).
                         label = {
                             Text(
                                 stringResource(tab.title),
@@ -82,11 +107,11 @@ fun MainScreen(
                                 softWrap = false,
                                 autoSize = TextAutoSize.StepBased(minFontSize = 8.sp, maxFontSize = LocalTextStyle.current.fontSize),
                             )
-                        }
+                        },
                     )
                 }
             }
-        }
+        },
     ) { innerPadding ->
         val modifier = Modifier.padding(innerPadding)
         if (detailApp != null) {
@@ -100,16 +125,18 @@ fun MainScreen(
             )
             return@Scaffold
         }
-        when (currentTab) {
-            // L'écran Scan a sa propre barre d'en-tête (sous la barre d'état) : seule la marge du bas lui est utile.
-            AppTab.SCAN -> ScanScreen(
-                Modifier.padding(bottom = innerPadding.calculateBottomPadding()),
-                onAppClick = { detailPackage = it.app.packageName },
-            )
-            AppTab.ANALYZE -> AnalysisScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
-            AppTab.ACT -> ActScreen(modifier)
-            AppTab.UNDERSTAND -> UnderstandScreen(modifier)
-            AppTab.SETTINGS -> SettingsScreen(modifier, onOpenLearn = { currentTab = AppTab.UNDERSTAND })
+        when (overlay) {
+            Overlay.SEARCH -> GlobalSearchScreen(homeState.scannedApps, query, onAppClick = { detailPackage = it.app.packageName }, modifier)
+            // Provisoire : l'aide propre à chaque écran remplacera Comprendre.
+            Overlay.HELP -> UnderstandScreen(modifier)
+            Overlay.SETTINGS -> SettingsScreen(modifier, onOpenLearn = { overlay = Overlay.HELP })
+            null -> when (currentTab) {
+                AppTab.SCAN -> ScanScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
+                AppTab.ANALYZE -> AnalysisScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
+                AppTab.REDUCE -> ActScreen(ActSection.REDUCE, modifier)
+                AppTab.REPLACE -> ActScreen(ActSection.ALTERNATIVES, modifier)
+                AppTab.CELEBRATE -> ActScreen(ActSection.REWARDS, modifier)
+            }
         }
     }
 }

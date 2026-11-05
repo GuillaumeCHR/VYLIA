@@ -35,9 +35,29 @@
     <!-- Navigation, Scan et détail d'une app -->
     <string name="tab_scan">Scan</string>
     <string name="tab_analyze">Analysis</string>
-    <string name="tab_act">Act</string>
-    <string name="tab_learn">Understand</string>
-    <string name="tab_settings">Settings</string>
+    <string name="tab_reduce">Reduce</string>
+    <string name="tab_replace">Replace</string>
+    <string name="tab_celebrate">Celebrate</string>
+    <string name="topbar_help">Help on this screen</string>
+    <string name="help_title">Help</string>
+    <string name="search_prompt">Type the name of an app to open its sheet.</string>
+    <string name="reduce_title">Reduce exposure</string>
+    <string name="replace_title">Choose an alternative</string>
+    <string name="celebrate_title">Your progress</string>
+    <string name="shield_pill_active">On</string>
+    <string name="shield_pill_inactive">Off</string>
+    <string name="shield_pill_starting">Starting</string>
+    <string name="shield_pill_bypassed">Bypassed</string>
+    <string name="shield_pill_desc_active">Shield on. Turn off</string>
+    <string name="shield_pill_desc_inactive">Shield off. Turn on</string>
+    <string name="shield_pill_desc_starting">Shield starting</string>
+    <string name="shield_pill_desc_bypassed">Shield bypassed. See why</string>
+    <string name="shield_bypass_title">Shield bypassed</string>
+    <string name="shield_bypass_dns">A private DNS service is set on this phone: Android sends its requests straight to it, and the shield no longer filters them. Turn private DNS off, or set it to Automatic, in Android network settings.</string>
+    <string name="shield_bypass_vpn">Another app’s VPN took the shield’s place: Android only keeps one VPN active at a time. Take over to filter again; the other VPN will be disconnected.</string>
+    <string name="shield_bypass_open_network">Open network settings</string>
+    <string name="shield_turn_off">Turn off the shield</string>
+    <string name="shield_take_over">Take over</string>
     <string name="back">Back</string>
     <string name="label_colon">%1$s: </string>
     <string name="score_description">%1$d/100, %2$s</string>
@@ -176,7 +196,6 @@
     </plurals>
 
     <!-- Agir -->
-    <string name="act_title">Act</string>
     <string name="act_rewards_title">🏆 Rewards</string>
     <string name="act_rewards_text">Each intrusive app (score below 50) you remove earns 100 minus its score in points.</string>
     <string name="act_badges">Badges (%1$d/%2$d)</string>
@@ -184,9 +203,6 @@
     <string name="act_removed_empty">None yet. Head to “Clean up” below to get started.</string>
     <string name="act_points">privacy points</string>
     <string name="ok">OK</string>
-    <string name="act_tab_reduce">Reduce</string>
-    <string name="act_tab_alternatives">Alternatives</string>
-    <string name="act_tab_rewards">Rewards</string>
     <string name="reduce_tab_permissions">Permissions</string>
     <string name="reduce_tab_removals">Apps</string>
     <string name="reduce_tab_private_dns">Ad tracking</string>

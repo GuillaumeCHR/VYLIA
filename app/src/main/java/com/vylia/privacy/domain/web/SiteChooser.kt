@@ -89,7 +89,7 @@ object SiteChooser {
     }
 
     private val TECHNICAL_LABELS = setOf(
-        "login", "auth", "sso", "s", "t", "u", "account", "accounts", "oauth", "signin", "id", "r", "l", "link", "links", "lnk", "click",
+        "login", "auth", "sso", "join", "krs", "s", "t", "u", "account", "accounts", "oauth", "signin", "id", "r", "l", "link", "links", "lnk", "click",
         "email", "mail", "e", "engage", "track", "tracking", "go", "api", "cdn", "static", "share", "deeplink", "redirect",
     )
 }

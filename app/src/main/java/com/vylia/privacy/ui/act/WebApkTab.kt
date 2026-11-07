@@ -77,7 +77,7 @@ internal fun WebApkTab(apps: List<AuditedApp>, webServices: WebServices) {
     val browser = remember(resumes) { defaultBrowser(context) }
     // La liste de référence d'abord, puis le site que chaque app déclare à Android (lu en arrière-plan).
     val declared by produceState(emptyList<WebService>(), apps, webServices) { value = declaredSites(context, apps, webServices) }
-    val known = remember(webServices, declared) { WebServices(webServices.services + declared, webServices.noWeb) }
+    val known = remember(webServices, declared) { WebServices(webServices.services + declared, webServices.noWeb, webServices.webCategories) }
     val candidates = remember(apps, known) {
         apps.filter { it.app.webStartUrl == null && it.app.packageName !in known.noWeb }
             .mapNotNull { app -> known.forPackage(app.app.packageName)?.let { Candidate(app, it) } }
@@ -252,8 +252,8 @@ private suspend fun declaredSites(context: Context, apps: List<AuditedApp>, webS
     withContext(Dispatchers.IO) {
         val sites = AppSites(context)
         apps.filter { it.app.webStartUrl == null && webServices.forPackage(it.app.packageName) == null && it.app.packageName !in webServices.noWeb }
-            // Un jeu n'a pas de version web qui le remplace.
-            .filter { it.result.categoryId != "GAME" }
+            // Seulement les catégories où un site remplace l'app (pas un véhicule, une montre, un jeu, un outil…).
+            .filter { it.result.categoryId in webServices.webCategories }
             .mapNotNull { audited ->
                 val url = sites.siteOf(audited.app.packageName, audited.app.label) ?: return@mapNotNull null
                 val host = WebServices.hostOf(url) ?: return@mapNotNull null

@@ -25,7 +25,12 @@ data class WebService(
  * La liste des services web (`assets/web_services.json`), lue comme une donnée externe : une entrée dont l'adresse
  * n'est pas en https, dont un domaine ou un paquet est mal formé, est écartée.
  */
-class WebServices(val services: List<WebService>, val noWeb: Set<String> = emptySet()) {
+class WebServices(
+    val services: List<WebService>,
+    val noWeb: Set<String> = emptySet(),
+    /** Catégories de la grille où une app détectée (hors liste) peut être proposée ; la liste, elle, l'est toujours. */
+    val webCategories: Set<String> = emptySet(),
+) {
 
     /** Le service d'un site, d'après l'adresse de départ d'un WebAPK ; un sous-domaine compte (www.lemonde.fr). */
     fun forUrl(url: String?): WebService? {
@@ -51,6 +56,7 @@ class WebServices(val services: List<WebService>, val noWeb: Set<String> = empty
             val services: List<WebService> = emptyList(),
             /** Apps sans site utilisable sur téléphone (messageries) : jamais proposées. */
             @SerialName("no_web") val noWeb: List<String> = emptyList(),
+            @SerialName("web_categories") val webCategories: List<String> = emptyList(),
         )
 
         private val json = Json { ignoreUnknownKeys = true }
@@ -60,6 +66,7 @@ class WebServices(val services: List<WebService>, val noWeb: Set<String> = empty
             return WebServices(
                 file.services.take(MAX_SERVICES).mapNotNull(::checked),
                 file.noWeb.take(MAX_SERVICES).filter(Untrusted::isPackage).toSet(),
+                file.webCategories.take(MAX_SERVICES).filter { CATEGORY.matches(it) }.toSet(),
             )
         }
 

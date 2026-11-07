@@ -1,7 +1,8 @@
 {
   "version": 1,
-  "comment": "Liste de référence (les autres apps sont proposées d'après les domaines qu'elles déclarent à Android). no_web : apps sans site utilisable sur téléphone ou dont le service passe par l'app (messageries, véhicule connecté, billettique), jamais proposées. Services qui existent en site web installable (manifeste web vérifié), pour Gérer › WebAPK et la catégorie des WebAPK installés. packages : apps natives que la version web remplace. example : proposé en exemple dans l'onglet. Vérifiés le 2026-11-07 ; à ajouter après vérification dans Chrome : Libération, Leboncoin, SNCF Connect, Ouest-France, Booking.",
-  "no_web": ["com.whatsapp", "com.whatsapp.w4b", "org.thoughtcrime.securesms", "com.facebook.orca", "com.snapchat.android", "com.viber.voip", "com.roole.roolemap", "de.mini.connected.mobile20.row", "com.applidium.vianavigo"],
+  "comment": "Liste de référence (les autres apps sont proposées d'après les domaines qu'elles déclarent à Android). web_categories : catégories de la grille de score pour lesquelles une app détectée est proposée (les autres, comme véhicule, objets connectés, sport, santé, jeux, outils, ne le sont jamais). no_web : apps sans site utilisable sur téléphone ou dont le service passe par l'app (messageries, véhicule connecté, billettique), jamais proposées. Services qui existent en site web installable (manifeste web vérifié), pour Gérer › WebAPK et la catégorie des WebAPK installés. packages : apps natives que la version web remplace. example : proposé en exemple dans l'onglet. Vérifiés le 2026-11-07 ; à ajouter après vérification dans Chrome : Libération, Leboncoin, SNCF Connect, Ouest-France, Booking.",
+  "web_categories": ["SOCIAL", "NEWS_READING", "ECOMMERCE", "FINANCE_ACCOUNTS", "HEALTH_ADMIN", "MEDIA_PLAYER", "TRANSPORT", "TRAVEL_LEISURE", "EMAIL", "PRODUCTIVITY_CLOUD", "AI_ASSISTANT", "EDUCATION_FAMILY", "DATING"],
+  "no_web": ["com.whatsapp", "com.whatsapp.w4b", "org.thoughtcrime.securesms", "com.facebook.orca", "com.snapchat.android", "com.viber.voip", "com.roole.roolemap", "de.mini.connected.mobile20.row", "com.applidium.vianavigo", "com.google.android.apps.walletnfcrel", "com.shazam.android", "hr.lunc.client"],
   "services": [
     {
       "id": "lemonde",
@@ -64,6 +65,24 @@
       "hosts": ["web.telegram.org"],
       "category": "MESSAGING",
       "packages": ["org.telegram.messenger"],
+      "example": false
+    },
+    {
+      "id": "office",
+      "name": "Microsoft 365",
+      "url": "https://www.office.com/",
+      "hosts": ["office.com", "microsoft365.com"],
+      "category": "PRODUCTIVITY_CLOUD",
+      "packages": ["com.microsoft.office.word", "com.microsoft.office.excel", "com.microsoft.office.powerpoint", "com.microsoft.office.officehubrow"],
+      "example": false
+    },
+    {
+      "id": "onedrive",
+      "name": "OneDrive",
+      "url": "https://onedrive.live.com/",
+      "hosts": ["onedrive.live.com"],
+      "category": "PRODUCTIVITY_CLOUD",
+      "packages": ["com.microsoft.skydrive"],
       "example": false
     },
     {

@@ -106,6 +106,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     /** Ouvrir directement Automatisations (lien « Modifier » de l'alerte de seuil, dans le Suivi). */
     openAutomation: Boolean = false,
+    /** Ouvre l'Aide sur « Comment fonctionne VYLIA ». */
+    onOpenHowItWorks: () -> Unit = {},
     viewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
@@ -113,7 +115,7 @@ fun SettingsScreen(
     val back = { page = SettingsPage.MAIN }
     BackHandler(enabled = page != SettingsPage.MAIN) { back() }
     when (page) {
-        SettingsPage.MAIN -> SettingsHome(modifier, viewModel, onOpen = { page = it })
+        SettingsPage.MAIN -> SettingsHome(modifier, viewModel, onOpen = { page = it }, onOpenHowItWorks = onOpenHowItWorks)
         SettingsPage.RULES -> RulesPage(modifier, viewModel, back)
         SettingsPage.DATABASE -> DatabasePage(modifier, viewModel, back)
         SettingsPage.AUTOMATION -> AutomationPage(modifier, viewModel, back)
@@ -125,7 +127,7 @@ fun SettingsScreen(
 // --- Menu principal ---------------------------------------------------------------------------
 
 @Composable
-private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpen: (SettingsPage) -> Unit) {
+private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpen: (SettingsPage) -> Unit, onOpenHowItWorks: () -> Unit) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val automation by viewModel.automation.collectAsStateWithLifecycle()
     Column(
@@ -184,6 +186,11 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
         )
 
         SectionTitle(R.string.settings_about_section)
+        SettingsLink(
+            title = stringResource(R.string.howto_title),
+            hint = stringResource(R.string.settings_howto_hint),
+            onClick = onOpenHowItWorks,
+        )
         SettingsLink(
             title = stringResource(R.string.settings_about),
             hint = stringResource(R.string.settings_about_hint, BuildConfig.VERSION_NAME),

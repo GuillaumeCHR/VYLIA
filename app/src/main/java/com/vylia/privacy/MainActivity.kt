@@ -54,6 +54,10 @@ class MainActivity : AppCompatActivity() {
                 }
                 val analyzeSection = if (tabExtra == TAB_TRACKING) AnalyzeSection.TRACKING else null
                 val pinPackage = intent.getStringExtra(EXTRA_PIN_PACKAGE)?.takeIf(Untrusted::isPackage)
+                // Une seule fois, au premier lancement ordinaire (pas depuis une notification).
+                val showHowItWorks = rememberSaveable {
+                    (openPackage == null && openTab == null && !settings.howItWorksShown).also { if (it) settings.howItWorksShown = true }
+                }
                 var showSplash by rememberSaveable { mutableStateOf(openPackage == null && openTab == null) }
                 // Fondu court : le logotype de l'intro est déjà à la place du titre de l'écran Scan.
                 Crossfade(targetState = showSplash, animationSpec = tween(250), label = "splash") { splash ->
@@ -63,6 +67,7 @@ class MainActivity : AppCompatActivity() {
                         initialManageSection = manageSection,
                         initialAnalyzeSection = analyzeSection,
                         pinnedPackage = pinPackage,
+                        showHowItWorks = showHowItWorks,
                     )
                 }
             } }

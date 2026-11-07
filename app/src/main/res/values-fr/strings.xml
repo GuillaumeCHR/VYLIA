@@ -433,7 +433,7 @@
     </plurals>
 
     <!-- Aide -->
-    <string name="understand_tab_screens">Écrans</string>
+    <string name="understand_tab_screens">Fonctionnement</string>
     <string name="understand_tab_score">Score</string>
     <string name="understand_tab_badges">Badges</string>
     <string name="understand_tab_trackers">Traqueurs</string>
@@ -575,12 +575,28 @@
     <string name="help_section_expanded">Déplié</string>
     <string name="help_section_collapsed">Replié</string>
     <string name="help_badges_family">%1$s (%2$d)</string>
+    <string name="howto_title">Comment fonctionne VYLIA</string>
+    <string name="howto_exposure_title">Votre surface d\'exposition</string>
+    <string name="howto_exposure_text">Chaque app installée peut accéder à une partie de votre vie : position, contacts, micro, photos. Beaucoup embarquent aussi des traqueurs publicitaires. L\'ensemble de ces accès forme votre surface d\'exposition.</string>
+    <string name="howto_step">%1$d. %2$s</string>
+    <string name="howto_identify_title">Identifier · Scanner, Analyser</string>
+    <string name="howto_identify_text">VYLIA note chaque app selon ses permissions et ses traqueurs, et montre quelles données sont exposées, et à combien d\'apps.</string>
+    <string name="howto_reduce_title">Réduire · Gérer</string>
+    <string name="howto_reduce_text">Retirez les permissions inutiles, supprimez les apps que vous n\'utilisez plus, remplacez les apps intrusives par des alternatives plus respectueuses, et lisez vos sites d\'information en version web plutôt qu\'en app.</string>
+    <string name="howto_protect_title">Se protéger</string>
+    <string name="howto_protect_text">Le filtre bloque les régies publicitaires sur tout l\'appareil, y compris dans les apps que vous gardez.</string>
+    <string name="howto_follow_title">Suivre dans le temps · Analyser, alertes</string>
+    <string name="howto_follow_text">VYLIA compare chaque scan au précédent et vous prévient si votre exposition augmente.</string>
+    <string name="howto_celebrate_title">Célébrer</string>
+    <string name="howto_celebrate_text">Mesurez vos progrès et partagez votre score, sans jamais partager la liste de vos apps.</string>
+    <string name="howto_note">VYLIA décrit ce qu\'une app peut faire, pas ce qu\'elle fait réellement. Tout est calculé sur votre téléphone : rien n\'est envoyé.</string>
+    <string name="howto_screens">Les écrans</string>
     <string name="help_scan_title">Scanner</string>
     <string name="help_scan_intro">Chaque app part de 100 points et en perd pour ses permissions et ses traqueurs. Les trois icônes du haut trient les apps par risque, par catégorie ou par badge. Touchez l\'icône d\'une app pour ouvrir ses réglages Android.</string>
     <string name="help_analyze_title">Analyser</string>
-    <string name="help_analyze_intro">Une vue d\'ensemble de votre téléphone : les zones de risque, les anomalies et les traqueurs les plus répandus. Les lexiques disent ce que chaque traqueur et chaque permission révèle de vous.</string>
+    <string name="help_analyze_intro">Une vue d\'ensemble de votre téléphone (zones de risque, anomalies, traqueurs les plus répandus) et, dans Suivi, la courbe du score de l\'appareil dans le temps, ses événements et l\'alerte de seuil. Les lexiques disent ce que chaque traqueur et chaque permission révèle de vous.</string>
     <string name="help_reduce_title">Gérer : permissions et apps</string>
-    <string name="help_reduce_intro">Les gestes commencent par les apps au score le plus bas : retirer une permission, désinstaller une app que vous n\'utilisez plus. Le lexique dit à quoi sert chaque permission, pour juger si l\'app en a vraiment besoin.</string>
+    <string name="help_reduce_intro">Une carte par app, les scores les plus bas d\'abord : les permissions dont elle se sert sans en avoir besoin, chacune avec son gain, et le score qu\'elle atteindrait sans elles. Dans Apps, les apps intrusives et celles que vous n\'ouvrez plus. Le lexique dit à quoi sert chaque permission, pour juger si l\'app en a vraiment besoin.</string>
     <string name="help_replace_title">Gérer : alternatives</string>
     <string name="help_replace_intro">Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l\'app d\'origine demande et embarque : ses permissions et ses traqueurs.</string>
     <string name="help_protect_title">Se protéger</string>
@@ -780,6 +796,7 @@
     <string name="csv_not_analyzed">Non analysé</string>
     <string name="csv_analysis_failed">Échec de l\'analyse</string>
     <string name="about_version">Version %1$s</string>
+    <string name="settings_howto_hint">Votre surface d\'exposition et les écrans, en bref</string>
     <string name="app_full_name">VYLIA : privacy score &amp; manager</string>
     <string name="about_publisher">Une application Yogi Studio</string>
     <string name="about_privacy_title">Vie privée</string>

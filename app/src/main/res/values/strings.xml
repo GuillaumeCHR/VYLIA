@@ -418,7 +418,7 @@
     </plurals>
 
     <!-- Aide -->
-    <string name="understand_tab_screens">Screens</string>
+    <string name="understand_tab_screens">How it works</string>
     <string name="understand_tab_score">Score</string>
     <string name="understand_tab_badges">Badges</string>
     <string name="understand_tab_trackers">Trackers</string>
@@ -560,12 +560,28 @@
     <string name="help_section_expanded">Expanded</string>
     <string name="help_section_collapsed">Collapsed</string>
     <string name="help_badges_family">%1$s (%2$d)</string>
+    <string name="howto_title">How VYLIA works</string>
+    <string name="howto_exposure_title">Your exposure surface</string>
+    <string name="howto_exposure_text">Every installed app can reach part of your life: location, contacts, microphone, photos. Many also embed advertising trackers. All these accesses together form your exposure surface.</string>
+    <string name="howto_step">%1$d. %2$s</string>
+    <string name="howto_identify_title">Identify · Scan, Analyze</string>
+    <string name="howto_identify_text">VYLIA scores each app on its permissions and trackers, and shows which data are exposed, and to how many apps.</string>
+    <string name="howto_reduce_title">Reduce · Manage</string>
+    <string name="howto_reduce_text">Revoke needless permissions, remove the apps you no longer use, replace intrusive apps with more respectful alternatives, and read your news sites in their web version rather than an app.</string>
+    <string name="howto_protect_title">Protect yourself</string>
+    <string name="howto_protect_text">The filter blocks ad networks across the whole device, including in the apps you keep.</string>
+    <string name="howto_follow_title">Follow over time · Analyze, alerts</string>
+    <string name="howto_follow_text">VYLIA compares each scan with the previous one and warns you if your exposure grows.</string>
+    <string name="howto_celebrate_title">Celebrate</string>
+    <string name="howto_celebrate_text">Measure your progress and share your score, without ever sharing your list of apps.</string>
+    <string name="howto_note">VYLIA describes what an app can do, not what it actually does. Everything is computed on your phone: nothing is sent.</string>
+    <string name="howto_screens">The screens</string>
     <string name="help_scan_title">Scan</string>
     <string name="help_scan_intro">Each app starts at 100 points and loses some for its permissions and trackers. The three icons at the top sort apps by risk, by category or by badge. Tap an app\'s icon to open its Android settings.</string>
     <string name="help_analyze_title">Analyze</string>
-    <string name="help_analyze_intro">An overview of your phone: risk zones, anomalies and the most common trackers. The glossaries say what each tracker and each permission reveals about you.</string>
+    <string name="help_analyze_intro">An overview of your phone (risk zones, anomalies, the most common trackers) and, under Tracking, the curve of your device score over time, its events and the threshold alert. The glossaries say what each tracker and each permission reveals about you.</string>
     <string name="help_reduce_title">Manage: permissions and apps</string>
-    <string name="help_reduce_intro">Actions start with the apps with the lowest score: removing a permission, uninstalling an app you no longer use. The glossary says what each permission is for, so you can judge whether the app really needs it.</string>
+    <string name="help_reduce_intro">One card per app, lowest scores first: the permissions it uses without needing them, each with its gain, and the score it would reach without them. Under Apps, the intrusive apps and those you no longer open. The glossary says what each permission is for, so you can judge whether the app really needs it.</string>
     <string name="help_replace_title">Manage: alternatives</string>
     <string name="help_replace_intro">Alternatives to the most intrusive apps, sorted by Play Store category. The glossaries say what the original app asks for and embeds: its permissions and its trackers.</string>
     <string name="help_protect_title">Protect yourself</string>
@@ -757,6 +773,7 @@
     <string name="csv_not_analyzed">Not analysed</string>
     <string name="csv_analysis_failed">Analysis failed</string>
     <string name="about_version">Version %1$s</string>
+    <string name="settings_howto_hint">Your exposure surface and the screens, in brief</string>
     <string name="app_full_name">VYLIA: privacy score &amp; manager</string>
     <string name="about_publisher">A Yogi Studio app</string>
     <string name="about_privacy_title">Privacy</string>

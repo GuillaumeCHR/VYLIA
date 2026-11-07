@@ -170,6 +170,7 @@ S = [
  ("csv_analysis_failed", "Analysis failed", "Échec de l'analyse"),
  # À propos
  ("about_version", "Version %1$s", "Version %1$s"),
+ ("settings_howto_hint", "Your exposure surface and the screens, in brief", "Votre surface d'exposition et les écrans, en bref"),
  ("app_full_name", "VYLIA: privacy score & manager", "VYLIA : privacy score & manager"),
  ("about_publisher", "A Yogi Studio app", "Une application Yogi Studio"),
  ("about_privacy_title", "Privacy", "Vie privée"),

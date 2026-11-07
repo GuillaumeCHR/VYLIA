@@ -67,6 +67,8 @@ fun MainScreen(
     initialManageSection: ManageSection? = null,
     initialAnalyzeSection: AnalyzeSection? = null,
     pinnedPackage: String? = null,
+    /** Premier lancement : l'Aide s'ouvre sur « Comment fonctionne VYLIA ». */
+    showHowItWorks: Boolean = false,
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
 ) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
@@ -83,7 +85,7 @@ fun MainScreen(
     var overlay by rememberSaveable { mutableStateOf<Overlay?>(null) }
     var query by rememberSaveable { mutableStateOf("") }
     // L'Aide, en feuille par-dessus l'écran affiché, qui reste en place dessous.
-    var help by rememberSaveable { mutableStateOf(false) }
+    var help by rememberSaveable { mutableStateOf(showHowItWorks) }
     var detailPackage by rememberSaveable { mutableStateOf(initialPackage) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val rules by homeViewModel.rules.collectAsStateWithLifecycle()
@@ -162,7 +164,7 @@ fun MainScreen(
         }
         when (overlay) {
             Overlay.SEARCH -> GlobalSearchScreen(homeState.scannedApps, query, onAppClick = { detailPackage = it.app.packageName }, modifier)
-            Overlay.SETTINGS -> SettingsScreen(modifier, openAutomation = openAutomation)
+            Overlay.SETTINGS -> SettingsScreen(modifier, openAutomation = openAutomation, onOpenHowItWorks = { help = true })
             null -> when (currentTab) {
                 AppTab.SCAN -> ScanScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
                 AppTab.ANALYZE -> AnalysisScreen(

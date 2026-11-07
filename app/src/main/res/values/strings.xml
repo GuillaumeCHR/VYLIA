@@ -915,4 +915,9 @@
     <string name="card_security_capped">Security alert · capped at %1$d</string>
     <string name="card_security_description">Security alert: %1$s.</string>
     <string name="card_security_capped_description">Security alert: %1$s. Score capped at %2$d.</string>
+    <string name="permissions_sensitive_none">No sensitive permission granted</string>
+    <plurals name="permissions_sensitive">
+        <item quantity="one">%1$d sensitive permission granted</item>
+        <item quantity="other">%1$d sensitive permissions granted</item>
+    </plurals>
 </resources>

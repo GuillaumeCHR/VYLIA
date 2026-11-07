@@ -168,6 +168,7 @@ private fun DetailedAppCard(auditedApp: AuditedApp, modifier: Modifier, onClick:
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
+                PermissionSummary(auditedApp.result)
                 TrackerSummary(auditedApp.trackerAnalysis)
                 if (auditedApp.result.displayedBadges.isNotEmpty()) BadgeRow(auditedApp.result.displayedBadges)
             }
@@ -190,6 +191,18 @@ private fun AppIcon(drawable: android.graphics.drawable.Drawable, label: String,
             .clickable { openAppSettings(context, packageName) }
             .size(IconSize),
     )
+}
+
+/** Permissions accordées qui coûtent des points au score. */
+@Composable
+private fun PermissionSummary(result: ScoreResult) {
+    val count = result.permissionFindings.count { it.granted && it.penalty > 0.0 }
+    val (text, color) = if (count == 0) {
+        stringResource(R.string.permissions_sensitive_none) to MaterialTheme.colorScheme.onSurfaceVariant
+    } else {
+        pluralStringResource(R.plurals.permissions_sensitive, count, count) to MaterialTheme.colorScheme.error
+    }
+    Text(text = text, style = MaterialTheme.typography.labelLarge, color = color)
 }
 
 /** Rien n'est affiché tant que l'analyse DEX n'a pas eu lieu. */

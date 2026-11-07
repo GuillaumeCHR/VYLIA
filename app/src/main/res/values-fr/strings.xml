@@ -948,4 +948,10 @@
     <string name="card_security_capped">Alerte sécurité · plafonné à %1$d</string>
     <string name="card_security_description">Alerte sécurité : %1$s.</string>
     <string name="card_security_capped_description">Alerte sécurité : %1$s. Score plafonné à %2$d.</string>
+    <string name="permissions_sensitive_none">Aucune permission sensible accordée</string>
+    <plurals name="permissions_sensitive">
+        <item quantity="one">%1$d permission sensible accordée</item>
+        <item quantity="many">%1$d permissions sensibles accordées</item>
+        <item quantity="other">%1$d permissions sensibles accordées</item>
+    </plurals>
 </resources>

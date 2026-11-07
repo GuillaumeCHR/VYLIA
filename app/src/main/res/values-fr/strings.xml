@@ -25,10 +25,24 @@
     <string name="risk_high">Risque élevé</string>
     <string name="trackers_failed">Analyse des traqueurs impossible</string>
     <string name="trackers_none">Aucun traqueur détecté</string>
+    <string name="card_penalties">Permissions − %1$d\nTraqueurs − %2$d</string>
+    <string name="card_penalties_partial">Permissions − %1$d\nTraqueurs ?</string>
+    <string name="card_penalties_description">Permissions : moins %1$d points. Traqueurs : moins %2$d points.</string>
+    <string name="card_penalties_partial_description">Permissions : moins %1$d points. Traqueurs : analyse incomplète.</string>
+    <string name="card_security">Alerte sécurité</string>
+    <string name="card_security_capped">Alerte sécurité · plafonné à %1$d</string>
+    <string name="card_security_description">Alerte sécurité : %1$s.</string>
+    <string name="card_security_capped_description">Alerte sécurité : %1$s. Score plafonné à %2$d.</string>
+    <string name="permissions_sensitive_none">Aucune permission sensible accordée</string>
     <plurals name="trackers_found">
         <item quantity="one">%1$d traqueur détecté</item>
         <item quantity="many">%1$d traqueurs détectés</item>
         <item quantity="other">%1$d traqueurs détectés</item>
+    </plurals>
+    <plurals name="permissions_sensitive">
+        <item quantity="one">%1$d permission sensible accordée</item>
+        <item quantity="many">%1$d permissions sensibles accordées</item>
+        <item quantity="other">%1$d permissions sensibles accordées</item>
     </plurals>
 
     <!-- Navigation, Scan et détail d'une app -->
@@ -39,23 +53,6 @@
     <string name="tab_celebrate">Célébrer</string>
     <string name="topbar_help">Aide sur cet écran</string>
     <string name="search_prompt">Tapez le nom d\'une app pour ouvrir sa fiche.</string>
-    <string name="reduce_title">Réduire l\'exposition</string>
-    <string name="replace_title">Choisir une alternative</string>
-    <string name="celebrate_title">Vos progrès</string>
-    <string name="shield_pill_active">Actif</string>
-    <string name="shield_pill_inactive">Inactif</string>
-    <string name="shield_pill_starting">Activation</string>
-    <string name="shield_pill_bypassed">Contourné</string>
-    <string name="shield_pill_desc_active">Bouclier actif. Désactiver</string>
-    <string name="shield_pill_desc_inactive">Bouclier inactif. Activer</string>
-    <string name="shield_pill_desc_starting">Activation du bouclier en cours</string>
-    <string name="shield_pill_desc_bypassed">Bouclier contourné. Voir le motif</string>
-    <string name="shield_bypass_title">Bouclier contourné</string>
-    <string name="shield_bypass_dns">Un service de DNS privé est réglé sur ce téléphone : Android lui envoie directement ses requêtes, et le bouclier ne les filtre plus. Désactivez le DNS privé, ou passez-le en Automatique, dans les réglages réseau d\'Android.</string>
-    <string name="shield_bypass_vpn">Le VPN d\'une autre app a pris la place du bouclier : Android n\'en garde qu\'un actif à la fois. Reprenez la main pour filtrer à nouveau ; l\'autre VPN sera déconnecté.</string>
-    <string name="shield_bypass_open_network">Ouvrir les réglages réseau</string>
-    <string name="shield_turn_off">Désactiver le bouclier</string>
-    <string name="shield_take_over">Reprendre la main</string>
     <string name="back">Retour</string>
     <string name="label_colon">%1$s : </string>
     <string name="score_description">%1$d/100, %2$s</string>
@@ -263,7 +260,7 @@
     <string name="act_summary_title">Score moyen de vos apps</string>
     <string name="act_summary_reachable">Atteignable : %1$d</string>
     <string name="act_summary_nothing">Rien d\'urgent : vos apps respectent déjà bien votre vie privée.</string>
-    <string name="reduce_revoke_hint">Des autorisations dont vos apps se servent sans en avoir besoin. Chaque gain est recalculé par le moteur de score. Touchez pour ouvrir la fiche Android de l\'app, puis Autorisations.</string>
+    <string name="reduce_revoke_hint">Des autorisations dont vos apps se servent sans en avoir besoin, les apps au score le plus bas d\'abord. Chaque gain est recalculé par le moteur de score. Touchez pour ouvrir la fiche Android de l\'app, puis Autorisations.</string>
     <string name="reduce_revoke_empty">Aucune autorisation à retirer : chaque autorisation accordée sert la finalité de son app.</string>
     <string name="reduce_revoke_line">Retirer : %1$s</string>
     <string name="reduce_gain_points">+%1$d pts</string>
@@ -335,6 +332,38 @@
     <string name="shield_pause_diagnose">• Une app affiche une erreur, une page blanche ou charge sans fin : si la pause règle le problème, le bouclier en était la cause, et les derniers blocages montrent quel serveur.</string>
     <string name="shield_pause_note">Rien n\'est compté pendant la pause : les traqueurs contactés à ce moment-là ne sont pas bloqués.</string>
     <string name="shield_lists">Listes : Exodus Privacy (ODbL 1.0), EasyPrivacy, EasyList et AdGuard Mobile Ads (GPL v3), %1$s domaines de traçage et de pub.</string>
+    <string name="reduce_title">Réduire l\'exposition</string>
+    <string name="replace_title">Choisir une alternative</string>
+    <string name="celebrate_title">Vos progrès</string>
+    <string name="shield_pill_active">Actif</string>
+    <string name="shield_pill_inactive">Inactif</string>
+    <string name="shield_pill_starting">Activation</string>
+    <string name="shield_pill_bypassed">Contourné</string>
+    <string name="shield_pill_desc_active">Bouclier actif. Désactiver</string>
+    <string name="shield_pill_desc_inactive">Bouclier inactif. Activer</string>
+    <string name="shield_pill_desc_starting">Activation du bouclier en cours</string>
+    <string name="shield_pill_desc_bypassed">Bouclier contourné. Voir le motif</string>
+    <string name="shield_bypass_title">Bouclier contourné</string>
+    <string name="shield_bypass_dns">Un service de DNS privé est réglé sur ce téléphone : Android lui envoie directement ses requêtes, et le bouclier ne les filtre plus. Désactivez le DNS privé, ou passez-le en Automatique, dans les réglages réseau d\'Android.</string>
+    <string name="shield_bypass_vpn">Le VPN d\'une autre app a pris la place du bouclier : Android n\'en garde qu\'un actif à la fois. Reprenez la main pour filtrer à nouveau ; l\'autre VPN sera déconnecté.</string>
+    <string name="shield_bypass_open_network">Ouvrir les réglages réseau</string>
+    <string name="shield_turn_off">Désactiver le bouclier</string>
+    <string name="shield_take_over">Reprendre la main</string>
+    <string name="act_empty_scan">Lancez un scan depuis l\'onglet Scan pour voir vos apps ici.</string>
+    <string name="reduce_subtitle">Les gestes les plus utiles, en commençant par les apps au score le plus bas.</string>
+    <string name="reduce_action_permissions">Gérer les permissions</string>
+    <string name="reduce_action_uninstall">Désinstaller</string>
+    <string name="replace_subtitle">Des apps équivalentes, avec moins de traqueurs.</string>
+    <string name="replace_for_you">Vos apps les plus intrusives</string>
+    <string name="replace_for_you_hint">Pour chacune, une catégorie d\'alternatives à parcourir.</string>
+    <string name="replace_for_you_empty">Aucune de vos apps n\'est très intrusive. Parcourez quand même les alternatives ci-dessous.</string>
+    <string name="replace_category">Alternatives : %1$s</string>
+    <string name="replace_show">Voir les alternatives</string>
+    <string name="replace_no_match">Aucune alternative pour %1$s pour l\'instant.</string>
+    <string name="celebrate_device_score">Score de vos apps</string>
+    <string name="celebrate_progress_none">Votre évolution s\'affichera après quelques jours de scans.</string>
+    <string name="celebrate_progress_stable_month">Stable depuis 30 jours</string>
+    <string name="celebrate_progress_stable_start">Stable depuis votre premier scan</string>
     <plurals name="act_summary_revocations">
         <item quantity="one">%1$d autorisation à retirer</item>
         <item quantity="many">%1$d autorisations à retirer</item>
@@ -380,6 +409,16 @@
         <item quantity="many">%1$s requêtes de traçage bloquées depuis l\'activation</item>
         <item quantity="other">%1$s requêtes de traçage bloquées depuis l\'activation</item>
     </plurals>
+    <plurals name="celebrate_progress_month">
+        <item quantity="one">%1$s%2$d point en 30 jours</item>
+        <item quantity="many">%1$s%2$d points en 30 jours</item>
+        <item quantity="other">%1$s%2$d points en 30 jours</item>
+    </plurals>
+    <plurals name="celebrate_progress_start">
+        <item quantity="one">%1$s%2$d point depuis votre premier scan</item>
+        <item quantity="many">%1$s%2$d points depuis votre premier scan</item>
+        <item quantity="other">%1$s%2$d points depuis votre premier scan</item>
+    </plurals>
 
     <!-- Comprendre -->
     <string name="understand_tab_score">Score</string>
@@ -419,7 +458,7 @@
     <string name="learn_example_text">La position précise pèse %1$d. Accordée à une app de navigation, où elle est justifiée : %1$d × %2$s = 0 point perdu. Accordée à un jeu, où elle est interdite : %1$d × %3$s = %4$s points perdus.</string>
     <string name="learn_conditional_title">Les capacités qui dépendent d\'un accès</string>
     <string name="learn_conditional_text">Certaines permissions ne servent à rien seules. Utiliser le micro, la caméra ou la position en arrière-plan suppose que cet accès soit d\'abord accordé ; d\'ici là, elles comptent pour ×%1$s. La capture d\'écran demande votre accord à chaque fois : elle compte toujours pour ×%1$s.</string>
-    <string name="learn_ads_neutral">Les permissions de ciblage publicitaire (identifiant publicitaire, services publicitaires d\'Android) ne sont pas comptées ici : la publicité est déjà pénalisée par les traqueurs.</string>
+    <string name="learn_ads_neutral">Les permissions de ciblage publicitaire (identifiant publicitaire, services publicitaires d\'Android) ne sont pas comptées ici : la publicité est déjà pénalisée par les traqueurs. Les notifications non plus : elles ne donnent accès à aucune de vos données.</string>
     <string name="learn_no_double_count">Pour ne pas compter deux fois</string>
     <string name="learn_no_double_location">Position précise et approximative ne comptent qu\'une fois (la plus lourde).</string>
     <string name="learn_no_double_media">Photos, vidéos, audio et ancien accès aux fichiers ne comptent qu\'une fois.</string>
@@ -505,6 +544,18 @@
     <string name="risk_level_high">Risque élevé</string>
     <string name="risk_level_critical">Risque critique</string>
     <string name="risk_level_unknown">Risque indéterminé</string>
+    <string name="help_scan_title">Lire le Scan</string>
+    <string name="help_scan_intro">Chaque app part de 100 points et en perd pour ses permissions et ses traqueurs. Les trois icônes du haut trient les apps par risque, par catégorie ou par badge. Touchez l\'icône d\'une app pour ouvrir ses réglages Android.</string>
+    <string name="help_analyze_title">Lire l\'Analyse</string>
+    <string name="help_analyze_intro">Une vue d\'ensemble de votre téléphone : les zones de risque, les anomalies et les traqueurs les plus répandus. Les lexiques disent ce que chaque traqueur et chaque permission révèle de vous.</string>
+    <string name="help_reduce_title">Réduire les risques</string>
+    <string name="help_reduce_intro">Les gestes commencent par les apps au score le plus bas : retirer une permission, désinstaller une app que vous n\'utilisez plus. Le lexique dit à quoi sert chaque permission, pour juger si l\'app en a vraiment besoin.</string>
+    <string name="help_replace_title">Remplacer une app</string>
+    <string name="help_replace_intro">Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l\'app d\'origine demande et embarque : ses permissions et ses traqueurs.</string>
+    <string name="help_celebrate_title">Célébrer vos progrès</string>
+    <string name="help_celebrate_intro">Le score de votre téléphone, vos progrès et vos badges. Le partage montre le score et les progrès, jamais la liste de vos apps.</string>
+    <string name="help_scoring_title">Calcul du score</string>
+    <string name="help_scoring_intro">Comment la grille en vigueur transforme les permissions et les traqueurs d\'une app en score.</string>
     <plurals name="badge_rule_trackers_in_categories">
         <item quantity="one">au moins %1$d traqueur parmi : %2$s.</item>
         <item quantity="many">au moins %1$d traqueurs parmi : %2$s.</item>
@@ -624,7 +675,7 @@
     <string name="grid_requires">%1$s : nécessite %2$s</string>
     <string name="grid_consent_each_time">%1$s : Android demande votre accord à chaque fois, elle compte donc toujours comme seulement déclarée.</string>
     <string name="grid_neutral_title">Permissions volontairement non comptées</string>
-    <string name="grid_neutral_hint">Les permissions de ciblage publicitaire sont neutralisées : la publicité est déjà pénalisée par les traqueurs (régies, profilage). La compter aussi ici la pénaliserait deux fois.</string>
+    <string name="grid_neutral_hint">Les notifications ne sont pas comptées : elles ne donnent accès à aucune de vos données. Les permissions de ciblage publicitaire sont neutralisées : la publicité est déjà pénalisée par les traqueurs (régies, profilage). La compter aussi ici la pénaliserait deux fois.</string>
     <string name="rules_open_learn">Comprendre le calcul</string>
     <string name="database_status">Base de données Exodus Privacy</string>
     <string name="database_last_update">Dernière mise à jour : %1$s</string>
@@ -755,6 +806,11 @@
     <string name="credits_outro">Aucune donnée personnelle n\'a été collectée pendant ce générique. Nous avons vérifié.</string>
     <string name="credits_post_credits">Scène post-générique : 🕵️ un petit espion repasse la tête… et repart aussitôt, bredouille.</string>
     <string name="about_contact_subject">VYLIA %1$s</string>
+    <string name="settings_cards">Cartes d\'apps</string>
+    <string name="settings_cards_compact">Compact</string>
+    <string name="settings_cards_compact_hint">Nom, score et ce qui le fait baisser</string>
+    <string name="settings_cards_detailed">Détaillé</string>
+    <string name="settings_cards_detailed_hint">Nom du paquet, traqueurs et badges</string>
     <plurals name="data_restore_snapshots">
         <item quantity="one">%1$d point de suivi</item>
         <item quantity="many">%1$d points de suivi</item>
@@ -931,37 +987,4 @@
         <item quantity="many">%1$d apps</item>
         <item quantity="other">%1$d apps</item>
     </plurals>
-    <!-- Cartes d'apps : Compact / Détaillé -->
-    <string name="settings_cards">Cartes d\'apps</string>
-    <string name="settings_cards_compact">Compact</string>
-    <string name="settings_cards_compact_hint">Nom, score et ce qui le fait baisser</string>
-    <string name="settings_cards_detailed">Détaillé</string>
-    <string name="settings_cards_detailed_hint">Nom du paquet, traqueurs et badges</string>
-    <string name="card_penalties">Permissions − %1$d\nTraqueurs − %2$d</string>
-    <string name="card_penalties_partial">Permissions − %1$d\nTraqueurs ?</string>
-    <string name="card_penalties_description">Permissions : moins %1$d points. Traqueurs : moins %2$d points.</string>
-    <string name="card_penalties_partial_description">Permissions : moins %1$d points. Traqueurs : analyse incomplète.</string>
-    <string name="card_security">Alerte sécurité</string>
-    <string name="card_security_capped">Alerte sécurité · plafonné à %1$d</string>
-    <string name="card_security_description">Alerte sécurité : %1$s.</string>
-    <string name="card_security_capped_description">Alerte sécurité : %1$s. Score plafonné à %2$d.</string>
-    <string name="permissions_sensitive_none">Aucune permission sensible accordée</string>
-    <plurals name="permissions_sensitive">
-        <item quantity="one">%1$d permission sensible accordée</item>
-        <item quantity="many">%1$d permissions sensibles accordées</item>
-        <item quantity="other">%1$d permissions sensibles accordées</item>
-    </plurals>
-    <!-- Aide par écran (feuille ouverte par « ? ») -->
-    <string name="help_scan_title">Lire le Scan</string>
-    <string name="help_scan_intro">Chaque app part de 100 points et en perd pour ses permissions et ses traqueurs. Les trois icônes du haut trient les apps par risque, par catégorie ou par badge. Touchez l\'icône d\'une app pour ouvrir ses réglages Android.</string>
-    <string name="help_analyze_title">Lire l\'Analyse</string>
-    <string name="help_analyze_intro">Une vue d\'ensemble de votre téléphone : les zones de risque, les anomalies et les traqueurs les plus répandus. Les lexiques disent ce que chaque traqueur et chaque permission révèle de vous.</string>
-    <string name="help_reduce_title">Réduire les risques</string>
-    <string name="help_reduce_intro">Les gestes sont classés par gain de score : retirer une permission, désinstaller une app que vous n\'utilisez plus. Le lexique dit à quoi sert chaque permission, pour juger si l\'app en a vraiment besoin.</string>
-    <string name="help_replace_title">Remplacer une app</string>
-    <string name="help_replace_intro">Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l\'app d\'origine demande et embarque : ses permissions et ses traqueurs.</string>
-    <string name="help_celebrate_title">Célébrer vos progrès</string>
-    <string name="help_celebrate_intro">Le score de votre téléphone, vos progrès et vos badges. Le partage montre le score et les progrès, jamais la liste de vos apps.</string>
-    <string name="help_scoring_title">Calcul du score</string>
-    <string name="help_scoring_intro">Comment la grille en vigueur transforme les permissions et les traqueurs d\'une app en score.</string>
 </resources>

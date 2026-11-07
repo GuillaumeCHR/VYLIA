@@ -82,7 +82,7 @@ S = [
  ("grid_requires", "%1$s: needs %2$s", "%1$s : nécessite %2$s"),
  ("grid_consent_each_time", "%1$s: Android asks for your consent every time, so it always counts as only declared.", "%1$s : Android demande votre accord à chaque fois, elle compte donc toujours comme seulement déclarée."),
  ("grid_neutral_title", "Permissions deliberately not counted", "Permissions volontairement non comptées"),
- ("grid_neutral_hint", "Ad targeting permissions are neutralised: advertising is already penalised through the trackers (ad networks, profiling). Counting it here too would penalise it twice.", "Les permissions de ciblage publicitaire sont neutralisées : la publicité est déjà pénalisée par les traqueurs (régies, profilage). La compter aussi ici la pénaliserait deux fois."),
+ ("grid_neutral_hint", "Notifications are not counted: they give access to none of your data. Ad targeting permissions are neutralised: advertising is already penalised through the trackers (ad networks, profiling). Counting it here too would penalise it twice.", "Les notifications ne sont pas comptées : elles ne donnent accès à aucune de vos données. Les permissions de ciblage publicitaire sont neutralisées : la publicité est déjà pénalisée par les traqueurs (régies, profilage). La compter aussi ici la pénaliserait deux fois."),
  ("rules_open_learn", "How the score works", "Comprendre le calcul"),
  # Base de traqueurs
  ("database_status", "Exodus Privacy database", "Base de données Exodus Privacy"),
@@ -231,6 +231,11 @@ S = [
  ("credits_outro", "No personal data was collected during these credits. We checked.", "Aucune donnée personnelle n'a été collectée pendant ce générique. Nous avons vérifié."),
  ("credits_post_credits", "Post-credits scene: 🕵️ a little spy peeks back in… and leaves straight away, empty-handed.", "Scène post-générique : 🕵️ un petit espion repasse la tête… et repart aussitôt, bredouille."),
  ("about_contact_subject", "VYLIA %1$s", "VYLIA %1$s"),
+ ("settings_cards", "App cards", "Cartes d'apps"),
+ ("settings_cards_compact", "Compact", "Compact"),
+ ("settings_cards_compact_hint", "Name, score and what lowers it", "Nom, score et ce qui le fait baisser"),
+ ("settings_cards_detailed", "Detailed", "Détaillé"),
+ ("settings_cards_detailed_hint", "Package name, trackers and badges", "Nom du paquet, traqueurs et badges"),
 ]
 P = [
  ("data_restore_snapshots", ("%1$d Tracking point", "%1$d Tracking points"), ("%1$d point de suivi", "%1$d points de suivi")),

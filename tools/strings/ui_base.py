@@ -21,7 +21,17 @@ S = [
  ("risk_high", "High risk", "Risque élevé"),
  ("trackers_failed", "Tracker analysis not possible", "Analyse des traqueurs impossible"),
  ("trackers_none", "No tracker detected", "Aucun traqueur détecté"),
+ ("card_penalties", "Permissions − %1$d\\nTrackers − %2$d", "Permissions − %1$d\\nTraqueurs − %2$d"),
+ ("card_penalties_partial", "Permissions − %1$d\\nTrackers ?", "Permissions − %1$d\\nTraqueurs ?"),
+ ("card_penalties_description", "Permissions: minus %1$d points. Trackers: minus %2$d points.", "Permissions : moins %1$d points. Traqueurs : moins %2$d points."),
+ ("card_penalties_partial_description", "Permissions: minus %1$d points. Trackers: analysis incomplete.", "Permissions : moins %1$d points. Traqueurs : analyse incomplète."),
+ ("card_security", "Security alert", "Alerte sécurité"),
+ ("card_security_capped", "Security alert · capped at %1$d", "Alerte sécurité · plafonné à %1$d"),
+ ("card_security_description", "Security alert: %1$s.", "Alerte sécurité : %1$s."),
+ ("card_security_capped_description", "Security alert: %1$s. Score capped at %2$d.", "Alerte sécurité : %1$s. Score plafonné à %2$d."),
+ ("permissions_sensitive_none", "No sensitive permission granted", "Aucune permission sensible accordée"),
 ]
 P = [
  ("trackers_found", ("%1$d tracker detected", "%1$d trackers detected"), ("%1$d traqueur détecté", "%1$d traqueurs détectés")),
+ ("permissions_sensitive", ("%1$d sensitive permission granted", "%1$d sensitive permissions granted"), ("%1$d permission sensible accordée", "%1$d permissions sensibles accordées")),
 ]

@@ -1,15 +1,17 @@
-# VYLIA
+# VYLIA : privacy score & manager
 
-**The Privacy Scorer : l'audit de confidentialité de vos applications Android, 100 % sur le téléphone.** Une application
-de [Yogi Studio](#crédits) qui note chaque app installée de 0 à 100 selon les permissions qu'elle demande et les
-traqueurs qu'elle embarque, explique pourquoi, et aide à faire le ménage.
+**Notez, réduisez et filtrez ce que vos applications Android savent de vous, 100 % sur le téléphone.** Une
+application de [Yogi Studio](#crédits) qui note chaque app installée de 0 à 100 selon les permissions qu'elle demande
+et les traqueurs qu'elle embarque, explique pourquoi, aide à faire le ménage et bloque les régies publicitaires sur
+tout l'appareil.
 
 **L'idée de départ : être le Yuka de la vie privée.** Comme on scanne un produit pour savoir ce qu'il contient, VYLIA
 scanne vos applications pour savoir ce qu'elles font de vos données. Le but est de mettre à la portée de tous une
 compréhension simple des enjeux de vie privée : une note lisible, des explications sans jargon, des bonnes pratiques
 mises en avant autant que les dérives, et des gestes concrets pour reprendre la main.
 
-> Version actuelle : **0.8.2** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)).
+> Version actuelle : **0.9.0** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
+> site : [guillaumechr.github.io/vylia-site](https://guillaumechr.github.io/vylia-site/).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.
 
@@ -17,34 +19,54 @@ mises en avant autant que les dérives, et des gestes concrets pour reprendre la
 
 | | | | |
 |:---:|:---:|:---:|:---:|
-| <img src="docs/screenshots/comprendre.png" width="200" alt="Onglet Comprendre : le Privacy Score en bref, formule et échelle des notes A à E"> | <img src="docs/screenshots/comprendre-badges.png" width="200" alt="Comprendre, sous-onglet Badges : chaque badge, sa signification et sa règle en clair"> | <img src="docs/screenshots/grille-de-score.png" width="200" alt="Grille de score : capacités conditionnelles et permissions justifiées par catégorie"> | <img src="docs/screenshots/a-propos.png" width="200" alt="À propos : logo VYLIA, version, Yogi Studio et engagement de vie privée"> |
-| Comprendre | Les badges et leurs règles | Grille de score | À propos |
+| <img src="docs/screenshots/aide-fonctionnement.png" width="200" alt="Aide, onglet Fonctionnement : votre surface d'exposition et les étapes Identifier, Réduire, Filtrer"> | <img src="docs/screenshots/filtrer.png" width="200" alt="Filtrer, onglet Filtrage DNS : bouclier VYLIA et DNS privé, deux façons de réduire le traçage publicitaire"> | <img src="docs/screenshots/alternatives.png" width="200" alt="Gérer, onglet Alternatives : apps plus respectueuses par catégorie, avec leur note Google Play"> | <img src="docs/screenshots/celebrer.png" width="200" alt="Célébrer et partager : score des apps, points de confidentialité et badges"> |
+| Comment fonctionne VYLIA | Filtrer | Alternatives | Célébrer et partager |
 
-## Ce qu'elle fait
+## Comment ça marche
 
-- **Un score par app, de 0 à 100, et une note de A à E** : on part de 100, on retire les permissions (50 points au
-  plus) et les traqueurs (60 points au plus).
+Chaque app installée peut accéder à une partie de votre vie : position, contacts, micro, photos, et beaucoup
+embarquent des traqueurs publicitaires. L'ensemble forme votre **surface d'exposition**. VYLIA la traite en cinq écrans,
+dans l'ordre de la barre du bas :
+
+1. **Scanner** : un score par app, de 0 à 100, et une note de A à E. On part de 100, on retire les permissions
+   (50 points au plus) et les traqueurs (60 points au plus). Trois vues : par risque, par catégorie, par badge ; des
+   cartes compactes ou détaillées ; un toucher sur l'icône ouvre la fiche Android de l'app.
+2. **Analyser** : les zones de risque, les anomalies et les traqueurs les plus répandus sur le téléphone ; le **Suivi**
+   avec la courbe du score dans le temps, l'historique des installations, suppressions et autorisations, et une
+   **alerte de seuil** si votre exposition augmente.
+3. **Gérer** : réduire l'exposition.
+   - **Permissions** : une carte par app, les scores les plus bas d'abord, avec les permissions dont elle se sert sans
+     en avoir besoin, le gain de chacune et le score qu'elle atteindrait sans elles.
+   - **Apps** : les apps intrusives et celles que vous n'ouvrez plus.
+   - **Alternatives** : des apps plus respectueuses par catégorie du Play Store, avec leur note Google Play. Aucune ne
+     rend exactement le même service : c'est à vous de choisir.
+4. **Filtrer** : réduire l'exposition sans modifier vos apps.
+   - **Filtrage DNS** : le **bouclier VYLIA**, un VPN local qui répond « introuvable » aux domaines des régies et des
+     traqueurs, sur tout l'appareil et y compris dans les apps que vous gardez (filtrage web et mobile au choix, pause,
+     compteur en direct, tuile des réglages rapides). Ou le **DNS privé** d'Android, avec un guide pas à pas (NextDNS
+     pour bloquer les traqueurs, Quad9 sans compte).
+   - **WebAPK** : remplacer une app par la version web du même service, installée par le navigateur comme une app.
+     L'app native, ses permissions et les traqueurs de son code disparaissent. VYLIA repère vos apps qui ont un site
+     d'après les adresses web qu'elles déclarent à Android, dans les catégories où un site peut les remplacer.
+5. **Célébrer et partager** : le score du téléphone, vos progrès, des points et des badges pour chaque app intrusive
+   supprimée, et une image à partager (score, progrès, traqueurs, bouclier, trophées) qui ne montre jamais le nom d'une
+   app.
+
+Et aussi :
+
 - **Des permissions jugées selon la finalité de l'app** : le GPS ne coûte rien à une app de navigation, il coûte cher à
   un jeu. Chacune des 28 catégories (navigation, messagerie, banque, jeux, santé…) dit ce qu'elle justifie, tolère ou
   interdit.
 - **Des traqueurs détectés localement** : VYLIA cherche dans le code de chaque app les signatures de la base publique
   [Exodus Privacy](https://exodus-privacy.eu.org/), sans rien envoyer.
-- **Des badges qui qualifient, sans alarmer** : bonnes pratiques (« Poids plume », « Bio », « Sait se faire oublier »)
-  autant que points d'attention (« Fouineuse », « Régie publicitaire », « Moteur, ça tourne ! »).
+- **Des stalkerwares repérés** : la base publique de l'association [Echap](https://echap.eu.org/) (applications
+  d'espionnage d'un proche) est intégrée ; une app reconnue déclenche une alerte.
 - **Des capacités d'espionnage repérées** : clavier ou service d'accessibilité capable de lire la saisie, icône cachée
   avec accès sensibles, lecture d'écran avec superposition. Elles plafonnent le score.
-- **Toutes les permissions, comme sur Exodus** : regroupées par thème, avec leur niveau de protection Android et une
-  fiche en langage simple pour comprendre chacune.
-- **Trois vues de vos apps** : par risque, par catégorie, par badge. Un toucher sur l'icône ouvre la fiche Android de
-  l'app pour la désinstaller ou retirer une autorisation.
-- **Agir** : les pires élèves à désinstaller, les meilleures apps à garder, des points et des trophées pour chaque
-  app intrusive supprimée, un bilan à partager.
-- **Comprendre** : le calcul du score, les badges, le lexique des traqueurs et celui des permissions, avec ce que
-  chacun révèle de vous et combien de vos apps sont concernées ; une loupe pour chercher dans chaque onglet.
-- **DNS privé** : un guide pour chiffrer les requêtes DNS de tout le téléphone (NextDNS recommandé pour bloquer les traqueurs publicitaires, ou Quad9 sans compte), avec
-  l'état actuel, les étapes dans les réglages Android et comment revenir en arrière.
-- **Suivi** : la courbe de votre score moyen dans le temps, les apps qui pèsent le plus, l'historique des
-  installations, suppressions et autorisations.
+- **Des badges qui qualifient, sans alarmer** : bonnes pratiques (« Poids plume », « Bio », « Sait se faire oublier »)
+  autant que points d'attention (« Fouineuse », « Régie publicitaire », « Moteur, ça tourne ! »).
+- **Une aide unique**, la même depuis chaque écran : comment fonctionne VYLIA, le calcul du score, les badges, le
+  lexique des traqueurs et celui des permissions.
 - **Automatisations** (désactivées par défaut) : une notification à l'installation d'une app avec son score, et des
   scans de fond hebdomadaires ou mensuels qui alimentent le Suivi.
 - **Vos données, à vous** : exporter tout ce que VYLIA conserve dans un fichier lisible, l'importer sur un autre
@@ -53,7 +75,7 @@ mises en avant autant que les dérives, et des gestes concrets pour reprendre la
 ## Une grille de score transparente
 
 La grille complète (poids de chaque permission, groupes, contexte par catégorie, permissions volontairement non
-comptées) est consultable dans l'app, **Paramètres › Règles de score › Voir la grille**, et dans
+comptées) est consultable dans l'app, **Aide › Score › La grille, catégorie par catégorie**, et dans
 [`app/src/main/assets/vylia_rules_v3.json`](app/src/main/assets/vylia_rules_v3.json). Quelques principes :
 
 - une capacité d'arrière-plan (micro, caméra, position) ne compte entièrement que si l'accès dont elle dépend est
@@ -71,14 +93,19 @@ et ne peut exclure aucune app de l'audit. Leur évolution est documentée dans [
 ## Vie privée
 
 **Aucune donnée collectée. Vos applications sont analysées sur votre téléphone, et nulle part ailleurs.**
+Politique complète : [confidentialité](https://guillaumechr.github.io/vylia-site/fr/confidentialite.html) ·
+[conditions d'utilisation](https://guillaumechr.github.io/vylia-site/fr/conditions.html).
 
 - Aucune publicité, aucun traqueur, aucun outil de mesure d'audience, aucune donnée revendue.
-- Internet ne sert que lorsque vous mettez à jour la base de traqueurs : VYLIA télécharge alors la liste publique
-  d'Exodus Privacy, sans rien envoyer sur vos applications.
+- Internet ne sert qu'à vos demandes de mise à jour : la base de traqueurs d'Exodus Privacy, celle des stalkerwares
+  d'Echap et la liste des DNS privés. Ce sont des fichiers publics téléchargés tels quels : rien n'est envoyé sur vos
+  applications.
+- Le bouclier filtre sur le téléphone. Les requêtes qu'il laisse passer vont directement au DNS de votre réseau, comme
+  sans lui : aucun serveur de VYLIA, aucun journal des sites visités.
 - Les résultats, badges et points restent sur le téléphone et sont exclus des sauvegardes Android. L'export, l'import
   et le partage du bilan ne se font qu'à votre demande.
 - Les alertes d'installation et les scans de fond, désactivés par défaut, s'exécutent sur le téléphone uniquement.
-- Tout ce qui vient de l'extérieur (sauvegarde importée, règles importées, base Exodus téléchargée) est vérifié avant
+- Tout ce qui vient de l'extérieur (sauvegarde importée, règles importées, bases téléchargées) est vérifié avant
   usage : voir [`docs/security/donnees-externes.md`](docs/security/donnees-externes.md).
 
 ## Installer
@@ -113,18 +140,19 @@ un vrai téléphone : `adb logcat -s VyliaScores`.
 
 ## Architecture
 
-Application mono-module en Kotlin et Jetpack Compose (Material 3), sans framework d'injection (conteneur manuel dans
-`di/AppContainer.kt`).
+Application en Kotlin et Jetpack Compose (Material 3), sans framework d'injection (conteneur manuel dans
+`di/AppContainer.kt`), en deux modules : `:app` et `:shield`, le bouclier (VPN local de filtrage DNS, voir
+[`docs/shield.md`](docs/shield.md)). Sans `:shield` (`SHIELD_ENABLED` à `false`), Filtrer garde le DNS privé et le WebAPK.
 
 ```
 app/src/main/java/com/vylia/privacy/
 ├── data/         apps installées et signaux de sécurité (apps/), analyse DEX des traqueurs (trackers/),
 │                 règles de score (rules/), suivi (history/), tâches de fond (automation/),
-│                 sauvegarde (backup/), préférences, récompenses, export CSV
-├── domain/       moteur de score et badges (scoring/), lexiques (learn/), analyse de l'appareil, suivi,
-│                 sauvegarde et contrôles des données externes (backup/, security/), modèles
-└── ui/           un paquet par écran : scan/, analysis/, act/, understand/, settings/, detail/ ;
-                  main/ (navigation), splash/ (intro), components/, theme/
+│                 sauvegarde (backup/), sites des apps (web/), préférences, récompenses, export CSV
+├── domain/       moteur de score et badges (scoring/), lexiques (learn/), gérer et alternatives (act/),
+│                 versions web (web/), analyse de l'appareil, suivi, contrôles des données externes
+└── ui/           scan/, analysis/, act/ (Gérer, Filtrer, Célébrer), help/ et understand/ (aide), settings/,
+                  detail/, share/, search/, shield/ ; main/ (navigation), splash/ (intro), components/, theme/
 ```
 
 - **Score** : `domain/scoring/PrivacyScorer.kt` applique les règles JSON ; `BadgeEngine.kt` attribue les badges ;
@@ -140,6 +168,11 @@ Outils du dépôt : voir [`tools/README.md`](tools/README.md). Feuille de route 
 - **Édition, conception et développement** : Yogi Studio. Le générique complet, avec un peu d'humour, est à la fin
   de l'écran À propos.
 - **Programmation en binôme** : Claude (Anthropic), via Claude Code.
+- **Stalkerwares connus** : [Echap](https://echap.eu.org/), base
+  [stalkerware-indicators](https://github.com/AssoEchap/stalkerware-indicators) sous licence
+  [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (extrait adapté : noms, paquets et certificats).
+- **Alternatives** : classement d'après les recommandations de la communauté [AlternativeTo](https://alternativeto.net/),
+  notes relevées sur Google Play.
 - **Signatures de traqueurs** : [Exodus Privacy](https://exodus-privacy.eu.org/), base sous
   [Open Database License (ODbL 1.0)](https://opendatacommons.org/licenses/odbl/1-0/), contenus sous Database Contents
   License (DbCL 1.0). Logo Exodus Privacy repris de [exodus-android-app](https://github.com/Exodus-Privacy/exodus-android-app)
@@ -156,4 +189,4 @@ Les noms VYLIA et Yogi Studio, leurs logos et l'icône de l'application ne sont 
 
 ## Contact
 
-Un bug, une idée, une question : yogistudiofr@gmail.com.
+Un bug, une idée, une question : yogistudiofr@gmail.com. Une faille de sécurité : voir [`SECURITY.md`](SECURITY.md).

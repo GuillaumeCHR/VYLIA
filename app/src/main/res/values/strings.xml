@@ -599,7 +599,7 @@
     <string name="howto_reduce_title">Reduce · Manage</string>
     <string name="howto_reduce_text">Revoke needless permissions, remove the apps you no longer use, and replace intrusive apps with more respectful alternatives.</string>
     <string name="howto_protect_title">Filter</string>
-    <string name="howto_protect_text">The filter blocks ad networks across the whole device, including in the apps you keep. And read your news sites in their web version rather than an app: the app and its trackers go away.</string>
+    <string name="howto_protect_text">The filter blocks ad networks across the whole device, including in the apps you keep. And when a service works in a browser, use its web version instead of its app: the app and its trackers go away.</string>
     <string name="howto_follow_title">Follow over time · Analyze, alerts</string>
     <string name="howto_follow_text">VYLIA compares each scan with the previous one and warns you if your exposure grows.</string>
     <string name="howto_celebrate_title">Celebrate</string>
@@ -613,7 +613,7 @@
     <string name="help_reduce_title">Manage: permissions and apps</string>
     <string name="help_reduce_intro">One card per app, lowest scores first: the permissions it uses without needing them, each with its gain, and the score it would reach without them. Under Apps, the intrusive apps and those you no longer open. The glossary says what each permission is for, so you can judge whether the app really needs it.</string>
     <string name="help_replace_title">Manage: alternatives</string>
-    <string name="help_replace_intro">Alternatives to the most intrusive apps, sorted by Play Store category. The glossaries say what the original app asks for and embeds: its permissions and its trackers.</string>
+    <string name="help_replace_intro">More respectful apps, sorted by Play Store category: you choose the category and judge whether an alternative suits you, since none renders exactly the same service. The Google Play rating is shown when there is one.</string>
     <string name="help_webapk_title">Filter: WebAPK</string>
     <string name="help_webapk_intro">Replace an app with the web version of the same service, installed by your browser as a WebAPK: the app\'s permissions and built-in trackers go away, and the DNS filtering applies to the browser. You may lose some notifications or offline use, depending on the site.</string>
     <string name="help_protect_title">Filter: DNS filtering</string>

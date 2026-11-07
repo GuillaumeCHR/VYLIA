@@ -616,7 +616,7 @@
     <string name="howto_reduce_title">Réduire · Gérer</string>
     <string name="howto_reduce_text">Retirez les permissions inutiles, supprimez les apps que vous n\'utilisez plus, et remplacez les apps intrusives par des alternatives plus respectueuses.</string>
     <string name="howto_protect_title">Filtrer</string>
-    <string name="howto_protect_text">Le filtre bloque les régies publicitaires sur tout l\'appareil, y compris dans les apps que vous gardez. Et lisez vos sites d\'information en version web plutôt qu\'en app : l\'app et ses traqueurs disparaissent.</string>
+    <string name="howto_protect_text">Le filtre bloque les régies publicitaires sur tout l\'appareil, y compris dans les apps que vous gardez. Et quand un service s\'utilise dans le navigateur, passez à sa version web plutôt qu\'à son app : l\'app et ses traqueurs disparaissent.</string>
     <string name="howto_follow_title">Suivre dans le temps · Analyser, alertes</string>
     <string name="howto_follow_text">VYLIA compare chaque scan au précédent et vous prévient si votre exposition augmente.</string>
     <string name="howto_celebrate_title">Célébrer</string>
@@ -630,7 +630,7 @@
     <string name="help_reduce_title">Gérer : permissions et apps</string>
     <string name="help_reduce_intro">Une carte par app, les scores les plus bas d\'abord : les permissions dont elle se sert sans en avoir besoin, chacune avec son gain, et le score qu\'elle atteindrait sans elles. Dans Apps, les apps intrusives et celles que vous n\'ouvrez plus. Le lexique dit à quoi sert chaque permission, pour juger si l\'app en a vraiment besoin.</string>
     <string name="help_replace_title">Gérer : alternatives</string>
-    <string name="help_replace_intro">Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l\'app d\'origine demande et embarque : ses permissions et ses traqueurs.</string>
+    <string name="help_replace_intro">Des apps plus respectueuses, rangées par catégorie du Play Store : vous choisissez la catégorie et jugez si une alternative vous convient, aucune ne rendant exactement le même service. La note Google Play est indiquée quand elle existe.</string>
     <string name="help_webapk_title">Filtrer : WebAPK</string>
     <string name="help_webapk_intro">Remplacer une app par la version web du même service, installée par votre navigateur comme un WebAPK : les permissions et les traqueurs intégrés à l\'app disparaissent, et le filtrage DNS s\'applique au navigateur. Selon le site, vous pouvez perdre certaines notifications ou l\'usage hors connexion.</string>
     <string name="help_protect_title">Filtrer : filtrage DNS</string>

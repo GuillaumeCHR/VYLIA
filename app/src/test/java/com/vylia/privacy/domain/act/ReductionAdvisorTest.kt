@@ -72,6 +72,22 @@ class ReductionAdvisorTest {
     }
 
     @Test
+    fun `une carte par app - toutes ses permissions, score recalcule avec tout retire`() {
+        val game = app("org.example.game", "CATEGORY_GAME", setOf("ACCESS_FINE_LOCATION", "READ_CONTACTS", "RECORD_AUDIO"))
+        val other = app("org.example.other", "CATEGORY_GAME", setOf("READ_CONTACTS"), trackers = 3)
+        val revocations = ReductionAdvisor.revocations(listOf(game, other), scorer)
+        val cards = ReductionAdvisor.byApp(revocations, scorer)
+        assertEquals(listOf("org.example.other", "org.example.game"), cards.map { it.app.app.packageName })
+        val gameCard = cards.single { it.app.app.packageName == "org.example.game" }
+        assertEquals(revocations.count { it.app.app.packageName == "org.example.game" }, gameCard.suggestions.size)
+        assertTrue(gameCard.suggestions.size >= 2)
+        // Le moteur recalcule tout retiré à la fois : au moins le meilleur gain seul, au plus le score de base.
+        assertTrue(gameCard.gain >= gameCard.suggestions.maxOf { it.gain })
+        assertTrue(gameCard.newScore <= 100)
+        assertEquals(gameCard.suggestions.sortedByDescending { it.gain }, gameCard.suggestions)
+    }
+
+    @Test
     fun `une permission justifiee n est jamais proposee`() {
         val maps = app("org.example.maps", "CATEGORY_MAPS", setOf("ACCESS_FINE_LOCATION"))
         assertTrue(ReductionAdvisor.revocations(listOf(maps), scorer).isEmpty())

@@ -271,7 +271,7 @@
     <string name="dns_list_unchanged">The list is already up to date.</string>
     <string name="dns_list_failed">Update failed: the current list is kept.</string>
     <string name="dns_list_privacy">The list is downloaded from VYLIA\'s public repository on GitHub, only when you tap this button, and checked before use.</string>
-    <string name="reduce_revoke_hint">Permissions your apps use without needing them, lowest-scoring apps first. Each gain is recalculated by the scoring engine. Tap to open the app\'s Android settings, then Permissions.</string>
+    <string name="reduce_revoke_hint">Permissions your apps use without needing them, one card per app, lowest-scoring apps first. Each gain is recalculated by the scoring engine; together, the gains do not always add up. Tap to open the app\'s Android settings, then Permissions.</string>
     <string name="reduce_revoke_empty">No permission to revoke: every granted permission fits its app\'s purpose.</string>
     <string name="reduce_revoke_line">Revoke: %1$s</string>
     <string name="reduce_gain_points">+%1$d pts</string>
@@ -360,6 +360,7 @@
     <string name="shield_bypass_open_network">Open network settings</string>
     <string name="shield_turn_off">Turn off the shield</string>
     <string name="shield_take_over">Take over</string>
+    <string name="shield_bypass_open_protect">See Protect yourself</string>
     <string name="act_empty_scan">Run a scan from Scan to see your apps here.</string>
     <string name="manage_subtitle">Reduce your exposure: permissions to revoke, apps to remove, alternatives. The apps with the lowest score come first.</string>
     <string name="reduce_action_permissions">Manage permissions</string>
@@ -378,6 +379,10 @@
     <plurals name="reduce_revoke_title">
         <item quantity="one">Revoke %1$d permission</item>
         <item quantity="other">Revoke %1$d permissions</item>
+    </plurals>
+    <plurals name="reduce_revoke_apps">
+        <item quantity="one">in %1$d app</item>
+        <item quantity="other">in %1$d apps</item>
     </plurals>
     <plurals name="reduce_remove_title">
         <item quantity="one">Remove %1$d app</item>

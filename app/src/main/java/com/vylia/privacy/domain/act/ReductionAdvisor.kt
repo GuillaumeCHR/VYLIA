@@ -23,6 +23,20 @@ data class RevokeSuggestion(
     val gain: Int get() = newScore - app.score.value
 }
 
+/**
+ * Toutes les autorisations à retirer d'une même app, pour une seule carte. [newScore] et les badges sont recalculés
+ * avec tout retiré à la fois : les gains de chaque ligne ne s'additionnent pas (plafonds, groupes de permissions).
+ */
+data class AppRevocations(
+    val app: AuditedApp,
+    val suggestions: List<RevokeSuggestion>,
+    val newScore: Int,
+    val badgesGained: List<BadgeDef>,
+    val badgesLost: List<BadgeDef>,
+) {
+    val gain: Int get() = newScore - app.score.value
+}
+
 /** App à supprimer : inutilisée et/ou intrusive. */
 data class RemovalSuggestion(
     val app: AuditedApp,
@@ -111,6 +125,22 @@ object ReductionAdvisor {
                     .thenBy { it.lastUsedAt ?: 0L },
             )
     }
+
+    /** Une entrée par app, dans l'ordre de [revocations] (score le plus bas d'abord), ses lignes par gain décroissant. */
+    fun byApp(revocations: List<RevokeSuggestion>, scorer: PrivacyScorer): List<AppRevocations> =
+        revocations.groupBy { it.app.app.packageName }.values.map { suggestions ->
+            val audited = suggestions.first().app
+            val after = scorer.scoreWithout(audited, suggestions.flatMap { it.revoked }.toSet())
+            val before = audited.result.badges.map { it.id }.toSet()
+            val now = after.badges.map { it.id }.toSet()
+            AppRevocations(
+                app = audited,
+                suggestions = suggestions.sortedByDescending { it.gain },
+                newScore = after.score,
+                badgesGained = after.badges.filter { it.id !in before && it.polarity == "positive" },
+                badgesLost = audited.result.badges.filter { it.id !in now && it.polarity == "negative" },
+            )
+        }
 
     /**
      * Score moyen atteignable : chaque app est recalculée sans toutes ses autorisations à retirer (le moteur gère

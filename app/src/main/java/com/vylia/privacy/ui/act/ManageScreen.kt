@@ -92,8 +92,9 @@ fun ManageScreen(
 
     val userApps = remember(state.scannedApps) { state.scannedApps.filter { AppFilter.USER.matches(it.app) } }
     val scorer = loadedRules.scorer
+    // Une carte par app : ses autorisations à retirer, et le score qu'elle aurait sans aucune d'elles.
     val revocations = remember(userApps, scorer, pinnedPackage) {
-        ReductionAdvisor.revocations(userApps, scorer).pinnedFirst(pinnedPackage) { it.app.app.packageName }
+        ReductionAdvisor.byApp(ReductionAdvisor.revocations(userApps, scorer), scorer).pinnedFirst(pinnedPackage) { it.app.app.packageName }
     }
     val removals = remember(userApps, usage, pinnedPackage) {
         ReductionAdvisor.removals(userApps, usage.lastUsed, System.currentTimeMillis()).pinnedFirst(pinnedPackage) { it.app.app.packageName }

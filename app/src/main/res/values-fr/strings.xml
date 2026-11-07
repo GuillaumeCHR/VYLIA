@@ -221,7 +221,7 @@
     <string name="act_removed_empty">Aucune pour l\'instant. Rendez-vous dans « Assainir » ci-dessous pour commencer.</string>
     <string name="act_points">points de confidentialité</string>
     <string name="ok">OK</string>
-    <string name="reduce_tab_permissions">Autorisations</string>
+    <string name="reduce_tab_permissions">Permissions</string>
     <string name="reduce_tab_removals">Apps</string>
     <string name="manage_tab_alternatives">Alternatives</string>
     <string name="protect_section_dns">Filtrage DNS</string>
@@ -276,8 +276,8 @@
     <string name="dns_list_unchanged">La liste est déjà à jour.</string>
     <string name="dns_list_failed">Mise à jour impossible : la liste actuelle est conservée.</string>
     <string name="dns_list_privacy">La liste est téléchargée depuis le dépôt public de VYLIA sur GitHub, seulement quand vous touchez ce bouton, et vérifiée avant usage.</string>
-    <string name="reduce_revoke_hint">Des autorisations dont vos apps se servent sans en avoir besoin, les apps au score le plus bas d\'abord. Chaque gain est recalculé par le moteur de score. Touchez pour ouvrir la fiche Android de l\'app, puis Autorisations.</string>
-    <string name="reduce_revoke_empty">Aucune autorisation à retirer : chaque autorisation accordée sert la finalité de son app.</string>
+    <string name="reduce_revoke_hint">Des permissions dont vos apps se servent sans en avoir besoin, une carte par app, les apps au score le plus bas d\'abord. Chaque gain est recalculé par le moteur de score ; ensemble, les gains ne s\'additionnent pas toujours. Touchez pour ouvrir la fiche Android de l\'app, puis Autorisations.</string>
+    <string name="reduce_revoke_empty">Aucune permission à retirer : chaque permission accordée sert la finalité de son app.</string>
     <string name="reduce_revoke_line">Retirer : %1$s</string>
     <string name="reduce_gain_points">+%1$d pts</string>
     <string name="reduce_score_after">Score %1$d → %2$d</string>
@@ -294,7 +294,7 @@
     <string name="reduce_usage_button">Autoriser l\'accès aux données d\'utilisation</string>
     <string name="alt_title">Des alternatives plus respectueuses</string>
     <string name="alt_intro">Changer d\'app est souvent le moyen le plus radical de protéger vos données, mais ce n\'est pas toujours possible. Votre banque, les services publics, l\'outil imposé par votre employeur ou la messagerie qu\'utilisent vos proches n\'ont généralement pas d\'équivalent.</string>
-    <string name="alt_reduce_first">C\'est pourquoi la démarche commence par réduire le risque des apps que vous gardez : retirer les autorisations inutiles, supprimer les apps oubliées, bloquer le traçage publicitaire. C\'est l\'objet des onglets Autorisations et Apps, et de Se protéger. Ensuite seulement, quand une alternative existe, changer devient intéressant : choisissez une catégorie ci-dessous pour en découvrir deux ou trois.</string>
+    <string name="alt_reduce_first">C\'est pourquoi la démarche commence par réduire le risque des apps que vous gardez : retirer les permissions inutiles, supprimer les apps oubliées, bloquer le traçage publicitaire. C\'est l\'objet des onglets Permissions et Apps, et de Se protéger. Ensuite seulement, quand une alternative existe, changer devient intéressant : choisissez une catégorie ci-dessous pour en découvrir deux ou trois.</string>
     <string name="alt_degoogle">Certains vont plus loin et adoptent un téléphone entièrement « dégooglisé », qui fonctionne sans les services de Google. Cette voie demande des compromis que tout le monde n\'est pas prêt à faire, et ce n\'est pas celle de VYLIA : notre philosophie est de réduire votre exposition tout en gardant votre téléphone et vos apps habituelles.</string>
     <string name="alt_trophy">Installer une alternative débloque le trophée Bon échange.</string>
     <string name="alt_installed">Installée</string>
@@ -365,8 +365,9 @@
     <string name="shield_bypass_open_network">Ouvrir les réglages réseau</string>
     <string name="shield_turn_off">Désactiver le bouclier</string>
     <string name="shield_take_over">Reprendre la main</string>
+    <string name="shield_bypass_open_protect">Voir Se protéger</string>
     <string name="act_empty_scan">Lancez un scan depuis Scanner pour voir vos apps ici.</string>
-    <string name="manage_subtitle">Réduire votre exposition : autorisations à retirer, apps à supprimer, alternatives. Les apps au score le plus bas d\'abord.</string>
+    <string name="manage_subtitle">Réduire votre exposition : permissions à retirer, apps à supprimer, alternatives. Les apps au score le plus bas d\'abord.</string>
     <string name="reduce_action_permissions">Gérer les permissions</string>
     <string name="reduce_action_uninstall">Désinstaller</string>
     <string name="protect_subtitle">Des mesures qui réduisent votre exposition sans modifier vos apps : le bouclier filtre les régies et les traqueurs sur tout l\'appareil, y compris dans les apps que vous gardez.</string>
@@ -381,9 +382,14 @@
     <string name="celebrate_progress_stable_month">Stable depuis 30 jours</string>
     <string name="celebrate_progress_stable_start">Stable depuis votre premier scan</string>
     <plurals name="reduce_revoke_title">
-        <item quantity="one">Retirer %1$d autorisation</item>
-        <item quantity="many">Retirer %1$d autorisations</item>
-        <item quantity="other">Retirer %1$d autorisations</item>
+        <item quantity="one">Retirer %1$d permission</item>
+        <item quantity="many">Retirer %1$d permissions</item>
+        <item quantity="other">Retirer %1$d permissions</item>
+    </plurals>
+    <plurals name="reduce_revoke_apps">
+        <item quantity="one">dans %1$d app</item>
+        <item quantity="many">dans %1$d apps</item>
+        <item quantity="other">dans %1$d apps</item>
     </plurals>
     <plurals name="reduce_remove_title">
         <item quantity="one">Supprimer %1$d app</item>
@@ -573,7 +579,7 @@
     <string name="help_scan_intro">Chaque app part de 100 points et en perd pour ses permissions et ses traqueurs. Les trois icônes du haut trient les apps par risque, par catégorie ou par badge. Touchez l\'icône d\'une app pour ouvrir ses réglages Android.</string>
     <string name="help_analyze_title">Analyser</string>
     <string name="help_analyze_intro">Une vue d\'ensemble de votre téléphone : les zones de risque, les anomalies et les traqueurs les plus répandus. Les lexiques disent ce que chaque traqueur et chaque permission révèle de vous.</string>
-    <string name="help_reduce_title">Gérer : autorisations et apps</string>
+    <string name="help_reduce_title">Gérer : permissions et apps</string>
     <string name="help_reduce_intro">Les gestes commencent par les apps au score le plus bas : retirer une permission, désinstaller une app que vous n\'utilisez plus. Le lexique dit à quoi sert chaque permission, pour juger si l\'app en a vraiment besoin.</string>
     <string name="help_replace_title">Gérer : alternatives</string>
     <string name="help_replace_intro">Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l\'app d\'origine demande et embarque : ses permissions et ses traqueurs.</string>

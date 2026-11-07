@@ -13,6 +13,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.ui.act.CelebrateScreen
@@ -31,6 +33,7 @@ import com.vylia.privacy.ui.act.ManageScreen
 import com.vylia.privacy.ui.act.ManageSection
 import com.vylia.privacy.ui.analysis.AnalyzeSection
 import com.vylia.privacy.ui.act.ProtectScreen
+import com.vylia.privacy.ui.shield.LocalOpenProtect
 import com.vylia.privacy.ui.analysis.AnalysisScreen
 import com.vylia.privacy.ui.components.categoryName
 import com.vylia.privacy.ui.detail.AppDetailScreen
@@ -46,7 +49,12 @@ enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: 
     ANALYZE(R.string.tab_analyze, R.drawable.ic_sym_bar_chart),
     MANAGE(R.string.tab_manage, R.drawable.ic_sym_tune),
     PROTECT(R.string.tab_protect, R.drawable.ic_sym_shield),
-    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration),
+    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration);
+
+    companion object {
+        /** Les destinations de la barre : sans le bouclier, Se protéger disparaît et il en reste quatre. */
+        fun destinations(shieldEnabled: Boolean): List<AppTab> = entries.filter { shieldEnabled || it != PROTECT }
+    }
 }
 
 /** Écrans ouverts par-dessus l'onglet en cours depuis la barre du haut. */
@@ -62,7 +70,9 @@ fun MainScreen(
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
 ) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
-    var currentTab by rememberSaveable { mutableStateOf(initialTab ?: AppTab.SCAN) }
+    var currentTab by rememberSaveable {
+        mutableStateOf(initialTab?.takeIf { it in AppTab.destinations(BuildConfig.SHIELD_ENABLED) } ?: AppTab.SCAN)
+    }
     // Dernier sous-onglet ouvert de Gérer et d'Analyser : gardé pour la session, même en changeant de destination.
     var manageSection by rememberSaveable { mutableStateOf(initialManageSection ?: ManageSection.PERMISSIONS) }
     var analyzeSection by rememberSaveable { mutableStateOf(initialAnalyzeSection ?: AnalyzeSection.OVERVIEW) }
@@ -90,7 +100,14 @@ fun MainScreen(
     // La flèche de la barre fait exactement comme le geste retour d'Android.
     val dispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val back: () -> Unit = { dispatcher?.onBackPressed() }
+    // La feuille « Bouclier contourné » de la pastille renvoie à Se protéger, d'où qu'on l'ouvre.
+    val openProtect = {
+        detailPackage = null
+        closeOverlay()
+        currentTab = AppTab.PROTECT
+    }
 
+    CompositionLocalProvider(LocalOpenProtect provides openProtect) {
     Scaffold(
         topBar = {
             when {
@@ -106,7 +123,7 @@ fun MainScreen(
         },
         bottomBar = {
             NavigationBar {
-                AppTab.entries.forEach { tab ->
+                AppTab.destinations(BuildConfig.SHIELD_ENABLED).forEach { tab ->
                     NavigationBarItem(
                         selected = currentTab == tab && overlay == null,
                         onClick = {
@@ -161,5 +178,6 @@ fun MainScreen(
                 AppTab.CELEBRATE -> CelebrateScreen(modifier)
             }
         }
+    }
     }
 }

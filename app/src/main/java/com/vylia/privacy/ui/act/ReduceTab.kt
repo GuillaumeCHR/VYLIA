@@ -40,7 +40,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.act.RemovalSuggestion
-import com.vylia.privacy.domain.act.RevokeSuggestion
+import com.vylia.privacy.domain.act.AppRevocations
 import com.vylia.privacy.domain.learn.PermissionGlossary
 import com.vylia.privacy.ui.components.AppIcon
 import com.vylia.privacy.ui.components.BadgeChip
@@ -64,7 +64,7 @@ enum class ManageSection(@param:StringRes val title: Int) {
 
 @Composable
 internal fun ReduceTab(
-    revocations: List<RevokeSuggestion>,
+    revocations: List<AppRevocations>,
     removals: List<RemovalSuggestion>,
     usage: UsageState,
     section: ManageSection,
@@ -97,12 +97,19 @@ internal fun ReduceTab(
 }
 
 @Composable
-private fun RevocationsList(revocations: List<RevokeSuggestion>) {
+private fun RevocationsList(revocations: List<AppRevocations>) {
     var allRevocations by rememberSaveable { mutableStateOf(false) }
+    val permissions = revocations.sumOf { it.suggestions.size }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        item { SectionHeader(pluralStringResource(R.plurals.reduce_revoke_title, revocations.size, revocations.size), stringResource(R.string.reduce_revoke_hint)) }
+        item {
+            SectionHeader(
+                pluralStringResource(R.plurals.reduce_revoke_title, permissions, permissions) + " · " +
+                    pluralStringResource(R.plurals.reduce_revoke_apps, revocations.size, revocations.size),
+                stringResource(R.string.reduce_revoke_hint),
+            )
+        }
         if (revocations.isEmpty()) item { Empty(stringResource(R.string.reduce_revoke_empty)) }
-        items(if (allRevocations) revocations else revocations.take(PreviewCount), key = { "revoke-${it.app.app.packageName}-${it.finding.permission}" }) {
+        items(if (allRevocations) revocations else revocations.take(PreviewCount), key = { "revoke-${it.app.app.packageName}" }) {
             RevokeRow(it)
         }
         if (revocations.size > PreviewCount) item { ShowAll(allRevocations, revocations.size) { allRevocations = !allRevocations } }
@@ -128,29 +135,37 @@ private fun RemovalsList(removals: List<RemovalSuggestion>, usage: UsageState) {
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun RevokeRow(suggestion: RevokeSuggestion) {
+private fun RevokeRow(entry: AppRevocations) {
     val context = LocalContext.current
-    val app = suggestion.app.app
-    val permission = PermissionGlossary.titleOf(suggestion.finding.permission)?.let { stringResource(it) } ?: suggestion.finding.permission
+    val app = entry.app.app
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 AppIcon(app.icon, 32.dp)
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text(stringResource(R.string.reduce_revoke_line, permission), style = MaterialTheme.typography.bodySmall)
+                Text(app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                Gain(stringResource(R.string.reduce_gain_points, entry.gain))
+            }
+            // Une ligne par autorisation, avec ce qu'elle rapporte seule.
+            entry.suggestions.forEach { suggestion ->
+                val permission = PermissionGlossary.titleOf(suggestion.finding.permission)?.let { stringResource(it) } ?: suggestion.finding.permission
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(stringResource(R.string.reduce_revoke_line, permission), style = MaterialTheme.typography.bodySmall, modifier = Modifier.weight(1f))
+                    Text(
+                        stringResource(R.string.reduce_gain_points, suggestion.gain),
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
                 }
-                Gain(stringResource(R.string.reduce_gain_points, suggestion.gain))
             }
             Text(
-                stringResource(R.string.reduce_score_after, suggestion.app.score.value, suggestion.newScore),
+                stringResource(R.string.reduce_score_after, entry.app.score.value, entry.newScore),
                 style = MaterialTheme.typography.labelMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            if (suggestion.badgesGained.isNotEmpty() || suggestion.badgesLost.isNotEmpty()) {
+            if (entry.badgesGained.isNotEmpty() || entry.badgesLost.isNotEmpty()) {
                 FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                    suggestion.badgesGained.forEach { BadgeChip(it) }
-                    suggestion.badgesLost.forEach { Text(stringResource(R.string.reduce_badge_lost), style = MaterialTheme.typography.labelSmall); BadgeChip(it) }
+                    entry.badgesGained.forEach { BadgeChip(it) }
+                    entry.badgesLost.forEach { Text(stringResource(R.string.reduce_badge_lost), style = MaterialTheme.typography.labelSmall); BadgeChip(it) }
                 }
             }
             OutlinedButton(onClick = { openAppSettings(context, app.packageName) }) {

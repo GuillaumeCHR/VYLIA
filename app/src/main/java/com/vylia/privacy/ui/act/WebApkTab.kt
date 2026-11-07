@@ -84,6 +84,7 @@ internal fun WebApkTab(apps: List<AuditedApp>, webServices: WebServices) {
 
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item { Intro(introOpen) { introOpen = !introOpen } }
+        item { HowTo(browser) }
         if (pending.isNotEmpty()) {
             items(pending, key = { "installed-${it.app.app.packageName}" }) { InstalledCard(it) }
         }
@@ -92,7 +93,6 @@ internal fun WebApkTab(apps: List<AuditedApp>, webServices: WebServices) {
             item { Text(stringResource(R.string.webapk_candidates_empty), color = MaterialTheme.colorScheme.onSurfaceVariant) }
         }
         items(toInstall, key = { "candidate-${it.app.app.packageName}" }) { CandidateCard(it, shortcutOnly = !browser.makesWebApk) }
-        item { HowTo(browser) }
         if (examples.isNotEmpty()) {
             item { SectionHeader(stringResource(R.string.webapk_examples_title), "") }
             items(examples, key = { "example-${it.id}" }) { ExampleRow(it) }
@@ -244,9 +244,32 @@ private suspend fun installedWebApkServices(context: Context, webServices: WebSe
     }
 }
 
+/**
+ * Le navigateur qui ouvrira le site : celui par défaut, sinon un navigateur installé (un de ceux qui produisent des
+ * WebAPK d'abord). `null` s'il n'y en a aucun.
+ */
+private fun browserPackage(context: Context): String? {
+    val pm = context.packageManager
+    val probe = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.org")).addCategory(Intent.CATEGORY_BROWSABLE)
+    pm.resolveActivity(probe, PackageManager.MATCH_DEFAULT_ONLY)?.activityInfo?.packageName
+        ?.takeIf { it != "android" }
+        ?.let { return it }
+    val browsers = pm.queryIntentActivities(probe, PackageManager.MATCH_ALL).map { it.activityInfo.packageName }.distinct()
+    return browsers.firstOrNull { it in WEBAPK_BROWSERS } ?: browsers.firstOrNull()
+}
+
+/**
+ * Intention qui ouvre le site dans le navigateur, jamais dans l'app native : sans paquet imposé, Android donnerait le
+ * lien à l'app du service (lien d'app vérifié), ce qui ferait manquer l'installation de la version web.
+ */
+private fun siteIntent(context: Context, url: String): Intent =
+    Intent(Intent.ACTION_VIEW, Uri.parse(url)).addCategory(Intent.CATEGORY_BROWSABLE).apply {
+        browserPackage(context)?.let { setPackage(it) }
+    }
+
 private fun openSite(context: Context, url: String) {
     try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        context.startActivity(siteIntent(context, url))
     } catch (_: android.content.ActivityNotFoundException) {
         // Aucun navigateur.
     }
@@ -258,7 +281,7 @@ private fun pinShortcut(context: Context, candidate: Candidate) {
     val shortcut = ShortcutInfoCompat.Builder(context, "web-${candidate.service.id}")
         .setShortLabel(candidate.service.name)
         .setIcon(IconCompat.createWithBitmap(candidate.app.app.icon.toBitmap(sizePx, sizePx)))
-        .setIntent(Intent(Intent.ACTION_VIEW, Uri.parse(candidate.service.url)))
+        .setIntent(siteIntent(context, candidate.service.url))
         .build()
     ShortcutManagerCompat.requestPinShortcut(context, shortcut, null)
 }

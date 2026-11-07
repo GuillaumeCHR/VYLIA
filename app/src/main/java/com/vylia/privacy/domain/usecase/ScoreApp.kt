@@ -27,6 +27,7 @@ internal fun InstalledApp.toAppScan(analysis: TrackerAnalysis): AppScan = AppSca
     trackers = (analysis as? TrackerAnalysis.Analyzed)?.trackers?.map { ScoredTracker(it.name, it.categories.toSet()) },
     signals = signals,
     signingCertDigests = signingCertDigests,
+    webCategory = webCategory,
 )
 
 /** Score qu'aurait l'app si les permissions [revoked] (noms courts) lui étaient retirées. */

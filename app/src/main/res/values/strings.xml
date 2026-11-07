@@ -219,6 +219,32 @@
     <string name="reduce_tab_permissions">Permissions</string>
     <string name="reduce_tab_removals">Apps</string>
     <string name="manage_tab_alternatives">Alternatives</string>
+    <string name="manage_tab_webapk">WebAPK</string>
+    <string name="webapk_intro_title">The web version, installed like an app</string>
+    <string name="webapk_intro">Many services also exist as a website. Your browser can install it on the home screen: it then has its own icon and opens full screen, like an app. This is a WebAPK.</string>
+    <string name="webapk_gain">What you gain: the native app and its permissions go away, and so do the trackers built into its code. The site runs in your browser, which only gives it what you accept, and Protect yourself\'s filtering applies to it.</string>
+    <string name="webapk_loss">What you may lose, depending on the site: some notifications, offline use, a few features specific to the app.</string>
+    <string name="webapk_no_score">VYLIA cannot measure a website\'s trackers, so it shows no score for the web version. A browser that blocks trackers adds to the gain.</string>
+    <string name="webapk_show_intro">What is a WebAPK?</string>
+    <string name="webapk_hide_intro">Hide</string>
+    <string name="webapk_candidates_title">Your apps that have a web version</string>
+    <string name="webapk_candidates_empty">None of your apps has a known web equivalent yet.</string>
+    <string name="webapk_candidate_native">App score: %1$d</string>
+    <string name="webapk_candidate_nothing">No tracker or sensitive permission to remove: the gain would be small.</string>
+    <string name="webapk_install">Install the web version</string>
+    <string name="webapk_shortcut">Add a shortcut</string>
+    <string name="webapk_installed_title">Web version installed</string>
+    <string name="webapk_installed_text">%1$s is installed in its web version. You can now uninstall the app.</string>
+    <string name="webapk_uninstall">Uninstall the app</string>
+    <string name="webapk_howto_title">How to</string>
+    <string name="webapk_howto_1">1. Tap Install the web version: the site opens in your browser.</string>
+    <string name="webapk_howto_2">2. Open the browser menu (⋮), then Install app or Add to home screen.</string>
+    <string name="webapk_howto_3">3. Come back to VYLIA: if the web version is installed, VYLIA offers to uninstall the native app.</string>
+    <string name="webapk_browser_ok">Your default browser, %1$s, installs real WebAPKs.</string>
+    <string name="webapk_browser_shortcut">Your default browser, %1$s, only adds a shortcut to the site, not a WebAPK: the site keeps running inside the browser. Chrome, Samsung Internet or Edge install a real WebAPK. Otherwise, VYLIA can add a shortcut to the site.</string>
+    <string name="webapk_examples_title">A few examples</string>
+    <string name="webapk_open_site">Open the site</string>
+    <string name="webapk_detail_note">Web version of %1$s: VYLIA cannot measure the site\'s trackers; Protect yourself\'s filtering applies to the browser.</string>
     <string name="protect_section_dns">DNS filtering</string>
     <string name="dns_status_title">Private DNS on this phone</string>
     <string name="dns_status_unsupported">Not available: private DNS requires Android 9 or later.</string>
@@ -362,7 +388,7 @@
     <string name="shield_take_over">Take over</string>
     <string name="shield_bypass_open_protect">See Protect yourself</string>
     <string name="act_empty_scan">Run a scan from Scan to see your apps here.</string>
-    <string name="manage_subtitle">Reduce your exposure: permissions to revoke, apps to remove, alternatives. The apps with the lowest score come first.</string>
+    <string name="manage_subtitle">Reduce your exposure: permissions to revoke, apps to remove, alternatives and web versions. The apps with the lowest score come first.</string>
     <string name="reduce_action_permissions">Manage permissions</string>
     <string name="reduce_action_uninstall">Uninstall</string>
     <string name="protect_subtitle">Measures that reduce your exposure without changing your apps: the shield filters ad networks and trackers across the whole device, including in the apps you keep.</string>
@@ -379,6 +405,14 @@
     <plurals name="reduce_revoke_title">
         <item quantity="one">Revoke %1$d permission</item>
         <item quantity="other">Revoke %1$d permissions</item>
+    </plurals>
+    <plurals name="webapk_candidate_gain">
+        <item quantity="one">%1$d tracker and %2$s would go away</item>
+        <item quantity="other">%1$d trackers and %2$s would go away</item>
+    </plurals>
+    <plurals name="webapk_sensitive">
+        <item quantity="one">%1$d sensitive permission</item>
+        <item quantity="other">%1$d sensitive permissions</item>
     </plurals>
     <plurals name="reduce_revoke_apps">
         <item quantity="one">in %1$d app</item>
@@ -584,6 +618,8 @@
     <string name="help_reduce_intro">One card per app, lowest scores first: the permissions it uses without needing them, each with its gain, and the score it would reach without them. Under Apps, the intrusive apps and those you no longer open. The glossary says what each permission is for, so you can judge whether the app really needs it.</string>
     <string name="help_replace_title">Manage: alternatives</string>
     <string name="help_replace_intro">Alternatives to the most intrusive apps, sorted by Play Store category. The glossaries say what the original app asks for and embeds: its permissions and its trackers.</string>
+    <string name="help_webapk_title">Manage: WebAPK</string>
+    <string name="help_webapk_intro">Replace an app with the web version of the same service, installed by your browser as a WebAPK: the app\'s permissions and built-in trackers go away, and Protect yourself\'s filtering applies to the browser. You may lose some notifications or offline use, depending on the site.</string>
     <string name="help_protect_title">Protect yourself</string>
     <string name="help_protect_intro">A compensating measure: the VYLIA Shield filters DNS requests on the phone and blocks ad networks and trackers across the whole device, including in the apps you keep, without changing them. Private DNS is another option, handled by Android.</string>
     <string name="help_celebrate_title">Celebrate and share</string>

@@ -56,6 +56,7 @@ import com.vylia.privacy.ui.theme.color
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
 import com.vylia.privacy.R
+import com.vylia.privacy.domain.web.WebServices
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.components.formatted
 
@@ -116,6 +117,16 @@ fun AppDetailScreen(
             }
         }
 
+        // WebAPK : son score ne couvre que l'APK du navigateur, pas les traqueurs du site.
+        auditedApp.app.webStartUrl?.let { url ->
+            VyliaCard(modifier = Modifier.fillMaxWidth()) {
+                Text(
+                    stringResource(R.string.webapk_detail_note, WebServices.hostOf(url).orEmpty()),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.padding(16.dp),
+                )
+            }
+        }
         if (result.securityFindings.isNotEmpty()) SecurityCard(result)
         if (result.badges.isNotEmpty()) BadgesCard(result)
 

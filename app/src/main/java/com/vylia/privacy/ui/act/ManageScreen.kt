@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.pluralStringResource
@@ -83,6 +84,10 @@ fun ManageScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loadedRules by viewModel.rules.collectAsStateWithLifecycle()
     val usage by actViewModel.usage.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    val webServices = remember(context) {
+        (context.applicationContext as com.vylia.privacy.VyliaApplication).container.webServicesRepository.services
+    }
 
     // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
     LifecycleResumeEffect(Unit) {
@@ -105,9 +110,11 @@ fun ManageScreen(
         when {
             state.isLoading -> ActPlaceholder(null)
             userApps.isEmpty() -> ActPlaceholder(stringResource(R.string.act_empty_scan))
-            else -> ReduceTab(revocations, removals, usage, section, onSection) {
-                AlternativesTab(state.scannedApps, userApps, actViewModel.catalogue)
-            }
+            else -> ReduceTab(
+                revocations, removals, usage, section, onSection,
+                alternatives = { AlternativesTab(state.scannedApps, userApps, actViewModel.catalogue) },
+                webApk = { WebApkTab(userApps, webServices) },
+            )
         }
     }
 }

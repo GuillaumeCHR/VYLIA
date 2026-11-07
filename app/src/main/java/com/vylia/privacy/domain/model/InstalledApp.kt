@@ -26,6 +26,10 @@ data class InstalledApp(
     val signals: Set<String> = emptySet(),
     /** Empreintes SHA-1 et SHA-256 (hexadécimal) des certificats de signature, comparées aux stalkerwares connus. */
     val signingCertDigests: Set<String> = emptySet(),
+    /** WebAPK (version web installée par le navigateur) : adresse de départ de son site ; `null` pour une app. */
+    val webStartUrl: String? = null,
+    /** WebAPK d'un site connu : sa catégorie dans la grille de score. */
+    val webCategory: String? = null,
     /**
      * Permissions du manifeste, plus `BIND_ACCESSIBILITY_SERVICE` si l'app déclare un service
      * d'accessibilité (cette permission protège le service, elle n'est jamais "demandée").

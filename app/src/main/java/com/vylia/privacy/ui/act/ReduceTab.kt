@@ -15,7 +15,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.items
@@ -60,6 +60,7 @@ enum class ManageSection(@param:StringRes val title: Int) {
     PERMISSIONS(R.string.reduce_tab_permissions),
     REMOVALS(R.string.reduce_tab_removals),
     ALTERNATIVES(R.string.manage_tab_alternatives),
+    WEBAPK(R.string.manage_tab_webapk),
 }
 
 @Composable
@@ -70,20 +71,17 @@ internal fun ReduceTab(
     section: ManageSection,
     onSection: (ManageSection) -> Unit,
     alternatives: @Composable () -> Unit,
+    webApk: @Composable () -> Unit,
 ) {
     Column {
-        SecondaryTabRow(selectedTabIndex = section.ordinal) {
+        // Quatre sous-onglets : la barre défile plutôt que de rétrécir les libellés sur un petit écran.
+        SecondaryScrollableTabRow(selectedTabIndex = section.ordinal, edgePadding = 0.dp) {
             ManageSection.entries.forEach { entry ->
                 Tab(
                     selected = section == entry,
                     onClick = { onSection(entry) },
                     text = {
-                        Text(
-                            stringResource(entry.title),
-                            maxLines = 1,
-                            softWrap = false,
-                            autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = LocalTextStyle.current.fontSize),
-                        )
+                        Text(stringResource(entry.title), maxLines = 1, softWrap = false)
                     },
                 )
             }
@@ -92,6 +90,7 @@ internal fun ReduceTab(
             ManageSection.PERMISSIONS -> RevocationsList(revocations)
             ManageSection.REMOVALS -> RemovalsList(removals, usage)
             ManageSection.ALTERNATIVES -> alternatives()
+            ManageSection.WEBAPK -> webApk()
         }
     }
 }
@@ -242,7 +241,7 @@ private fun openUsageAccessSettings(context: Context) {
 internal fun SectionHeader(title: String, hint: String, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-        Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        if (hint.isNotEmpty()) Text(hint, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 

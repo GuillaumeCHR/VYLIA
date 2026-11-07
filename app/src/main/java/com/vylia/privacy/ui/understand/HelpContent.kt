@@ -202,6 +202,7 @@ private fun HowItWorksTab() {
         add(R.string.help_analyze_title to R.string.help_analyze_intro)
         add(R.string.help_reduce_title to R.string.help_reduce_intro)
         add(R.string.help_replace_title to R.string.help_replace_intro)
+        add(R.string.help_webapk_title to R.string.help_webapk_intro)
         if (BuildConfig.SHIELD_ENABLED) add(R.string.help_protect_title to R.string.help_protect_intro)
         add(R.string.help_celebrate_title to R.string.help_celebrate_intro)
     }

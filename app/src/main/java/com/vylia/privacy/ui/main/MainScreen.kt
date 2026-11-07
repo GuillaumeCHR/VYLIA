@@ -28,6 +28,8 @@ import com.vylia.privacy.R
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.ui.act.CelebrateScreen
 import com.vylia.privacy.ui.act.ManageScreen
+import com.vylia.privacy.ui.act.ManageSection
+import com.vylia.privacy.ui.analysis.AnalyzeSection
 import com.vylia.privacy.ui.act.ProtectScreen
 import com.vylia.privacy.ui.analysis.AnalysisScreen
 import com.vylia.privacy.ui.components.categoryName
@@ -54,11 +56,16 @@ private enum class Overlay { SEARCH, SETTINGS }
 fun MainScreen(
     initialPackage: String? = null,
     initialTab: AppTab? = null,
+    initialManageSection: ManageSection? = null,
+    initialAnalyzeSection: AnalyzeSection? = null,
     pinnedPackage: String? = null,
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
 ) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
     var currentTab by rememberSaveable { mutableStateOf(initialTab ?: AppTab.SCAN) }
+    // Dernier sous-onglet ouvert de Gérer et d'Analyser : gardé pour la session, même en changeant de destination.
+    var manageSection by rememberSaveable { mutableStateOf(initialManageSection ?: ManageSection.PERMISSIONS) }
+    var analyzeSection by rememberSaveable { mutableStateOf(initialAnalyzeSection ?: AnalyzeSection.OVERVIEW) }
     // L'app mise en tête de Gérer ne vaut que pour l'ouverture depuis la notification.
     var pinned by rememberSaveable { mutableStateOf(pinnedPackage) }
     // Paramètres ouverts directement sur Automatisations (lien « Modifier » du Suivi).
@@ -146,8 +153,10 @@ fun MainScreen(
                     onAppClick = { detailPackage = it.app.packageName },
                     onOpenAutomation = { openAutomation = true; overlay = Overlay.SETTINGS },
                     onOpenReduce = { currentTab = AppTab.MANAGE },
+                    tab = analyzeSection,
+                    onTab = { analyzeSection = it },
                 )
-                AppTab.MANAGE -> ManageScreen(modifier, pinnedPackage = pinned)
+                AppTab.MANAGE -> ManageScreen(modifier, pinnedPackage = pinned, section = manageSection, onSection = { manageSection = it })
                 AppTab.PROTECT -> ProtectScreen(modifier)
                 AppTab.CELEBRATE -> CelebrateScreen(modifier)
             }

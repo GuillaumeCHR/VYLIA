@@ -30,6 +30,23 @@ data class DropCause(
     val pinnedPackage: String? get() = packageName.takeIf { type != Type.REMOVED && type != Type.RULES_UPDATED && type != Type.SPREAD }
 }
 
+/** Où ouvrir l'app depuis la notification d'un franchissement, selon sa cause. */
+enum class AlertTarget { MANAGE_APPS, MANAGE_PERMISSIONS, APP_DETAIL, TRACKING }
+
+/**
+ * Apps pour une app installée ou désinstallée, Autorisations pour une permission accordée, la fiche de l'app pour un
+ * traqueur ou un motif de sécurité (ce qu'on peut y faire est sur sa fiche), le Suivi pour une mise à jour des règles
+ * ou une baisse répartie (aucune app à montrer).
+ */
+val DropCause.target: AlertTarget
+    get() = when (type) {
+        DropCause.Type.INSTALLED, DropCause.Type.REMOVED -> AlertTarget.MANAGE_APPS
+        DropCause.Type.PERMISSION_GRANTED -> AlertTarget.MANAGE_PERMISSIONS
+        DropCause.Type.TRACKER_ADDED, DropCause.Type.SECURITY_PATTERN ->
+            if (packageName != null) AlertTarget.APP_DETAIL else AlertTarget.TRACKING
+        DropCause.Type.RULES_UPDATED, DropCause.Type.SPREAD -> AlertTarget.TRACKING
+    }
+
 /** Un franchissement qui a déclenché une notification ; les 50 derniers alimentent les marqueurs du Suivi. */
 @Serializable
 data class ThresholdCrossing(val at: Long, val score: Int, val threshold: Int, val cause: DropCause)

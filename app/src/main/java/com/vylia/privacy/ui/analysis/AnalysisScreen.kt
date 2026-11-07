@@ -68,6 +68,9 @@ fun AnalysisScreen(
     /** Lien « Modifier » ou « Définir un seuil d'alerte » du Suivi : Paramètres › Automatisations. */
     onOpenAutomation: () -> Unit = {},
     onOpenReduce: () -> Unit = {},
+    /** Vue d'ensemble ou Suivi, gardé par l'écran principal (une notification peut ouvrir le Suivi). */
+    tab: AnalyzeSection = AnalyzeSection.OVERVIEW,
+    onTab: (AnalyzeSection) -> Unit = {},
     settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
@@ -75,7 +78,6 @@ fun AnalysisScreen(
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val analysis = remember(homeState.scannedApps) { DeviceAnalysis.from(homeState.scannedApps) }
     val history by homeViewModel.history.collectAsStateWithLifecycle()
-    var tab by rememberSaveable { mutableStateOf(0) }
     var section by rememberSaveable { mutableStateOf(0) }
 
     Column(modifier = modifier.fillMaxSize()) {
@@ -85,16 +87,16 @@ fun AnalysisScreen(
         modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
     )
     // Deux vues : l'état actuel de l'appareil, et son suivi dans le temps (icône de graphique).
-    PrimaryTabRow(selectedTabIndex = tab) {
-        Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text(stringResource(R.string.analysis_tab_overview)) })
+    PrimaryTabRow(selectedTabIndex = tab.ordinal) {
+        Tab(selected = tab == AnalyzeSection.OVERVIEW, onClick = { onTab(AnalyzeSection.OVERVIEW) }, text = { Text(stringResource(R.string.analysis_tab_overview)) })
         Tab(
-            selected = tab == 1,
-            onClick = { tab = 1 },
+            selected = tab == AnalyzeSection.TRACKING,
+            onClick = { onTab(AnalyzeSection.TRACKING) },
             text = { Text(stringResource(R.string.analysis_tab_tracking)) },
             icon = { Icon(Icons.AutoMirrored.Filled.ShowChart, contentDescription = null) },
         )
     }
-    if (tab == 1) {
+    if (tab == AnalyzeSection.TRACKING) {
         val alert by settingsViewModel.thresholdAlert.collectAsStateWithLifecycle()
         TrackingTab(history, alert, onOpenAutomation, onOpenReduce)
         return@Column
@@ -485,3 +487,6 @@ private fun SmallIcon(drawable: android.graphics.drawable.Drawable) {
 private fun EmptyLine(text: String) {
     Text(text, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
 }
+
+/** Onglets d'Analyser. */
+enum class AnalyzeSection { OVERVIEW, TRACKING }

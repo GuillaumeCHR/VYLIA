@@ -55,8 +55,8 @@ private const val PreviewCount = 8
  * Réduire : les actions à fort impact. D'abord les autorisations injustifiées à retirer (gain exact recalculé par le
  * moteur de score), puis les apps à supprimer, inutilisées ou intrusives.
  */
-/** Sous-onglets de Gérer : retirer des autorisations, supprimer des apps, remplacer une app. */
-private enum class ReduceSection(@param:StringRes val title: Int) {
+/** Sous-onglets de Gérer : retirer des autorisations, supprimer des apps, remplacer une app. Mémorisé pour la session. */
+enum class ManageSection(@param:StringRes val title: Int) {
     PERMISSIONS(R.string.reduce_tab_permissions),
     REMOVALS(R.string.reduce_tab_removals),
     ALTERNATIVES(R.string.manage_tab_alternatives),
@@ -67,15 +67,16 @@ internal fun ReduceTab(
     revocations: List<RevokeSuggestion>,
     removals: List<RemovalSuggestion>,
     usage: UsageState,
+    section: ManageSection,
+    onSection: (ManageSection) -> Unit,
     alternatives: @Composable () -> Unit,
 ) {
-    var section by rememberSaveable { mutableStateOf(ReduceSection.PERMISSIONS) }
     Column {
         SecondaryTabRow(selectedTabIndex = section.ordinal) {
-            ReduceSection.entries.forEach { entry ->
+            ManageSection.entries.forEach { entry ->
                 Tab(
                     selected = section == entry,
-                    onClick = { section = entry },
+                    onClick = { onSection(entry) },
                     text = {
                         Text(
                             stringResource(entry.title),
@@ -88,9 +89,9 @@ internal fun ReduceTab(
             }
         }
         when (section) {
-            ReduceSection.PERMISSIONS -> RevocationsList(revocations)
-            ReduceSection.REMOVALS -> RemovalsList(removals, usage)
-            ReduceSection.ALTERNATIVES -> alternatives()
+            ManageSection.PERMISSIONS -> RevocationsList(revocations)
+            ManageSection.REMOVALS -> RemovalsList(removals, usage)
+            ManageSection.ALTERNATIVES -> alternatives()
         }
     }
 }

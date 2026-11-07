@@ -10,12 +10,15 @@ import androidx.core.app.NotificationManagerCompat
 import com.vylia.privacy.MainActivity
 import com.vylia.privacy.R
 import com.vylia.privacy.data.alert.ThresholdNotifier
+import com.vylia.privacy.domain.alert.AlertTarget
+import com.vylia.privacy.domain.alert.DropCause
 import com.vylia.privacy.domain.alert.ThresholdCrossing
+import com.vylia.privacy.domain.alert.target
 import com.vylia.privacy.ui.components.dropCauseText
 
 /**
- * « Score de l'appareil sous votre seuil », sur un canal à part que l'on peut couper seul. Un appui ouvre Gérer,
- * l'app en cause en tête. Écran verrouillé : seulement le score et le seuil, jamais le nom d'une app.
+ * « Score de l'appareil sous votre seuil », sur un canal à part que l'on peut couper seul. Un appui ouvre l'endroit
+ * où agir sur la cause : Gérer (l'app en tête), sa fiche, ou le Suivi. Écran verrouillé : seulement le score et le seuil, jamais le nom d'une app.
  */
 class ThresholdNotifications(private val context: Context) : ThresholdNotifier {
 
@@ -29,10 +32,7 @@ class ThresholdNotifications(private val context: Context) : ThresholdNotifier {
         val open = PendingIntent.getActivity(
             context,
             REQUEST,
-            Intent(context, MainActivity::class.java)
-                .putExtra(MainActivity.EXTRA_OPEN_TAB, MainActivity.TAB_MANAGE)
-                .putExtra(MainActivity.EXTRA_PIN_PACKAGE, crossing.cause.pinnedPackage)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
+            destination(crossing.cause).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
         val public = NotificationCompat.Builder(context, CHANNEL)
@@ -55,6 +55,21 @@ class ThresholdNotifications(private val context: Context) : ThresholdNotifier {
             manager.notify(ID, notification)
         } catch (_: SecurityException) {
             // Autorisation de notifier retirée entre-temps.
+        }
+    }
+
+    /** Gérer › Apps ou Autorisations (l'app en tête), sa fiche, ou Analyser › Suivi : voir [DropCause.target]. */
+    private fun destination(cause: DropCause): Intent {
+        val intent = Intent(context, MainActivity::class.java)
+        return when (cause.target) {
+            AlertTarget.MANAGE_APPS -> intent.putExtra(MainActivity.EXTRA_OPEN_TAB, MainActivity.TAB_MANAGE)
+                .putExtra(MainActivity.EXTRA_OPEN_SECTION, MainActivity.SECTION_APPS)
+                .putExtra(MainActivity.EXTRA_PIN_PACKAGE, cause.pinnedPackage)
+            AlertTarget.MANAGE_PERMISSIONS -> intent.putExtra(MainActivity.EXTRA_OPEN_TAB, MainActivity.TAB_MANAGE)
+                .putExtra(MainActivity.EXTRA_OPEN_SECTION, MainActivity.SECTION_PERMISSIONS)
+                .putExtra(MainActivity.EXTRA_PIN_PACKAGE, cause.pinnedPackage)
+            AlertTarget.APP_DETAIL -> intent.putExtra(MainActivity.EXTRA_OPEN_PACKAGE, cause.packageName)
+            AlertTarget.TRACKING -> intent.putExtra(MainActivity.EXTRA_OPEN_TAB, MainActivity.TAB_TRACKING)
         }
     }
 

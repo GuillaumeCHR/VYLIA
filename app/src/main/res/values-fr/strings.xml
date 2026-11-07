@@ -276,9 +276,6 @@
     <string name="dns_list_unchanged">La liste est déjà à jour.</string>
     <string name="dns_list_failed">Mise à jour impossible : la liste actuelle est conservée.</string>
     <string name="dns_list_privacy">La liste est téléchargée depuis le dépôt public de VYLIA sur GitHub, seulement quand vous touchez ce bouton, et vérifiée avant usage.</string>
-    <string name="act_summary_title">Score moyen de vos apps</string>
-    <string name="act_summary_reachable">Atteignable : %1$d</string>
-    <string name="act_summary_nothing">Rien d\'urgent : vos apps respectent déjà bien votre vie privée.</string>
     <string name="reduce_revoke_hint">Des autorisations dont vos apps se servent sans en avoir besoin, les apps au score le plus bas d\'abord. Chaque gain est recalculé par le moteur de score. Touchez pour ouvrir la fiche Android de l\'app, puis Autorisations.</string>
     <string name="reduce_revoke_empty">Aucune autorisation à retirer : chaque autorisation accordée sert la finalité de son app.</string>
     <string name="reduce_revoke_line">Retirer : %1$s</string>
@@ -383,16 +380,6 @@
     <string name="celebrate_progress_none">Votre évolution s\'affichera après quelques jours de scans.</string>
     <string name="celebrate_progress_stable_month">Stable depuis 30 jours</string>
     <string name="celebrate_progress_stable_start">Stable depuis votre premier scan</string>
-    <plurals name="act_summary_revocations">
-        <item quantity="one">%1$d autorisation à retirer</item>
-        <item quantity="many">%1$d autorisations à retirer</item>
-        <item quantity="other">%1$d autorisations à retirer</item>
-    </plurals>
-    <plurals name="act_summary_removals">
-        <item quantity="one">%1$d app à supprimer</item>
-        <item quantity="many">%1$d apps à supprimer</item>
-        <item quantity="other">%1$d apps à supprimer</item>
-    </plurals>
     <plurals name="reduce_revoke_title">
         <item quantity="one">Retirer %1$d autorisation</item>
         <item quantity="many">Retirer %1$d autorisations</item>

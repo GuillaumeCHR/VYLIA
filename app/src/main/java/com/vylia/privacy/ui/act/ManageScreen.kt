@@ -66,14 +66,17 @@ internal fun ActPlaceholder(text: String?, modifier: Modifier = Modifier) {
 }
 
 /**
- * Gérer : l'analyse globale (score moyen et score atteignable), puis les sous-onglets pour réduire votre exposition —
- * autorisations à retirer, apps à désinstaller, alternatives. La protection réseau est dans Se protéger.
+ * Gérer : les sous-onglets pour réduire votre exposition — autorisations à retirer, apps à désinstaller,
+ * alternatives. Le score de l'appareil est dans Célébrer, la protection réseau dans Se protéger.
  */
 @Composable
 fun ManageScreen(
     modifier: Modifier = Modifier,
     /** App mise en tête des listes (cause d'une alerte de seuil). */
     pinnedPackage: String? = null,
+    /** Sous-onglet affiché, gardé par l'écran principal pour toute la session. */
+    section: ManageSection = ManageSection.PERMISSIONS,
+    onSection: (ManageSection) -> Unit = {},
     viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
     actViewModel: ActViewModel = viewModel(factory = ActViewModel.Factory),
 ) {
@@ -95,42 +98,14 @@ fun ManageScreen(
     val removals = remember(userApps, usage, pinnedPackage) {
         ReductionAdvisor.removals(userApps, usage.lastUsed, System.currentTimeMillis()).pinnedFirst(pinnedPackage) { it.app.app.packageName }
     }
-    val projected = remember(userApps, revocations, removals, scorer) {
-        ReductionAdvisor.projectedAverage(userApps, revocations, removals, scorer)
-    }
 
     Column(modifier = modifier.fillMaxSize()) {
         ActHeader(R.string.manage_title, R.string.manage_subtitle)
-        if (!state.isLoading && userApps.isNotEmpty()) {
-            SummaryCard(state.userAverageScore, projected, revocations.size, removals.size, Modifier.padding(horizontal = 16.dp))
-        }
         when {
             state.isLoading -> ActPlaceholder(null)
             userApps.isEmpty() -> ActPlaceholder(stringResource(R.string.act_empty_scan))
-            else -> ReduceTab(revocations, removals, usage) {
+            else -> ReduceTab(revocations, removals, usage, section, onSection) {
                 AlternativesTab(state.scannedApps, userApps, actViewModel.catalogue)
-            }
-        }
-    }
-}
-
-/** Analyse globale : score moyen actuel, score atteignable, et ce qu'il faut faire pour y arriver. */
-@Composable
-private fun SummaryCard(current: PrivacyScore?, projected: PrivacyScore?, revocations: Int, removals: Int, modifier: Modifier = Modifier) {
-    VyliaCard(modifier = modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            current?.let { ScoreBadge(it) }
-            Column(modifier = Modifier.weight(1f)) {
-                Text(stringResource(R.string.act_summary_title), fontWeight = FontWeight.Bold)
-                val reachable = projected?.takeIf { current != null && it.value > current.value }
-                Text(
-                    if (reachable == null || revocations + removals == 0) stringResource(R.string.act_summary_nothing)
-                    else stringResource(R.string.act_summary_reachable, reachable.value) + " · " +
-                        pluralStringResource(R.plurals.act_summary_revocations, revocations, revocations) + " · " +
-                        pluralStringResource(R.plurals.act_summary_removals, removals, removals),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
             }
         }
     }

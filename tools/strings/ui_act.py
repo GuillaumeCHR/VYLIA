@@ -64,9 +64,6 @@ S = [
  ("dns_list_unchanged", "The list is already up to date.", "La liste est déjà à jour."),
  ("dns_list_failed", "Update failed: the current list is kept.", "Mise à jour impossible : la liste actuelle est conservée."),
  ("dns_list_privacy", "The list is downloaded from VYLIA's public repository on GitHub, only when you tap this button, and checked before use.", "La liste est téléchargée depuis le dépôt public de VYLIA sur GitHub, seulement quand vous touchez ce bouton, et vérifiée avant usage."),
- ("act_summary_title", "Average score of your apps", "Score moyen de vos apps"),
- ("act_summary_reachable", "Reachable: %1$d", "Atteignable : %1$d"),
- ("act_summary_nothing", "Nothing urgent: your apps already respect your privacy well.", "Rien d'urgent : vos apps respectent déjà bien votre vie privée."),
  ("reduce_revoke_hint", "Permissions your apps use without needing them, lowest-scoring apps first. Each gain is recalculated by the scoring engine. Tap to open the app's Android settings, then Permissions.", "Des autorisations dont vos apps se servent sans en avoir besoin, les apps au score le plus bas d'abord. Chaque gain est recalculé par le moteur de score. Touchez pour ouvrir la fiche Android de l'app, puis Autorisations."),
  ("reduce_revoke_empty", "No permission to revoke: every granted permission fits its app's purpose.", "Aucune autorisation à retirer : chaque autorisation accordée sert la finalité de son app."),
  ("reduce_revoke_line", "Revoke: %1$s", "Retirer : %1$s"),
@@ -195,8 +192,6 @@ S = [
 ]
 
 P = [
- ("act_summary_revocations", ("%1$d permission to revoke", "%1$d permissions to revoke"), ("%1$d autorisation à retirer", "%1$d autorisations à retirer")),
- ("act_summary_removals", ("%1$d app to remove", "%1$d apps to remove"), ("%1$d app à supprimer", "%1$d apps à supprimer")),
  ("reduce_revoke_title", ("Revoke %1$d permission", "Revoke %1$d permissions"), ("Retirer %1$d autorisation", "Retirer %1$d autorisations")),
  ("reduce_remove_title", ("Remove %1$d app", "Remove %1$d apps"), ("Supprimer %1$d app", "Supprimer %1$d apps")),
  ("reduce_last_used_days", ("Opened %1$d day ago", "Opened %1$d days ago"), ("Ouverte il y a %1$d jour", "Ouverte il y a %1$d jours")),

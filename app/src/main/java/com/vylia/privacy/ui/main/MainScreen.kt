@@ -32,6 +32,7 @@ import com.vylia.privacy.ui.act.CelebrateScreen
 import com.vylia.privacy.ui.act.ManageScreen
 import com.vylia.privacy.ui.act.ManageSection
 import com.vylia.privacy.ui.analysis.AnalyzeSection
+import com.vylia.privacy.ui.act.FilterSection
 import com.vylia.privacy.ui.act.ProtectScreen
 import com.vylia.privacy.ui.shield.LocalOpenProtect
 import com.vylia.privacy.ui.analysis.AnalysisScreen
@@ -52,8 +53,12 @@ enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: 
     CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration);
 
     companion object {
-        /** Les destinations de la barre : sans le bouclier, Se protéger disparaît et il en reste quatre. */
-        fun destinations(shieldEnabled: Boolean): List<AppTab> = entries.filter { shieldEnabled || it != PROTECT }
+        /**
+         * Les destinations de la barre. Filtrer reste sans le bouclier : il garde le DNS privé et les versions web
+         * (WebAPK), qui n'en dépendent pas ; seule la carte du bouclier disparaît.
+         */
+        @Suppress("UNUSED_PARAMETER")
+        fun destinations(shieldEnabled: Boolean): List<AppTab> = entries
     }
 }
 
@@ -78,6 +83,7 @@ fun MainScreen(
     // Dernier sous-onglet ouvert de Gérer et d'Analyser : gardé pour la session, même en changeant de destination.
     var manageSection by rememberSaveable { mutableStateOf(initialManageSection ?: ManageSection.PERMISSIONS) }
     var analyzeSection by rememberSaveable { mutableStateOf(initialAnalyzeSection ?: AnalyzeSection.OVERVIEW) }
+    var filterSection by rememberSaveable { mutableStateOf(FilterSection.DNS) }
     // L'app mise en tête de Gérer ne vaut que pour l'ouverture depuis la notification.
     var pinned by rememberSaveable { mutableStateOf(pinnedPackage) }
     // Paramètres ouverts directement sur Automatisations (lien « Modifier » du Suivi).
@@ -176,7 +182,7 @@ fun MainScreen(
                     onTab = { analyzeSection = it },
                 )
                 AppTab.MANAGE -> ManageScreen(modifier, pinnedPackage = pinned, section = manageSection, onSection = { manageSection = it })
-                AppTab.PROTECT -> ProtectScreen(modifier)
+                AppTab.PROTECT -> ProtectScreen(modifier, section = filterSection, onSection = { filterSection = it })
                 AppTab.CELEBRATE -> CelebrateScreen(modifier)
             }
         }

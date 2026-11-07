@@ -4,6 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.Arrangement
+import com.vylia.privacy.ui.scan.components.LocalCardStyle
+import com.vylia.privacy.data.preferences.CardStyle
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.platform.LocalResources
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
@@ -15,7 +20,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.SecondaryScrollableTabRow
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.items
@@ -60,7 +65,6 @@ enum class ManageSection(@param:StringRes val title: Int) {
     PERMISSIONS(R.string.reduce_tab_permissions),
     REMOVALS(R.string.reduce_tab_removals),
     ALTERNATIVES(R.string.manage_tab_alternatives),
-    WEBAPK(R.string.manage_tab_webapk),
 }
 
 @Composable
@@ -71,17 +75,20 @@ internal fun ReduceTab(
     section: ManageSection,
     onSection: (ManageSection) -> Unit,
     alternatives: @Composable () -> Unit,
-    webApk: @Composable () -> Unit,
 ) {
     Column {
-        // Quatre sous-onglets : la barre défile plutôt que de rétrécir les libellés sur un petit écran.
-        SecondaryScrollableTabRow(selectedTabIndex = section.ordinal, edgePadding = 0.dp) {
+        SecondaryTabRow(selectedTabIndex = section.ordinal) {
             ManageSection.entries.forEach { entry ->
                 Tab(
                     selected = section == entry,
                     onClick = { onSection(entry) },
                     text = {
-                        Text(stringResource(entry.title), maxLines = 1, softWrap = false)
+                        Text(
+                            stringResource(entry.title),
+                            maxLines = 1,
+                            softWrap = false,
+                            autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = LocalTextStyle.current.fontSize),
+                        )
                     },
                 )
             }
@@ -90,7 +97,6 @@ internal fun ReduceTab(
             ManageSection.PERMISSIONS -> RevocationsList(revocations)
             ManageSection.REMOVALS -> RemovalsList(removals, usage)
             ManageSection.ALTERNATIVES -> alternatives()
-            ManageSection.WEBAPK -> webApk()
         }
     }
 }
@@ -135,6 +141,10 @@ private fun RemovalsList(removals: List<RemovalSuggestion>, usage: UsageState) {
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun RevokeRow(entry: AppRevocations) {
+    if (LocalCardStyle.current == CardStyle.COMPACT) {
+        CompactRevokeRow(entry)
+        return
+    }
     val context = LocalContext.current
     val app = entry.app.app
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
@@ -170,6 +180,44 @@ private fun RevokeRow(entry: AppRevocations) {
             OutlinedButton(onClick = { openAppSettings(context, app.packageName) }) {
                 Text(stringResource(R.string.reduce_action_permissions))
             }
+        }
+    }
+}
+
+/**
+ * Carte compacte (réglage Cartes d'apps) : nom, permissions à retirer sur une ligne, score avant et après, gain ;
+ * ni badges ni bouton, toute la carte ouvre la fiche Android de l'app.
+ */
+@Composable
+private fun CompactRevokeRow(entry: AppRevocations) {
+    val context = LocalContext.current
+    val resources = LocalResources.current
+    val app = entry.app.app
+    val permissions = entry.suggestions.joinToString(" · ") { s ->
+        PermissionGlossary.titleOf(s.finding.permission)?.let(resources::getString) ?: s.finding.permission
+    }
+    val action = stringResource(R.string.reduce_action_permissions)
+    VyliaCard(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(role = Role.Button, onClickLabel = action) { openAppSettings(context, app.packageName) },
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            AppIcon(app.icon, 32.dp)
+            Column(modifier = Modifier.weight(1f)) {
+                Text(app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(permissions, style = MaterialTheme.typography.bodySmall, maxLines = 2, overflow = TextOverflow.Ellipsis)
+                Text(
+                    stringResource(R.string.reduce_score_after, entry.app.score.value, entry.newScore),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            Gain(stringResource(R.string.reduce_gain_points, entry.gain))
         }
     }
 }

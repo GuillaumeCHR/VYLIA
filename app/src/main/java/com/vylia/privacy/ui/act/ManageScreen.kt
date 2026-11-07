@@ -84,10 +84,6 @@ fun ManageScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loadedRules by viewModel.rules.collectAsStateWithLifecycle()
     val usage by actViewModel.usage.collectAsStateWithLifecycle()
-    val context = LocalContext.current
-    val webServices = remember(context) {
-        (context.applicationContext as com.vylia.privacy.VyliaApplication).container.webServicesRepository.services
-    }
 
     // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
     LifecycleResumeEffect(Unit) {
@@ -113,7 +109,6 @@ fun ManageScreen(
             else -> ReduceTab(
                 revocations, removals, usage, section, onSection,
                 alternatives = { AlternativesTab(state.scannedApps, userApps, actViewModel.catalogue) },
-                webApk = { WebApkTab(userApps, webServices) },
             )
         }
     }

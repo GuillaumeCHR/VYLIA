@@ -185,15 +185,14 @@ private fun ScoreTab(rules: Rules, stalkerwareCount: Int) {
 }
 
 /**
- * « Comment fonctionne VYLIA » : la surface d'exposition et la démarche en étapes (sans le bouclier, l'étape Se
- * protéger disparaît et la numérotation suit), puis le mode d'emploi de chaque écran, dans l'ordre de la barre du bas.
+ * « Comment fonctionne VYLIA » : la surface d'exposition et la démarche en étapes (numérotées à l'affichage), puis le mode d'emploi de chaque écran, dans l'ordre de la barre du bas.
  */
 @Composable
 private fun HowItWorksTab() {
     val steps = buildList {
         add(R.string.howto_identify_title to R.string.howto_identify_text)
         add(R.string.howto_reduce_title to R.string.howto_reduce_text)
-        if (BuildConfig.SHIELD_ENABLED) add(R.string.howto_protect_title to R.string.howto_protect_text)
+        add(R.string.howto_protect_title to R.string.howto_protect_text)
         add(R.string.howto_follow_title to R.string.howto_follow_text)
         add(R.string.howto_celebrate_title to R.string.howto_celebrate_text)
     }
@@ -202,8 +201,8 @@ private fun HowItWorksTab() {
         add(R.string.help_analyze_title to R.string.help_analyze_intro)
         add(R.string.help_reduce_title to R.string.help_reduce_intro)
         add(R.string.help_replace_title to R.string.help_replace_intro)
-        add(R.string.help_webapk_title to R.string.help_webapk_intro)
         if (BuildConfig.SHIELD_ENABLED) add(R.string.help_protect_title to R.string.help_protect_intro)
+        add(R.string.help_webapk_title to R.string.help_webapk_intro)
         add(R.string.help_celebrate_title to R.string.help_celebrate_intro)
     }
     LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {

@@ -49,7 +49,7 @@
     <string name="tab_scan">Scanner</string>
     <string name="tab_analyze">Analyser</string>
     <string name="tab_manage">Gérer</string>
-    <string name="tab_protect">Se protéger</string>
+    <string name="tab_protect">Filtrer</string>
     <string name="tab_celebrate">Célébrer</string>
     <string name="topbar_help">Aide</string>
     <string name="search_prompt">Tapez le nom d\'une app pour ouvrir sa fiche.</string>
@@ -213,7 +213,7 @@
         <item quantity="other">%1$d apps</item>
     </plurals>
 
-    <!-- Gérer, Se protéger, Célébrer -->
+    <!-- Gérer, Filtrer, Célébrer -->
     <string name="act_rewards_title">🏆 Récompenses</string>
     <string name="act_rewards_text">Chaque application intrusive (score &lt; 50) que vous supprimez rapporte 100 − son score en points.</string>
     <string name="act_badges">Badges (%1$d/%2$d)</string>
@@ -227,7 +227,7 @@
     <string name="manage_tab_webapk">WebAPK</string>
     <string name="webapk_intro_title">La version web, installée comme une app</string>
     <string name="webapk_intro">Beaucoup de services existent aussi en site web. Votre navigateur peut l\'installer sur l\'écran d\'accueil : il a alors son icône et s\'ouvre en plein écran, comme une app. C\'est un WebAPK.</string>
-    <string name="webapk_gain">Ce que vous y gagnez : l\'app native et ses permissions disparaissent, ainsi que les traqueurs intégrés à son code. Le site tourne dans votre navigateur, qui ne lui donne accès qu\'à ce que vous acceptez, et le filtrage de Se protéger s\'y applique.</string>
+    <string name="webapk_gain">Ce que vous y gagnez : l\'app native et ses permissions disparaissent, ainsi que les traqueurs intégrés à son code. Le site tourne dans votre navigateur, qui ne lui donne accès qu\'à ce que vous acceptez, et le filtrage DNS s\'y applique.</string>
     <string name="webapk_loss">Ce que vous pouvez perdre, selon le site : certaines notifications, l\'usage hors connexion, quelques fonctions propres à l\'app.</string>
     <string name="webapk_no_score">VYLIA ne peut pas mesurer les traqueurs d\'un site : elle n\'affiche donc pas de score pour la version web. Un navigateur qui bloque les traqueurs renforce le gain.</string>
     <string name="webapk_show_intro">Qu\'est-ce qu\'un WebAPK ?</string>
@@ -249,7 +249,7 @@
     <string name="webapk_browser_shortcut">Votre navigateur par défaut, %1$s, ajoute seulement un raccourci vers le site, pas un WebAPK : le site reste dans le navigateur. Chrome, Samsung Internet ou Edge installent un vrai WebAPK. Sinon, VYLIA peut ajouter un raccourci vers le site.</string>
     <string name="webapk_examples_title">Quelques exemples</string>
     <string name="webapk_open_site">Ouvrir le site</string>
-    <string name="webapk_detail_note">Version web de %1$s : VYLIA ne mesure pas les traqueurs du site ; le filtrage de Se protéger s\'applique au navigateur.</string>
+    <string name="webapk_detail_note">Version web de %1$s : VYLIA ne mesure pas les traqueurs du site ; le filtrage DNS s\'applique au navigateur.</string>
     <string name="protect_section_dns">Filtrage DNS</string>
     <string name="dns_status_title">DNS privé sur ce téléphone</string>
     <string name="dns_status_unsupported">Indisponible : le DNS privé demande Android 9 ou plus récent.</string>
@@ -320,7 +320,7 @@
     <string name="reduce_usage_button">Autoriser l\'accès aux données d\'utilisation</string>
     <string name="alt_title">Des alternatives plus respectueuses</string>
     <string name="alt_intro">Changer d\'app est souvent le moyen le plus radical de protéger vos données, mais ce n\'est pas toujours possible. Votre banque, les services publics, l\'outil imposé par votre employeur ou la messagerie qu\'utilisent vos proches n\'ont généralement pas d\'équivalent.</string>
-    <string name="alt_reduce_first">C\'est pourquoi la démarche commence par réduire le risque des apps que vous gardez : retirer les permissions inutiles, supprimer les apps oubliées, bloquer le traçage publicitaire. C\'est l\'objet des onglets Permissions et Apps, et de Se protéger. Ensuite seulement, quand une alternative existe, changer devient intéressant : choisissez une catégorie ci-dessous pour en découvrir deux ou trois.</string>
+    <string name="alt_reduce_first">C\'est pourquoi la démarche commence par réduire le risque des apps que vous gardez : retirer les permissions inutiles, supprimer les apps oubliées, bloquer le traçage publicitaire. C\'est l\'objet des onglets Permissions et Apps, et de Filtrer. Ensuite seulement, quand une alternative existe, changer devient intéressant : choisissez une catégorie ci-dessous pour en découvrir deux ou trois.</string>
     <string name="alt_degoogle">Certains vont plus loin et adoptent un téléphone entièrement « dégooglisé », qui fonctionne sans les services de Google. Cette voie demande des compromis que tout le monde n\'est pas prêt à faire, et ce n\'est pas celle de VYLIA : notre philosophie est de réduire votre exposition tout en gardant votre téléphone et vos apps habituelles.</string>
     <string name="alt_trophy">Installer une alternative débloque le trophée Bon échange.</string>
     <string name="alt_installed">Installée</string>
@@ -375,7 +375,7 @@
     <string name="shield_pause_note">Rien n\'est compté pendant la pause : les traqueurs contactés à ce moment-là ne sont pas bloqués.</string>
     <string name="shield_lists">Listes : Exodus Privacy (ODbL 1.0), EasyPrivacy, EasyList et AdGuard Mobile Ads (GPL v3), %1$s domaines de traçage et de pub.</string>
     <string name="manage_title">Gérer</string>
-    <string name="protect_title">Se protéger</string>
+    <string name="protect_title">Filtrer</string>
     <string name="celebrate_title">Célébrer et partager</string>
     <string name="shield_pill_active">Actif</string>
     <string name="shield_pill_inactive">Inactif</string>
@@ -391,12 +391,12 @@
     <string name="shield_bypass_open_network">Ouvrir les réglages réseau</string>
     <string name="shield_turn_off">Désactiver le bouclier</string>
     <string name="shield_take_over">Reprendre la main</string>
-    <string name="shield_bypass_open_protect">Voir Se protéger</string>
+    <string name="shield_bypass_open_protect">Voir Filtrer</string>
     <string name="act_empty_scan">Lancez un scan depuis Scanner pour voir vos apps ici.</string>
-    <string name="manage_subtitle">Réduire votre exposition : permissions à retirer, apps à supprimer, alternatives et versions web. Les apps au score le plus bas d\'abord.</string>
+    <string name="manage_subtitle">Réduire votre exposition : permissions à retirer, apps à supprimer, alternatives. Les apps au score le plus bas d\'abord.</string>
     <string name="reduce_action_permissions">Gérer les permissions</string>
     <string name="reduce_action_uninstall">Désinstaller</string>
-    <string name="protect_subtitle">Des mesures qui réduisent votre exposition sans modifier vos apps : le bouclier filtre les régies et les traqueurs sur tout l\'appareil, y compris dans les apps que vous gardez.</string>
+    <string name="protect_subtitle">Réduire votre exposition sans modifier vos apps : le bouclier filtre les régies et les traqueurs sur tout l\'appareil, et la version web d\'un service remplace son app et les traqueurs intégrés à son code.</string>
     <string name="replace_for_you">Vos apps les plus intrusives</string>
     <string name="replace_for_you_hint">Pour chacune, une catégorie d\'alternatives à parcourir.</string>
     <string name="replace_for_you_empty">Aucune de vos apps n\'est très intrusive. Parcourez quand même les alternatives ci-dessous.</string>
@@ -618,9 +618,9 @@
     <string name="howto_identify_title">Identifier · Scanner, Analyser</string>
     <string name="howto_identify_text">VYLIA note chaque app selon ses permissions et ses traqueurs, et montre quelles données sont exposées, et à combien d\'apps.</string>
     <string name="howto_reduce_title">Réduire · Gérer</string>
-    <string name="howto_reduce_text">Retirez les permissions inutiles, supprimez les apps que vous n\'utilisez plus, remplacez les apps intrusives par des alternatives plus respectueuses, et lisez vos sites d\'information en version web plutôt qu\'en app.</string>
-    <string name="howto_protect_title">Se protéger</string>
-    <string name="howto_protect_text">Le filtre bloque les régies publicitaires sur tout l\'appareil, y compris dans les apps que vous gardez.</string>
+    <string name="howto_reduce_text">Retirez les permissions inutiles, supprimez les apps que vous n\'utilisez plus, et remplacez les apps intrusives par des alternatives plus respectueuses.</string>
+    <string name="howto_protect_title">Filtrer</string>
+    <string name="howto_protect_text">Le filtre bloque les régies publicitaires sur tout l\'appareil, y compris dans les apps que vous gardez. Et lisez vos sites d\'information en version web plutôt qu\'en app : l\'app et ses traqueurs disparaissent.</string>
     <string name="howto_follow_title">Suivre dans le temps · Analyser, alertes</string>
     <string name="howto_follow_text">VYLIA compare chaque scan au précédent et vous prévient si votre exposition augmente.</string>
     <string name="howto_celebrate_title">Célébrer</string>
@@ -635,9 +635,9 @@
     <string name="help_reduce_intro">Une carte par app, les scores les plus bas d\'abord : les permissions dont elle se sert sans en avoir besoin, chacune avec son gain, et le score qu\'elle atteindrait sans elles. Dans Apps, les apps intrusives et celles que vous n\'ouvrez plus. Le lexique dit à quoi sert chaque permission, pour juger si l\'app en a vraiment besoin.</string>
     <string name="help_replace_title">Gérer : alternatives</string>
     <string name="help_replace_intro">Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l\'app d\'origine demande et embarque : ses permissions et ses traqueurs.</string>
-    <string name="help_webapk_title">Gérer : WebAPK</string>
-    <string name="help_webapk_intro">Remplacer une app par la version web du même service, installée par votre navigateur comme un WebAPK : les permissions et les traqueurs intégrés à l\'app disparaissent, et le filtrage de Se protéger s\'applique au navigateur. Selon le site, vous pouvez perdre certaines notifications ou l\'usage hors connexion.</string>
-    <string name="help_protect_title">Se protéger</string>
+    <string name="help_webapk_title">Filtrer : WebAPK</string>
+    <string name="help_webapk_intro">Remplacer une app par la version web du même service, installée par votre navigateur comme un WebAPK : les permissions et les traqueurs intégrés à l\'app disparaissent, et le filtrage DNS s\'applique au navigateur. Selon le site, vous pouvez perdre certaines notifications ou l\'usage hors connexion.</string>
+    <string name="help_protect_title">Filtrer : filtrage DNS</string>
     <string name="help_protect_intro">Une mesure compensatoire : le bouclier VYLIA filtre les requêtes DNS sur le téléphone et bloque les régies et les traqueurs sur tout l\'appareil, y compris dans les apps que vous gardez, sans les modifier. Le DNS privé est une autre option, gérée par Android.</string>
     <string name="help_celebrate_title">Célébrer et partager</string>
     <string name="help_celebrate_intro">Le score de votre téléphone, vos progrès et vos badges. Le partage fait une image de votre score, de vos progrès, de vos traqueurs, du bouclier ou de vos trophées : seulement des chiffres d\'ensemble, jamais le nom d\'une app.</string>

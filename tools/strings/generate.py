@@ -35,7 +35,7 @@ SCREENS = [
     ("Écran Scan, cartes et en-tête", "ui_base"),
     ("Navigation, Scan et détail d'une app", "ui_scan"),
     ("Analyse", "ui_analysis"),
-    ("Gérer, Se protéger, Célébrer", "ui_act"),
+    ("Gérer, Filtrer, Célébrer", "ui_act"),
     ("Aide", "ui_understand"),
     ("Paramètres, À propos et grille de score", "ui_settings"),
     ("Badges et sécurité", "ui_badges"),

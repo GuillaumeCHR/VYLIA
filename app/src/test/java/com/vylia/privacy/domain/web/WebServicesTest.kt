@@ -21,6 +21,15 @@ class WebServicesTest {
     }
 
     @Test
+    fun `categories web - connues de la grille, sans vehicule, montre, sport, sante, jeu ni outil`() {
+        val categories = TestFixtures.rules.categories.keys
+        assertTrue(embedded.webCategories.isNotEmpty())
+        assertTrue(embedded.webCategories.all { it in categories })
+        listOf("VEHICLE", "WEARABLE_COMPANION", "FITNESS", "HEALTH_TRACKING", "GAME", "UTILITY", "NAVIGATION", "MESSAGING", "DEFAULT")
+            .forEach { assertTrue(it, it !in embedded.webCategories) }
+    }
+
+    @Test
     fun `domaine et sous-domaine reconnus, jamais un domaine qui finit pareil ni du http`() {
         assertEquals("lemonde", embedded.forUrl("https://www.lemonde.fr/")?.id)
         assertEquals("lemonde", embedded.forUrl("https://lemonde.fr/international/")?.id)

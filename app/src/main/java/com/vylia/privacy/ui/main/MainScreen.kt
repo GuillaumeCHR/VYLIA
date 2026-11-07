@@ -27,8 +27,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.ui.act.CelebrateScreen
-import com.vylia.privacy.ui.act.ReduceScreen
-import com.vylia.privacy.ui.act.ReplaceScreen
+import com.vylia.privacy.ui.act.ManageScreen
+import com.vylia.privacy.ui.act.ProtectScreen
 import com.vylia.privacy.ui.analysis.AnalysisScreen
 import com.vylia.privacy.ui.components.categoryName
 import com.vylia.privacy.ui.detail.AppDetailScreen
@@ -42,8 +42,8 @@ import com.vylia.privacy.ui.help.HelpSheet
 enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: Int) {
     SCAN(R.string.tab_scan, R.drawable.ic_sym_radar),
     ANALYZE(R.string.tab_analyze, R.drawable.ic_sym_bar_chart),
-    REDUCE(R.string.tab_reduce, R.drawable.ic_sym_tune),
-    REPLACE(R.string.tab_replace, R.drawable.ic_sym_swap_horiz),
+    MANAGE(R.string.tab_manage, R.drawable.ic_sym_tune),
+    PROTECT(R.string.tab_protect, R.drawable.ic_sym_shield),
     CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration),
 }
 
@@ -59,7 +59,7 @@ fun MainScreen(
 ) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
     var currentTab by rememberSaveable { mutableStateOf(initialTab ?: AppTab.SCAN) }
-    // L'app mise en tête de Réduire ne vaut que pour l'ouverture depuis la notification.
+    // L'app mise en tête de Gérer ne vaut que pour l'ouverture depuis la notification.
     var pinned by rememberSaveable { mutableStateOf(pinnedPackage) }
     // Paramètres ouverts directement sur Automatisations (lien « Modifier » du Suivi).
     var openAutomation by rememberSaveable { mutableStateOf(false) }
@@ -145,10 +145,10 @@ fun MainScreen(
                     modifier,
                     onAppClick = { detailPackage = it.app.packageName },
                     onOpenAutomation = { openAutomation = true; overlay = Overlay.SETTINGS },
-                    onOpenReduce = { currentTab = AppTab.REDUCE },
+                    onOpenReduce = { currentTab = AppTab.MANAGE },
                 )
-                AppTab.REDUCE -> ReduceScreen(modifier, pinnedPackage = pinned)
-                AppTab.REPLACE -> ReplaceScreen(modifier)
+                AppTab.MANAGE -> ManageScreen(modifier, pinnedPackage = pinned)
+                AppTab.PROTECT -> ProtectScreen(modifier)
                 AppTab.CELEBRATE -> CelebrateScreen(modifier)
             }
         }

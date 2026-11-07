@@ -14,7 +14,7 @@ import com.vylia.privacy.domain.alert.ThresholdCrossing
 import com.vylia.privacy.ui.components.dropCauseText
 
 /**
- * « Score de l'appareil sous votre seuil », sur un canal à part que l'on peut couper seul. Un appui ouvre Réduire,
+ * « Score de l'appareil sous votre seuil », sur un canal à part que l'on peut couper seul. Un appui ouvre Gérer,
  * l'app en cause en tête. Écran verrouillé : seulement le score et le seuil, jamais le nom d'une app.
  */
 class ThresholdNotifications(private val context: Context) : ThresholdNotifier {
@@ -30,7 +30,7 @@ class ThresholdNotifications(private val context: Context) : ThresholdNotifier {
             context,
             REQUEST,
             Intent(context, MainActivity::class.java)
-                .putExtra(MainActivity.EXTRA_OPEN_TAB, MainActivity.TAB_REDUCE)
+                .putExtra(MainActivity.EXTRA_OPEN_TAB, MainActivity.TAB_MANAGE)
                 .putExtra(MainActivity.EXTRA_PIN_PACKAGE, crossing.cause.pinnedPackage)
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,

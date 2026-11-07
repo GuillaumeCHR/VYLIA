@@ -55,11 +55,11 @@ private const val PreviewCount = 8
  * Réduire : les actions à fort impact. D'abord les autorisations injustifiées à retirer (gain exact recalculé par le
  * moteur de score), puis les apps à supprimer, inutilisées ou intrusives.
  */
-/** Sous-onglets de Réduire : retirer des autorisations, supprimer des apps, chiffrer ses requêtes DNS. */
+/** Sous-onglets de Gérer : retirer des autorisations, supprimer des apps, remplacer une app. */
 private enum class ReduceSection(@param:StringRes val title: Int) {
     PERMISSIONS(R.string.reduce_tab_permissions),
     REMOVALS(R.string.reduce_tab_removals),
-    PRIVATE_DNS(R.string.reduce_tab_private_dns),
+    ALTERNATIVES(R.string.manage_tab_alternatives),
 }
 
 @Composable
@@ -67,7 +67,7 @@ internal fun ReduceTab(
     revocations: List<RevokeSuggestion>,
     removals: List<RemovalSuggestion>,
     usage: UsageState,
-    privateDns: @Composable () -> Unit,
+    alternatives: @Composable () -> Unit,
 ) {
     var section by rememberSaveable { mutableStateOf(ReduceSection.PERMISSIONS) }
     Column {
@@ -90,7 +90,7 @@ internal fun ReduceTab(
         when (section) {
             ReduceSection.PERMISSIONS -> RevocationsList(revocations)
             ReduceSection.REMOVALS -> RemovalsList(removals, usage)
-            ReduceSection.PRIVATE_DNS -> privateDns()
+            ReduceSection.ALTERNATIVES -> alternatives()
         }
     }
 }

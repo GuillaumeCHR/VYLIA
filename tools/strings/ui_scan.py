@@ -1,8 +1,8 @@
 S = [
- ("tab_scan", "Scan", "Scan"),
- ("tab_analyze", "Analysis", "Analyse"),
- ("tab_reduce", "Reduce", "Réduire"),
- ("tab_replace", "Replace", "Remplacer"),
+ ("tab_scan", "Scan", "Scanner"),
+ ("tab_analyze", "Analyze", "Analyser"),
+ ("tab_manage", "Manage", "Gérer"),
+ ("tab_protect", "Protect", "Se protéger"),
  ("tab_celebrate", "Celebrate", "Célébrer"),
  ("topbar_help", "Help", "Aide"),
  ("search_prompt", "Type the name of an app to open its sheet.", "Tapez le nom d'une app pour ouvrir sa fiche."),

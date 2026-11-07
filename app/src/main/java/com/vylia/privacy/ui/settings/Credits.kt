@@ -51,7 +51,7 @@ internal fun CreditsSection() {
                 modifier = Modifier.fillMaxWidth().semantics { heading() },
             )
             Terminal()
-            Text(stringResource(R.string.app_name), style = MaterialTheme.typography.headlineLarge, modifier = Modifier.semantics { heading() })
+            Text(stringResource(R.string.app_full_name), style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center, modifier = Modifier.semantics { heading() })
             Text(
                 stringResource(R.string.credits_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
                 style = MaterialTheme.typography.titleMedium,

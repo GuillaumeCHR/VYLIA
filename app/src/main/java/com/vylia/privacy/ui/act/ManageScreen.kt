@@ -66,11 +66,11 @@ internal fun ActPlaceholder(text: String?, modifier: Modifier = Modifier) {
 }
 
 /**
- * Réduire : l'analyse globale (score moyen et score atteignable), puis les gestes classés par gain de score —
- * autorisations à retirer, apps à désinstaller — et la protection réseau (DNS privé, bouclier).
+ * Gérer : l'analyse globale (score moyen et score atteignable), puis les sous-onglets pour réduire votre exposition —
+ * autorisations à retirer, apps à désinstaller, alternatives. La protection réseau est dans Se protéger.
  */
 @Composable
-fun ReduceScreen(
+fun ManageScreen(
     modifier: Modifier = Modifier,
     /** App mise en tête des listes (cause d'une alerte de seuil). */
     pinnedPackage: String? = null,
@@ -84,8 +84,6 @@ fun ReduceScreen(
     // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
     LifecycleResumeEffect(Unit) {
         actViewModel.refreshUsage()
-        actViewModel.refreshDnsStatus()
-        actViewModel.refreshShieldContext()
         onPauseOrDispose { }
     }
 
@@ -102,7 +100,7 @@ fun ReduceScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        ActHeader(R.string.reduce_title, R.string.reduce_subtitle)
+        ActHeader(R.string.manage_title, R.string.manage_subtitle)
         if (!state.isLoading && userApps.isNotEmpty()) {
             SummaryCard(state.userAverageScore, projected, revocations.size, removals.size, Modifier.padding(horizontal = 16.dp))
         }
@@ -110,27 +108,7 @@ fun ReduceScreen(
             state.isLoading -> ActPlaceholder(null)
             userApps.isEmpty() -> ActPlaceholder(stringResource(R.string.act_empty_scan))
             else -> ReduceTab(revocations, removals, usage) {
-                val dnsCatalogue by actViewModel.dnsCatalogue.collectAsStateWithLifecycle()
-                val dnsStatus by actViewModel.dnsStatus.collectAsStateWithLifecycle()
-                val dnsListUpdate by actViewModel.dnsListUpdate.collectAsStateWithLifecycle()
-                val shield by actViewModel.shield.collectAsStateWithLifecycle()
-                val blocklistSize by actViewModel.blocklistSize.collectAsStateWithLifecycle()
-                val otherVpn by actViewModel.otherVpn.collectAsStateWithLifecycle()
-                PrivateDnsTab(dnsCatalogue, dnsStatus, dnsListUpdate, actViewModel::updateDnsList, shieldOn = shield.status == ShieldStatus.ON) {
-                    ShieldCard(
-                        state = shield,
-                        blocklistSize = blocklistSize,
-                        privateDns = dnsStatus,
-                        otherVpn = otherVpn,
-                        consentIntent = actViewModel::shieldConsentIntent,
-                        onStart = actViewModel::startShield,
-                        onStop = actViewModel::stopShield,
-                        onPause = actViewModel::pauseShield,
-                        onResume = actViewModel::resumeShield,
-                        onPauseMinutes = actViewModel::setShieldPauseMinutes,
-                        onFilter = actViewModel::setShieldFilter,
-                    )
-                }
+                AlternativesTab(state.scannedApps, userApps, actViewModel.catalogue)
             }
         }
     }

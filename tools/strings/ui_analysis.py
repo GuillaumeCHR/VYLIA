@@ -1,5 +1,5 @@
 S = [
- ("analysis_title", "Analysis", "Analyse"),
+ ("analysis_title", "Analyze", "Analyser"),
  ("analysis_tab_overview", "Overview", "Vue d'ensemble"),
  ("analysis_tab_tracking", "Tracking", "Suivi"),
  ("cause_installed", "%1$s installed (score %2$d)", "%1$s installée (score %2$d)"),
@@ -11,7 +11,7 @@ S = [
  ("cause_spread", "Drop spread over several apps", "Baisse répartie sur plusieurs apps"),
  ("tracking_threshold_active", "Alert on · threshold %1$d · current score %2$d", "Alerte active · seuil %1$d · score actuel %2$d"),
  ("tracking_threshold_below", "Below your threshold since %1$s", "Sous votre seuil depuis le %1$s"),
- ("tracking_threshold_reduce", "See Reduce", "Voir Réduire"),
+ ("tracking_threshold_reduce", "See Manage", "Voir Gérer"),
  ("tracking_threshold_edit", "Edit", "Modifier"),
  ("tracking_threshold_set", "Set an alert threshold", "Définir un seuil d'alerte"),
  ("tracking_threshold_label", "Threshold %1$d", "Seuil %1$d"),

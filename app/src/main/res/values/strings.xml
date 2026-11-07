@@ -2,7 +2,7 @@
 <!-- Généré par tools/strings/generate.py : ne pas modifier. -->
 <resources>
     <string name="app_name" translatable="false">VYLIA</string>
-    <string name="app_tagline" translatable="false">The Privacy Scorer</string>
+    <string name="app_tagline" translatable="false">privacy score &amp; manager</string>
 
     <!-- Écran Scan, cartes et en-tête -->
     <string name="splash_presents">Yogi Studio presents</string>
@@ -47,9 +47,9 @@
 
     <!-- Navigation, Scan et détail d'une app -->
     <string name="tab_scan">Scan</string>
-    <string name="tab_analyze">Analysis</string>
-    <string name="tab_reduce">Reduce</string>
-    <string name="tab_replace">Replace</string>
+    <string name="tab_analyze">Analyze</string>
+    <string name="tab_manage">Manage</string>
+    <string name="tab_protect">Protect</string>
     <string name="tab_celebrate">Celebrate</string>
     <string name="topbar_help">Help</string>
     <string name="search_prompt">Type the name of an app to open its sheet.</string>
@@ -110,7 +110,7 @@
     </plurals>
 
     <!-- Analyse -->
-    <string name="analysis_title">Analysis</string>
+    <string name="analysis_title">Analyze</string>
     <string name="analysis_tab_overview">Overview</string>
     <string name="analysis_tab_tracking">Tracking</string>
     <string name="cause_installed">%1$s installed (score %2$d)</string>
@@ -122,7 +122,7 @@
     <string name="cause_spread">Drop spread over several apps</string>
     <string name="tracking_threshold_active">Alert on · threshold %1$d · current score %2$d</string>
     <string name="tracking_threshold_below">Below your threshold since %1$s</string>
-    <string name="tracking_threshold_reduce">See Reduce</string>
+    <string name="tracking_threshold_reduce">See Manage</string>
     <string name="tracking_threshold_edit">Edit</string>
     <string name="tracking_threshold_set">Set an alert threshold</string>
     <string name="tracking_threshold_label">Threshold %1$d</string>
@@ -208,7 +208,7 @@
         <item quantity="other">%1$d apps</item>
     </plurals>
 
-    <!-- Agir -->
+    <!-- Gérer, Se protéger, Célébrer -->
     <string name="act_rewards_title">🏆 Rewards</string>
     <string name="act_rewards_text">Each intrusive app (score below 50) you remove earns 100 minus its score in points.</string>
     <string name="act_badges">Badges (%1$d/%2$d)</string>
@@ -218,7 +218,8 @@
     <string name="ok">OK</string>
     <string name="reduce_tab_permissions">Permissions</string>
     <string name="reduce_tab_removals">Apps</string>
-    <string name="reduce_tab_private_dns">Ad tracking</string>
+    <string name="manage_tab_alternatives">Alternatives</string>
+    <string name="protect_section_dns">DNS filtering</string>
     <string name="dns_status_title">Private DNS on this phone</string>
     <string name="dns_status_unsupported">Not available: private DNS requires Android 9 or later.</string>
     <string name="dns_status_no_network">No network connection right now: the status will show once you are connected.</string>
@@ -291,7 +292,7 @@
     <string name="reduce_usage_button">Allow usage access</string>
     <string name="alt_title">More respectful alternatives</string>
     <string name="alt_intro">Switching apps is often the most radical way to protect your data, but it is not always possible. Your bank, public services, the tool your employer requires or the messaging app your friends and family use usually have no equivalent.</string>
-    <string name="alt_reduce_first">That is why the approach starts by reducing the risk of the apps you keep: removing needless permissions, deleting forgotten apps, blocking ad tracking. That is what the Reduce tab is for. Only then, when an alternative exists, does switching become worthwhile: choose a category below to see two or three of them.</string>
+    <string name="alt_reduce_first">That is why the approach starts by reducing the risk of the apps you keep: removing needless permissions, deleting forgotten apps, blocking ad tracking. That is what the Permissions and Apps tabs, and Protect yourself, are for. Only then, when an alternative exists, does switching become worthwhile: choose a category below to see two or three of them.</string>
     <string name="alt_degoogle">Some people go further and adopt a fully « de-Googled » phone, one that works without Google services. That path calls for compromises not everyone is ready to make, and it is not VYLIA\'s: our approach is to reduce your exposure while you keep your phone and your usual apps.</string>
     <string name="alt_trophy">Installing an alternative earns the Good swap trophy.</string>
     <string name="alt_installed">Installed</string>
@@ -345,9 +346,9 @@
     <string name="shield_pause_diagnose">• An app shows an error, a blank page or keeps loading: if the pause fixes it, the Shield was the cause, and the latest blocks show which server.</string>
     <string name="shield_pause_note">Nothing is counted during the pause: the trackers contacted then are not blocked.</string>
     <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0), EasyPrivacy, EasyList and AdGuard Mobile Ads (GPL v3), %1$s tracking and ad domains.</string>
-    <string name="reduce_title">Reduce exposure</string>
-    <string name="replace_title">Choose an alternative</string>
-    <string name="celebrate_title">Your progress</string>
+    <string name="manage_title">Manage</string>
+    <string name="protect_title">Protect yourself</string>
+    <string name="celebrate_title">Celebrate and share</string>
     <string name="shield_pill_active">On</string>
     <string name="shield_pill_inactive">Off</string>
     <string name="shield_pill_starting">Starting</string>
@@ -362,11 +363,11 @@
     <string name="shield_bypass_open_network">Open network settings</string>
     <string name="shield_turn_off">Turn off the shield</string>
     <string name="shield_take_over">Take over</string>
-    <string name="act_empty_scan">Run a scan from the Scan tab to see your apps here.</string>
-    <string name="reduce_subtitle">The most useful actions, starting with the apps with the lowest score.</string>
+    <string name="act_empty_scan">Run a scan from Scan to see your apps here.</string>
+    <string name="manage_subtitle">Reduce your exposure: permissions to revoke, apps to remove, alternatives. The apps with the lowest score come first.</string>
     <string name="reduce_action_permissions">Manage permissions</string>
     <string name="reduce_action_uninstall">Uninstall</string>
-    <string name="replace_subtitle">Equivalent apps, with fewer trackers.</string>
+    <string name="protect_subtitle">Measures that reduce your exposure without changing your apps: the shield filters ad networks and trackers across the whole device, including in the apps you keep.</string>
     <string name="replace_for_you">Your most intrusive apps</string>
     <string name="replace_for_you_hint">For each one, a category of alternatives to browse.</string>
     <string name="replace_for_you_empty">None of your apps is very intrusive. You can still browse the alternatives below.</string>
@@ -565,15 +566,17 @@
     <string name="help_section_expanded">Expanded</string>
     <string name="help_section_collapsed">Collapsed</string>
     <string name="help_badges_family">%1$s (%2$d)</string>
-    <string name="help_scan_title">Reading the Scan</string>
+    <string name="help_scan_title">Scan</string>
     <string name="help_scan_intro">Each app starts at 100 points and loses some for its permissions and trackers. The three icons at the top sort apps by risk, by category or by badge. Tap an app\'s icon to open its Android settings.</string>
-    <string name="help_analyze_title">Reading the Analysis</string>
+    <string name="help_analyze_title">Analyze</string>
     <string name="help_analyze_intro">An overview of your phone: risk zones, anomalies and the most common trackers. The glossaries say what each tracker and each permission reveals about you.</string>
-    <string name="help_reduce_title">Reducing risks</string>
+    <string name="help_reduce_title">Manage: permissions and apps</string>
     <string name="help_reduce_intro">Actions start with the apps with the lowest score: removing a permission, uninstalling an app you no longer use. The glossary says what each permission is for, so you can judge whether the app really needs it.</string>
-    <string name="help_replace_title">Replacing an app</string>
+    <string name="help_replace_title">Manage: alternatives</string>
     <string name="help_replace_intro">Alternatives to the most intrusive apps, sorted by Play Store category. The glossaries say what the original app asks for and embeds: its permissions and its trackers.</string>
-    <string name="help_celebrate_title">Celebrating your progress</string>
+    <string name="help_protect_title">Protect yourself</string>
+    <string name="help_protect_intro">A compensating measure: the VYLIA Shield filters DNS requests on the phone and blocks ad networks and trackers across the whole device, including in the apps you keep, without changing them. Private DNS is another option, handled by Android.</string>
+    <string name="help_celebrate_title">Celebrate and share</string>
     <string name="help_celebrate_intro">Your phone\'s score, your progress and your badges. Sharing makes an image of your score, progress, trackers, shield or trophies: overall figures only, never the name of an app.</string>
     <plurals name="badge_rule_trackers_in_categories">
         <item quantity="one">at least %1$d tracker among: %2$s.</item>
@@ -604,8 +607,8 @@
         <item quantity="other">… and %1$d others.</item>
     </plurals>
     <plurals name="learn_tracker_more">
-        <item quantity="one">… and %1$d other, see the Analysis tab.</item>
-        <item quantity="other">… and %1$d others, see the Analysis tab.</item>
+        <item quantity="one">… and %1$d other, see Analyze.</item>
+        <item quantity="other">… and %1$d others, see Analyze.</item>
     </plurals>
 
     <!-- Paramètres, À propos et grille de score -->
@@ -694,7 +697,7 @@
     <string name="database_update">Update the signature database</string>
     <string name="database_updating">Updating…</string>
     <string name="database_update_error">Error: %1$s</string>
-    <string name="database_update_success">Update successful! Restart the analysis (Scan tab) to refresh the scores.</string>
+    <string name="database_update_success">Update successful! Restart the analysis (Scan) to refresh the scores.</string>
     <string name="stalkerware_status">Echap known stalkerware database</string>
     <string name="stalkerware_embedded">%1$d stalkerware apps · built-in version %2$s</string>
     <string name="stalkerware_downloaded">%1$d stalkerware apps · updated %2$s</string>
@@ -760,6 +763,7 @@
     <string name="csv_not_analyzed">Not analysed</string>
     <string name="csv_analysis_failed">Analysis failed</string>
     <string name="about_version">Version %1$s</string>
+    <string name="app_full_name">VYLIA: privacy score &amp; manager</string>
     <string name="about_publisher">A Yogi Studio app</string>
     <string name="about_privacy_title">Privacy</string>
     <string name="about_privacy_headline">No data collected. Your apps are analysed on your phone only.</string>
@@ -767,7 +771,7 @@
     <string name="about_privacy_network">The Internet is only used when you ask for it: to update the tracker database (the public Exodus Privacy list), the known stalkerware database (the public Echap list) or the list of private DNS services (published with VYLIA\'s source code). Nothing about your apps is sent.</string>
     <string name="about_privacy_automation">Install alerts and background scans are off by default. Once turned on, they run on the phone only, scheduled by Android.</string>
     <string name="about_privacy_self">To analyse your apps, VYLIA needs the list of installed apps (QUERY_ALL_PACKAGES): without it, there is nothing to audit. It owns this: VYLIA scores itself with the same rules as every other app, and this permission costs it points. Its page is in Scan, like the others.</string>
-    <string name="about_privacy_local">Results stay on the phone. You can export, import or delete them at any time (Settings › Data management), and share your progress from the Celebrate tab.</string>
+    <string name="about_privacy_local">Results stay on the phone. You can export, import or delete them at any time (Settings › Data management), and share your progress from Celebrate.</string>
     <string name="about_license_title">Licence and source code</string>
     <string name="about_license">VYLIA is free software, licensed under the GNU GPL v3 (or any later version): you may study, modify and redistribute it under its terms. It comes with no warranty.</string>
     <string name="about_license_trademarks">The VYLIA and Yogi Studio names, their logos and the app icon are not covered by the licence. The Exodus Privacy logo belongs to the Exodus Privacy association.</string>

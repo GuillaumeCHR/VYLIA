@@ -191,6 +191,7 @@ private fun ScreensTab() {
         R.string.help_analyze_title to R.string.help_analyze_intro,
         R.string.help_reduce_title to R.string.help_reduce_intro,
         R.string.help_replace_title to R.string.help_replace_intro,
+        R.string.help_protect_title to R.string.help_protect_intro,
         R.string.help_celebrate_title to R.string.help_celebrate_intro,
     )
     LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {

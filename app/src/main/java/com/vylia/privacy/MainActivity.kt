@@ -36,9 +36,13 @@ class MainActivity : AppCompatActivity() {
                 viewModel<ScanViewModel>(factory = ScanViewModel.Factory)
                 // Ouverte depuis une notification d'installation : directement la fiche de l'app, sans splash.
                 val openPackage = intent.getStringExtra(EXTRA_OPEN_PACKAGE)?.takeIf(Untrusted::isPackage)
-                // Ouverte depuis une alerte de seuil : Réduire, l'app en cause en tête. L'activité est exportée :
-                // seuls un onglet connu et un nom de paquet valide sont repris.
-                val openTab = if (intent.getStringExtra(EXTRA_OPEN_TAB) == TAB_REDUCE) AppTab.REDUCE else null
+                // Ouverte depuis une alerte de seuil : Gérer, l'app en cause en tête. L'activité est exportée :
+                // seuls un onglet connu et un nom de paquet valide sont repris. « reduce » : notifications
+                // envoyées avant que Réduire devienne Gérer.
+                val openTab = when (intent.getStringExtra(EXTRA_OPEN_TAB)) {
+                    TAB_MANAGE, "reduce" -> AppTab.MANAGE
+                    else -> null
+                }
                 val pinPackage = intent.getStringExtra(EXTRA_PIN_PACKAGE)?.takeIf(Untrusted::isPackage)
                 var showSplash by rememberSaveable { mutableStateOf(openPackage == null && openTab == null) }
                 // Fondu court : le logotype de l'intro est déjà à la place du titre de l'écran Scan.
@@ -52,9 +56,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         /** Paquet dont la fiche s'ouvre au lancement (notification d'installation). */
         const val EXTRA_OPEN_PACKAGE = "com.vylia.privacy.OPEN_PACKAGE"
-        /** Onglet ouvert au lancement ([TAB_REDUCE] seulement) et app mise en tête de Réduire (alerte de seuil). */
+        /** Onglet ouvert au lancement ([TAB_MANAGE] seulement) et app mise en tête de Gérer (alerte de seuil). */
         const val EXTRA_OPEN_TAB = "com.vylia.privacy.OPEN_TAB"
         const val EXTRA_PIN_PACKAGE = "com.vylia.privacy.PIN_PACKAGE"
-        const val TAB_REDUCE = "reduce"
+        const val TAB_MANAGE = "manage"
     }
 }

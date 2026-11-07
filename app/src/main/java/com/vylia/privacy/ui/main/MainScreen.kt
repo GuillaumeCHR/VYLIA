@@ -35,19 +35,20 @@ import com.vylia.privacy.ui.scan.ScanScreen
 import com.vylia.privacy.ui.scan.ScanViewModel
 import com.vylia.privacy.ui.search.GlobalSearchScreen
 import com.vylia.privacy.ui.settings.SettingsScreen
-import com.vylia.privacy.ui.understand.UnderstandScreen
+import com.vylia.privacy.ui.help.HelpSheet
+import com.vylia.privacy.ui.help.HelpTopic
 
 /** Les cinq destinations de la barre du bas (icônes Material Symbols embarquées). */
-enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: Int) {
-    SCAN(R.string.tab_scan, R.drawable.ic_sym_radar),
-    ANALYZE(R.string.tab_analyze, R.drawable.ic_sym_bar_chart),
-    REDUCE(R.string.tab_reduce, R.drawable.ic_sym_tune),
-    REPLACE(R.string.tab_replace, R.drawable.ic_sym_swap_horiz),
-    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration),
+enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: Int, val help: HelpTopic) {
+    SCAN(R.string.tab_scan, R.drawable.ic_sym_radar, HelpTopic.SCAN),
+    ANALYZE(R.string.tab_analyze, R.drawable.ic_sym_bar_chart, HelpTopic.ANALYZE),
+    REDUCE(R.string.tab_reduce, R.drawable.ic_sym_tune, HelpTopic.REDUCE),
+    REPLACE(R.string.tab_replace, R.drawable.ic_sym_swap_horiz, HelpTopic.REPLACE),
+    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration, HelpTopic.CELEBRATE),
 }
 
 /** Écrans ouverts par-dessus l'onglet en cours depuis la barre du haut. */
-private enum class Overlay { SEARCH, HELP, SETTINGS }
+private enum class Overlay { SEARCH, SETTINGS }
 
 @Composable
 fun MainScreen(
@@ -58,6 +59,8 @@ fun MainScreen(
     var currentTab by rememberSaveable { mutableStateOf(AppTab.SCAN) }
     var overlay by rememberSaveable { mutableStateOf<Overlay?>(null) }
     var query by rememberSaveable { mutableStateOf("") }
+    // Aide de l'écran affiché, en feuille par-dessus : l'écran reste en place dessous.
+    var help by rememberSaveable { mutableStateOf<HelpTopic?>(null) }
     var detailPackage by rememberSaveable { mutableStateOf(initialPackage) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val rules by homeViewModel.rules.collectAsStateWithLifecycle()
@@ -79,11 +82,10 @@ fun MainScreen(
             when {
                 detailApp != null -> BackTopBar(R.string.detail_title, back)
                 overlay == Overlay.SEARCH -> SearchTopBar(query, { query = it }, back)
-                overlay == Overlay.HELP -> BackTopBar(R.string.help_title, back)
                 overlay == Overlay.SETTINGS -> BackTopBar(R.string.settings_title, back)
                 else -> MainTopBar(
                     onSearch = { overlay = Overlay.SEARCH },
-                    onHelp = { overlay = Overlay.HELP },
+                    onHelp = { help = currentTab.help },
                     onSettings = { overlay = Overlay.SETTINGS },
                 )
             }
@@ -113,6 +115,7 @@ fun MainScreen(
             }
         },
     ) { innerPadding ->
+        help?.let { HelpSheet(it, onDismiss = { help = null }) }
         val modifier = Modifier.padding(innerPadding)
         if (detailApp != null) {
             AppDetailScreen(
@@ -127,9 +130,7 @@ fun MainScreen(
         }
         when (overlay) {
             Overlay.SEARCH -> GlobalSearchScreen(homeState.scannedApps, query, onAppClick = { detailPackage = it.app.packageName }, modifier)
-            // Provisoire : l'aide propre à chaque écran remplacera Comprendre.
-            Overlay.HELP -> UnderstandScreen(modifier)
-            Overlay.SETTINGS -> SettingsScreen(modifier, onOpenLearn = { overlay = Overlay.HELP })
+            Overlay.SETTINGS -> SettingsScreen(modifier, onOpenLearn = { help = HelpTopic.SCORING })
             null -> when (currentTab) {
                 AppTab.SCAN -> ScanScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
                 AppTab.ANALYZE -> AnalysisScreen(modifier, onAppClick = { detailPackage = it.app.packageName })

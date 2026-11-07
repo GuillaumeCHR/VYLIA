@@ -39,7 +39,6 @@
     <string name="tab_replace">Replace</string>
     <string name="tab_celebrate">Celebrate</string>
     <string name="topbar_help">Help on this screen</string>
-    <string name="help_title">Help</string>
     <string name="search_prompt">Type the name of an app to open its sheet.</string>
     <string name="reduce_title">Reduce exposure</string>
     <string name="replace_title">Choose an alternative</string>
@@ -370,12 +369,10 @@
     </plurals>
 
     <!-- Comprendre -->
-    <string name="learn_title">Understand</string>
     <string name="understand_tab_score">Score</string>
     <string name="understand_tab_badges">Badges</string>
     <string name="understand_tab_trackers">Trackers</string>
     <string name="understand_tab_permissions">Permissions</string>
-    <string name="learn_subtitle">How the permissions and trackers of each app shape its score and its badges, and what they mean for your privacy.</string>
     <string name="learn_trackers_glossary_hint">The main families of trackers, what they do with your data and the most common ones. A tracker can belong to several families: the most serious one counts in the score.</string>
     <string name="learn_permissions_glossary_hint">Tap a permission to see what it allows, why it is sensitive and how it is granted.</string>
     <string name="learn_search_hint">Search (e.g. SMS, READ_PHONE_STATE, location)</string>
@@ -920,4 +917,17 @@
         <item quantity="one">%1$d sensitive permission granted</item>
         <item quantity="other">%1$d sensitive permissions granted</item>
     </plurals>
+    <!-- Per-screen help (sheet opened by "?") -->
+    <string name="help_scan_title">Reading the Scan</string>
+    <string name="help_scan_intro">Each app starts at 100 points and loses some for its permissions and trackers. The three icons at the top sort apps by risk, by category or by badge. Tap an app\'s icon to open its Android settings.</string>
+    <string name="help_analyze_title">Reading the Analysis</string>
+    <string name="help_analyze_intro">An overview of your phone: risk zones, anomalies and the most common trackers. The glossaries say what each tracker and each permission reveals about you.</string>
+    <string name="help_reduce_title">Reducing risks</string>
+    <string name="help_reduce_intro">Actions are ranked by score gain: removing a permission, uninstalling an app you no longer use. The glossary says what each permission is for, so you can judge whether the app really needs it.</string>
+    <string name="help_replace_title">Replacing an app</string>
+    <string name="help_replace_intro">Alternatives to the most intrusive apps, sorted by Play Store category. The glossaries say what the original app asks for and embeds: its permissions and its trackers.</string>
+    <string name="help_celebrate_title">Celebrating your progress</string>
+    <string name="help_celebrate_intro">Your phone\'s score, your progress and your badges. Sharing shows the score and progress, never your list of apps.</string>
+    <string name="help_scoring_title">How the score works</string>
+    <string name="help_scoring_intro">How the current grid turns an app\'s permissions and trackers into a score.</string>
 </resources>

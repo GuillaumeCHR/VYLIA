@@ -38,7 +38,6 @@
     <string name="tab_replace">Remplacer</string>
     <string name="tab_celebrate">Célébrer</string>
     <string name="topbar_help">Aide sur cet écran</string>
-    <string name="help_title">Aide</string>
     <string name="search_prompt">Tapez le nom d\'une app pour ouvrir sa fiche.</string>
     <string name="reduce_title">Réduire l\'exposition</string>
     <string name="replace_title">Choisir une alternative</string>
@@ -383,12 +382,10 @@
     </plurals>
 
     <!-- Comprendre -->
-    <string name="learn_title">Comprendre</string>
     <string name="understand_tab_score">Score</string>
     <string name="understand_tab_badges">Badges</string>
     <string name="understand_tab_trackers">Traqueurs</string>
     <string name="understand_tab_permissions">Permissions</string>
-    <string name="learn_subtitle">Comment les permissions et les traqueurs de chaque app font son score et ses badges, et ce qu\'ils révèlent de vous.</string>
     <string name="learn_trackers_glossary_hint">Les grandes familles de traqueurs, ce qu\'elles font de vos données et les plus répandues. Un traqueur peut appartenir à plusieurs familles : c\'est la plus grave qui compte dans le score.</string>
     <string name="learn_permissions_glossary_hint">Touchez une permission pour savoir ce qu\'elle permet, pourquoi c\'est sensible et comment elle est accordée.</string>
     <string name="learn_search_hint">Rechercher (ex. SMS, READ_PHONE_STATE, position)</string>
@@ -954,4 +951,17 @@
         <item quantity="many">%1$d permissions sensibles accordées</item>
         <item quantity="other">%1$d permissions sensibles accordées</item>
     </plurals>
+    <!-- Aide par écran (feuille ouverte par « ? ») -->
+    <string name="help_scan_title">Lire le Scan</string>
+    <string name="help_scan_intro">Chaque app part de 100 points et en perd pour ses permissions et ses traqueurs. Les trois icônes du haut trient les apps par risque, par catégorie ou par badge. Touchez l\'icône d\'une app pour ouvrir ses réglages Android.</string>
+    <string name="help_analyze_title">Lire l\'Analyse</string>
+    <string name="help_analyze_intro">Une vue d\'ensemble de votre téléphone : les zones de risque, les anomalies et les traqueurs les plus répandus. Les lexiques disent ce que chaque traqueur et chaque permission révèle de vous.</string>
+    <string name="help_reduce_title">Réduire les risques</string>
+    <string name="help_reduce_intro">Les gestes sont classés par gain de score : retirer une permission, désinstaller une app que vous n\'utilisez plus. Le lexique dit à quoi sert chaque permission, pour juger si l\'app en a vraiment besoin.</string>
+    <string name="help_replace_title">Remplacer une app</string>
+    <string name="help_replace_intro">Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l\'app d\'origine demande et embarque : ses permissions et ses traqueurs.</string>
+    <string name="help_celebrate_title">Célébrer vos progrès</string>
+    <string name="help_celebrate_intro">Le score de votre téléphone, vos progrès et vos badges. Le partage montre le score et les progrès, jamais la liste de vos apps.</string>
+    <string name="help_scoring_title">Calcul du score</string>
+    <string name="help_scoring_intro">Comment la grille en vigueur transforme les permissions et les traqueurs d\'une app en score.</string>
 </resources>

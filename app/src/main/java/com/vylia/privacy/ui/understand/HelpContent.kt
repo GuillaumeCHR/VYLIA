@@ -16,6 +16,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -62,7 +64,7 @@ import java.util.Locale
 
 /** Onglets de l'écran Comprendre : chaque contenu est à un toucher, sans long défilement. */
 /** [searchHint] : texte du champ de recherche ; `null` pour un onglet sans recherche (Score). */
-private enum class UnderstandTab(@param:StringRes val title: Int, @param:StringRes val searchHint: Int?) {
+internal enum class UnderstandTab(@param:StringRes val title: Int, @param:StringRes val searchHint: Int?) {
     SCORE(R.string.understand_tab_score, null),
     BADGES(R.string.understand_tab_badges, R.string.learn_search_badges_hint),
     TRACKERS(R.string.understand_tab_trackers, R.string.learn_search_trackers_hint),
@@ -70,31 +72,34 @@ private enum class UnderstandTab(@param:StringRes val title: Int, @param:StringR
 }
 
 /**
- * Pédagogie, en trois onglets : 1/ comment le Privacy Score est calculé (valeurs lues dans les règles en vigueur),
- * 2/ lexique des traqueurs, 3/ lexique des permissions sensibles et de leurs impacts.
+ * Contenu de l'aide d'un écran : un titre, une courte introduction propre à l'écran, puis les lexiques utiles
+ * ([tabs], valeurs lues dans les règles en vigueur). Sans barre d'onglets s'il n'y en a qu'un.
  */
 @Composable
-fun UnderstandScreen(
+internal fun HelpContent(
+    title: String,
+    intro: String,
+    tabs: List<UnderstandTab>,
     modifier: Modifier = Modifier,
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
     val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
     val rules = loadedRules.rules
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
-    var tab by rememberSaveable { mutableStateOf(UnderstandTab.SCORE) }
+    var tab by rememberSaveable(tabs) { mutableStateOf(tabs.first()) }
     var query by rememberSaveable { mutableStateOf("") }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
     val searchHint = tab.searchHint?.let { stringResource(it) }
 
-    Column(modifier = modifier.fillMaxSize()) {
-        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)) {
-            // Recherche des permissions repliée en loupe, comme sur l'écran Scan ; ouverte, elle remplace le titre.
+    Column(modifier = modifier) {
+        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
+            // Recherche repliée en loupe ; ouverte, elle remplace le titre.
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.heightIn(min = 48.dp)) {
                 Box(modifier = Modifier.weight(1f)) {
                     if (searchOpen && searchHint != null) {
                         SearchField(query, { query = it }, searchHint)
                     } else {
-                        Text(stringResource(R.string.learn_title), style = MaterialTheme.typography.headlineMedium)
+                        Text(title, style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })
                     }
                 }
                 if (searchHint != null) {
@@ -110,13 +115,13 @@ fun UnderstandScreen(
                 }
             }
             Text(
-                stringResource(R.string.learn_subtitle),
+                intro,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        PrimaryTabRow(selectedTabIndex = tab.ordinal) {
-            UnderstandTab.entries.forEach { entry ->
+        if (tabs.size > 1) PrimaryTabRow(selectedTabIndex = tabs.indexOf(tab)) {
+            tabs.forEach { entry ->
                 Tab(
                     selected = tab == entry,
                     // Chaque onglet a sa propre recherche : on repart d'un champ vide.

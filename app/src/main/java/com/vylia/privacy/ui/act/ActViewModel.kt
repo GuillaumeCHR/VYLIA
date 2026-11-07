@@ -10,6 +10,9 @@ import com.vylia.privacy.data.alternatives.AlternativesRepository
 import com.vylia.privacy.data.apps.UsageStatsReader
 import com.vylia.privacy.data.dns.PrivateDnsRepository
 import com.vylia.privacy.data.dns.PrivateDnsStatus
+import com.vylia.privacy.data.shield.ShieldController
+import com.vylia.privacy.domain.shield.ShieldFilter
+import com.vylia.privacy.domain.shield.ShieldState
 import com.vylia.privacy.domain.act.AlternativeCatalogue
 import com.vylia.privacy.domain.act.PrivateDnsCatalogue
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +33,41 @@ class ActViewModel(
     private val usageStatsReader: UsageStatsReader,
     private val alternatives: AlternativesRepository,
     private val privateDns: PrivateDnsRepository,
+    private val shieldController: ShieldController,
 ) : ViewModel() {
+
+    val shield: StateFlow<ShieldState> = shieldController.state
+
+    /** Domaines de la liste de blocage (`null` le temps de la lire). */
+    private val _blocklistSize = MutableStateFlow<Int?>(null)
+    val blocklistSize: StateFlow<Int?> = _blocklistSize.asStateFlow()
+
+    private val _otherVpn = MutableStateFlow(false)
+    val otherVpn: StateFlow<Boolean> = _otherVpn.asStateFlow()
+
+    init {
+        // Lecture anticipée : le bouclier démarre ensuite sans attendre la liste.
+        viewModelScope.launch { _blocklistSize.value = withContext(Dispatchers.IO) { runCatching { shieldController.blocklist().size }.getOrNull() } }
+    }
+
+    /** Intention d'accord VPN à lancer avant [startShield], ou `null` si l'accord est déjà donné. */
+    fun shieldConsentIntent() = shieldController.consentIntent()
+
+    fun startShield() = shieldController.start()
+
+    fun stopShield() = shieldController.stop()
+
+    fun pauseShield() = shieldController.pause()
+
+    fun resumeShield() = shieldController.resume()
+
+    fun setShieldPauseMinutes(minutes: Int) = shieldController.setPauseMinutes(minutes)
+
+    fun setShieldFilter(filter: ShieldFilter, enabled: Boolean) = shieldController.setFilter(filter, enabled)
+
+    fun refreshShieldContext() {
+        _otherVpn.value = shieldController.otherVpnActive()
+    }
 
     val dnsCatalogue: StateFlow<PrivateDnsCatalogue> = privateDns.catalogue
 
@@ -75,7 +112,12 @@ class ActViewModel(
         val Factory = viewModelFactory {
             initializer {
                 val container = (this[APPLICATION_KEY] as VyliaApplication).container
-                ActViewModel(container.usageStatsReader, container.alternativesRepository, container.privateDnsRepository)
+                ActViewModel(
+                    container.usageStatsReader,
+                    container.alternativesRepository,
+                    container.privateDnsRepository,
+                    container.shieldController,
+                )
             }
         }
     }

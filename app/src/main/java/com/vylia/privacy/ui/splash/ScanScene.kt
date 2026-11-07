@@ -133,11 +133,12 @@ internal class ScanLayout(val width: Float, val height: Float) {
 internal class ScanPainter(private val layout: ScanLayout) {
     private val loupe = FloatArray(2)
 
-    fun draw(scope: DrawScope, time: Long, presents: TextLayoutResult) = with(scope) {
+    fun draw(scope: DrawScope, time: Long, presents: TextLayoutResult?) = with(scope) {
         drawRect(Background)
         if (time < SplashTimeline.EJECT_END + ICON_FADE) drawIcons(time)
         if (time in SplashTimeline.SETUP_END..SplashTimeline.SCAN_END + LOUPE_FADE) drawLoupe(time)
-        if (time >= SplashTimeline.EJECT_END) drawSignature(time, presents)
+        // Sans texte (clip de partage) : la scène s'arrête au scan, sans la signature.
+        if (time >= SplashTimeline.EJECT_END && presents != null) drawSignature(time, presents)
     }
 
     private fun DrawScope.drawIcons(time: Long) {

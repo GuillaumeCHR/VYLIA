@@ -10,6 +10,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
+import android.os.PowerManager
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
@@ -33,8 +34,10 @@ import kotlinx.coroutines.withContext
  *   (overlays de ressources, thèmes…).
  *
  * Permissions accordées = permissions runtime accordées (`REQUESTED_PERMISSION_GRANTED`), plus les
- * permissions spéciales effectivement actives : superposition et accès aux statistiques d'usage
- * (AppOps), service d'accessibilité, écoute des notifications, administrateur de l'appareil.
+ * permissions spéciales effectivement actives : superposition, statistiques d'usage, notifications plein écran et
+ * alarmes exactes (AppOps), exemption d'optimisation de la batterie, service d'accessibilité, écoute des
+ * notifications, administrateur de l'appareil. Pour les accès spéciaux, l'indicateur du PackageManager ne dit pas
+ * ce que l'utilisateur a choisi : seul l'état AppOps ou système fait foi.
  *
  * Tout le travail (requêtes IPC + chargement des icônes) est fait sur [ioDispatcher]
  * pour ne jamais bloquer le thread UI. Requiert `QUERY_ALL_PACKAGES` sur Android 11+.
@@ -47,6 +50,7 @@ class AppScanner(
     private val packageManager = context.packageManager
     private val contentResolver = context.contentResolver
     private val appOps = context.getSystemService(AppOpsManager::class.java)
+    private val powerManager = context.getSystemService(PowerManager::class.java)
     private val securitySignals = SecuritySignalCollector(context)
 
     override suspend fun getInstalledApps(filter: AppFilter, only: Set<String>?): List<InstalledApp> =
@@ -143,6 +147,18 @@ class AppScanner(
         if (isDeviceAdmin) granted += Manifest.permission.BIND_DEVICE_ADMIN
         applyAppOp(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW, Manifest.permission.SYSTEM_ALERT_WINDOW, appInfo, requested, granted)
         applyAppOp(AppOpsManager.OPSTR_GET_USAGE_STATS, Manifest.permission.PACKAGE_USAGE_STATS, appInfo, requested, granted)
+        // Android 14+ refuse le plein écran par défaut hors appels et alarmes, alors que l'indicateur reste « accordé ».
+        applyAppOp(OPSTR_USE_FULL_SCREEN_INTENT, USE_FULL_SCREEN_INTENT, appInfo, requested, granted)
+        applyAppOp(OPSTR_SCHEDULE_EXACT_ALARM, SCHEDULE_EXACT_ALARM, appInfo, requested, granted)
+        // Permission « normale » qui ne fait qu'ouvrir la fenêtre de demande : accordée seulement si l'app est exemptée.
+        if (REQUEST_IGNORE_BATTERY_OPTIMIZATIONS in requested) {
+            val exempted = runCatching { powerManager.isIgnoringBatteryOptimizations(packageName) }.getOrNull()
+            when (exempted) {
+                true -> granted += REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                false -> granted -= REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
+                null -> Unit
+            }
+        }
         // Permissions d'installation : déclarée = accordée.
         INSTALL_TIME_PERMISSIONS.filterTo(granted) { it in requested }
 
@@ -198,6 +214,8 @@ class AppScanner(
             }
         } catch (_: SecurityException) {
             return
+        } catch (_: IllegalArgumentException) {
+            return // opération inconnue de cette version d'Android
         }
         when (mode) {
             AppOpsManager.MODE_ALLOWED -> granted += permission
@@ -218,6 +236,13 @@ class AppScanner(
     private fun ApplicationInfo.hasCode(): Boolean = flags and ApplicationInfo.FLAG_HAS_CODE != 0
 
     private companion object {
+        // Constantes en clair : publiques seulement à partir d'Android 14, ou masquées par le SDK.
+        private const val USE_FULL_SCREEN_INTENT = "android.permission.USE_FULL_SCREEN_INTENT"
+        private const val OPSTR_USE_FULL_SCREEN_INTENT = "android:use_full_screen_intent"
+        private const val SCHEDULE_EXACT_ALARM = "android.permission.SCHEDULE_EXACT_ALARM"
+        private const val OPSTR_SCHEDULE_EXACT_ALARM = "android:schedule_exact_alarm"
+        private const val REQUEST_IGNORE_BATTERY_OPTIMIZATIONS = "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS"
+
         val INSTALL_TIME_PERMISSIONS = listOf(Manifest.permission.QUERY_ALL_PACKAGES, Manifest.permission.REQUEST_INSTALL_PACKAGES)
 
         fun shortName(permission: String) = permission.removePrefix("android.permission.")

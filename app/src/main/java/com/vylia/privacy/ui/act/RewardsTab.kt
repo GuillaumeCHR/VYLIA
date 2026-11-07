@@ -45,6 +45,10 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import com.vylia.privacy.ui.share.ShareContent
+import com.vylia.privacy.ui.share.ShareSheet
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import com.vylia.privacy.domain.model.PrivacyScore
@@ -70,44 +74,40 @@ import com.vylia.privacy.ui.components.currentLocale
  */
 @Composable
 internal fun RewardsTab(
-    averageScore: Int?,
+    shareContent: () -> ShareContent?,
     rewards: RewardsState,
     recentRewards: List<RemovedApp>,
     onDismissRecent: () -> Unit,
+    top: @Composable () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        top()
         RewardsSection(rewards, recentRewards, onDismissRecent, Modifier.fillMaxWidth())
-        ShareCard(averageScore, rewards)
+        ShareEntry(shareContent)
     }
 }
 
-/** Partager son bilan : score moyen, points et trophées, en image (100 % hors connexion). */
+/** Partager son bilan : ouvre l'écran de partage (modèles d'image, formats, clip animé), tout sur le téléphone. */
 @Composable
-private fun ShareCard(averageScore: Int?, rewards: RewardsState) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
-    val chooserTitle = stringResource(R.string.act_share_chooser)
+private fun ShareEntry(shareContent: () -> ShareContent?) {
+    var open by remember { mutableStateOf<ShareContent?>(null) }
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text(stringResource(R.string.act_share_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.share_open_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
             Spacer(modifier = Modifier.height(4.dp))
-            Text(stringResource(R.string.act_share_text), style = MaterialTheme.typography.bodyMedium)
+            Text(stringResource(R.string.share_open_text), style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = {
-                coroutineScope.launch {
-                    val uri = generateAndSaveScoreBitmap(context, averageScore ?: 100, rewards.points, rewards.unlockedBadges.size)
-                    uri?.let { shareImage(context, it, chooserTitle) }
-                }
-            }) {
+            Button(onClick = { open = shareContent() }) {
                 Icon(Icons.Default.Share, contentDescription = null)
                 Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.act_share_button))
+                Text(stringResource(R.string.share_open_button))
             }
         }
     }
+    open?.let { ShareSheet(it) { open = null } }
 }
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -243,71 +243,4 @@ private fun BadgeChip(badge: Badge, unlocked: Boolean) {
             )
         }
     }
-}
-
-suspend fun generateAndSaveScoreBitmap(context: Context, score: Int, points: Int, trophies: Int): Uri? = withContext(Dispatchers.IO) {
-    try {
-        val width = 1080
-        val height = 1920
-        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        
-        // Draw background
-        canvas.drawColor(Slate900.toArgb())
-        
-        // Draw texts
-        val paint = Paint().apply {
-            color = Slate300.toArgb()
-            textSize = 80f
-            textAlign = Paint.Align.CENTER
-            isAntiAlias = true
-        }
-        
-        canvas.drawText(context.getString(R.string.act_story_title), width / 2f, 400f, paint)
-        
-        paint.textSize = 250f
-        paint.color = when {
-            score >= 80 -> Emerald.toArgb()
-            score >= 50 -> android.graphics.Color.parseColor("#F59E0B")
-            else -> android.graphics.Color.parseColor("#EF4444")
-        }
-        
-        canvas.drawText("$score/100", width / 2f, 1000f, paint)
-        
-        // Les accomplissements : points de confidentialité et trophées.
-        paint.textSize = 60f
-        paint.color = Slate300.toArgb()
-        canvas.drawText(context.getString(R.string.act_story_points, points), width / 2f, 1250f, paint)
-        canvas.drawText(
-            context.resources.getQuantityString(R.plurals.act_story_trophies, trophies, trophies),
-            width / 2f,
-            1350f,
-            paint,
-        )
-
-        paint.textSize = 50f
-        paint.color = Slate400.toArgb()
-        canvas.drawText(context.getString(R.string.act_story_footer), width / 2f, 1800f, paint)
-
-        // Save to cache
-        val imagePath = File(context.cacheDir, "images")
-        imagePath.mkdirs()
-        val file = File(imagePath, "vylia_score.png")
-        FileOutputStream(file).use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-        }
-        
-        FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-    } catch (e: Exception) {
-        null
-    }
-}
-
-fun shareImage(context: Context, uri: Uri, chooserTitle: String) {
-    val intent = Intent(Intent.ACTION_SEND).apply {
-        type = "image/png"
-        putExtra(Intent.EXTRA_STREAM, uri)
-        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-    }
-    context.startActivity(Intent.createChooser(intent, chooserTitle))
 }

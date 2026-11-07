@@ -4,7 +4,7 @@ import com.vylia.privacy.domain.model.AuditedApp
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-/** Catalogue d'alternatives éthiques ou libres (assets/alternatives.json). */
+/** Catalogue d'alternatives par catégorie du Play Store (assets/alternatives.json, voir tools/alternatives/build_catalogue.py). */
 @Serializable
 data class AlternativeCatalogue(val version: String, val groups: List<AlternativeGroup>) {
 
@@ -38,6 +38,10 @@ data class Alternative(
     /** Site de l'app quand elle n'est sur aucun des deux magasins (ex. F-Droid lui-même). */
     val web: String? = null,
     @SerialName("open_source") val openSource: Boolean = false,
+    /** Coût relevé sur AlternativeTo (« Free », « Freemium »…), `null` si inconnu. */
+    val cost: String? = null,
+    /** Likes de la communauté AlternativeTo au moment du relevé : la popularité, pas un audit. */
+    val likes: Int? = null,
     val pitch: Map<String, String>,
 )
 

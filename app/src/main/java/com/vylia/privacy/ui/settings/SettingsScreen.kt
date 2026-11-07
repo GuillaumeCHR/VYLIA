@@ -24,16 +24,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.RadioButton
@@ -67,6 +66,7 @@ import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.R
 import com.vylia.privacy.data.export.CsvExporter
 import com.vylia.privacy.data.preferences.BackgroundScan
+import com.vylia.privacy.data.preferences.CardStyle
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.scan.ScanViewModel
@@ -133,8 +133,7 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        Text(stringResource(R.string.settings_title), style = MaterialTheme.typography.headlineMedium)
-
+        // Titre et retour : barre d'en-tête de l'écran principal.
         SectionTitle(R.string.settings_general)
         LanguageCard()
         SettingsSwitch(
@@ -143,6 +142,7 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
             checked = state.advancedMode,
             onChange = viewModel::setAdvancedMode,
         )
+        CardStyleCard(viewModel)
 
         SectionTitle(R.string.settings_analysis)
         SettingsLink(
@@ -194,32 +194,63 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
 @Composable
 private fun LanguageCard() {
     var current by remember { mutableStateOf(AppLanguage.current()) }
+    RadioCard(
+        title = stringResource(R.string.settings_language),
+        options = AppLanguage.entries,
+        selected = current,
+        label = { "${it.flag}  ${stringResource(it.label)}" },
+        onSelect = { current = it; it.select() },
+    )
+}
+
+/** Présentation des cartes d'apps dans les listes Scan et la recherche. */
+@Composable
+private fun CardStyleCard(viewModel: SettingsViewModel) {
+    val current by viewModel.cardStyle.collectAsStateWithLifecycle()
+    RadioCard(
+        title = stringResource(R.string.settings_cards),
+        options = CardStyle.entries,
+        selected = current,
+        label = {
+            stringResource(if (it == CardStyle.COMPACT) R.string.settings_cards_compact else R.string.settings_cards_detailed)
+        },
+        hint = {
+            stringResource(if (it == CardStyle.COMPACT) R.string.settings_cards_compact_hint else R.string.settings_cards_detailed_hint)
+        },
+        onSelect = viewModel::setCardStyle,
+    )
+}
+
+@Composable
+private fun <T> RadioCard(
+    title: String,
+    options: List<T>,
+    selected: T,
+    label: @Composable (T) -> String,
+    onSelect: (T) -> Unit,
+    hint: (@Composable (T) -> String)? = null,
+) {
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(vertical = 8.dp)) {
+        Column(Modifier.padding(vertical = 8.dp).selectableGroup()) {
             Text(
-                stringResource(R.string.settings_language),
+                title,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
-            AppLanguage.entries.forEach { language ->
-                val selected = current == language
+            options.forEach { option ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .selectable(selected = selected, role = Role.RadioButton) {
-                            current = language
-                            language.select()
-                        }
+                        .selectable(selected = option == selected, role = Role.RadioButton) { onSelect(option) }
                         .heightIn(min = 48.dp)
                         .padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    RadioButton(selected = selected, onClick = null)
-                    Text(
-                        "${language.flag}  ${stringResource(language.label)}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 12.dp),
-                    )
+                    RadioButton(selected = option == selected, onClick = null)
+                    Column(Modifier.padding(start = 12.dp, top = 4.dp, bottom = 4.dp)) {
+                        Text(label(option), style = MaterialTheme.typography.bodyLarge)
+                        hint?.let { Hint(it(option)) }
+                    }
                 }
             }
         }
@@ -378,7 +409,11 @@ private const val ODBL_URL = "https://opendatacommons.org/licenses/odbl/1-0/"
 
 // --- Briques communes -------------------------------------------------------------------------
 
-/** Sous-menu : flèche de retour, titre, puis contenu défilant. */
+/**
+ * Sous-menu : titre, puis contenu défilant. Le retour passe par la flèche de la barre d'en-tête et le geste retour
+ * d'Android, tous deux reçus par le [BackHandler] de [SettingsScreen] ; [onBack] reste pour les appelants.
+ */
+@Suppress("UNUSED_PARAMETER")
 @Composable
 internal fun SubPage(modifier: Modifier, @StringRes title: Int, onBack: () -> Unit, content: @Composable ColumnScope.() -> Unit) {
     Column(
@@ -388,12 +423,7 @@ internal fun SubPage(modifier: Modifier, @StringRes title: Int, onBack: () -> Un
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
-            }
-            Text(stringResource(title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
-        }
+        Text(stringResource(title), style = MaterialTheme.typography.titleLarge, modifier = Modifier.semantics { heading() })
         content()
     }
 }

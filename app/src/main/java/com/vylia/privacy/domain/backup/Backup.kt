@@ -117,6 +117,7 @@ object BackupMerge {
             completedScans = maxOf(current.completedScans, incoming.completedScans),
             revokedPermissions = maxOf(current.revokedPermissions, incoming.revokedPermissions),
             swaps = current.swaps + incoming.swaps,
+            shieldBlocked = current.shieldBlocked || incoming.shieldBlocked,
         )
         return Merged(merged, fresh.size + newBadges, valid.size - fresh.size, bad.size)
     }

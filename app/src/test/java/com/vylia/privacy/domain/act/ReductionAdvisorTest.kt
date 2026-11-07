@@ -63,6 +63,15 @@ class ReductionAdvisorTest {
     }
 
     @Test
+    fun `retraits - les apps au score le plus bas d abord`() {
+        val light = app("org.example.light", "CATEGORY_GAME", setOf("ACCESS_FINE_LOCATION"))
+        val heavy = app("org.example.heavy", "CATEGORY_GAME", setOf("ACCESS_FINE_LOCATION"), trackers = 3)
+        assertTrue(heavy.score.value < light.score.value)
+        val order = ReductionAdvisor.revocations(listOf(light, heavy), scorer).map { it.app.app.packageName }.distinct()
+        assertEquals(listOf("org.example.heavy", "org.example.light"), order)
+    }
+
+    @Test
     fun `une permission justifiee n est jamais proposee`() {
         val maps = app("org.example.maps", "CATEGORY_MAPS", setOf("ACCESS_FINE_LOCATION"))
         assertTrue(ReductionAdvisor.revocations(listOf(maps), scorer).isEmpty())
@@ -100,9 +109,11 @@ class ReductionAdvisorTest {
         catalogue.groups.forEach { group ->
             assertEquals(group.id, group.alternatives.size, group.alternatives.map { it.packageName }.toSet().size)
             assertTrue(group.id, "en" in group.title && "fr" in group.title)
+            assertTrue(group.id, group.alternatives.size in 2..3)
             group.alternatives.forEach { alt ->
                 assertTrue(alt.name, "en" in alt.pitch && "fr" in alt.pitch)
                 assertTrue(alt.name, alt.fdroid != null || alt.play != null || alt.web != null)
+                assertEquals(alt.name, "Free", alt.cost)
             }
         }
         val categories = TestFixtures.rules.categories.keys

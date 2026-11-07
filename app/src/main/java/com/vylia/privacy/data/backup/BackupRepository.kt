@@ -30,6 +30,8 @@ class BackupRepository(
     private val rules: RuleMatrixRepository,
     private val trackerCache: TrackerScanCache,
     private val language: () -> String?,
+    /** Compteur de requêtes bloquées par le bouclier, effacé avec le reste. */
+    private val clearShieldCounter: () -> Unit = {},
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
     suspend fun export(out: OutputStream) {
@@ -70,12 +72,16 @@ class BackupRepository(
         )
     }
 
-    /** Efface le Suivi, les récompenses et le cache d'analyse (qui contient la liste de vos apps). Les réglages restent. */
+    /**
+     * Efface le Suivi, les récompenses, le compteur du bouclier et le cache d'analyse (qui contient la liste de vos
+     * apps). Les réglages restent.
+     */
     suspend fun deleteAll() {
         history.clear()
         rewards.clear()
         trackerCache.clear()
         settings.clearScanTimestamps()
+        clearShieldCounter()
     }
 
     private fun read(input: InputStream): String {

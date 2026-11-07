@@ -25,6 +25,17 @@ class SettingsRepository(context: Context) {
     private val _advancedMode = MutableStateFlow(prefs.getBoolean(KEY_ADVANCED_MODE, false))
     val advancedMode: StateFlow<Boolean> = _advancedMode.asStateFlow()
 
+    /** Présentation des cartes d'apps dans les listes (Compact par défaut). */
+    private val _cardStyle = MutableStateFlow(
+        CardStyle.entries.find { it.name == prefs.getString(KEY_CARD_STYLE, null) } ?: CardStyle.COMPACT
+    )
+    val cardStyle: StateFlow<CardStyle> = _cardStyle.asStateFlow()
+
+    fun setCardStyle(style: CardStyle) {
+        prefs.edit().putString(KEY_CARD_STYLE, style.name).apply()
+        _cardStyle.value = style
+    }
+
     /** Fin du dernier scan complet (traqueurs compris) ; `null` avant le tout premier. */
     private val _lastScanTimestamp = MutableStateFlow(prefs.getLong(KEY_LAST_SCAN, 0L).takeIf { it > 0 })
     val lastScanTimestamp: StateFlow<Long?> = _lastScanTimestamp.asStateFlow()
@@ -110,6 +121,7 @@ class SettingsRepository(context: Context) {
         }
 
     companion object {
+        private const val KEY_CARD_STYLE = "card_style"
         private const val KEY_INSTALL_ALERTS = "install_alerts"
         private const val KEY_BACKGROUND_SCAN = "background_scan"
         private const val KEY_LAST_BACKGROUND_SCAN = "last_background_scan"
@@ -125,3 +137,6 @@ class SettingsRepository(context: Context) {
 
 /** Fréquence des scans de fond. */
 enum class BackgroundScan(val intervalDays: Long) { OFF(0), WEEKLY(7), MONTHLY(30) }
+
+/** Cartes d'apps : Compact (icône, nom, score, pénalités) ou Détaillé (paquet, traqueurs, badges). */
+enum class CardStyle { COMPACT, DETAILED }

@@ -19,6 +19,7 @@ import com.vylia.privacy.VyliaApplication
 import com.vylia.privacy.data.automation.AutomationScheduler
 import com.vylia.privacy.data.automation.InstallWatcher
 import com.vylia.privacy.data.preferences.BackgroundScan
+import com.vylia.privacy.data.preferences.CardStyle
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
@@ -200,6 +201,10 @@ class SettingsViewModel(
     fun resetSuccessState() {
         _updateSuccess.value = false
     }
+
+    val cardStyle: StateFlow<CardStyle> = settingsRepository.cardStyle
+
+    fun setCardStyle(style: CardStyle) = settingsRepository.setCardStyle(style)
 
     /** Le changement de mode relance automatiquement le scan (observé par ScanViewModel). */
     fun setAdvancedMode(enabled: Boolean) {

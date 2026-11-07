@@ -33,8 +33,11 @@ fun VyliaLogotype(modifier: Modifier = Modifier, fontSize: TextUnit = HeaderLogo
     )
 }
 
-/** Taille du logotype dans l'en-tête de l'écran Scan (celle d'un titre de barre d'application). */
-val HeaderLogotypeSize = 22.sp
+/**
+ * Taille du logotype dans la barre d'en-tête. 20 sp : à 360 dp de large, la pastille du bouclier garde son libellé le
+ * plus long (« Contourné ») à côté des trois boutons de 48 dp.
+ */
+val HeaderLogotypeSize = 20.sp
 
 /** Unbounded (SIL Open Font License 1.1), réservée au nom VYLIA : large, géométrique, reconnaissable. */
 val Unbounded = FontFamily(

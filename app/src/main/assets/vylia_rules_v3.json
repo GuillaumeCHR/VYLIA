@@ -1765,6 +1765,7 @@
     "ACCESS_ADSERVICES_ATTRIBUTION",
     "ACCESS_ADSERVICES_AD_ID",
     "com.google.android.gms.permission.AD_ID",
-    "AD_SERVICES_CONFIG"
+    "AD_SERVICES_CONFIG",
+    "POST_NOTIFICATIONS"
   ]
 }

@@ -64,6 +64,7 @@ object ReductionAdvisor {
     /**
      * Autorisations accordées qui coûtent des points sans être justifiées par la finalité de l'app, avec le score
      * qu'elle aurait sans elles. Les retraits sans effet sur le score ne sont pas proposés.
+     * Ordre : les apps au score le plus bas d'abord.
      */
     fun revocations(apps: List<AuditedApp>, scorer: PrivacyScorer): List<RevokeSuggestion> = apps.flatMap { audited ->
         val result = audited.result
@@ -85,7 +86,10 @@ object ReductionAdvisor {
                     badgesLost = result.badges.filter { it.id !in now && it.polarity == "negative" },
                 )
             }
-    }.sortedWith(compareByDescending<RevokeSuggestion> { it.gain }.thenBy { it.app.app.label })
+    }.sortedWith(
+        // Les apps au score le plus bas d'abord ; pour une même app, le retrait qui rapporte le plus.
+        compareBy<RevokeSuggestion> { it.app.score.value }.thenBy { it.app.app.label }.thenByDescending { it.gain },
+    )
 
     /**
      * Apps à supprimer : les intrusives (zone rouge), et celles sous [REMOVAL_SCORE_THRESHOLD] inutilisées depuis

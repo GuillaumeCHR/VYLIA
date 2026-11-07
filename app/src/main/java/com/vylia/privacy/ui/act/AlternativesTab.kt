@@ -2,9 +2,10 @@ package com.vylia.privacy.ui.act
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -13,11 +14,18 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -28,134 +36,199 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.text.style.TextOverflow
+import com.vylia.privacy.domain.rewards.BadgesManager
+import com.vylia.privacy.ui.components.AppIcon
+import com.vylia.privacy.ui.components.ScoreBadge
+import kotlinx.coroutines.launch
 import com.vylia.privacy.domain.act.Alternative
 import com.vylia.privacy.domain.act.AlternativeCatalogue
 import com.vylia.privacy.domain.act.AlternativeGroup
 import com.vylia.privacy.domain.act.localized
 import com.vylia.privacy.domain.model.AuditedApp
-import com.vylia.privacy.ui.components.AppIcon
-import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.currentLocale
-
-/** Score sous lequel on propose de remplacer une app (zone orange et rouge). */
-private const val REPLACE_BELOW = 70
+import java.text.NumberFormat
 
 /**
- * Alternatives : d'abord le Worst of Fame (vos apps les moins respectueuses, avec de quoi les remplacer), puis le
- * Hall of Fame des alternatives éthiques ou libres, par famille. Les alternatives déjà installées sont repérées.
+ * Alternatives : une introduction (remplacer n'est pas toujours possible, réduire le risque vient d'abord, pas de
+ * téléphone « dégooglisé »), un menu des catégories du Play Store, deux ou trois apps (avec leur logo) pour la catégorie
+ * choisie, et en deux phrases la façon dont la liste est construite. Les alternatives déjà installées sont repérées.
  */
 @Composable
-internal fun AlternativesTab(userApps: List<AuditedApp>, allApps: List<AuditedApp>, catalogue: AlternativeCatalogue) {
+internal fun AlternativesTab(allApps: List<AuditedApp>, userApps: List<AuditedApp>, catalogue: AlternativeCatalogue) {
     val language = currentLocale().language
     val installed = remember(allApps) { allApps.map { it.app.packageName }.toSet() }
-    val worst = remember(userApps, catalogue) {
-        userApps.filter { it.score.value < REPLACE_BELOW }
-            .mapNotNull { app -> catalogue.groupFor(app)?.let { app to it } }
-            .filter { (app, group) -> group.alternatives.any { it.packageName != app.app.packageName } }
-            .sortedBy { it.first.score.value }
+    // Les apps intrusives d'abord : celles qu'une catégorie d'alternatives couvre, puis celles qu'aucune ne couvre.
+    val intrusive = remember(userApps) {
+        userApps.filter { it.score.value < BadgesManager.INTRUSIVE_THRESHOLD }.sortedBy { it.score.value }
     }
-    var open by rememberSaveable { mutableStateOf<String?>(null) }
-    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        item { SectionHeader(stringResource(R.string.alt_worst_title), stringResource(R.string.alt_worst_hint)) }
-        if (worst.isEmpty()) {
-            item { Text(stringResource(R.string.alt_worst_empty), color = MaterialTheme.colorScheme.onSurfaceVariant) }
-        }
-        items(worst, key = { "worst-${it.first.app.packageName}" }) { (app, group) -> ReplaceCard(app, group, installed, language) }
+    val matched = remember(intrusive, catalogue) { intrusive.mapNotNull { app -> catalogue.groupFor(app)?.let { app to it } } }
+    val unmatched = remember(intrusive, matched) { intrusive - matched.map { it.first }.toSet() }
+    var selectedId by rememberSaveable { mutableStateOf(matched.firstOrNull()?.second?.id ?: catalogue.groups.firstOrNull()?.id) }
+    val selected = catalogue.groups.firstOrNull { it.id == selectedId } ?: catalogue.groups.firstOrNull()
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    // Rang du menu des catégories dans la liste : en-tête, apps couvertes, ligne des apps non couvertes, introduction.
+    val menuIndex = 1 + matched.size + (if (unmatched.isNotEmpty()) 1 else 0) + 1
 
+    LazyColumn(state = listState, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item {
-            SectionHeader(stringResource(R.string.alt_hall_title), stringResource(R.string.alt_hall_hint), Modifier.padding(top = 12.dp))
+            SectionHeader(
+                stringResource(R.string.replace_for_you),
+                stringResource(if (intrusive.isEmpty()) R.string.replace_for_you_empty else R.string.replace_for_you_hint),
+            )
         }
-        items(catalogue.groups, key = { "group-${it.id}" }) { group ->
-            GroupCard(group, installed, language, expanded = open == group.id) { open = if (open == group.id) null else group.id }
+        items(matched, key = { "swap-${it.first.app.packageName}" }) { (app, group) ->
+            SwapCard(app, group.title.localized(language)) {
+                selectedId = group.id
+                scope.launch { listState.animateScrollToItem(menuIndex) }
+            }
+        }
+        if (unmatched.isNotEmpty()) item {
+            Text(
+                stringResource(R.string.replace_no_match, unmatched.joinToString { it.app.label }),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        item { Intro(Modifier.padding(top = 12.dp)) }
+        item(key = "menu") { CategoryMenu(catalogue.groups, selected, language) { selectedId = it.id } }
+        if (selected != null) {
+            items(selected.alternatives, key = { "${selected.id}-${it.packageName}" }) { alt ->
+                AlternativeCard(alt, alt.packageName in installed, language)
+            }
+        }
+        item { MethodNote() }
+    }
+}
+
+/** Une app intrusive installée et la catégorie d'alternatives qui la couvre. */
+@Composable
+private fun SwapCard(audited: AuditedApp, category: String, onShow: () -> Unit) {
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                AppIcon(audited.app.icon, 32.dp)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(audited.app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(
+                        stringResource(R.string.replace_category, category),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                ScoreBadge(audited.score)
+            }
+            OutlinedButton(onClick = onShow) { Text(stringResource(R.string.replace_show)) }
         }
     }
 }
 
-/** Une app à remplacer, avec les alternatives de sa famille. */
+@Composable
+private fun Intro(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
+        Text(stringResource(R.string.alt_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.alt_intro), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.alt_reduce_first), style = MaterialTheme.typography.bodyMedium)
+        Text(stringResource(R.string.alt_degoogle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(stringResource(R.string.alt_trophy), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+/** Menu déroulant des catégories du Play Store. */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CategoryMenu(groups: List<AlternativeGroup>, selected: AlternativeGroup?, language: String, onSelect: (AlternativeGroup) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    ExposedDropdownMenuBox(expanded = expanded, onExpandedChange = { expanded = it }, modifier = Modifier.padding(top = 4.dp)) {
+        OutlinedTextField(
+            value = selected?.title?.localized(language).orEmpty(),
+            onValueChange = {},
+            readOnly = true,
+            label = { Text(stringResource(R.string.alt_category)) },
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+            modifier = Modifier.fillMaxWidth().menuAnchor(MenuAnchorType.PrimaryNotEditable),
+        )
+        ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+            groups.forEach { group ->
+                DropdownMenuItem(
+                    text = { Text("${group.title.localized(language)}  ·  ${group.alternatives.size}") },
+                    onClick = {
+                        onSelect(group)
+                        expanded = false
+                    },
+                )
+            }
+        }
+    }
+}
+
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ReplaceCard(app: AuditedApp, group: AlternativeGroup, installed: Set<String>, language: String) {
+private fun AlternativeCard(alt: Alternative, isInstalled: Boolean, language: String) {
     val context = LocalContext.current
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                AppIcon(app.app.icon, 32.dp)
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(app.app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    Text(group.title.localized(language), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                ScoreBadge(app.score)
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                AltIcon(alt.packageName)
+                Text(alt.name + if (isInstalled) "  ✓" else "", fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
             }
-            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                group.alternatives.filter { it.packageName != app.app.packageName }.forEach { alt ->
-                    AlternativeChip(alt, alt.packageName in installed) { openStore(context, alt) }
-                }
+            Text(alt.pitch.localized(language), style = MaterialTheme.typography.bodyMedium)
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                if (isInstalled) Tag(stringResource(R.string.alt_installed), Color(0xFF10B981))
+                if (alt.cost == "Free") Tag(stringResource(R.string.alt_free), Color(0xFF10B981))
+                if (alt.openSource) Tag(stringResource(R.string.alt_open_source), Color(0xFF38BDF8))
+                if (alt.play != null) Tag("Google Play", Color(0xFF94A3B8))
+                if (alt.fdroid != null) Tag("F-Droid", Color(0xFF94A3B8))
             }
-        }
-    }
-}
-
-/** Une famille du catalogue : repliée, elle montre ses alternatives ; ouverte, leur description et leurs magasins. */
-@Composable
-private fun GroupCard(group: AlternativeGroup, installed: Set<String>, language: String, expanded: Boolean, onToggle: () -> Unit) {
-    val context = LocalContext.current
-    VyliaCard(modifier = Modifier.fillMaxWidth().clickable(onClick = onToggle)) {
-        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(group.title.localized(language), fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                Text(if (expanded) "▲" else "▼", color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            if (!expanded) {
+            alt.likes?.takeIf { it > 0 }?.let {
                 Text(
-                    group.alternatives.joinToString(" · ") { it.name },
+                    stringResource(R.string.alt_likes, NumberFormat.getIntegerInstance(currentLocale()).format(it)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-            } else {
-                group.alternatives.forEach { alt -> AlternativeDetail(alt, alt.packageName in installed) { openStore(context, alt) } }
+            }
+            if (!isInstalled) {
+                val label = when {
+                    alt.play != null -> R.string.alt_get_play
+                    alt.fdroid != null -> R.string.alt_get_fdroid
+                    else -> R.string.alt_get_web
+                }
+                OutlinedButton(onClick = { openStore(context, alt) }) { Text(stringResource(label)) }
             }
         }
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
+/** Comment la liste est construite, en quelques mots. */
 @Composable
-private fun AlternativeDetail(alt: Alternative, isInstalled: Boolean, onOpen: () -> Unit) {
-    Column(modifier = Modifier.padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        Text(alt.name + if (isInstalled) "  ✓" else "", fontWeight = FontWeight.SemiBold)
-        Text(alt.pitch.localized(currentLocale().language), style = MaterialTheme.typography.bodySmall)
-        FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            if (isInstalled) Tag(stringResource(R.string.alt_installed), Color(0xFF10B981))
-            if (alt.openSource) Tag(stringResource(R.string.alt_open_source), Color(0xFF38BDF8))
-            if (alt.fdroid != null) Tag("F-Droid", Color(0xFF94A3B8))
-            if (alt.play != null) Tag("Google Play", Color(0xFF94A3B8))
-        }
-        if (!isInstalled) OutlinedButton(onClick = onOpen) { Text(stringResource(R.string.alt_get)) }
+private fun MethodNote() {
+    Column(Modifier.padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(stringResource(R.string.alt_method_title), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.alt_method_text), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 }
 
+/** Icône de l'alternative, embarquée dans l'app (assets/alt_icons, voir tools/alternatives/fetch_icons.py). */
 @Composable
-private fun AlternativeChip(alt: Alternative, isInstalled: Boolean, onClick: () -> Unit) {
-    val color = if (isInstalled) Color(0xFF10B981) else MaterialTheme.colorScheme.primary
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(8.dp),
-        color = color.copy(alpha = 0.12f),
-        border = BorderStroke(1.dp, color.copy(alpha = 0.5f)),
-    ) {
-        Text(
-            alt.name + if (isInstalled) "  ✓" else "",
-            style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 6.dp),
-        )
+private fun AltIcon(packageName: String) {
+    val context = LocalContext.current
+    val bitmap = remember(packageName) {
+        runCatching { context.assets.open("alt_icons/$packageName.webp").use { BitmapFactory.decodeStream(it) }?.asImageBitmap() }.getOrNull()
+    }
+    if (bitmap != null) {
+        Image(bitmap, contentDescription = null, modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)))
     }
 }
 
@@ -167,18 +240,21 @@ private fun Tag(text: String, color: Color) {
 }
 
 /**
- * Ouvre la page de l'alternative : F-Droid d'abord (applications libres vérifiées), sinon Google Play, sinon son site.
- * Le navigateur ou le magasin s'en chargent : VYLIA ne se connecte à rien.
+ * Ouvre la page de l'alternative : le Play Store d'abord (l'app Play Store si elle est là, sinon sa page web), sinon
+ * F-Droid, sinon son site. Le magasin ou le navigateur s'en chargent : VYLIA ne se connecte à rien.
  */
 private fun openStore(context: Context, alt: Alternative) {
-    val uri = when {
-        alt.fdroid != null -> "https://f-droid.org/packages/${alt.fdroid}/"
-        alt.play != null -> "https://play.google.com/store/apps/details?id=${alt.play}"
-        else -> alt.web ?: return
+    val uris = when {
+        alt.play != null -> listOf("market://details?id=${alt.play}", "https://play.google.com/store/apps/details?id=${alt.play}")
+        alt.fdroid != null -> listOf("https://f-droid.org/packages/${alt.fdroid}/")
+        else -> listOfNotNull(alt.web)
     }
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
-    } catch (_: android.content.ActivityNotFoundException) {
-        // Ni navigateur ni magasin : rien à ouvrir.
+    for (uri in uris) {
+        try {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
+            return
+        } catch (_: android.content.ActivityNotFoundException) {
+            // Pas d'app pour ce lien : on essaie le suivant.
+        }
     }
 }

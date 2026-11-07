@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <!-- Bouclier VYLIA : VPN local qui ne transporte que les requêtes DNS, filtrées sur le téléphone. Seul Android
+             peut s'y lier (BIND_VPN_SERVICE) ; compatible avec le VPN permanent. -->
+        <service
+            android:name="com.vylia.privacy.data.shield.ShieldVpnService"
+            android:exported="false"
+            android:permission="android.permission.BIND_VPN_SERVICE">
+            <intent-filter>
+                <action android:name="android.net.VpnService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON"
+                android:value="true" />
+        </service>
+
+        <!-- Tuile des réglages rapides : même état et même effet d'un appui que la pastille de l'app. -->
+        <service
+            android:name="com.vylia.privacy.data.shield.ShieldTileService"
+            android:exported="true"
+            android:icon="@drawable/ic_shield_tile"
+            android:label="@string/shield_tile_label"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+        </service>
+    </application>
+</manifest>

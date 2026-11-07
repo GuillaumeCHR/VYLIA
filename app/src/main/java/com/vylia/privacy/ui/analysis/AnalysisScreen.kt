@@ -17,9 +17,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.core.graphics.drawable.toBitmap
@@ -56,8 +58,8 @@ import java.util.Date
 private const val PreviewCount = 5
 
 /**
- * Résultats transversaux : score global, zones de risque, adéquation permissions / finalité,
- * apps par permission sensible et cartographie des traqueurs.
+ * Résultats transversaux : score global, puis trois sous-onglets : zones de risque, anomalies (adéquation
+ * permissions / finalité et apps par permission sensible) et cartographie des traqueurs.
  */
 @Composable
 fun AnalysisScreen(
@@ -71,6 +73,7 @@ fun AnalysisScreen(
     val analysis = remember(homeState.scannedApps) { DeviceAnalysis.from(homeState.scannedApps) }
     val history by homeViewModel.history.collectAsStateWithLifecycle()
     var tab by rememberSaveable { mutableStateOf(0) }
+    var section by rememberSaveable { mutableStateOf(0) }
 
     Column(modifier = modifier.fillMaxSize()) {
     Text(
@@ -130,14 +133,28 @@ fun AnalysisScreen(
             }
         }
 
-        item { ZonesSection(analysis, onAppClick) }
+        // Trois vues sous le score, pour ne pas faire défiler tout l'écran : zones de risque, anomalies (avec les apps
+        // par permission sensible, qui parlent aussi d'autorisations) et traqueurs.
         item {
-            val rules by homeViewModel.rules.collectAsStateWithLifecycle()
-            val resources = LocalResources.current
-            AnomaliesSection(analysis.anomalies, { resources.categoryName(it, rules.rules) }, onAppClick)
+            SecondaryTabRow(selectedTabIndex = section, containerColor = Color.Transparent) {
+                listOf(R.string.analysis_section_zones, R.string.analysis_section_anomalies, R.string.analysis_section_trackers)
+                    .forEachIndexed { index, label ->
+                        Tab(selected = section == index, onClick = { section = index }, text = { Text(stringResource(label), textAlign = TextAlign.Center) })
+                    }
+            }
         }
-        item { PermissionsSection(analysis.permissions, onAppClick) }
-        item { TrackersSection(analysis, onAppClick) }
+        when (section) {
+            0 -> item { ZonesSection(analysis, onAppClick) }
+            1 -> {
+                item {
+                    val rules by homeViewModel.rules.collectAsStateWithLifecycle()
+                    val resources = LocalResources.current
+                    AnomaliesSection(analysis.anomalies, { resources.categoryName(it, rules.rules) }, onAppClick)
+                }
+                item { PermissionsSection(analysis.permissions, onAppClick) }
+            }
+            else -> item { TrackersSection(analysis, onAppClick) }
+        }
 
         item {
             Text(

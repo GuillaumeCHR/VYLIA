@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shield_tile_label">Bouclier VYLIA</string>
+    <string name="shield_tile_active">Actif</string>
+    <string name="shield_tile_inactive">Inactif</string>
+    <string name="shield_tile_starting">Activation</string>
+    <string name="shield_tile_bypassed">Contourné</string>
+</resources>

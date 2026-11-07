@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -20,6 +21,7 @@ import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +43,7 @@ import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.scoreGradientColor
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.scoring.Rules
@@ -48,7 +51,13 @@ import com.vylia.privacy.ui.components.categoryName
 
 /** "Dernier scan : aujourd'hui à 22:41", ou l'état du scan en cours. */
 @Composable
-fun LastScanLine(lastScanAt: Long?, scanning: Boolean, modifier: Modifier = Modifier) {
+fun LastScanLine(
+    lastScanAt: Long?,
+    scanning: Boolean,
+    modifier: Modifier = Modifier,
+    onRefresh: (() -> Unit)? = null,
+    refreshEnabled: Boolean = true,
+) {
     val context = LocalContext.current
     val last = lastScanAt?.let {
         DateUtils.formatDateTime(
@@ -56,7 +65,8 @@ fun LastScanLine(lastScanAt: Long?, scanning: Boolean, modifier: Modifier = Modi
             DateUtils.FORMAT_SHOW_DATE or DateUtils.FORMAT_SHOW_TIME or DateUtils.FORMAT_ABBREV_MONTH,
         )
     }
-    Row(modifier = modifier, verticalAlignment = Alignment.CenterVertically) {
+    // Le bouton « Relancer le scan » termine la ligne (cible de 48 dp).
+    Row(modifier = modifier.fillMaxWidth().heightIn(min = 48.dp), verticalAlignment = Alignment.CenterVertically) {
         if (scanning) {
             CircularProgressIndicator(modifier = Modifier.size(12.dp), strokeWidth = 2.dp)
             Spacer(Modifier.width(6.dp))
@@ -70,7 +80,13 @@ fun LastScanLine(lastScanAt: Long?, scanning: Boolean, modifier: Modifier = Modi
             },
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.weight(1f),
         )
+        if (onRefresh != null) {
+            IconButton(onClick = onRefresh, enabled = refreshEnabled) {
+                Icon(painterResource(R.drawable.ic_refresh), contentDescription = stringResource(R.string.home_refresh))
+            }
+        }
     }
 }
 

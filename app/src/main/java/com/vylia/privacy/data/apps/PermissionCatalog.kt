@@ -67,6 +67,8 @@ class PermissionCatalog(private val context: Context) {
     }.getOrNull()
 
     private fun protectionOf(info: PermissionInfo): Protection {
+        if (info.name in NORMAL_FOR_VYLIA) return Protection.NORMAL
+        if (info.name in SPECIAL_FOR_VYLIA) return Protection.SPECIAL
         val (base, flags) = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             info.protection to info.protectionFlags
         } else {
@@ -79,5 +81,23 @@ class PermissionCatalog(private val context: Context) {
             base == PermissionInfo.PROTECTION_NORMAL -> Protection.NORMAL
             else -> Protection.SYSTEM
         }
+    }
+
+    companion object {
+        /**
+         * « dangerous » pour Android, qui les demande dans une fenêtre, mais sans accès à aucune donnée : présentées
+         * comme normales, ni sensibles ni comptées (voir neutral_permissions dans la grille).
+         */
+        val NORMAL_FOR_VYLIA = setOf(
+            "android.permission.POST_NOTIFICATIONS",
+            // Marquée « appop » pour la politique de Google Play : rien à accorder par l'utilisateur.
+            "android.permission.FOREGROUND_SERVICE_SPECIAL_USE",
+        )
+
+        /**
+         * « normal » pour Android, mais l'effet dépend d'un choix de l'utilisateur dans un écran dédié : présentées
+         * comme un accès spécial, avec leur état réel (lu par AppScanner).
+         */
+        val SPECIAL_FOR_VYLIA = setOf("android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS")
     }
 }

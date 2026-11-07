@@ -83,6 +83,9 @@ class BadgeEngineTest {
         assertEquals(29, result.securityScoreCap)
         assertTrue(result.score <= 29)
         assertTrue("SEC_SPY_PIANIST" in result.ids())
+        // Sans pénalité, le score brut dépasse le plafond : la carte compacte doit l'annoncer.
+        assertTrue(result.uncappedScore > 29)
+        assertTrue(result.isCapped)
     }
 
     @Test
@@ -90,6 +93,7 @@ class BadgeEngineTest {
         val result = score(signals = setOf("INTERNET", "IME_ENABLED"), packageName = "com.google.android.inputmethod.latin")
         assertTrue(result.securityFindings.isEmpty())
         assertNull(result.securityScoreCap)
+        assertFalse(result.isCapped)
     }
 
     @Test

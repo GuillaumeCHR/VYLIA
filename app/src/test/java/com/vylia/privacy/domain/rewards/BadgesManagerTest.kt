@@ -95,4 +95,14 @@ class BadgesManagerTest {
         )
         assertTrue(Badge.GOOD_SWAP in manager.state.value.unlockedBadges)
     }
+
+    @Test
+    fun `le premier blocage du bouclier debloque Bouclier actif une seule fois`() {
+        manager.onShieldBlocked()
+        assertEquals(1_000L, manager.state.value.unlockedBadges[Badge.SHIELD_ACTIVE])
+        val saved = store.saved
+        manager.onShieldBlocked()
+        assertTrue(saved === store.saved) // rien de réécrit
+        assertTrue(manager.state.value.shieldBlocked)
+    }
 }

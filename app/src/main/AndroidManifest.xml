@@ -59,6 +59,8 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
+        <!-- Bouclier VYLIA : déclaré par le module :shield (service VPN et tuile). -->
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

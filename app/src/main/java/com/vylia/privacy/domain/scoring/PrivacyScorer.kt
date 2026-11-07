@@ -247,12 +247,17 @@ data class ScoreResult(
     val permissionPenaltyRaw: Double = permissionPenalty,
     /** Plafond imposé par un pattern de sécurité, null si aucun. */
     val securityScoreCap: Int? = null,
+    /** Score avant le plafond de sécurité : s'il dépasse [score], le plafond s'applique. */
+    val uncappedScore: Int = score,
     val securityFindings: List<SecurityFinding> = emptyList(),
     /** Tous les badges attribués, dans l'ordre des définitions. */
     val badges: List<BadgeDef> = emptyList(),
     /** Badges à afficher sur la fiche (triés par gravité, limités à display.max_shown). */
     val displayedBadges: List<BadgeDef> = emptyList(),
-)
+) {
+    /** Vrai si le plafond de sécurité a abaissé le score : la somme des pénalités ne l'explique plus. */
+    val isCapped: Boolean get() = securityScoreCap != null && score < uncappedScore
+}
 
 /** Base d'indicateurs (ex. stalkerware-indicators d'Echap), chargée séparément des règles. */
 class IocDatabase(private val packages: Set<String>, certificatesSha256: Set<String>) {
@@ -374,6 +379,7 @@ class PrivacyScorer(
             permissionPenaltyRaw = permissionPenaltyRaw,
             trackerPenalty = trackerPenalty,
             securityScoreCap = securityScoreCap,
+            uncappedScore = raw,
             permissionFindings = permissionFindings.sortedByDescending { it.penalty },
             trackerFindings = trackerFindings.sortedByDescending { it.penalty },
             securityFindings = securityFindings,

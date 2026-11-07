@@ -934,4 +934,18 @@
         <item quantity="many">%1$d apps</item>
         <item quantity="other">%1$d apps</item>
     </plurals>
+    <!-- Cartes d'apps : Compact / Détaillé -->
+    <string name="settings_cards">Cartes d\'apps</string>
+    <string name="settings_cards_compact">Compact</string>
+    <string name="settings_cards_compact_hint">Nom, score et ce qui le fait baisser</string>
+    <string name="settings_cards_detailed">Détaillé</string>
+    <string name="settings_cards_detailed_hint">Nom du paquet, traqueurs et badges</string>
+    <string name="card_penalties">Permissions − %1$d\nTraqueurs − %2$d</string>
+    <string name="card_penalties_partial">Permissions − %1$d\nTraqueurs ?</string>
+    <string name="card_penalties_description">Permissions : moins %1$d points. Traqueurs : moins %2$d points.</string>
+    <string name="card_penalties_partial_description">Permissions : moins %1$d points. Traqueurs : analyse incomplète.</string>
+    <string name="card_security">Alerte sécurité</string>
+    <string name="card_security_capped">Alerte sécurité · plafonné à %1$d</string>
+    <string name="card_security_description">Alerte sécurité : %1$s.</string>
+    <string name="card_security_capped_description">Alerte sécurité : %1$s. Score plafonné à %2$d.</string>
 </resources>

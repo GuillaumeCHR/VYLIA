@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -65,6 +66,7 @@ import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.R
 import com.vylia.privacy.data.export.CsvExporter
 import com.vylia.privacy.data.preferences.BackgroundScan
+import com.vylia.privacy.data.preferences.CardStyle
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.scan.ScanViewModel
@@ -140,6 +142,7 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
             checked = state.advancedMode,
             onChange = viewModel::setAdvancedMode,
         )
+        CardStyleCard(viewModel)
 
         SectionTitle(R.string.settings_analysis)
         SettingsLink(
@@ -191,32 +194,63 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
 @Composable
 private fun LanguageCard() {
     var current by remember { mutableStateOf(AppLanguage.current()) }
+    RadioCard(
+        title = stringResource(R.string.settings_language),
+        options = AppLanguage.entries,
+        selected = current,
+        label = { "${it.flag}  ${stringResource(it.label)}" },
+        onSelect = { current = it; it.select() },
+    )
+}
+
+/** Présentation des cartes d'apps dans les listes Scan et la recherche. */
+@Composable
+private fun CardStyleCard(viewModel: SettingsViewModel) {
+    val current by viewModel.cardStyle.collectAsStateWithLifecycle()
+    RadioCard(
+        title = stringResource(R.string.settings_cards),
+        options = CardStyle.entries,
+        selected = current,
+        label = {
+            stringResource(if (it == CardStyle.COMPACT) R.string.settings_cards_compact else R.string.settings_cards_detailed)
+        },
+        hint = {
+            stringResource(if (it == CardStyle.COMPACT) R.string.settings_cards_compact_hint else R.string.settings_cards_detailed_hint)
+        },
+        onSelect = viewModel::setCardStyle,
+    )
+}
+
+@Composable
+private fun <T> RadioCard(
+    title: String,
+    options: List<T>,
+    selected: T,
+    label: @Composable (T) -> String,
+    onSelect: (T) -> Unit,
+    hint: (@Composable (T) -> String)? = null,
+) {
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
-        Column(Modifier.padding(vertical = 8.dp)) {
+        Column(Modifier.padding(vertical = 8.dp).selectableGroup()) {
             Text(
-                stringResource(R.string.settings_language),
+                title,
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             )
-            AppLanguage.entries.forEach { language ->
-                val selected = current == language
+            options.forEach { option ->
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .selectable(selected = selected, role = Role.RadioButton) {
-                            current = language
-                            language.select()
-                        }
+                        .selectable(selected = option == selected, role = Role.RadioButton) { onSelect(option) }
                         .heightIn(min = 48.dp)
                         .padding(horizontal = 8.dp),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    RadioButton(selected = selected, onClick = null)
-                    Text(
-                        "${language.flag}  ${stringResource(language.label)}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(start = 12.dp),
-                    )
+                    RadioButton(selected = option == selected, onClick = null)
+                    Column(Modifier.padding(start = 12.dp, top = 4.dp, bottom = 4.dp)) {
+                        Text(label(option), style = MaterialTheme.typography.bodyLarge)
+                        hint?.let { Hint(it(option)) }
+                    }
                 }
             }
         }

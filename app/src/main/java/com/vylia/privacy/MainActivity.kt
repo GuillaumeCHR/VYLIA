@@ -6,7 +6,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vylia.privacy.ui.scan.components.LocalCardStyle
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -21,10 +24,12 @@ import com.vylia.privacy.ui.theme.VyliaTheme
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppLanguage.applyDefault((application as VyliaApplication).container.settingsRepository)
+        val settings = (application as VyliaApplication).container.settingsRepository
+        AppLanguage.applyDefault(settings)
         enableEdgeToEdge()
         setContent {
-            VyliaTheme {
+            val cardStyle by settings.cardStyle.collectAsStateWithLifecycle()
+            VyliaTheme { CompositionLocalProvider(LocalCardStyle provides cardStyle) {
                 // Instancié dès le splash : le scan démarre pendant l'animation. Même instance que l'écran Scan.
                 viewModel<ScanViewModel>(factory = ScanViewModel.Factory)
                 // Ouverte depuis une notification d'installation : directement la fiche de l'app, sans splash.
@@ -34,7 +39,7 @@ class MainActivity : AppCompatActivity() {
                 Crossfade(targetState = showSplash, animationSpec = tween(250), label = "splash") { splash ->
                     if (splash) VyliaSplashScreen(onFinished = { showSplash = false }) else MainScreen(initialPackage = openPackage)
                 }
-            }
+            } }
         }
     }
 

@@ -901,4 +901,18 @@
         <item quantity="one">%1$d app</item>
         <item quantity="other">%1$d apps</item>
     </plurals>
+    <!-- App cards: Compact / Detailed -->
+    <string name="settings_cards">App cards</string>
+    <string name="settings_cards_compact">Compact</string>
+    <string name="settings_cards_compact_hint">Name, score and what lowers it</string>
+    <string name="settings_cards_detailed">Detailed</string>
+    <string name="settings_cards_detailed_hint">Package name, trackers and badges</string>
+    <string name="card_penalties">Permissions − %1$d\nTrackers − %2$d</string>
+    <string name="card_penalties_partial">Permissions − %1$d\nTrackers ?</string>
+    <string name="card_penalties_description">Permissions: minus %1$d points. Trackers: minus %2$d points.</string>
+    <string name="card_penalties_partial_description">Permissions: minus %1$d points. Trackers: analysis incomplete.</string>
+    <string name="card_security">Security alert</string>
+    <string name="card_security_capped">Security alert · capped at %1$d</string>
+    <string name="card_security_description">Security alert: %1$s.</string>
+    <string name="card_security_capped_description">Security alert: %1$s. Score capped at %2$d.</string>
 </resources>

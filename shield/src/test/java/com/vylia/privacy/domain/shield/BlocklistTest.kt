@@ -88,4 +88,21 @@ class BlocklistTest {
         assertEquals(ShieldFilter.WEB, embedded.match("app-measurement.com", web)?.filter)
         assertEquals(ShieldFilter.WEB, embedded.match("api2.amplitude.com", web)?.filter)
     }
+
+    @Test
+    fun `logiciel espion bloque meme filtrages coupes, avec le nom de la campagne`() {
+        val spy = Blocklist.parse(
+            """{"version":2,"groups":{"web":{"domains":["tracker.example"]},
+               "spyware":{"trackers":{"Predator (Intellexa)":["spy-c2.example"]}}}}""",
+        )
+        assertEquals(BlockMatch("spy-c2.example", null, "Predator (Intellexa)"), spy.match("a.spy-c2.example", emptySet()))
+        assertNull(spy.match("tracker.example", emptySet()))
+    }
+
+    @Test
+    fun `liste embarquee - domaines MVT presents`() {
+        val embedded = Blocklist.parse(File("src/main/assets/shield_blocklist.json").readText())
+        assertEquals(null, embedded.match("nsoqa.com", emptySet())?.filter)
+        assertEquals("Pegasus (NSO Group)", embedded.match("nsoqa.com", emptySet())?.trackerName)
+    }
 }

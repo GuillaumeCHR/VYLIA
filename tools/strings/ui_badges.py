@@ -25,8 +25,8 @@ B = [
 ]
 
 SEC = [
- ("KNOWN_STALKERWARE", ("Known stalkerware", "Stalkerware connu"),
-  ("Its package name or signing certificate is listed in Echap's database of known stalkerware.", "Son nom de paquet ou son certificat de signature figure dans la base des stalkerwares connus d'Echap.")),
+ ("KNOWN_STALKERWARE", ("Known spyware", "Logiciel espion connu"),
+  ("Its package name or signing certificate is listed in Echap's stalkerware database or in MVT's targeted spyware indicators.", "Son nom de paquet ou son certificat de signature figure dans la base des stalkerwares d'Echap ou dans les indicateurs MVT des logiciels espions de surveillance ciblée.")),
  ("KEYLOGGER_CAPABLE", ("Keylogger-like capability", "Capacité de type keylogger"),
   ("Can read what you type (accessibility service or third-party keyboard) and has Internet access.", "Peut lire ce que vous tapez (service d'accessibilité ou clavier tiers) et dispose d'un accès Internet.")),
  ("COVERT_RECORDING", ("Background recording", "Enregistrement en arrière-plan"),
@@ -57,6 +57,8 @@ S += [
  ("security_matched_stalkerware", "Recognised as %1$s, a known stalkerware.", "Reconnue comme %1$s, un stalkerware connu."),
  ("security_matched_stalkerware_safety", "Someone may have installed it to watch you. Before uninstalling it, think about your safety: the person may notice, and the app can serve as evidence. Get help, for free and anonymously: in France, call 3919 (Violences Femmes Info), or 17 if you are in danger. More in Help › Score.",
   "Quelqu'un l'a peut-être installée pour vous surveiller. Avant de la désinstaller, pensez à votre sécurité : la personne peut s'en apercevoir, et l'app peut servir de preuve. Faites-vous aider, gratuitement et anonymement : en France, le 3919 (Violences Femmes Info), ou le 17 en cas de danger. Plus d'informations dans Aide › Score."),
+ ("security_matched_targeted", "Recognised as %1$s, a targeted surveillance spyware (MVT indicators).", "Reconnue comme %1$s, un logiciel espion de surveillance ciblée (indicateurs MVT)."),
+ ("security_matched_targeted_safety", "This kind of spyware is sold to governments and mostly aimed at journalists, activists, lawyers or politicians. Don't uninstall it right away: it is evidence. Get free, confidential help to examine your phone: Amnesty International's Security Lab or Access Now's Digital Security Helpline (accessnow.org/help).", "Ce type de logiciel espion est vendu à des États et vise surtout des journalistes, militants, avocats ou responsables politiques. Ne la désinstallez pas tout de suite : c'est une preuve. Faites examiner votre téléphone, gratuitement et en toute confidentialité : Security Lab d'Amnesty International ou ligne d'assistance d'Access Now (accessnow.org/help)."),
  ("app_icon_manage", "Manage %1$s in Android settings", "Gérer %1$s dans les paramètres d'Android"),
 ]
 

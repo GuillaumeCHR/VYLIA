@@ -23,7 +23,9 @@ import com.vylia.privacy.data.automation.InstallWatcher
 import com.vylia.privacy.data.preferences.BackgroundScan
 import com.vylia.privacy.data.preferences.CardStyle
 import com.vylia.privacy.data.preferences.SettingsRepository
+import com.vylia.privacy.data.security.MvtRepository
 import com.vylia.privacy.data.security.StalkerwareRepository
+import com.vylia.privacy.data.shield.ShieldController
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
 import com.vylia.privacy.data.trackers.TrackerUpdater
@@ -35,6 +37,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 /** Résultat d'une mise à jour de la base Echap, traduit par l'écran. */
+sealed interface MvtMessage {
+    data class Updated(val campaigns: Int, val domains: Int) : MvtMessage
+    data class Failed(val detail: String?) : MvtMessage
+}
+
 sealed interface StalkerwareMessage {
     data class Updated(val count: Int) : StalkerwareMessage
     data class Failed(val detail: String?) : StalkerwareMessage
@@ -87,6 +94,8 @@ class SettingsViewModel(
     private val trackerSignatureRepository: AssetTrackerSignatureRepository,
     private val ruleMatrixRepository: RuleMatrixRepository,
     private val stalkerwareRepository: StalkerwareRepository,
+    private val mvtRepository: MvtRepository,
+    private val shieldController: ShieldController,
     private val installWatcher: InstallWatcher,
     private val automationScheduler: AutomationScheduler,
     private val thresholdAlertRepository: ThresholdAlertRepository,
@@ -117,6 +126,32 @@ class SettingsViewModel(
                 onFailure = { error -> StalkerwareMessage.Failed(error.localizedMessage) },
             )
             _stalkerwareUpdating.value = false
+        }
+    }
+
+    /** Indicateurs MVT des logiciels espions : en vigueur, mise à jour en cours, résultat de la dernière. */
+    val mvt: StateFlow<MvtRepository.State> = mvtRepository.current
+
+    private val _mvtUpdating = MutableStateFlow(false)
+    val mvtUpdating: StateFlow<Boolean> = _mvtUpdating
+
+    private val _mvtMessage = MutableStateFlow<MvtMessage?>(null)
+    val mvtMessage: StateFlow<MvtMessage?> = _mvtMessage
+
+    fun updateMvt() {
+        if (_mvtUpdating.value) return
+        viewModelScope.launch {
+            _mvtUpdating.value = true
+            _mvtMessage.value = mvtRepository.update().fold(
+                onSuccess = { database ->
+                    // Les scores se recalculent, et le bouclier bloque tout de suite les nouveaux domaines.
+                    ruleMatrixRepository.refreshStalkerware()
+                    shieldController.setSpywareDomains(database.domains)
+                    MvtMessage.Updated(database.total, database.domains.size)
+                },
+                onFailure = { error -> MvtMessage.Failed(error.localizedMessage) },
+            )
+            _mvtUpdating.value = false
         }
     }
 
@@ -311,6 +346,8 @@ class SettingsViewModel(
                     container.trackerSignatureRepository,
                     container.ruleMatrixRepository,
                     container.stalkerwareRepository,
+                    container.mvtRepository,
+                    container.shieldController,
                     container.installWatcher,
                     container.automationScheduler,
                     container.thresholdAlertRepository,

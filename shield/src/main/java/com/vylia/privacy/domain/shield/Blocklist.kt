@@ -12,8 +12,11 @@ enum class ShieldFilter {
     MOBILE,
 }
 
-/** Raison d'un blocage : la règle, son filtrage, et le traqueur connu pour elle (`null` : domaine d'une liste). */
-data class BlockMatch(val rule: String, val filter: ShieldFilter, val trackerName: String?)
+/**
+ * Raison d'un blocage : la règle, son filtrage (`null` : logiciel espion, toujours bloqué), et le traqueur ou la
+ * campagne connus pour elle (`null` : domaine d'une liste).
+ */
+data class BlockMatch(val rule: String, val filter: ShieldFilter?, val trackerName: String?)
 
 /**
  * Liste de blocage du bouclier : un domaine est bloqué s'il figure dans la liste, ou si l'un de ses domaines parents
@@ -22,14 +25,31 @@ data class BlockMatch(val rule: String, val filter: ShieldFilter, val trackerNam
  * Le filtrage mobile l'emporte : un domaine qui relève (lui ou un parent) d'une régie mobile passe quand le filtrage
  * mobile est coupé, même si une liste web le cite aussi. C'est ce qui laisse passer les vidéos récompensées.
  */
-class Blocklist(private val web: Map<String, String?>, private val mobile: Map<String, String?>) {
+class Blocklist(
+    private val web: Map<String, String?>,
+    private val mobile: Map<String, String?>,
+    /** Domaines de logiciels espions (indicateurs MVT) : bloqués dès que le bouclier tourne, quels que soient les filtrages. */
+    private val spyware: Map<String, String?> = emptyMap(),
+) {
 
-    val size: Int get() = web.size + mobile.size
+    val size: Int get() = web.size + mobile.size + spyware.size
+
+    /**
+     * La même liste avec d'autres domaines de logiciels espions (indicateurs MVT mis à jour depuis l'app) ; les
+     * domaines invalides sont écartés, et le nombre en est borné comme pour la liste embarquée.
+     */
+    fun withSpyware(domains: Map<String, String>): Blocklist = Blocklist(
+        web,
+        mobile,
+        domains.entries.asSequence().filter { DOMAIN.matches(it.key) }.take(MAX_SPYWARE)
+            .associate { it.key to visibleText(it.value, 100) },
+    )
 
     fun match(domain: String, enabled: Set<ShieldFilter> = ShieldFilter.entries.toSet()): BlockMatch? {
         var name = domain.trimEnd('.').lowercase()
         var found: BlockMatch? = null
         while (true) {
+            if (spyware.containsKey(name)) return BlockMatch(name, null, spyware[name])
             if (mobile.containsKey(name)) {
                 if (ShieldFilter.MOBILE !in enabled) return null
                 if (found == null) found = BlockMatch(name, ShieldFilter.MOBILE, mobile[name])
@@ -57,6 +77,7 @@ class Blocklist(private val web: Map<String, String?>, private val mobile: Map<S
 
         /** Garde-fous : la liste est embarquée, mais une liste hors normes ne doit ni saturer la mémoire ni tout bloquer. */
         const val MAX_RULES = 200_000
+        const val MAX_SPYWARE = 50_000
         private val DOMAIN = Regex("^(?=.{4,253}$)([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,63}$")
         private val json = Json { ignoreUnknownKeys = true }
 
@@ -74,8 +95,10 @@ class Blocklist(private val web: Map<String, String?>, private val mobile: Map<S
                 group?.domains?.forEach { if (budget > 0 && DOMAIN.matches(it) && !rules.containsKey(it)) { rules[it] = null; budget-- } }
                 return rules
             }
+            // Les logiciels espions d'abord : le budget de règles ne doit jamais les écarter.
+            val spyware = rules(file.groups["spyware"])
             val mobile = rules(file.groups["mobile"])
-            return Blocklist(rules(file.groups["web"]), mobile)
+            return Blocklist(rules(file.groups["web"]), mobile, spyware)
         }
     }
 }

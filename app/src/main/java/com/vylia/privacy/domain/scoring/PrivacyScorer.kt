@@ -212,6 +212,8 @@ data class AppScan(
     val signingCertDigests: Set<String> = emptySet(),
     /** WebAPK : catégorie de son site, d'après la liste des services web (un WebAPK n'a pas de catégorie Android). */
     val webCategory: String? = null,
+    /** App préinstallée : certains logiciels espions imitent des noms de paquets système (voir [IocDatabase]). */
+    val isSystemApp: Boolean = false,
 )
 
 data class Tracker(val name: String, val exodusCategories: Set<String>)
@@ -253,8 +255,10 @@ data class ScoreResult(
     /** Score avant le plafond de sécurité : s'il dépasse [score], le plafond s'applique. */
     val uncappedScore: Int = score,
     val securityFindings: List<SecurityFinding> = emptyList(),
-    /** Nom du stalkerware connu auquel l'app correspond (base d'Echap), `null` sinon. */
+    /** Nom du logiciel espion connu auquel l'app correspond (Echap ou MVT), `null` sinon. */
     val knownStalkerware: String? = null,
+    /** Vrai si ce logiciel espion relève de la surveillance ciblée (indicateurs MVT) plutôt que d'un stalkerware. */
+    val knownSpywareTargeted: Boolean = false,
     /** Tous les badges attribués, dans l'ordre des définitions. */
     val badges: List<BadgeDef> = emptyList(),
     /** Badges à afficher sur la fiche (triés par gravité, limités à display.max_shown). */
@@ -265,19 +269,42 @@ data class ScoreResult(
 }
 
 /**
- * Stalkerwares connus (base stalkerware-indicators d'Echap, embarquée dans l'app), chargée séparément des règles :
- * un import de règles ne peut pas la modifier. Une app y correspond par son nom de paquet ou par l'empreinte
- * (SHA-1 ou SHA-256) d'un de ses certificats de signature, qui la trahit même renommée.
+ * Logiciels espions connus, chargés séparément des règles (un import de règles ne peut pas les modifier) : les
+ * stalkerwares de la base d'Echap et les logiciels espions de surveillance ciblée des indicateurs MVT. Une app y
+ * correspond par son nom de paquet ou par l'empreinte (SHA-1 ou SHA-256) d'un de ses certificats de signature, qui la
+ * trahit même renommée. [userAppPackages] : paquets reconnus seulement sur une app installée par l'utilisateur, car
+ * ils imitent des noms système (`com.android.core`) qu'une vraie app préinstallée pourrait porter.
  */
-class IocDatabase(packages: Map<String, String>, certificates: Map<String, String>) {
+class IocDatabase(
+    packages: Map<String, String>,
+    certificates: Map<String, String>,
+    userAppPackages: Map<String, String> = emptyMap(),
+    /** Noms des logiciels espions de surveillance ciblée (MVT), pour adapter les conseils. */
+    val targeted: Set<String> = emptySet(),
+) {
     private val packages = packages.toMap()
     private val certs = certificates.mapKeys { normalizeHash(it.key) }
+    private val userAppPackages = userAppPackages.toMap()
 
-    /** Nom du stalkerware reconnu, `null` sinon. */
+    /** Nom du logiciel espion reconnu, `null` sinon. */
     fun match(scan: AppScan): String? =
-        packages[scan.packageName] ?: scan.signingCertDigests.firstNotNullOfOrNull { certs[normalizeHash(it)] }
+        packages[scan.packageName]
+            ?: (if (scan.isSystemApp) null else userAppPackages[scan.packageName])
+            ?: scan.signingCertDigests.firstNotNullOfOrNull { certs[normalizeHash(it)] }
 
-    val size: Int get() = (packages.values + certs.values).toSet().size
+    val size: Int get() = (packages.values + certs.values + userAppPackages.values).toSet().size
+
+    /** Stalkerwares (Echap) et campagnes de surveillance ciblée (MVT) reconnaissables, comptés à part. */
+    val stalkerwareSize: Int get() = (packages.values + certs.values + userAppPackages.values).toSet().count { it !in targeted }
+    val targetedSize: Int get() = (packages.values + certs.values + userAppPackages.values).toSet().count { it in targeted }
+
+    /** Les deux bases ensemble ; à indicateur égal, celle-ci l'emporte. */
+    operator fun plus(other: IocDatabase) = IocDatabase(
+        other.packages + packages,
+        other.certs + certs,
+        (other.userAppPackages + userAppPackages) - packages.keys - other.packages.keys,
+        other.targeted + targeted,
+    )
 
     /** Contenu complet (paquets, empreintes), pour comparer deux bases dans les tests. */
     internal fun entries(): Pair<Map<String, String>, Map<String, String>> = packages to certs
@@ -414,6 +441,7 @@ class PrivacyScorer(
             securityScoreCap = securityScoreCap,
             uncappedScore = raw,
             knownStalkerware = knownStalkerware,
+            knownSpywareTargeted = knownStalkerware != null && knownStalkerware in iocs.targeted,
             permissionFindings = permissionFindings.sortedByDescending { it.penalty },
             trackerFindings = trackerFindings.sortedByDescending { it.penalty },
             securityFindings = securityFindings,

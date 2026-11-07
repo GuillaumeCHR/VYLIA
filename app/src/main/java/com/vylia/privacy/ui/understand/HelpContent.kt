@@ -158,7 +158,7 @@ internal fun HelpContent(
         }
         when (tab) {
             UnderstandTab.SCREENS -> HowItWorksTab()
-            UnderstandTab.SCORE -> ScoreTab(rules, stalkerwareCount = loadedRules.iocs.size)
+            UnderstandTab.SCORE -> ScoreTab(rules, stalkerwareCount = loadedRules.iocs.stalkerwareSize, targetedCount = loadedRules.iocs.targetedSize)
             UnderstandTab.BADGES -> BadgesTab(rules, homeState.scannedApps, query)
             UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps, query)
             UnderstandTab.PERMISSIONS -> PermissionsTab(rules, homeState.scannedApps, query)
@@ -169,7 +169,7 @@ internal fun HelpContent(
 private val TabContentPadding = PaddingValues(16.dp)
 
 @Composable
-private fun ScoreTab(rules: Rules, stalkerwareCount: Int) {
+private fun ScoreTab(rules: Rules, stalkerwareCount: Int, targetedCount: Int) {
     // Six sections longues : en accordéon, leurs titres tiennent sur un écran et l'on va droit à celle qu'on cherche.
     var open by rememberSaveable { mutableStateOf<String?>(null) }
     CompositionLocalProvider(LocalAccordion provides Accordion(open) { title -> open = if (open == title) null else title }) {
@@ -178,7 +178,7 @@ private fun ScoreTab(rules: Rules, stalkerwareCount: Int) {
             item { PermissionScoring(rules) }
             item { TrackerScoring(rules) }
             item { CategoryResolution(rules) }
-            item { SecurityCapabilities(rules, stalkerwareCount) }
+            item { SecurityCapabilities(rules, stalkerwareCount, targetedCount) }
             item { BadgesSummary() }
         }
     }
@@ -402,7 +402,7 @@ private fun TrackerScoring(rules: Rules) {
 
 /** Patterns de sécurité des règles et le plafond qu'ils imposent au score. */
 @Composable
-private fun SecurityCapabilities(rules: Rules, stalkerwareCount: Int) {
+private fun SecurityCapabilities(rules: Rules, stalkerwareCount: Int, targetedCount: Int) {
     val security = rules.security
     if (security.patterns.isEmpty()) return
     val resources = LocalResources.current
@@ -414,6 +414,12 @@ private fun SecurityCapabilities(rules: Rules, stalkerwareCount: Int) {
             Paragraph(stringResource(R.string.learn_stalkerware_limit))
             Subtitle(stringResource(R.string.learn_stalkerware_help_title))
             Paragraph(stringResource(R.string.learn_stalkerware_help))
+        }
+        // Logiciels espions de surveillance ciblée (indicateurs MVT) : autre public, autres conseils.
+        if (targetedCount > 0) {
+            Subtitle(stringResource(R.string.learn_mvt_title))
+            Paragraph(stringResource(R.string.learn_mvt_text, targetedCount))
+            Paragraph(stringResource(R.string.learn_mvt_help))
         }
         Paragraph(stringResource(R.string.learn_security_text))
         security.patterns.entries

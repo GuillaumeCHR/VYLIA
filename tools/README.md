@@ -51,6 +51,20 @@ son nom, ses noms de paquet et les empreintes SHA-1 de ses certificats, avec le 
 Chaque valeur est vérifiée ; une entrée invalide fait échouer la génération. Après mise à jour :
 `./gradlew testDebugUnitTest` (`BadgeEngineTest` contrôle la base embarquée). L'écran À propos affiche la version.
 
+## Logiciels espions de surveillance ciblée (MVT)
+
+```
+python3 tools/update_mvt_iocs.py                      # campagnes d'indicators.yaml, aux commits figés dans le script
+python3 tools/update_shield_blocklist.py --spyware-only   # reporte leurs domaines dans le bouclier, sans réseau
+```
+
+Produit `app/src/main/assets/mvt_iocs.json` depuis [mvt-indicators](https://github.com/mvt-project/mvt-indicators)
+(MIT ; fichiers d'Amnesty International repris avec attribution) : pour chaque campagne sauf celle des stalkerwares
+(déjà couverte par Echap), ses noms de paquet, empreintes de certificat et domaines. Les paquets ne sont comparés qu'aux
+apps installées par l'utilisateur (plusieurs imitent un nom système) ; les domaines forment le groupe « spyware » du
+bouclier, toujours bloqué. Pour suivre MVT : mettre à jour `MVT_COMMIT` (et `COMMITS`), ajouter le nom court de toute
+nouvelle campagne dans `SHORT_NAMES`, puis `./gradlew testDebugUnitTest` (`MvtDatabaseTest`, `BlocklistTest`).
+
 ## Textes traduits
 
 ```

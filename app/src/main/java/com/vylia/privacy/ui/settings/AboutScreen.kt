@@ -83,6 +83,8 @@ fun AboutScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
 
         EchapCreditsCard()
 
+        MvtCreditsCard()
+
         CreditsSection()
     }
 }

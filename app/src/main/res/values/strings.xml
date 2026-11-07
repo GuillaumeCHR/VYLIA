@@ -523,6 +523,9 @@
     <string name="learn_stalkerware_limit">The database is kept by volunteers and cannot know every stalkerware: finding none is not a guarantee. The capability checks below look for the rest.</string>
     <string name="learn_stalkerware_help_title">If VYLIA finds one</string>
     <string name="learn_stalkerware_help">Someone may have installed this app to watch you. Before uninstalling it, think about your safety: the person who installed it may notice, and the app can serve as evidence. Get help: in France, 3919 (Violences Femmes Info) is free and anonymous, and 17 is for emergencies. The stopstalkerware.org website also gives advice.</string>
+    <string name="learn_mvt_title">Targeted surveillance spyware (MVT)</string>
+    <string name="learn_mvt_text">Spyware such as Pegasus, Predator or NoviSpy is sold to governments to watch journalists, activists or lawyers. VYLIA also compares each app with the public indicators of MVT, the tool of Amnesty International\'s Security Lab: %1$d campaigns are recognised by their package names or signing certificates. A recognised app drops to 0, like a stalkerware. When it is on, the shield also blocks the domains of these campaigns.</string>
+    <string name="learn_mvt_help">If VYLIA finds one, don\'t uninstall it right away: it is evidence. Amnesty International\'s Security Lab and Access Now\'s Digital Security Helpline (accessnow.org/help) examine phones for free and confidentially.</string>
     <string name="learn_badges_title">5. Badges</string>
     <string name="learn_badges_text">Badges sum up at a glance what an app does well and what deserves your attention. They do not change the score. Every badge and its rule are in the Badges tab.</string>
     <string name="learn_grade_line">%1$s · %2$d to %3$d</string>
@@ -667,7 +670,7 @@
     <string name="settings_rules_bundled">Built-in rules · %1$d categories</string>
     <string name="settings_rules_imported">Imported rules · %1$d categories</string>
     <string name="settings_database">Databases</string>
-    <string name="settings_database_hint">Exodus Privacy trackers · updated %1$s · Echap stalkerware</string>
+    <string name="settings_database_hint">Exodus Privacy trackers · updated %1$s · Echap stalkerware · MVT spyware</string>
     <string name="settings_database_obsolete_short">Out of date: an update is recommended</string>
     <string name="settings_automation">Automations</string>
     <string name="settings_automation_off">Install alerts and background scans, off</string>
@@ -689,9 +692,9 @@
     <string name="automation_battery_text">Android decides when these tasks run, grouping them with those of other apps; scans wait until the battery is not low. Everything stays on the phone, and turning an option off cancels its task straight away.</string>
     <string name="notif_channel_installs">New apps</string>
     <string name="notif_channel_installs_description">Score of each newly installed app</string>
-    <string name="automation_stalkerware_title">Stalkerware alert</string>
-    <string name="automation_stalkerware_switch">Warn me if a known stalkerware is found</string>
-    <string name="automation_stalkerware_hint">When an app is installed and during background scans, VYLIA compares your apps with Echap\'s database. A recognised app is reported once. On the lock screen, the notification shows neither the app\'s name nor the word stalkerware.</string>
+    <string name="automation_stalkerware_title">Spyware alert</string>
+    <string name="automation_stalkerware_switch">Warn me if a known spyware is found</string>
+    <string name="automation_stalkerware_hint">When an app is installed and during background scans, VYLIA compares your apps with Echap\'s stalkerware database and MVT\'s spyware indicators. A recognised app is reported once. On the lock screen, the notification shows neither the app\'s name nor what it is.</string>
     <string name="automation_threshold_title">Threshold alert</string>
     <string name="automation_threshold_switch">Warn me if the device score drops below a threshold</string>
     <string name="automation_threshold_hint">Checked at the end of every full scan. One alert per crossing: the score has to climb back above the threshold before you are warned again.</string>
@@ -706,9 +709,9 @@
     <string name="notif_threshold_title">Device score below your threshold</string>
     <string name="notif_threshold_text">%1$d, below your threshold of %2$d. Main cause: %3$s.</string>
     <string name="notif_threshold_public">%1$d, below your threshold of %2$d.</string>
-    <string name="notif_channel_stalkerware">Stalkerware detected</string>
-    <string name="notif_channel_stalkerware_description">When an app is recognised as known stalkerware (Echap\'s database).</string>
-    <string name="notif_stalkerware_title">Known stalkerware detected</string>
+    <string name="notif_channel_stalkerware">Spyware detected</string>
+    <string name="notif_channel_stalkerware_description">When an app is recognised as known spyware (Echap\'s database, MVT indicators).</string>
+    <string name="notif_stalkerware_title">Known spyware detected</string>
     <string name="notif_stalkerware_text">%1$s is recognised as %2$s. Before uninstalling it, think about your safety: open VYLIA to see what to do.</string>
     <string name="notif_stalkerware_public">An app needs your attention.</string>
     <string name="notif_install_title">%1$s: %2$d/100</string>
@@ -746,6 +749,12 @@
     <string name="stalkerware_update_hint">The public ioc.yaml file is downloaded from Echap\'s GitHub repository, only when you ask, and checked before replacing the current database. Nothing about your apps is sent.</string>
     <string name="stalkerware_update">Update the stalkerware database</string>
     <string name="stalkerware_update_success">Update successful: %1$d stalkerware apps. Scores have been recalculated.</string>
+    <string name="mvt_status">MVT spyware indicators</string>
+    <string name="mvt_embedded">%1$d campaigns · built-in version %2$s</string>
+    <string name="mvt_downloaded">%1$d campaigns · updated %2$s</string>
+    <string name="mvt_update_hint">MVT\'s public files (the list of campaigns, then each campaign\'s indicators) are downloaded from GitHub, only when you ask, and checked before replacing the current database. Nothing about your apps is sent. The shield blocks the new domains straight away.</string>
+    <string name="mvt_update">Update the spyware indicators</string>
+    <string name="mvt_update_success">Update successful: %1$d campaigns, %2$d domains for the shield. Scores have been recalculated.</string>
     <string name="exodus_title">Tracker signatures: Exodus Privacy</string>
     <string name="exodus_logo_description">Exodus Privacy logo</string>
     <string name="exodus_intro">Exodus Privacy is a French non-profit association that analyses Android apps and publishes the trackers they contain.</string>
@@ -758,6 +767,12 @@
     <string name="echap_limit">Limitation: the database is kept by volunteers and many stalkerware apps are probably missing. Finding none is not a guarantee.</string>
     <string name="echap_website">Echap</string>
     <string name="echap_cc_by">CC BY 4.0 licence</string>
+    <string name="mvt_title">Targeted surveillance spyware: MVT</string>
+    <string name="mvt_intro">MVT (Mobile Verification Toolkit) is the tool Amnesty International\'s Security Lab uses to find spyware such as Pegasus or Predator on the phones of journalists and activists. It publishes the indicators of these campaigns, gathered by Amnesty, Citizen Lab, Google, Lookout and other researchers.</string>
+    <string name="mvt_license">Indicators published under the MIT licence (mvt-indicators), some by Amnesty International. VYLIA embeds an extract (%1$d campaigns with app indicators, version %2$s): package names and signing certificates, compared on the device, and the campaigns\' domains, blocked by the shield. VYLIA is an independent app, neither affiliated with nor endorsed by MVT or Amnesty International.</string>
+    <string name="mvt_limit">Limitation: these spyware apps are rare, change quickly and often leave no app behind. Finding none is not a guarantee; if you think you are targeted, ask for a full analysis of your phone.</string>
+    <string name="mvt_website">MVT</string>
+    <string name="mvt_mit">MIT licence</string>
     <string name="exodus_odbl">ODbL licence</string>
     <string name="cancel">Cancel</string>
     <string name="data_backup_title">My data</string>
@@ -811,7 +826,7 @@
     <string name="about_privacy_title">Privacy</string>
     <string name="about_privacy_headline">No data collected. Your apps are analysed on your phone only.</string>
     <string name="about_privacy_no_ads">VYLIA contains no ads, no trackers, no audience measurement tools, and sells no data.</string>
-    <string name="about_privacy_network">The Internet is only used when you ask for it: to update the tracker database (the public Exodus Privacy list), the known stalkerware database (the public Echap list) or the list of private DNS services (published with VYLIA\'s source code). Nothing about your apps is sent.</string>
+    <string name="about_privacy_network">The Internet is only used when you ask for it: to update the tracker database (the public Exodus Privacy list), the known stalkerware database (the public Echap list), the spyware indicators (MVT\'s public files) or the list of private DNS services (published with VYLIA\'s source code). Nothing about your apps is sent.</string>
     <string name="about_privacy_automation">Install alerts and background scans are off by default. Once turned on, they run on the phone only, scheduled by Android.</string>
     <string name="about_privacy_self">To analyse your apps, VYLIA needs the list of installed apps (QUERY_ALL_PACKAGES): without it, there is nothing to audit. It owns this: VYLIA scores itself with the same rules as every other app, and this permission costs it points. Its page is in Scan, like the others.</string>
     <string name="about_privacy_local">Results stay on the phone. You can export, import or delete them at any time (Settings › Data management), and share your progress from Celebrate.</string>
@@ -855,6 +870,12 @@
     <string name="credits_counter_spy">Counter-espionage</string>
     <string name="credits_counter_spy_name">Echap — stalkerware-indicators</string>
     <string name="credits_counter_spy_note">They spot the apps made to spy on a partner. VYLIA checks them against your apps, on your phone, under CC BY 4.0.</string>
+    <string name="credits_targeted">Targeted surveillance unit</string>
+    <string name="credits_targeted_name">MVT — Amnesty International Security Lab, Citizen Lab and fellow researchers</string>
+    <string name="credits_targeted_note">They track Pegasus, Predator and their cousins on the phones of journalists and activists, then publish the clues. VYLIA compares them with your apps and the shield turns their servers away, under the MIT licence.</string>
+    <string name="credits_casting">Alternatives casting</string>
+    <string name="credits_casting_name">The AlternativeTo community</string>
+    <string name="credits_casting_note">Thousands of recommendations between users. VYLIA picks two or three per category, and lets you choose.</string>
     <string name="credits_shield">Shield DNS filtering</string>
     <string name="credits_shield_name">EasyList, EasyPrivacy and AdGuard Mobile Ads</string>
     <string name="credits_shield_note">Lists of ad and tracking servers, kept up to date by their communities and shared under GPL v3. The shield reads them on your phone, to say no on your behalf.</string>
@@ -879,7 +900,9 @@
     <string name="credits_thanks_title">Thanks</string>
     <string name="credits_thanks_exodus">To Exodus Privacy, for years of patient tracker hunting, shared with everyone.</string>
     <string name="credits_thanks_echap">To Echap, for supporting victims of technology-facilitated violence and sharing what they know about stalkerware with everyone.</string>
+    <string name="credits_thanks_mvt">To MVT, Amnesty International\'s Security Lab, Citizen Lab and all the researchers who expose mercenary spyware and share its indicators with everyone.</string>
     <string name="credits_thanks_lists">To the EasyList authors and to AdGuard, whose ad and tracking server lists let the shield block before anything leaves the phone.</string>
+    <string name="credits_thanks_alternativeto">To the AlternativeTo community, whose recommendations feed the alternatives.</string>
     <string name="credits_thanks_apps">To the apps that ask for the microphone to show the weather: without you, VYLIA would not exist.</string>
     <string name="credits_outro">No personal data was collected during these credits. We checked.</string>
     <string name="credits_post_credits">Post-credits scene: 🕵️ a little spy peeks back in… and leaves straight away, empty-handed.</string>
@@ -957,8 +980,8 @@
     <string name="badgedef_combo_top_of_class_description">Positive on permissions and trackers, with no negative badge.</string>
     <string name="badgedef_combo_double_trouble">Double trouble</string>
     <string name="badgedef_combo_double_trouble_description">A red badge on both the permissions or security side and the trackers side.</string>
-    <string name="security_known_stalkerware">Known stalkerware</string>
-    <string name="security_known_stalkerware_description">Its package name or signing certificate is listed in Echap\'s database of known stalkerware.</string>
+    <string name="security_known_stalkerware">Known spyware</string>
+    <string name="security_known_stalkerware_description">Its package name or signing certificate is listed in Echap\'s stalkerware database or in MVT\'s targeted spyware indicators.</string>
     <string name="security_keylogger_capable">Keylogger-like capability</string>
     <string name="security_keylogger_capable_description">Can read what you type (accessibility service or third-party keyboard) and has Internet access.</string>
     <string name="security_covert_recording">Background recording</string>
@@ -977,6 +1000,8 @@
     <string name="security_cap">Score capped at %1$d because of this.</string>
     <string name="security_matched_stalkerware">Recognised as %1$s, a known stalkerware.</string>
     <string name="security_matched_stalkerware_safety">Someone may have installed it to watch you. Before uninstalling it, think about your safety: the person may notice, and the app can serve as evidence. Get help, for free and anonymously: in France, call 3919 (Violences Femmes Info), or 17 if you are in danger. More in Help › Score.</string>
+    <string name="security_matched_targeted">Recognised as %1$s, a targeted surveillance spyware (MVT indicators).</string>
+    <string name="security_matched_targeted_safety">This kind of spyware is sold to governments and mostly aimed at journalists, activists, lawyers or politicians. Don\'t uninstall it right away: it is evidence. Get free, confidential help to examine your phone: Amnesty International\'s Security Lab or Access Now\'s Digital Security Helpline (accessnow.org/help).</string>
     <string name="app_icon_manage">Manage %1$s in Android settings</string>
 
     <!-- Partage -->

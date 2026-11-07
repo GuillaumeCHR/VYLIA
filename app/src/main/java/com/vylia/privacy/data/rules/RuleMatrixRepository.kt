@@ -6,6 +6,7 @@ import android.util.Log
 import com.vylia.privacy.domain.scoring.IocDatabase
 import com.vylia.privacy.domain.scoring.PrivacyScorer
 import com.vylia.privacy.data.security.StalkerwareRepository
+import com.vylia.privacy.data.security.MvtRepository
 import com.vylia.privacy.domain.scoring.RulesValidator
 import com.vylia.privacy.domain.scoring.Rules
 import kotlinx.coroutines.Dispatchers
@@ -24,12 +25,16 @@ import java.io.File
  * L'import et l'export passent par le Storage Access Framework : aucune permission de stockage n'est requise.
  * Un fichier importé passe par [RulesValidator] (texte brut puis règles décodées) avant de remplacer quoi que ce soit.
  */
-class RuleMatrixRepository(private val context: Context, private val stalkerware: StalkerwareRepository) {
+class RuleMatrixRepository(
+    private val context: Context,
+    private val stalkerware: StalkerwareRepository,
+    private val mvt: MvtRepository,
+) {
 
     enum class Source { IMPORTED, BUNDLED }
 
     /**
-     * Le moteur reçoit aussi la base des stalkerwares connus, qui ne dépend pas des règles importées. [fingerprint] :
+     * Le moteur reçoit aussi les logiciels espions connus (Echap, MVT), qui ne dépendent pas des règles importées. [fingerprint] :
      * empreinte du fichier de règles et de la base, enregistrée avec chaque point du Suivi pour reconnaître une baisse
      * due à une mise à jour des règles plutôt qu'à une app.
      */
@@ -42,7 +47,8 @@ class RuleMatrixRepository(private val context: Context, private val stalkerware
         val scorer = PrivacyScorer(rules, iocs)
     }
 
-    private val iocs: IocDatabase get() = stalkerware.current.value.database.iocs
+    /** Stalkerwares d'Echap et logiciels espions de MVT, embarqués ou mis à jour. */
+    private val iocs: IocDatabase get() = stalkerware.current.value.database.iocs + mvt.current.value.database.iocs
 
     private fun fingerprint(content: String): String {
         val digest = java.security.MessageDigest.getInstance("SHA-256").digest(content.toByteArray(Charsets.UTF_8))
@@ -85,7 +91,7 @@ class RuleMatrixRepository(private val context: Context, private val stalkerware
         }
     }
 
-    /** Après une mise à jour de la base Echap : mêmes règles, nouvelle base, les scores se recalculent. */
+    /** Après une mise à jour de la base Echap ou MVT : mêmes règles, nouvelle base, les scores se recalculent. */
     fun refreshStalkerware() {
         _current.value = _current.value.copy(iocs = iocs, fingerprint = fingerprint(currentContent()))
     }

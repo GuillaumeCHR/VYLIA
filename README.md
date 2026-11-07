@@ -59,8 +59,10 @@ Et aussi :
   interdit.
 - **Des traqueurs détectés localement** : VYLIA cherche dans le code de chaque app les signatures de la base publique
   [Exodus Privacy](https://exodus-privacy.eu.org/), sans rien envoyer.
-- **Des stalkerwares repérés** : la base publique de l'association [Echap](https://echap.eu.org/) (applications
-  d'espionnage d'un proche) est intégrée ; une app reconnue déclenche une alerte.
+- **Des logiciels espions repérés** : la base publique de l'association [Echap](https://echap.eu.org/) (stalkerwares,
+  pour espionner un proche) et les indicateurs de [MVT](https://github.com/mvt-project/mvt-indicators) (logiciels
+  espions de surveillance ciblée comme Pegasus, Predator ou NoviSpy) sont intégrés ; une app reconnue tombe à 0 et
+  déclenche une alerte, avec des conseils adaptés. Le bouclier bloque aussi les domaines de ces campagnes.
 - **Des capacités d'espionnage repérées** : clavier ou service d'accessibilité capable de lire la saisie, icône cachée
   avec accès sensibles, lecture d'écran avec superposition. Elles plafonnent le score.
 - **Des badges qui qualifient, sans alarmer** : bonnes pratiques (« Poids plume », « Bio », « Sait se faire oublier »)
@@ -171,6 +173,9 @@ Outils du dépôt : voir [`tools/README.md`](tools/README.md). Feuille de route 
 - **Stalkerwares connus** : [Echap](https://echap.eu.org/), base
   [stalkerware-indicators](https://github.com/AssoEchap/stalkerware-indicators) sous licence
   [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) (extrait adapté : noms, paquets et certificats).
+- **Logiciels espions de surveillance ciblée** : [MVT, mvt-indicators](https://github.com/mvt-project/mvt-indicators)
+  (licence MIT), avec les indicateurs publiés par Amnesty International, Citizen Lab, Google, Lookout et d'autres
+  chercheurs (extrait : noms de paquet, certificats et domaines, voir [`tools/update_mvt_iocs.py`](tools/update_mvt_iocs.py)).
 - **Alternatives** : classement d'après les recommandations de la communauté [AlternativeTo](https://alternativeto.net/),
   notes relevées sur Google Play.
 - **Signatures de traqueurs** : [Exodus Privacy](https://exodus-privacy.eu.org/), base sous

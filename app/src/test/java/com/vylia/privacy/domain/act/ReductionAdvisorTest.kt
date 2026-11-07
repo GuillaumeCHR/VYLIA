@@ -63,6 +63,15 @@ class ReductionAdvisorTest {
     }
 
     @Test
+    fun `retraits - les apps au score le plus bas d abord`() {
+        val light = app("org.example.light", "CATEGORY_GAME", setOf("ACCESS_FINE_LOCATION"))
+        val heavy = app("org.example.heavy", "CATEGORY_GAME", setOf("ACCESS_FINE_LOCATION"), trackers = 3)
+        assertTrue(heavy.score.value < light.score.value)
+        val order = ReductionAdvisor.revocations(listOf(light, heavy), scorer).map { it.app.app.packageName }.distinct()
+        assertEquals(listOf("org.example.heavy", "org.example.light"), order)
+    }
+
+    @Test
     fun `une permission justifiee n est jamais proposee`() {
         val maps = app("org.example.maps", "CATEGORY_MAPS", setOf("ACCESS_FINE_LOCATION"))
         assertTrue(ReductionAdvisor.revocations(listOf(maps), scorer).isEmpty())

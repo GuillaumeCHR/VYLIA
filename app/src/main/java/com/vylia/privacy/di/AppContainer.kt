@@ -1,12 +1,18 @@
 package com.vylia.privacy.di
 
 import android.content.Context
+import com.vylia.privacy.data.alert.ScanCompletion
+import com.vylia.privacy.data.alert.StalkerwareAlerts
+import com.vylia.privacy.ui.notifications.StalkerwareNotifications
+import com.vylia.privacy.data.alert.ThresholdAlertRepository
+import com.vylia.privacy.ui.notifications.ThresholdNotifications
 import com.vylia.privacy.data.apps.AppScanner
 import com.vylia.privacy.data.apps.PackageRemovalMonitor
 import com.vylia.privacy.data.apps.UsageStatsReader
 import com.vylia.privacy.data.alternatives.AlternativesRepository
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rewards.PrefsRewardsStore
+import com.vylia.privacy.data.security.StalkerwareRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
 import com.vylia.privacy.data.trackers.DexTrackerAnalyzer
@@ -32,7 +38,8 @@ import java.io.File
 class AppContainer(context: Context) {
     val settingsRepository = SettingsRepository(context)
     val trackerUpdater = TrackerUpdater(context, settingsRepository)
-    val ruleMatrixRepository = RuleMatrixRepository(context)
+    val stalkerwareRepository = StalkerwareRepository(context)
+    val ruleMatrixRepository = RuleMatrixRepository(context, stalkerwareRepository)
     val badgesManager = BadgesManager(PrefsRewardsStore(context))
     val packageRemovalMonitor = PackageRemovalMonitor(context)
     val alternativesRepository = AlternativesRepository(context)
@@ -40,6 +47,13 @@ class AppContainer(context: Context) {
     val shieldController = ShieldController(context, onFirstBlock = badgesManager::onShieldBlocked)
     val usageStatsReader = UsageStatsReader(context)
     val historyRecorder = HistoryRecorder(FileHistoryStore(File(context.filesDir, "history.json")))
+    val thresholdAlertRepository = ThresholdAlertRepository(context)
+    /** Fin de tout scan complet : point du Suivi, puis alerte de seuil. */
+    private val stalkerwareAlerts = StalkerwareAlerts(settingsRepository, StalkerwareNotifications(context))
+    val scanCompletion = ScanCompletion(
+        historyRecorder, thresholdAlertRepository, ThresholdNotifications(context), stalkerwareAlerts,
+        rules = { ruleMatrixRepository.current.value },
+    )
 
     private val scorer = { ruleMatrixRepository.current.value.scorer }
     private val appScanner = AppScanner(context)
@@ -56,12 +70,13 @@ class AppContainer(context: Context) {
     val analyzeTrackersUseCase = AnalyzeTrackersUseCase(trackerAnalyzer, scorer = scorer)
 
     private val fullAuditUseCase = FullAuditUseCase(auditAppsUseCase, analyzeTrackersUseCase)
-    val installWatcher = InstallWatcher(context, settingsRepository, fullAuditUseCase, InstallNotifications(context), scorer)
-    val backgroundScanner = BackgroundScanner(settingsRepository, fullAuditUseCase, historyRecorder)
+    val installWatcher = InstallWatcher(context, settingsRepository, fullAuditUseCase, InstallNotifications(context), stalkerwareAlerts, scorer)
+    val backgroundScanner = BackgroundScanner(settingsRepository, fullAuditUseCase, scanCompletion)
     val automationScheduler = AutomationScheduler(context, settingsRepository)
     val backupRepository = BackupRepository(
         settingsRepository, historyRecorder, badgesManager, ruleMatrixRepository, trackerScanCache,
         language = { AppLanguage.current().tag },
         clearShieldCounter = shieldController::clear,
+        alerts = thresholdAlertRepository,
     )
 }

@@ -205,6 +205,11 @@ private fun SecurityCard(result: ScoreResult) {
     VyliaCard(modifier = Modifier.fillMaxWidth(), containerColor = MaterialTheme.colorScheme.errorContainer) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(stringResource(R.string.security_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            // Stalkerware connu : son nom, puis la conduite à tenir, avant le détail des motifs.
+            result.knownStalkerware?.let { name ->
+                Text("🕵️ " + stringResource(R.string.security_matched_stalkerware, name), fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.security_matched_stalkerware_safety), style = MaterialTheme.typography.bodyMedium)
+            }
             result.securityFindings.forEach { finding ->
                 Text("⚠️ " + resources.securityLabel(finding), fontWeight = FontWeight.Bold)
                 resources.securityDescription(finding)?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
@@ -212,7 +217,10 @@ private fun SecurityCard(result: ScoreResult) {
             result.securityScoreCap?.let {
                 Text(stringResource(R.string.security_cap, it), style = MaterialTheme.typography.labelLarge)
             }
-            Text(stringResource(R.string.security_hint), style = MaterialTheme.typography.bodySmall)
+            // « Ce que l'app PEUT faire » : vrai des capacités, pas d'un stalkerware reconnu par la base d'Echap.
+            if (result.securityFindings.any { it.id != KNOWN_STALKERWARE }) {
+                Text(stringResource(R.string.security_hint), style = MaterialTheme.typography.bodySmall)
+            }
         }
     }
 }
@@ -280,3 +288,6 @@ internal val Context.tint: Color
         Context.UNEXPECTED -> Color(0xFFF59E0B)
         Context.FORBIDDEN -> MaterialTheme.colorScheme.error
     }
+
+/** Motif de la grille déclenché par la base des stalkerwares connus. */
+private const val KNOWN_STALKERWARE = "KNOWN_STALKERWARE"

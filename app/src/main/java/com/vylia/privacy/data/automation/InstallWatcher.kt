@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.provider.Settings
+import com.vylia.privacy.data.alert.StalkerwareAlerts
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.preferences.SettingsRepository.InstallCursor
 import com.vylia.privacy.domain.model.AuditedApp
@@ -21,6 +22,7 @@ class InstallWatcher(
     private val settings: SettingsRepository,
     private val fullAudit: FullAuditUseCase,
     private val notifier: InstallNotifier,
+    private val stalkerware: StalkerwareAlerts,
     private val scorer: () -> PrivacyScorer,
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
@@ -42,7 +44,10 @@ class InstallWatcher(
         )
         if (detected.packages.isNotEmpty()) {
             val scorer = scorer()
-            fullAudit(detected.packages.toSet()).forEach { notifier.notify(it, scorer.scoreIfAllGranted(it).score) }
+            val audited = fullAudit(detected.packages.toSet())
+            // Le contrôle sert aux deux alertes, chacune selon son propre réglage.
+            stalkerware.check(audited, full = false, notify = true)
+            if (settings.installAlerts.value) audited.forEach { notifier.notify(it, scorer.scoreIfAllGranted(it).score) }
         }
         settings.installCursor = detected.cursor
     }

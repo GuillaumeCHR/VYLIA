@@ -22,7 +22,13 @@ value class PrivacyScore(val value: Int) {
 
         /** Moyenne arrondie des scores, ou `null` s'il n'y a rien à moyenner. */
         fun average(scores: Collection<PrivacyScore>): PrivacyScore? =
-            if (scores.isEmpty()) null else PrivacyScore(scores.map { it.value }.average().roundToInt())
+            if (scores.isEmpty()) null else ofAverage(scores.map { it.value }.average())
+
+        /**
+         * La seule façon d'arrondir une moyenne de scores, pour que le score de l'appareil soit le même partout
+         * (Célébrer, Réduire, Analyse, Suivi, partage, alerte de seuil) : à l'entier le plus proche, 62,5 donnant 63.
+         */
+        fun ofAverage(average: Double): PrivacyScore = PrivacyScore(average.coerceIn(0.0, 100.0).roundToInt())
     }
 }
 

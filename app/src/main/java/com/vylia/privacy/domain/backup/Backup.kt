@@ -1,5 +1,6 @@
 package com.vylia.privacy.domain.backup
 
+import com.vylia.privacy.domain.alert.ThresholdCrossing
 import com.vylia.privacy.domain.history.History
 import com.vylia.privacy.domain.history.HistoryRecorder
 import com.vylia.privacy.domain.model.PrivacyScore
@@ -22,6 +23,8 @@ data class BackupFile(
     val settings: BackupSettings = BackupSettings(),
     /** Règles de score importées (fichier JSON d'origine), `null` si ce sont les règles intégrées. */
     val importedRules: String? = null,
+    /** Franchissements de l'alerte de seuil (50 au plus). */
+    val thresholdCrossings: List<ThresholdCrossing> = emptyList(),
 ) {
     companion object {
         const val FORMAT = "vylia-backup"

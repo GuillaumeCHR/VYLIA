@@ -78,6 +78,20 @@ class SettingsRepository(context: Context) {
         _installAlerts.value = enabled
     }
 
+    /** Notification dédiée quand une app est reconnue comme stalkerware connu (désactivée par défaut). */
+    private val _stalkerwareAlerts = MutableStateFlow(prefs.getBoolean(KEY_STALKERWARE_ALERTS, false))
+    val stalkerwareAlerts: StateFlow<Boolean> = _stalkerwareAlerts.asStateFlow()
+
+    fun setStalkerwareAlerts(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_STALKERWARE_ALERTS, enabled).apply()
+        _stalkerwareAlerts.value = enabled
+    }
+
+    /** Apps déjà signalées comme stalkerware : une seule notification par app. */
+    var notifiedStalkerware: Set<String>
+        get() = prefs.getStringSet(KEY_NOTIFIED_STALKERWARE, emptySet()).orEmpty().toSet()
+        set(value) = prefs.edit().putStringSet(KEY_NOTIFIED_STALKERWARE, value).apply()
+
     /** Fréquence des scans de fond programmés (désactivés par défaut). */
     private val _backgroundScan = MutableStateFlow(
         BackgroundScan.entries.find { it.name == prefs.getString(KEY_BACKGROUND_SCAN, null) } ?: BackgroundScan.OFF
@@ -123,6 +137,8 @@ class SettingsRepository(context: Context) {
     companion object {
         private const val KEY_CARD_STYLE = "card_style"
         private const val KEY_INSTALL_ALERTS = "install_alerts"
+        private const val KEY_STALKERWARE_ALERTS = "stalkerware_alerts"
+        private const val KEY_NOTIFIED_STALKERWARE = "notified_stalkerware"
         private const val KEY_BACKGROUND_SCAN = "background_scan"
         private const val KEY_LAST_BACKGROUND_SCAN = "last_background_scan"
         private const val KEY_CURSOR_BOOT = "install_cursor_boot"

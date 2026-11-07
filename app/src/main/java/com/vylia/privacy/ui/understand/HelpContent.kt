@@ -62,9 +62,12 @@ import android.content.res.Resources
 import java.text.Normalizer
 import java.util.Locale
 
-/** Onglets de l'écran Comprendre : chaque contenu est à un toucher, sans long défilement. */
-/** [searchHint] : texte du champ de recherche ; `null` pour un onglet sans recherche (Score). */
+/**
+ * Onglets de l'Aide : chaque contenu est à un toucher, sans long défilement.
+ * [searchHint] : texte du champ de recherche ; `null` pour un onglet sans recherche (Écrans, Score).
+ */
 internal enum class UnderstandTab(@param:StringRes val title: Int, @param:StringRes val searchHint: Int?) {
+    SCREENS(R.string.understand_tab_screens, null),
     SCORE(R.string.understand_tab_score, null),
     BADGES(R.string.understand_tab_badges, R.string.learn_search_badges_hint),
     TRACKERS(R.string.understand_tab_trackers, R.string.learn_search_trackers_hint),
@@ -72,21 +75,22 @@ internal enum class UnderstandTab(@param:StringRes val title: Int, @param:String
 }
 
 /**
- * Contenu de l'aide d'un écran : un titre, une courte introduction propre à l'écran, puis les lexiques utiles
- * ([tabs], valeurs lues dans les règles en vigueur). Sans barre d'onglets s'il n'y en a qu'un.
+ * Contenu de l'Aide, le même d'où qu'on l'ouvre : titre, introduction, puis tous les onglets (valeurs lues dans les
+ * règles en vigueur). [initialTab] : l'onglet affiché à l'ouverture.
  */
 @Composable
 internal fun HelpContent(
-    title: String,
-    intro: String,
-    tabs: List<UnderstandTab>,
+    initialTab: UnderstandTab = UnderstandTab.SCREENS,
     modifier: Modifier = Modifier,
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
     val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
     val rules = loadedRules.rules
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
-    var tab by rememberSaveable(tabs) { mutableStateOf(tabs.first()) }
+    val tabs = UnderstandTab.entries
+    val title = stringResource(R.string.help_title)
+    val intro = stringResource(R.string.help_intro)
+    var tab by rememberSaveable { mutableStateOf(initialTab) }
     var query by rememberSaveable { mutableStateOf("") }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
     val searchHint = tab.searchHint?.let { stringResource(it) }
@@ -120,7 +124,7 @@ internal fun HelpContent(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        if (tabs.size > 1) PrimaryTabRow(selectedTabIndex = tabs.indexOf(tab)) {
+        PrimaryTabRow(selectedTabIndex = tabs.indexOf(tab)) {
             tabs.forEach { entry ->
                 Tab(
                     selected = tab == entry,
@@ -145,7 +149,8 @@ internal fun HelpContent(
             }
         }
         when (tab) {
-            UnderstandTab.SCORE -> ScoreTab(rules)
+            UnderstandTab.SCREENS -> ScreensTab()
+            UnderstandTab.SCORE -> ScoreTab(rules, stalkerwareCount = loadedRules.iocs.size)
             UnderstandTab.BADGES -> BadgesTab(rules, homeState.scannedApps, query)
             UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps, query)
             UnderstandTab.PERMISSIONS -> PermissionsTab(rules, homeState.scannedApps, query)
@@ -156,14 +161,31 @@ internal fun HelpContent(
 private val TabContentPadding = PaddingValues(16.dp)
 
 @Composable
-private fun ScoreTab(rules: Rules) {
+private fun ScoreTab(rules: Rules, stalkerwareCount: Int) {
     LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item { ScoreOverview(rules) }
         item { PermissionScoring(rules) }
         item { TrackerScoring(rules) }
         item { CategoryResolution(rules) }
-        item { SecurityCapabilities(rules) }
+        item { SecurityCapabilities(rules, stalkerwareCount) }
         item { BadgesSummary() }
+    }
+}
+
+/** Mode d'emploi des cinq écrans, dans l'ordre de la barre du bas. */
+@Composable
+private fun ScreensTab() {
+    val screens = listOf(
+        R.string.help_scan_title to R.string.help_scan_intro,
+        R.string.help_analyze_title to R.string.help_analyze_intro,
+        R.string.help_reduce_title to R.string.help_reduce_intro,
+        R.string.help_replace_title to R.string.help_replace_intro,
+        R.string.help_celebrate_title to R.string.help_celebrate_intro,
+    )
+    LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        items(screens, key = { it.first }) { (title, text) ->
+            LearnCard(stringResource(title)) { Paragraph(stringResource(text)) }
+        }
     }
 }
 
@@ -254,6 +276,7 @@ private fun ScoreOverview(rules: Rules) {
         BulletLine(stringResource(R.string.learn_zone_green))
         BulletLine(stringResource(R.string.learn_zone_orange))
         BulletLine(stringResource(R.string.learn_zone_red))
+        Paragraph(stringResource(R.string.learn_overview_rules))
     }
 }
 
@@ -334,11 +357,19 @@ private fun TrackerScoring(rules: Rules) {
 
 /** Patterns de sécurité des règles et le plafond qu'ils imposent au score. */
 @Composable
-private fun SecurityCapabilities(rules: Rules) {
+private fun SecurityCapabilities(rules: Rules, stalkerwareCount: Int) {
     val security = rules.security
     if (security.patterns.isEmpty()) return
     val resources = LocalResources.current
     LearnCard(stringResource(R.string.learn_security_title)) {
+        // Stalkerwares connus (base d'Echap) : ce que VYLIA vérifie, ses limites, et quoi faire si l'un est trouvé.
+        if (stalkerwareCount > 0) {
+            Subtitle(stringResource(R.string.learn_stalkerware_title))
+            Paragraph(stringResource(R.string.learn_stalkerware_text, stalkerwareCount))
+            Paragraph(stringResource(R.string.learn_stalkerware_limit))
+            Subtitle(stringResource(R.string.learn_stalkerware_help_title))
+            Paragraph(stringResource(R.string.learn_stalkerware_help))
+        }
         Paragraph(stringResource(R.string.learn_security_text))
         security.patterns.entries
             .mapNotNull { (id, pattern) -> security.severityEffects[pattern.severity]?.scoreCap?.let { Triple(id, pattern, it) } }

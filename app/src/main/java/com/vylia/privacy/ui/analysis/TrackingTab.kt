@@ -1,6 +1,8 @@
 package com.vylia.privacy.ui.analysis
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -26,12 +28,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.drawText
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
+import com.vylia.privacy.data.alert.ThresholdAlertRepository
+import com.vylia.privacy.domain.alert.AlertState
+import com.vylia.privacy.domain.alert.ThresholdCrossing
+import com.vylia.privacy.ui.components.dropCauseText
 import com.vylia.privacy.domain.history.EventType
 import com.vylia.privacy.domain.history.History
 import com.vylia.privacy.domain.history.HistoryEvent
@@ -49,16 +60,22 @@ import kotlin.math.abs
 private const val EventsPreview = 15
 
 /**
- * Suivi : courbe du score moyen de vos apps dans le temps (avec la bande de l'écart-type), apps qui pèsent le plus
- * sur la moyenne, et historique des installations, suppressions et changements d'autorisations.
+ * Suivi : courbe du score moyen de vos apps dans le temps (avec la bande de l'écart-type), l'alerte de seuil (ligne,
+ * franchissements, état), apps qui pèsent le plus sur la moyenne, et historique des installations, suppressions et
+ * changements d'autorisations. Le seuil se règle dans Automatisations ([onOpenAutomation]).
  */
 @Composable
-internal fun TrackingTab(history: History) {
+internal fun TrackingTab(
+    history: History,
+    alert: ThresholdAlertRepository.State,
+    onOpenAutomation: () -> Unit = {},
+    onOpenReduce: () -> Unit = {},
+) {
     var allEvents by rememberSaveable { mutableStateOf(false) }
     val last = history.snapshots.lastOrNull()
     val influences = remember(last) { last?.let { HistoryRecorder.influences(it) }.orEmpty() }
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { CurveCard(history) }
+        item { CurveCard(history, alert, onOpenAutomation, onOpenReduce) }
         if (influences.isNotEmpty()) item { InfluenceCard(influences) }
         item {
             Text(stringResource(R.string.tracking_events_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -82,9 +99,9 @@ internal fun TrackingTab(history: History) {
     }
 }
 
-/** Score moyen et écart-type dans le temps, sur l'échelle 0–100 (zones à 50 et 80). */
+/** Score moyen et écart-type dans le temps, sur l'échelle 0–100 (zones à 50 et 80), avec l'alerte de seuil. */
 @Composable
-private fun CurveCard(history: History) {
+private fun CurveCard(history: History, alert: ThresholdAlertRepository.State, onOpenAutomation: () -> Unit, onOpenReduce: () -> Unit) {
     val locale = currentLocale()
     val points = history.snapshots
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
@@ -99,7 +116,7 @@ private fun CurveCard(history: History) {
             Text(
                 stringResource(
                     R.string.tracking_curve_now,
-                    last.average.formatted(locale, decimals = 0),
+                    last.score.toString(),
                     last.stdDev.formatted(locale, decimals = 0),
                 ),
                 style = MaterialTheme.typography.bodyMedium,
@@ -117,7 +134,34 @@ private fun CurveCard(history: History) {
                     color = if (delta >= 0) Color(0xFF10B981) else MaterialTheme.colorScheme.error,
                 )
             }
-            Curve(history, Modifier.fillMaxWidth().height(160.dp))
+            ThresholdStatus(alert, last.score, onOpenAutomation, onOpenReduce)
+            val threshold = alert.setting.threshold.takeIf { alert.setting.enabled }
+            val crossings = if (alert.setting.enabled) alert.crossings else emptyList()
+            var selected by remember(crossings) { mutableStateOf<ThresholdCrossing?>(null) }
+            val resources = LocalResources.current
+            val dates = DateFormat.getDateInstance(DateFormat.MEDIUM, locale)
+            val description = buildString {
+                append(stringResource(R.string.tracking_chart_description, last.score))
+                threshold?.let { append(' ').append(stringResource(R.string.tracking_chart_threshold, it)) }
+                crossings.lastOrNull()?.let { append(' ').append(stringResource(R.string.tracking_chart_crossing, dates.format(Date(it.at)), it.score)) }
+            }
+            Curve(
+                history,
+                threshold,
+                crossings,
+                onSelect = { selected = it },
+                modifier = Modifier.fillMaxWidth().height(160.dp).semantics { contentDescription = description },
+            )
+            val shown = selected
+            if (shown != null) {
+                Text(
+                    stringResource(R.string.tracking_crossing, dates.format(Date(shown.at)), shown.score, resources.dropCauseText(shown.cause)),
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Bold,
+                )
+            } else if (crossings.isNotEmpty()) {
+                Text(stringResource(R.string.tracking_crossing_hint), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
             Text(stringResource(R.string.tracking_curve_legend), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             if (points.size == 1) {
                 Text(stringResource(R.string.tracking_curve_one_point), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -126,16 +170,85 @@ private fun CurveCard(history: History) {
     }
 }
 
+/**
+ * Ligne d'état de l'alerte au-dessus de la courbe : active (seuil, score), ou sous le seuil depuis une date avec un
+ * lien vers Réduire ; désactivée, un simple lien pour en définir une. « Modifier » ouvre Automatisations.
+ */
 @Composable
-private fun Curve(history: History, modifier: Modifier) {
+private fun ThresholdStatus(alert: ThresholdAlertRepository.State, score: Int, onOpenAutomation: () -> Unit, onOpenReduce: () -> Unit) {
+    val setting = alert.setting
+    if (!setting.enabled) {
+        TextButton(onClick = onOpenAutomation, modifier = Modifier.heightIn(min = 48.dp)) {
+            Text(stringResource(R.string.tracking_threshold_set))
+        }
+        return
+    }
+    val below = alert.state == AlertState.TRIGGERED
+    Text(
+        if (below) {
+            stringResource(
+                R.string.tracking_threshold_below,
+                DateFormat.getDateInstance(DateFormat.MEDIUM, currentLocale()).format(Date(alert.since ?: System.currentTimeMillis())),
+            )
+        } else {
+            stringResource(R.string.tracking_threshold_active, setting.threshold, score)
+        },
+        style = MaterialTheme.typography.bodyMedium,
+        color = if (below) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface,
+    )
+    Row {
+        if (below) {
+            TextButton(onClick = onOpenReduce, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.tracking_threshold_reduce)) }
+        }
+        TextButton(onClick = onOpenAutomation, modifier = Modifier.heightIn(min = 48.dp)) { Text(stringResource(R.string.tracking_threshold_edit)) }
+    }
+}
+
+/**
+ * La courbe. Le seuil est une ligne en pointillés longs, plus épaisse que les zones, avec son étiquette « Seuil 70 » :
+ * elle ne repose pas sur la couleur. Chaque franchissement notifié est un anneau sur la courbe ; un appui à moins de
+ * 24 dp le sélectionne ([onSelect]).
+ */
+@Composable
+private fun Curve(
+    history: History,
+    threshold: Int?,
+    crossings: List<ThresholdCrossing>,
+    onSelect: (ThresholdCrossing?) -> Unit,
+    modifier: Modifier,
+) {
     val grid = MaterialTheme.colorScheme.outlineVariant
     val band = MaterialTheme.colorScheme.primary.copy(alpha = 0.16f)
+    val thresholdColor = MaterialTheme.colorScheme.onSurface
+    val markerColor = MaterialTheme.colorScheme.error
+    val labelStyle = MaterialTheme.typography.labelSmall.copy(color = thresholdColor)
+    val label = threshold?.let { stringResource(R.string.tracking_threshold_label, it) }
+    val measurer = rememberTextMeasurer()
     val points = history.snapshots
-    Canvas(modifier) {
-        fun y(score: Double) = size.height * (1f - (score.coerceIn(0.0, 100.0) / 100.0).toFloat())
-        val start = points.first().at
-        val span = (points.last().at - start).coerceAtLeast(1L)
-        fun x(at: Long) = if (points.size == 1) size.width / 2 else size.width * (at - start).toFloat() / span
+    val start = points.first().at
+    val end = points.last().at
+    fun xOf(at: Long, width: Float) = if (points.size == 1 || end == start) width / 2 else width * ((at.coerceIn(start, end) - start).toFloat() / (end - start))
+    fun yOf(score: Double, height: Float) = height * (1f - (score.coerceIn(0.0, 100.0) / 100.0).toFloat())
+    Canvas(
+        modifier.pointerInput(crossings) {
+            detectTapGestures { tap ->
+                val radius = 24.dp.toPx()
+                onSelect(
+                    crossings.minByOrNull { c ->
+                        val dx = xOf(c.at, size.width.toFloat()) - tap.x
+                        val dy = yOf(c.score.toDouble(), size.height.toFloat()) - tap.y
+                        dx * dx + dy * dy
+                    }?.takeIf { c ->
+                        val dx = xOf(c.at, size.width.toFloat()) - tap.x
+                        val dy = yOf(c.score.toDouble(), size.height.toFloat()) - tap.y
+                        dx * dx + dy * dy <= radius * radius
+                    }
+                )
+            }
+        }
+    ) {
+        fun y(score: Double) = yOf(score, size.height)
+        fun x(at: Long) = xOf(at, size.width)
         // Seuils des zones de couleur (50 et 80), en pointillés.
         listOf(50.0, 80.0).forEach {
             drawLine(grid, Offset(0f, y(it)), Offset(size.width, y(it)), 1.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(8f, 8f)))
@@ -151,6 +264,18 @@ private fun Curve(history: History, modifier: Modifier) {
             drawPath(line, scoreGradientColor(points.last().average.toInt()), style = Stroke(3.dp.toPx()))
         }
         points.forEach { p -> drawCircle(scoreGradientColor(p.average.toInt()), radius = 4.dp.toPx(), center = Offset(x(p.at), y(p.average))) }
+        if (threshold != null && label != null) {
+            val ty = y(threshold.toDouble())
+            drawLine(thresholdColor, Offset(0f, ty), Offset(size.width, ty), 2.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(16f, 10f)))
+            val text = measurer.measure(label, labelStyle)
+            // Étiquette au-dessus de la ligne, ou dessous si le seuil est tout en haut.
+            val top = if (ty - text.size.height - 2.dp.toPx() >= 0) ty - text.size.height - 2.dp.toPx() else ty + 2.dp.toPx()
+            drawText(text, topLeft = Offset(size.width - text.size.width - 4.dp.toPx(), top))
+        }
+        crossings.forEach { c ->
+            val center = Offset(x(c.at), y(c.score.toDouble()))
+            drawCircle(markerColor, radius = 7.dp.toPx(), center = center, style = Stroke(2.5.dp.toPx()))
+        }
     }
 }
 

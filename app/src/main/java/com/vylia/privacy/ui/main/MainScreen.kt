@@ -37,15 +37,14 @@ import com.vylia.privacy.ui.scan.ScanViewModel
 import com.vylia.privacy.ui.search.GlobalSearchScreen
 import com.vylia.privacy.ui.settings.SettingsScreen
 import com.vylia.privacy.ui.help.HelpSheet
-import com.vylia.privacy.ui.help.HelpTopic
 
 /** Les cinq destinations de la barre du bas (icônes Material Symbols embarquées). */
-enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: Int, val help: HelpTopic) {
-    SCAN(R.string.tab_scan, R.drawable.ic_sym_radar, HelpTopic.SCAN),
-    ANALYZE(R.string.tab_analyze, R.drawable.ic_sym_bar_chart, HelpTopic.ANALYZE),
-    REDUCE(R.string.tab_reduce, R.drawable.ic_sym_tune, HelpTopic.REDUCE),
-    REPLACE(R.string.tab_replace, R.drawable.ic_sym_swap_horiz, HelpTopic.REPLACE),
-    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration, HelpTopic.CELEBRATE),
+enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: Int) {
+    SCAN(R.string.tab_scan, R.drawable.ic_sym_radar),
+    ANALYZE(R.string.tab_analyze, R.drawable.ic_sym_bar_chart),
+    REDUCE(R.string.tab_reduce, R.drawable.ic_sym_tune),
+    REPLACE(R.string.tab_replace, R.drawable.ic_sym_swap_horiz),
+    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration),
 }
 
 /** Écrans ouverts par-dessus l'onglet en cours depuis la barre du haut. */
@@ -54,14 +53,20 @@ private enum class Overlay { SEARCH, SETTINGS }
 @Composable
 fun MainScreen(
     initialPackage: String? = null,
+    initialTab: AppTab? = null,
+    pinnedPackage: String? = null,
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
 ) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
-    var currentTab by rememberSaveable { mutableStateOf(AppTab.SCAN) }
+    var currentTab by rememberSaveable { mutableStateOf(initialTab ?: AppTab.SCAN) }
+    // L'app mise en tête de Réduire ne vaut que pour l'ouverture depuis la notification.
+    var pinned by rememberSaveable { mutableStateOf(pinnedPackage) }
+    // Paramètres ouverts directement sur Automatisations (lien « Modifier » du Suivi).
+    var openAutomation by rememberSaveable { mutableStateOf(false) }
     var overlay by rememberSaveable { mutableStateOf<Overlay?>(null) }
     var query by rememberSaveable { mutableStateOf("") }
-    // Aide de l'écran affiché, en feuille par-dessus : l'écran reste en place dessous.
-    var help by rememberSaveable { mutableStateOf<HelpTopic?>(null) }
+    // L'Aide, en feuille par-dessus l'écran affiché, qui reste en place dessous.
+    var help by rememberSaveable { mutableStateOf(false) }
     var detailPackage by rememberSaveable { mutableStateOf(initialPackage) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val rules by homeViewModel.rules.collectAsStateWithLifecycle()
@@ -71,6 +76,7 @@ fun MainScreen(
     val closeOverlay = {
         overlay = null
         query = ""
+        openAutomation = false
     }
     // Fiche d'une app d'abord (son propre BackHandler), puis l'écran superposé (les sous-pages des paramètres ont le leur).
     BackHandler(enabled = overlay != null && detailApp == null) { closeOverlay() }
@@ -86,7 +92,7 @@ fun MainScreen(
                 overlay == Overlay.SETTINGS -> BackTopBar(R.string.settings_title, back)
                 else -> MainTopBar(
                     onSearch = { overlay = Overlay.SEARCH },
-                    onHelp = { help = currentTab.help },
+                    onHelp = { help = true },
                     onSettings = { overlay = Overlay.SETTINGS },
                 )
             }
@@ -98,6 +104,7 @@ fun MainScreen(
                         selected = currentTab == tab && overlay == null,
                         onClick = {
                             currentTab = tab
+                            pinned = null
                             detailPackage = null
                             closeOverlay()
                         },
@@ -116,7 +123,7 @@ fun MainScreen(
             }
         },
     ) { innerPadding ->
-        help?.let { HelpSheet(it, onDismiss = { help = null }) }
+        if (help) HelpSheet(onDismiss = { help = false })
         val modifier = Modifier.padding(innerPadding)
         if (detailApp != null) {
             AppDetailScreen(
@@ -131,11 +138,16 @@ fun MainScreen(
         }
         when (overlay) {
             Overlay.SEARCH -> GlobalSearchScreen(homeState.scannedApps, query, onAppClick = { detailPackage = it.app.packageName }, modifier)
-            Overlay.SETTINGS -> SettingsScreen(modifier, onOpenLearn = { help = HelpTopic.SCORING })
+            Overlay.SETTINGS -> SettingsScreen(modifier, openAutomation = openAutomation)
             null -> when (currentTab) {
                 AppTab.SCAN -> ScanScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
-                AppTab.ANALYZE -> AnalysisScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
-                AppTab.REDUCE -> ReduceScreen(modifier)
+                AppTab.ANALYZE -> AnalysisScreen(
+                    modifier,
+                    onAppClick = { detailPackage = it.app.packageName },
+                    onOpenAutomation = { openAutomation = true; overlay = Overlay.SETTINGS },
+                    onOpenReduce = { currentTab = AppTab.REDUCE },
+                )
+                AppTab.REDUCE -> ReduceScreen(modifier, pinnedPackage = pinned)
                 AppTab.REPLACE -> ReplaceScreen(modifier)
                 AppTab.CELEBRATE -> CelebrateScreen(modifier)
             }

@@ -5,7 +5,7 @@ B = [
  ("PERM_FISHING", ("Fishing trip", "Pêche à la ligne"), ("Asks for permissions forbidden for this type of app, which you refused.", "Demande des permissions interdites pour ce type d'app, que vous avez refusées.")),
  ("PERM_OUTLAW", ("Outlaw", "Hors-la-loi"), ("At least one permission forbidden for this type of app is granted.", "Au moins une permission interdite pour ce type d'app est accordée.")),
  ("PERM_GLUTTON", ("Glutton", "Goinfre"), ("So many permissions that the penalty cap is reached.", "Tellement de permissions que le plafond de pénalité est atteint.")),
- ("SEC_WANTED", ("Wanted", "Avis de recherche"), ("Listed in a public database of stalkerware.", "Référencée dans une base publique de stalkerwares.")),
+ ("SEC_WANTED", ("Wanted", "Avis de recherche"), ("Recognised as known stalkerware by Echap's database: an app made to spy on someone in secret.", "Reconnue comme stalkerware connu par la base d'Echap : une app faite pour espionner quelqu'un en cachette.")),
  ("SEC_BIG_EARS", ("Big ears", "Grandes oreilles"), ("Can record the microphone or camera in the background.", "Peut enregistrer le micro ou la caméra en arrière-plan.")),
  ("SEC_SPY_PIANIST", ("Keystroke spy", "Pianiste espion"), ("Can read what you type and send it over the Internet.", "Peut lire ce que vous tapez et l'envoyer sur Internet.")),
  ("SEC_MOLOTOV", ("Molotov cocktail", "Cocktail Molotov"), ("A combination of capabilities typical of malware.", "Combinaison de capacités typique d'un logiciel malveillant.")),
@@ -26,7 +26,7 @@ B = [
 
 SEC = [
  ("KNOWN_STALKERWARE", ("Known stalkerware", "Stalkerware connu"),
-  ("The package or its signing certificate appears in a public database of stalkerware indicators.", "Le package ou le certificat de signature figure dans une base publique d'indicateurs de stalkerwares.")),
+  ("Its package name or signing certificate is listed in Echap's database of known stalkerware.", "Son nom de paquet ou son certificat de signature figure dans la base des stalkerwares connus d'Echap.")),
  ("KEYLOGGER_CAPABLE", ("Keylogger-like capability", "Capacité de type keylogger"),
   ("Can read what you type (accessibility service or third-party keyboard) and has Internet access.", "Peut lire ce que vous tapez (service d'accessibilité ou clavier tiers) et dispose d'un accès Internet.")),
  ("COVERT_RECORDING", ("Background recording", "Enregistrement en arrière-plan"),
@@ -54,6 +54,9 @@ S += [
  ("security_hint", "Capabilities typical of spyware: they describe what the app CAN do, not what it does. VYLIA does not see other apps' network traffic.",
   "Capacités typiques des logiciels espions : elles décrivent ce que l'app PEUT faire, pas ce qu'elle fait. VYLIA ne voit pas le trafic réseau des autres apps."),
  ("security_cap", "Score capped at %1$d because of this.", "Score plafonné à %1$d pour cette raison."),
+ ("security_matched_stalkerware", "Recognised as %1$s, a known stalkerware.", "Reconnue comme %1$s, un stalkerware connu."),
+ ("security_matched_stalkerware_safety", "Someone may have installed it to watch you. Before uninstalling it, think about your safety: the person may notice, and the app can serve as evidence. Get help, for free and anonymously: in France, call 3919 (Violences Femmes Info), or 17 if you are in danger. More in Help › Score.",
+  "Quelqu'un l'a peut-être installée pour vous surveiller. Avant de la désinstaller, pensez à votre sécurité : la personne peut s'en apercevoir, et l'app peut servir de preuve. Faites-vous aider, gratuitement et anonymement : en France, le 3919 (Violences Femmes Info), ou le 17 en cas de danger. Plus d'informations dans Aide › Score."),
  ("app_icon_manage", "Manage %1$s in Android settings", "Gérer %1$s dans les paramètres d'Android"),
 ]
 

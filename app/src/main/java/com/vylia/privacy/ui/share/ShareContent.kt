@@ -5,7 +5,6 @@ import com.vylia.privacy.domain.history.History
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.rewards.Badge
 import com.vylia.privacy.domain.rewards.RewardsState
-import kotlin.math.roundToInt
 
 /** Formats d'image : story (par défaut), fil Instagram, carré. Largeur 1 080 px dans tous les cas. */
 enum class ShareFormat(val width: Int, val height: Int) {
@@ -68,7 +67,7 @@ data class ShareContent(
             return ShareContent(
                 score = score,
                 appCount = userApps.size,
-                firstScore = snapshots.firstOrNull()?.average?.roundToInt(),
+                firstScore = snapshots.firstOrNull()?.score,
                 firstAt = snapshots.firstOrNull()?.at,
                 curve = snapshots.map { it.average.toFloat() },
                 trackers = analysis.trackers.size,

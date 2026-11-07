@@ -27,7 +27,8 @@ import com.vylia.privacy.domain.rewards.RewardsState
 import com.vylia.privacy.domain.usecase.AnalyzeTrackersUseCase
 import com.vylia.privacy.domain.usecase.AuditAppsUseCase
 import com.vylia.privacy.domain.usecase.RiskFirstOrder
-import com.vylia.privacy.domain.usecase.historyPoint
+import com.vylia.privacy.domain.usecase.deviceScore
+import com.vylia.privacy.data.alert.ScanCompletion
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -47,6 +48,7 @@ class ScanViewModel(
     packageRemovalMonitor: PackageRemovalMonitor,
     private val alternatives: AlternativesRepository,
     private val historyRecorder: HistoryRecorder,
+    private val scanCompletion: ScanCompletion,
 ) : ViewModel() {
 
     private sealed interface ScanState {
@@ -126,9 +128,7 @@ class ScanViewModel(
                     "en ${SystemClock.elapsedRealtime() - listedAt} ms ($unanalyzed non analysées)",
             )
             if (BuildConfig.DEBUG) logScores()
-            historyRecorder.record(
-                currentApps().filter { AppFilter.USER.matches(it.app) }.associate { it.app.packageName to it.historyPoint() },
-            )
+            scanCompletion.onFullScan(currentApps(), background = false)
             badgesManager.onScanCompleted(
                 currentApps().filter { AppFilter.USER.matches(it.app) }.toSnapshots(),
                 alternatives.catalogue.packages,
@@ -191,7 +191,7 @@ class ScanViewModel(
                     apps = visible,
                     scannedApps = scan.apps,
                     averageScore = PrivacyScore.average(visible.map { it.score }),
-                    userAverageScore = PrivacyScore.average(scan.apps.filter { AppFilter.USER.matches(it.app) }.map { it.score }),
+                    userAverageScore = scan.apps.deviceScore(),
                     systemAverageScore = PrivacyScore.average(scan.apps.filter { AppFilter.SYSTEM.matches(it.app) }.map { it.score }),
                     allAverageScore = PrivacyScore.average(scan.apps.map { it.score }),
                     userAppCount = scan.apps.count { AppFilter.USER.matches(it.app) },
@@ -237,6 +237,7 @@ class ScanViewModel(
                     container.packageRemovalMonitor,
                     container.alternativesRepository,
                     container.historyRecorder,
+                    container.scanCompletion,
                 )
             }
         }

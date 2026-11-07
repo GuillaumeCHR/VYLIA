@@ -26,11 +26,16 @@ internal fun InstalledApp.toAppScan(analysis: TrackerAnalysis): AppScan = AppSca
     grantedPermissions = grantedPermissions,
     trackers = (analysis as? TrackerAnalysis.Analyzed)?.trackers?.map { ScoredTracker(it.name, it.categories.toSet()) },
     signals = signals,
+    signingCertDigests = signingCertDigests,
 )
 
 /** Score qu'aurait l'app si les permissions [revoked] (noms courts) lui étaient retirées. */
 fun PrivacyScorer.scoreWithout(audited: AuditedApp, revoked: Set<String>) =
     score(audited.app.toAppScan(audited.trackerAnalysis).let { it.copy(grantedPermissions = it.grantedPermissions - revoked) })
+
+/** Score qu'aurait l'app sans les traqueurs [names] (par exemple ceux arrivés avec une mise à jour). */
+fun PrivacyScorer.scoreWithoutTrackers(audited: AuditedApp, names: Set<String>) =
+    score(audited.app.toAppScan(audited.trackerAnalysis).let { scan -> scan.copy(trackers = scan.trackers?.filterNot { it.name in names }) })
 
 /**
  * Score qu'aurait l'app si toutes les permissions qu'elle déclare lui étaient accordées : à l'installation, rien ne

@@ -3,7 +3,9 @@ package com.vylia.privacy.data.rules
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.vylia.privacy.domain.scoring.IocDatabase
 import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.data.security.StalkerwareRepository
 import com.vylia.privacy.domain.scoring.RulesValidator
 import com.vylia.privacy.domain.scoring.Rules
 import kotlinx.coroutines.Dispatchers
@@ -19,14 +21,32 @@ import java.io.File
  * 1. copie importée par l'utilisateur (sélecteur de fichiers, typiquement depuis Téléchargements),
  * 2. sinon, ou si la copie est illisible, règles intégrées dans `assets/`.
  *
- * L'import passe par le Storage Access Framework : aucune permission de stockage n'est requise.
+ * L'import et l'export passent par le Storage Access Framework : aucune permission de stockage n'est requise.
+ * Un fichier importé passe par [RulesValidator] (texte brut puis règles décodées) avant de remplacer quoi que ce soit.
  */
-class RuleMatrixRepository(private val context: Context) {
+class RuleMatrixRepository(private val context: Context, private val stalkerware: StalkerwareRepository) {
 
     enum class Source { IMPORTED, BUNDLED }
 
-    data class LoadedRules(val rules: Rules, val source: Source) {
-        val scorer = PrivacyScorer(rules)
+    /**
+     * Le moteur reçoit aussi la base des stalkerwares connus, qui ne dépend pas des règles importées. [fingerprint] :
+     * empreinte du fichier de règles et de la base, enregistrée avec chaque point du Suivi pour reconnaître une baisse
+     * due à une mise à jour des règles plutôt qu'à une app.
+     */
+    data class LoadedRules(
+        val rules: Rules,
+        val source: Source,
+        val iocs: IocDatabase = IocDatabase.EMPTY,
+        val fingerprint: String = "",
+    ) {
+        val scorer = PrivacyScorer(rules, iocs)
+    }
+
+    private val iocs: IocDatabase get() = stalkerware.current.value.database.iocs
+
+    private fun fingerprint(content: String): String {
+        val digest = java.security.MessageDigest.getInstance("SHA-256").digest(content.toByteArray(Charsets.UTF_8))
+        return digest.take(8).joinToString("") { "%02x".format(it) } + ":" + iocs.size
     }
 
     private val importedFile = File(context.filesDir, IMPORTED_FILE_NAME)
@@ -39,10 +59,9 @@ class RuleMatrixRepository(private val context: Context) {
         runCatching {
             val content = context.contentResolver.openInputStream(uri)?.use { readBounded(it, RulesValidator.MAX_BYTES) }
                 ?: error("Fichier illisible")
-            val rules = parse(content)
-            RulesValidator.validate(rules, allowedExclusions = loadBundled().rules.excludedPackages)
+            val rules = checked(content, loadBundled().rules)
             // Le moteur valide badges et patterns de sécurité à la construction : avant d'écraser la copie.
-            val loaded = LoadedRules(rules, Source.IMPORTED)
+            val loaded = LoadedRules(rules, Source.IMPORTED, iocs, fingerprint(content))
             importedFile.writeText(content)
             _current.value = loaded
             rules.categories.size
@@ -53,6 +72,24 @@ class RuleMatrixRepository(private val context: Context) {
     fun importedContent(): String? =
         if (_current.value.source == Source.IMPORTED && importedFile.exists()) importedFile.readText() else null
 
+    /** Le fichier des règles en vigueur, tel quel : la copie importée, sinon les règles intégrées. */
+    fun currentContent(): String = importedContent() ?: bundledContent()
+
+    /** Écrit les règles en vigueur dans le fichier choisi, pour les modifier ou les partager puis les réimporter. */
+    suspend fun export(uri: Uri): Result<Unit> = withContext(Dispatchers.IO) {
+        runCatching {
+            val content = currentContent()
+            context.contentResolver.openOutputStream(uri, "wt")?.use { it.write(content.toByteArray(Charsets.UTF_8)) }
+                ?: error("Fichier impossible à écrire")
+            Unit
+        }
+    }
+
+    /** Après une mise à jour de la base Echap : mêmes règles, nouvelle base, les scores se recalculent. */
+    fun refreshStalkerware() {
+        _current.value = _current.value.copy(iocs = iocs, fingerprint = fingerprint(currentContent()))
+    }
+
     fun resetToBundled() {
         importedFile.delete()
         _current.value = loadBundled()
@@ -62,10 +99,9 @@ class RuleMatrixRepository(private val context: Context) {
         if (importedFile.exists()) {
             try {
                 // Revalidé à chaque lancement : la copie a pu être importée par une version moins stricte.
-                val rules = parse(importedFile.readText())
-                val bundled = loadBundled()
-                RulesValidator.validate(rules, allowedExclusions = bundled.rules.excludedPackages)
-                return LoadedRules(rules, Source.IMPORTED)
+                val content = importedFile.readText()
+                val rules = checked(content, loadBundled().rules)
+                return LoadedRules(rules, Source.IMPORTED, iocs, fingerprint(content))
             } catch (e: Exception) {
                 Log.w(TAG, "Règles importées invalides, retour aux règles intégrées", e)
             }
@@ -74,8 +110,9 @@ class RuleMatrixRepository(private val context: Context) {
     }
 
     /** Les règles intégrées font partie de l'app : illisibles, c'est un bug de build, pas un cas à masquer. */
-    private fun loadBundled(): LoadedRules =
-        LoadedRules(parse(context.assets.open(BUNDLED_ASSET).bufferedReader().use { it.readText() }), Source.BUNDLED)
+    private fun loadBundled(): LoadedRules = bundledContent().let { LoadedRules(parse(it), Source.BUNDLED, iocs, fingerprint(it)) }
+
+    private fun bundledContent(): String = context.assets.open(BUNDLED_ASSET).bufferedReader().use { it.readText() }
 
     companion object {
         private const val TAG = "RuleMatrixRepository"
@@ -84,6 +121,13 @@ class RuleMatrixRepository(private val context: Context) {
         private val json = Json { ignoreUnknownKeys = true }
 
         fun parse(content: String): Rules = json.decodeFromString(content.removePrefix("\uFEFF"))
+
+        /** Les deux contrôles de [RulesValidator], dans l'ordre : texte brut, puis règles décodées. */
+        fun checked(content: String, bundled: Rules): Rules {
+            val text = content.removePrefix("\uFEFF")
+            RulesValidator.checkDocument(text)
+            return parse(text).also { RulesValidator.validate(it, bundled) }
+        }
 
         /** Lecture bornée : un fichier trop gros est refusé avant d'être chargé en entier. */
         fun readBounded(input: java.io.InputStream, maxBytes: Int): String {

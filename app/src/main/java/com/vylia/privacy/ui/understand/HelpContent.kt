@@ -48,6 +48,7 @@ import com.vylia.privacy.ui.scan.ScanViewModel
 import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.R
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.ui.unit.sp
@@ -156,7 +157,7 @@ internal fun HelpContent(
             }
         }
         when (tab) {
-            UnderstandTab.SCREENS -> ScreensTab()
+            UnderstandTab.SCREENS -> HowItWorksTab()
             UnderstandTab.SCORE -> ScoreTab(rules, stalkerwareCount = loadedRules.iocs.size)
             UnderstandTab.BADGES -> BadgesTab(rules, homeState.scannedApps, query)
             UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps, query)
@@ -183,17 +184,50 @@ private fun ScoreTab(rules: Rules, stalkerwareCount: Int) {
     }
 }
 
-/** Mode d'emploi des cinq écrans, dans l'ordre de la barre du bas. */
+/**
+ * « Comment fonctionne VYLIA » : la surface d'exposition et la démarche en étapes (numérotées à l'affichage), puis le mode d'emploi de chaque écran, dans l'ordre de la barre du bas.
+ */
 @Composable
-private fun ScreensTab() {
-    val screens = listOf(
-        R.string.help_scan_title to R.string.help_scan_intro,
-        R.string.help_analyze_title to R.string.help_analyze_intro,
-        R.string.help_reduce_title to R.string.help_reduce_intro,
-        R.string.help_replace_title to R.string.help_replace_intro,
-        R.string.help_celebrate_title to R.string.help_celebrate_intro,
-    )
+private fun HowItWorksTab() {
+    val steps = buildList {
+        add(R.string.howto_identify_title to R.string.howto_identify_text)
+        add(R.string.howto_reduce_title to R.string.howto_reduce_text)
+        add(R.string.howto_protect_title to R.string.howto_protect_text)
+        add(R.string.howto_follow_title to R.string.howto_follow_text)
+        add(R.string.howto_celebrate_title to R.string.howto_celebrate_text)
+    }
+    val screens = buildList {
+        add(R.string.help_scan_title to R.string.help_scan_intro)
+        add(R.string.help_analyze_title to R.string.help_analyze_intro)
+        add(R.string.help_reduce_title to R.string.help_reduce_intro)
+        add(R.string.help_replace_title to R.string.help_replace_intro)
+        if (BuildConfig.SHIELD_ENABLED) add(R.string.help_protect_title to R.string.help_protect_intro)
+        add(R.string.help_webapk_title to R.string.help_webapk_intro)
+        add(R.string.help_celebrate_title to R.string.help_celebrate_intro)
+    }
     LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        item {
+            LearnCard(stringResource(R.string.howto_exposure_title)) {
+                Paragraph(stringResource(R.string.howto_exposure_text))
+                steps.forEachIndexed { index, (title, text) ->
+                    Subtitle(stringResource(R.string.howto_step, index + 1, stringResource(title)))
+                    Paragraph(stringResource(text))
+                }
+                Text(
+                    stringResource(R.string.howto_note),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
+        item {
+            Text(
+                stringResource(R.string.howto_screens),
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 8.dp).semantics { heading() },
+            )
+        }
         items(screens, key = { it.first }) { (title, text) ->
             LearnCard(stringResource(title)) { Paragraph(stringResource(text)) }
         }

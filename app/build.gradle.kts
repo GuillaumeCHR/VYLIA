@@ -11,6 +11,9 @@ android {
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
+        // Bouclier (VPN local, module :shield) : à false, Se protéger et la pastille disparaissent, la barre du bas
+        // passe à quatre destinations. Préparé pour une variante Play sans bouclier.
+        buildConfigField("boolean", "SHIELD_ENABLED", "true")
         applicationId = "com.vylia.privacy"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()

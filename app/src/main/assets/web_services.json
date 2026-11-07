@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "comment": "Liste de référence (les autres apps sont proposées d'après les domaines qu'elles déclarent à Android). no_web : apps sans site utilisable sur téléphone ou dont le service passe par l'app (messageries, véhicule connecté, billettique), jamais proposées. Services qui existent en site web installable (manifeste web vérifié), pour Gérer › WebAPK et la catégorie des WebAPK installés. packages : apps natives que la version web remplace. example : proposé en exemple dans l'onglet. Vérifiés le 2026-11-07 ; à ajouter après vérification dans Chrome : Libération, Leboncoin, SNCF Connect, Ouest-France, Booking.",
+  "no_web": ["com.whatsapp", "com.whatsapp.w4b", "org.thoughtcrime.securesms", "com.facebook.orca", "com.snapchat.android", "com.viber.voip", "com.roole.roolemap", "de.mini.connected.mobile20.row", "com.applidium.vianavigo"],
+  "services": [
+    {
+      "id": "lemonde",
+      "name": "Le Monde",
+      "url": "https://www.lemonde.fr/",
+      "hosts": ["lemonde.fr"],
+      "category": "NEWS_READING",
+      "packages": ["com.lemonde.androidapp", "com.lemonde.morning"],
+      "example": true
+    },
+    {
+      "id": "franceinfo",
+      "name": "franceinfo",
+      "url": "https://www.francetvinfo.fr/",
+      "hosts": ["francetvinfo.fr", "franceinfo.fr"],
+      "category": "NEWS_READING",
+      "packages": ["fr.francetv.apps.info"],
+      "example": true
+    },
+    {
+      "id": "mediapart",
+      "name": "Mediapart",
+      "url": "https://www.mediapart.fr/",
+      "hosts": ["mediapart.fr"],
+      "category": "NEWS_READING",
+      "packages": ["com.mediapart.app"],
+      "example": false
+    },
+    {
+      "id": "leparisien",
+      "name": "Le Parisien",
+      "url": "https://www.leparisien.fr/",
+      "hosts": ["leparisien.fr"],
+      "category": "NEWS_READING",
+      "packages": [],
+      "example": true
+    },
+    {
+      "id": "blablacar",
+      "name": "BlaBlaCar",
+      "url": "https://www.blablacar.fr/",
+      "hosts": ["blablacar.fr", "blablacar.com"],
+      "category": "TRANSPORT",
+      "packages": ["com.comuto"],
+      "example": true
+    },
+    {
+      "id": "airbnb",
+      "name": "Airbnb",
+      "url": "https://www.airbnb.fr/",
+      "hosts": ["airbnb.fr", "airbnb.com"],
+      "category": "TRAVEL_LEISURE",
+      "packages": ["com.airbnb.android"],
+      "example": true
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "url": "https://web.telegram.org/",
+      "hosts": ["web.telegram.org"],
+      "category": "MESSAGING",
+      "packages": ["org.telegram.messenger"],
+      "example": false
+    },
+    {
+      "id": "myswisslife",
+      "name": "MySwissLife",
+      "url": "https://myswisslife.fr/",
+      "hosts": ["myswisslife.fr"],
+      "category": "FINANCE_ACCOUNTS",
+      "packages": [],
+      "example": false
+    }
+  ]
+}

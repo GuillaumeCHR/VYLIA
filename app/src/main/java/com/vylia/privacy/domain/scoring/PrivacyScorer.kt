@@ -210,6 +210,8 @@ data class AppScan(
     /** Empreintes SHA-256 des certificats de signature, hex minuscule sans séparateur. */
     /** Empreintes SHA-1 et SHA-256 des certificats de signature, en hexadécimal. */
     val signingCertDigests: Set<String> = emptySet(),
+    /** WebAPK : catégorie de son site, d'après la liste des services web (un WebAPK n'a pas de catégorie Android). */
+    val webCategory: String? = null,
 )
 
 data class Tracker(val name: String, val exodusCategories: Set<String>)
@@ -303,6 +305,7 @@ class PrivacyScorer(
 
     fun resolveCategory(scan: AppScan): String =
         rules.packageOverrides[scan.packageName]
+            ?: scan.webCategory?.takeIf { it in rules.categories }
             ?: rules.categoryResolution.appInfoCategoryMap[scan.appInfoCategory]
             ?: "DEFAULT"
 

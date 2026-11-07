@@ -24,6 +24,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.pluralStringResource
@@ -66,14 +67,19 @@ internal fun ActPlaceholder(text: String?, modifier: Modifier = Modifier) {
 }
 
 /**
- * Réduire : l'analyse globale (score moyen et score atteignable), puis les gestes classés par gain de score —
- * autorisations à retirer, apps à désinstaller — et la protection réseau (DNS privé, bouclier).
+ * Gérer : les sous-onglets pour réduire votre exposition — autorisations à retirer, apps à désinstaller,
+ * alternatives. Le score de l'appareil est dans Célébrer, la protection réseau dans Se protéger.
  */
 @Composable
-fun ReduceScreen(
+fun ManageScreen(
     modifier: Modifier = Modifier,
     /** App mise en tête des listes (cause d'une alerte de seuil). */
     pinnedPackage: String? = null,
+    /** Sous-onglet affiché, gardé par l'écran principal pour toute la session. */
+    section: ManageSection = ManageSection.PERMISSIONS,
+    onSection: (ManageSection) -> Unit = {},
+    /** Lien de l'onglet Alternatives vers Filtrer › WebAPK. */
+    onOpenWebApk: () -> Unit = {},
     viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
     actViewModel: ActViewModel = viewModel(factory = ActViewModel.Factory),
 ) {
@@ -84,76 +90,28 @@ fun ReduceScreen(
     // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
     LifecycleResumeEffect(Unit) {
         actViewModel.refreshUsage()
-        actViewModel.refreshDnsStatus()
-        actViewModel.refreshShieldContext()
         onPauseOrDispose { }
     }
 
     val userApps = remember(state.scannedApps) { state.scannedApps.filter { AppFilter.USER.matches(it.app) } }
     val scorer = loadedRules.scorer
+    // Une carte par app : ses autorisations à retirer, et le score qu'elle aurait sans aucune d'elles.
     val revocations = remember(userApps, scorer, pinnedPackage) {
-        ReductionAdvisor.revocations(userApps, scorer).pinnedFirst(pinnedPackage) { it.app.app.packageName }
+        ReductionAdvisor.byApp(ReductionAdvisor.revocations(userApps, scorer), scorer).pinnedFirst(pinnedPackage) { it.app.app.packageName }
     }
     val removals = remember(userApps, usage, pinnedPackage) {
         ReductionAdvisor.removals(userApps, usage.lastUsed, System.currentTimeMillis()).pinnedFirst(pinnedPackage) { it.app.app.packageName }
     }
-    val projected = remember(userApps, revocations, removals, scorer) {
-        ReductionAdvisor.projectedAverage(userApps, revocations, removals, scorer)
-    }
 
     Column(modifier = modifier.fillMaxSize()) {
-        ActHeader(R.string.reduce_title, R.string.reduce_subtitle)
-        if (!state.isLoading && userApps.isNotEmpty()) {
-            SummaryCard(state.userAverageScore, projected, revocations.size, removals.size, Modifier.padding(horizontal = 16.dp))
-        }
+        ActHeader(R.string.manage_title, R.string.manage_subtitle)
         when {
             state.isLoading -> ActPlaceholder(null)
             userApps.isEmpty() -> ActPlaceholder(stringResource(R.string.act_empty_scan))
-            else -> ReduceTab(revocations, removals, usage) {
-                val dnsCatalogue by actViewModel.dnsCatalogue.collectAsStateWithLifecycle()
-                val dnsStatus by actViewModel.dnsStatus.collectAsStateWithLifecycle()
-                val dnsListUpdate by actViewModel.dnsListUpdate.collectAsStateWithLifecycle()
-                val shield by actViewModel.shield.collectAsStateWithLifecycle()
-                val blocklistSize by actViewModel.blocklistSize.collectAsStateWithLifecycle()
-                val otherVpn by actViewModel.otherVpn.collectAsStateWithLifecycle()
-                PrivateDnsTab(dnsCatalogue, dnsStatus, dnsListUpdate, actViewModel::updateDnsList, shieldOn = shield.status == ShieldStatus.ON) {
-                    ShieldCard(
-                        state = shield,
-                        blocklistSize = blocklistSize,
-                        privateDns = dnsStatus,
-                        otherVpn = otherVpn,
-                        consentIntent = actViewModel::shieldConsentIntent,
-                        onStart = actViewModel::startShield,
-                        onStop = actViewModel::stopShield,
-                        onPause = actViewModel::pauseShield,
-                        onResume = actViewModel::resumeShield,
-                        onPauseMinutes = actViewModel::setShieldPauseMinutes,
-                        onFilter = actViewModel::setShieldFilter,
-                    )
-                }
-            }
-        }
-    }
-}
-
-/** Analyse globale : score moyen actuel, score atteignable, et ce qu'il faut faire pour y arriver. */
-@Composable
-private fun SummaryCard(current: PrivacyScore?, projected: PrivacyScore?, revocations: Int, removals: Int, modifier: Modifier = Modifier) {
-    VyliaCard(modifier = modifier.fillMaxWidth()) {
-        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            current?.let { ScoreBadge(it) }
-            Column(modifier = Modifier.weight(1f)) {
-                Text(stringResource(R.string.act_summary_title), fontWeight = FontWeight.Bold)
-                val reachable = projected?.takeIf { current != null && it.value > current.value }
-                Text(
-                    if (reachable == null || revocations + removals == 0) stringResource(R.string.act_summary_nothing)
-                    else stringResource(R.string.act_summary_reachable, reachable.value) + " · " +
-                        pluralStringResource(R.plurals.act_summary_revocations, revocations, revocations) + " · " +
-                        pluralStringResource(R.plurals.act_summary_removals, removals, removals),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            else -> ReduceTab(
+                revocations, removals, usage, section, onSection,
+                alternatives = { AlternativesTab(state.scannedApps, actViewModel.catalogue, onOpenWebApk) },
+            )
         }
     }
 }

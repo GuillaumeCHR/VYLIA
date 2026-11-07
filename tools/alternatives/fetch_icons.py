@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[2]
 CATALOGUE = ROOT / "app/src/main/assets/alternatives.json"
 OUT = ROOT / "app/src/main/assets/alt_icons"
 SIZE = 128
-UA = "VYLIA-catalogue-icons/1.0 (contact@alcyconie.com)"
+UA = "VYLIA-catalogue-icons/1.0"
 
 
 def get(url: str) -> bytes:

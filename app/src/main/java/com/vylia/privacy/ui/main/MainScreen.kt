@@ -13,6 +13,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,11 +25,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.learn.GradeBands
 import com.vylia.privacy.ui.act.CelebrateScreen
-import com.vylia.privacy.ui.act.ReduceScreen
-import com.vylia.privacy.ui.act.ReplaceScreen
+import com.vylia.privacy.ui.act.ManageScreen
+import com.vylia.privacy.ui.act.ManageSection
+import com.vylia.privacy.ui.analysis.AnalyzeSection
+import com.vylia.privacy.ui.act.FilterSection
+import com.vylia.privacy.ui.act.ProtectScreen
+import com.vylia.privacy.ui.shield.LocalOpenProtect
 import com.vylia.privacy.ui.analysis.AnalysisScreen
 import com.vylia.privacy.ui.components.categoryName
 import com.vylia.privacy.ui.detail.AppDetailScreen
@@ -42,9 +48,18 @@ import com.vylia.privacy.ui.help.HelpSheet
 enum class AppTab(@param:StringRes val title: Int, @param:DrawableRes val icon: Int) {
     SCAN(R.string.tab_scan, R.drawable.ic_sym_radar),
     ANALYZE(R.string.tab_analyze, R.drawable.ic_sym_bar_chart),
-    REDUCE(R.string.tab_reduce, R.drawable.ic_sym_tune),
-    REPLACE(R.string.tab_replace, R.drawable.ic_sym_swap_horiz),
-    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration),
+    MANAGE(R.string.tab_manage, R.drawable.ic_sym_tune),
+    PROTECT(R.string.tab_protect, R.drawable.ic_sym_shield),
+    CELEBRATE(R.string.tab_celebrate, R.drawable.ic_sym_celebration);
+
+    companion object {
+        /**
+         * Les destinations de la barre. Filtrer reste sans le bouclier : il garde le DNS privé et les versions web
+         * (WebAPK), qui n'en dépendent pas ; seule la carte du bouclier disparaît.
+         */
+        @Suppress("UNUSED_PARAMETER")
+        fun destinations(shieldEnabled: Boolean): List<AppTab> = entries
+    }
 }
 
 /** Écrans ouverts par-dessus l'onglet en cours depuis la barre du haut. */
@@ -54,19 +69,29 @@ private enum class Overlay { SEARCH, SETTINGS }
 fun MainScreen(
     initialPackage: String? = null,
     initialTab: AppTab? = null,
+    initialManageSection: ManageSection? = null,
+    initialAnalyzeSection: AnalyzeSection? = null,
     pinnedPackage: String? = null,
+    /** Premier lancement : l'Aide s'ouvre sur « Comment fonctionne VYLIA ». */
+    showHowItWorks: Boolean = false,
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
 ) {
     // Survit à la recréation de l'activité (changement de langue) : on reste sur l'onglet en cours.
-    var currentTab by rememberSaveable { mutableStateOf(initialTab ?: AppTab.SCAN) }
-    // L'app mise en tête de Réduire ne vaut que pour l'ouverture depuis la notification.
+    var currentTab by rememberSaveable {
+        mutableStateOf(initialTab?.takeIf { it in AppTab.destinations(BuildConfig.SHIELD_ENABLED) } ?: AppTab.SCAN)
+    }
+    // Dernier sous-onglet ouvert de Gérer et d'Analyser : gardé pour la session, même en changeant de destination.
+    var manageSection by rememberSaveable { mutableStateOf(initialManageSection ?: ManageSection.PERMISSIONS) }
+    var analyzeSection by rememberSaveable { mutableStateOf(initialAnalyzeSection ?: AnalyzeSection.OVERVIEW) }
+    var filterSection by rememberSaveable { mutableStateOf(FilterSection.DNS) }
+    // L'app mise en tête de Gérer ne vaut que pour l'ouverture depuis la notification.
     var pinned by rememberSaveable { mutableStateOf(pinnedPackage) }
     // Paramètres ouverts directement sur Automatisations (lien « Modifier » du Suivi).
     var openAutomation by rememberSaveable { mutableStateOf(false) }
     var overlay by rememberSaveable { mutableStateOf<Overlay?>(null) }
     var query by rememberSaveable { mutableStateOf("") }
     // L'Aide, en feuille par-dessus l'écran affiché, qui reste en place dessous.
-    var help by rememberSaveable { mutableStateOf(false) }
+    var help by rememberSaveable { mutableStateOf(showHowItWorks) }
     var detailPackage by rememberSaveable { mutableStateOf(initialPackage) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val rules by homeViewModel.rules.collectAsStateWithLifecycle()
@@ -83,7 +108,14 @@ fun MainScreen(
     // La flèche de la barre fait exactement comme le geste retour d'Android.
     val dispatcher = LocalOnBackPressedDispatcherOwner.current?.onBackPressedDispatcher
     val back: () -> Unit = { dispatcher?.onBackPressed() }
+    // La feuille « Bouclier contourné » de la pastille renvoie à Se protéger, d'où qu'on l'ouvre.
+    val openProtect = {
+        detailPackage = null
+        closeOverlay()
+        currentTab = AppTab.PROTECT
+    }
 
+    CompositionLocalProvider(LocalOpenProtect provides openProtect) {
     Scaffold(
         topBar = {
             when {
@@ -99,7 +131,7 @@ fun MainScreen(
         },
         bottomBar = {
             NavigationBar {
-                AppTab.entries.forEach { tab ->
+                AppTab.destinations(BuildConfig.SHIELD_ENABLED).forEach { tab ->
                     NavigationBarItem(
                         selected = currentTab == tab && overlay == null,
                         onClick = {
@@ -138,19 +170,31 @@ fun MainScreen(
         }
         when (overlay) {
             Overlay.SEARCH -> GlobalSearchScreen(homeState.scannedApps, query, onAppClick = { detailPackage = it.app.packageName }, modifier)
-            Overlay.SETTINGS -> SettingsScreen(modifier, openAutomation = openAutomation)
+            Overlay.SETTINGS -> SettingsScreen(modifier, openAutomation = openAutomation, onOpenHowItWorks = { help = true })
             null -> when (currentTab) {
                 AppTab.SCAN -> ScanScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
                 AppTab.ANALYZE -> AnalysisScreen(
                     modifier,
                     onAppClick = { detailPackage = it.app.packageName },
                     onOpenAutomation = { openAutomation = true; overlay = Overlay.SETTINGS },
-                    onOpenReduce = { currentTab = AppTab.REDUCE },
+                    onOpenReduce = { currentTab = AppTab.MANAGE },
+                    tab = analyzeSection,
+                    onTab = { analyzeSection = it },
                 )
-                AppTab.REDUCE -> ReduceScreen(modifier, pinnedPackage = pinned)
-                AppTab.REPLACE -> ReplaceScreen(modifier)
+                AppTab.MANAGE -> ManageScreen(
+                    modifier,
+                    pinnedPackage = pinned,
+                    section = manageSection,
+                    onSection = { manageSection = it },
+                    onOpenWebApk = {
+                        filterSection = FilterSection.WEBAPK
+                        currentTab = AppTab.PROTECT
+                    },
+                )
+                AppTab.PROTECT -> ProtectScreen(modifier, section = filterSection, onSection = { filterSection = it })
                 AppTab.CELEBRATE -> CelebrateScreen(modifier)
             }
         }
+    }
     }
 }

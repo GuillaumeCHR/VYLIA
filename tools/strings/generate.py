@@ -35,7 +35,7 @@ SCREENS = [
     ("Écran Scan, cartes et en-tête", "ui_base"),
     ("Navigation, Scan et détail d'une app", "ui_scan"),
     ("Analyse", "ui_analysis"),
-    ("Agir", "ui_act"),
+    ("Gérer, Filtrer, Célébrer", "ui_act"),
     ("Aide", "ui_understand"),
     ("Paramètres, À propos et grille de score", "ui_settings"),
     ("Badges et sécurité", "ui_badges"),
@@ -58,7 +58,7 @@ def screens_xml(lang):
     out = ['<?xml version="1.0" encoding="utf-8"?>', "<!-- Généré par tools/strings/generate.py : ne pas modifier. -->", "<resources>"]
     if lang == "en":
         out += ['    <string name="app_name" translatable="false">VYLIA</string>',
-                '    <string name="app_tagline" translatable="false">The Privacy Scorer</string>']
+                '    <string name="app_tagline" translatable="false">privacy score &amp; manager</string>']
     for title, module in SCREENS:
         mod = importlib.import_module(module)
         out.append(f"\n    <!-- {title} -->")

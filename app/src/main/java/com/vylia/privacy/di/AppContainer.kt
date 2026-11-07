@@ -1,6 +1,7 @@
 package com.vylia.privacy.di
 
 import android.content.Context
+import com.vylia.privacy.data.web.WebServicesRepository
 import com.vylia.privacy.data.alert.ScanCompletion
 import com.vylia.privacy.data.alert.StalkerwareAlerts
 import com.vylia.privacy.ui.notifications.StalkerwareNotifications
@@ -56,7 +57,8 @@ class AppContainer(context: Context) {
     )
 
     private val scorer = { ruleMatrixRepository.current.value.scorer }
-    private val appScanner = AppScanner(context)
+    val webServicesRepository = WebServicesRepository(context)
+    private val appScanner = AppScanner(context, webServices = { webServicesRepository.services })
 
     val trackerSignatureRepository = AssetTrackerSignatureRepository(context)
     private val trackerScanCache = TrackerScanCache(File(context.filesDir, "tracker_scan_cache.json"))

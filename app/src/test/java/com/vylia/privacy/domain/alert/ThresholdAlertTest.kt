@@ -98,6 +98,22 @@ class ThresholdAlertTest {
         assertEquals(10L, list.first().at)
     }
 
+    // --- Destination de la notification -----------------------------------------------------------
+
+    @Test
+    fun `notification de seuil - ouvre l endroit ou agir sur la cause`() {
+        fun target(type: DropCause.Type, pkg: String? = "org.app") = DropCause(type, pkg, "App", 40).target
+        assertEquals(AlertTarget.MANAGE_APPS, target(DropCause.Type.INSTALLED))
+        assertEquals(AlertTarget.MANAGE_APPS, target(DropCause.Type.REMOVED))
+        assertEquals(AlertTarget.MANAGE_PERMISSIONS, target(DropCause.Type.PERMISSION_GRANTED))
+        assertEquals(AlertTarget.APP_DETAIL, target(DropCause.Type.TRACKER_ADDED))
+        assertEquals(AlertTarget.APP_DETAIL, target(DropCause.Type.SECURITY_PATTERN))
+        assertEquals(AlertTarget.TRACKING, target(DropCause.Type.RULES_UPDATED, null))
+        assertEquals(AlertTarget.TRACKING, target(DropCause.Type.SPREAD, null))
+        // Sans nom de paquet, pas de fiche à ouvrir : le Suivi.
+        assertEquals(AlertTarget.TRACKING, target(DropCause.Type.TRACKER_ADDED, null))
+    }
+
     // --- Score de l'appareil : un seul arrondi ---------------------------------------------------
 
     @Test

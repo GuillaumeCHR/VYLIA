@@ -21,6 +21,7 @@ import com.vylia.privacy.domain.model.DetectedPermission
 import com.vylia.privacy.domain.model.InstalledApp
 import com.vylia.privacy.domain.repository.AppRepository
 import com.vylia.privacy.domain.scoring.PermissionRegistry
+import com.vylia.privacy.domain.web.WebServices
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ensureActive
@@ -45,6 +46,8 @@ import kotlinx.coroutines.withContext
  */
 class AppScanner(
     private val context: Context,
+    /** Les sites connus, pour donner sa catégorie à un WebAPK. */
+    private val webServices: () -> WebServices = { WebServices.EMPTY },
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : AppRepository {
 
@@ -94,7 +97,8 @@ class AppScanner(
 
     /** `GET_SERVICES` sert à repérer les services d'accessibilité déclarés. */
     private fun getInstalledPackages(): List<PackageInfo> {
-        val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES
+        // GET_META_DATA : l'adresse de départ d'un WebAPK est dans les méta-données de son application.
+        val flags = PackageManager.GET_PERMISSIONS or PackageManager.GET_SERVICES or PackageManager.GET_META_DATA
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             packageManager.getInstalledPackages(PackageManager.PackageInfoFlags.of(flags.toLong()))
         } else {
@@ -125,6 +129,7 @@ class AppScanner(
         signals: Set<String>,
     ): InstalledApp {
         val packageName = packageInfo.packageName
+        val webStartUrl = webStartUrl(appInfo)
         val requested = packageInfo.requestedPermissions.orEmpty()
         val flags = packageInfo.requestedPermissionsFlags ?: IntArray(0)
         val granted = requested.filterIndexedTo(HashSet()) { index, _ ->
@@ -185,6 +190,8 @@ class AppScanner(
             grantedPermissions = granted.mapTo(HashSet(), ::shortName),
             signals = signals,
             signingCertDigests = signingCertDigests(packageName),
+            webStartUrl = webStartUrl,
+            webCategory = webServices().forUrl(webStartUrl)?.category,
             requestedPermissions = permissions,
             permissions = PermissionRegistry.strongestByFamily(permissions).map { strongest ->
                 val familyGranted = permissions.any { permission ->
@@ -249,6 +256,10 @@ class AppScanner(
     } catch (_: PackageManager.NameNotFoundException) {
         emptySet() // désinstallée pendant le scan
     }
+
+    /** Adresse de départ d'un WebAPK (méta-données posées par le navigateur), en https seulement. */
+    private fun webStartUrl(appInfo: ApplicationInfo): String? =
+        appInfo.metaData?.getString(WebServices.WEBAPK_START_URL)?.takeIf { WebServices.hostOf(it) != null }
 
     private fun hex(bytes: ByteArray): String = bytes.joinToString("") { "%02X".format(it) }
 

@@ -87,6 +87,11 @@ class SettingsRepository(context: Context) {
         _stalkerwareAlerts.value = enabled
     }
 
+    /** « Comment fonctionne VYLIA » a déjà été montré (il s'ouvre une seule fois, au premier lancement). */
+    var howItWorksShown: Boolean
+        get() = prefs.getBoolean(KEY_HOW_IT_WORKS_SHOWN, false)
+        set(value) = prefs.edit().putBoolean(KEY_HOW_IT_WORKS_SHOWN, value).apply()
+
     /** Apps déjà signalées comme stalkerware : une seule notification par app. */
     var notifiedStalkerware: Set<String>
         get() = prefs.getStringSet(KEY_NOTIFIED_STALKERWARE, emptySet()).orEmpty().toSet()
@@ -138,6 +143,7 @@ class SettingsRepository(context: Context) {
         private const val KEY_CARD_STYLE = "card_style"
         private const val KEY_INSTALL_ALERTS = "install_alerts"
         private const val KEY_STALKERWARE_ALERTS = "stalkerware_alerts"
+        private const val KEY_HOW_IT_WORKS_SHOWN = "how_it_works_shown"
         private const val KEY_NOTIFIED_STALKERWARE = "notified_stalkerware"
         private const val KEY_BACKGROUND_SCAN = "background_scan"
         private const val KEY_LAST_BACKGROUND_SCAN = "last_background_scan"

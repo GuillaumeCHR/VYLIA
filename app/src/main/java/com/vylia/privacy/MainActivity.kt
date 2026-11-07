@@ -10,6 +10,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vylia.privacy.domain.security.Untrusted
+import com.vylia.privacy.ui.act.ManageSection
+import com.vylia.privacy.ui.analysis.AnalyzeSection
 import com.vylia.privacy.ui.main.AppTab
 import com.vylia.privacy.ui.scan.components.LocalCardStyle
 import androidx.compose.runtime.mutableStateOf
@@ -36,14 +38,37 @@ class MainActivity : AppCompatActivity() {
                 viewModel<ScanViewModel>(factory = ScanViewModel.Factory)
                 // Ouverte depuis une notification d'installation : directement la fiche de l'app, sans splash.
                 val openPackage = intent.getStringExtra(EXTRA_OPEN_PACKAGE)?.takeIf(Untrusted::isPackage)
-                // Ouverte depuis une alerte de seuil : Réduire, l'app en cause en tête. L'activité est exportée :
-                // seuls un onglet connu et un nom de paquet valide sont repris.
-                val openTab = if (intent.getStringExtra(EXTRA_OPEN_TAB) == TAB_REDUCE) AppTab.REDUCE else null
+                // Ouverte depuis une alerte de seuil : Gérer, l'app en cause en tête. L'activité est exportée :
+                // seuls un onglet connu et un nom de paquet valide sont repris. « reduce » : notifications
+                // envoyées avant que Réduire devienne Gérer.
+                val tabExtra = intent.getStringExtra(EXTRA_OPEN_TAB)
+                val openTab = when (tabExtra) {
+                    TAB_MANAGE, "reduce" -> AppTab.MANAGE
+                    TAB_TRACKING -> AppTab.ANALYZE
+                    else -> null
+                }
+                val manageSection = when (intent.getStringExtra(EXTRA_OPEN_SECTION)) {
+                    SECTION_APPS -> ManageSection.REMOVALS
+                    SECTION_PERMISSIONS -> ManageSection.PERMISSIONS
+                    else -> null
+                }
+                val analyzeSection = if (tabExtra == TAB_TRACKING) AnalyzeSection.TRACKING else null
                 val pinPackage = intent.getStringExtra(EXTRA_PIN_PACKAGE)?.takeIf(Untrusted::isPackage)
+                // Une seule fois, au premier lancement ordinaire (pas depuis une notification).
+                val showHowItWorks = rememberSaveable {
+                    (openPackage == null && openTab == null && !settings.howItWorksShown).also { if (it) settings.howItWorksShown = true }
+                }
                 var showSplash by rememberSaveable { mutableStateOf(openPackage == null && openTab == null) }
                 // Fondu court : le logotype de l'intro est déjà à la place du titre de l'écran Scan.
                 Crossfade(targetState = showSplash, animationSpec = tween(250), label = "splash") { splash ->
-                    if (splash) VyliaSplashScreen(onFinished = { showSplash = false }) else MainScreen(initialPackage = openPackage, initialTab = openTab, pinnedPackage = pinPackage)
+                    if (splash) VyliaSplashScreen(onFinished = { showSplash = false }) else MainScreen(
+                        initialPackage = openPackage,
+                        initialTab = openTab,
+                        initialManageSection = manageSection,
+                        initialAnalyzeSection = analyzeSection,
+                        pinnedPackage = pinPackage,
+                        showHowItWorks = showHowItWorks,
+                    )
                 }
             } }
         }
@@ -52,9 +77,15 @@ class MainActivity : AppCompatActivity() {
     companion object {
         /** Paquet dont la fiche s'ouvre au lancement (notification d'installation). */
         const val EXTRA_OPEN_PACKAGE = "com.vylia.privacy.OPEN_PACKAGE"
-        /** Onglet ouvert au lancement ([TAB_REDUCE] seulement) et app mise en tête de Réduire (alerte de seuil). */
+        /** Onglet ouvert au lancement ([TAB_MANAGE] seulement) et app mise en tête de Gérer (alerte de seuil). */
         const val EXTRA_OPEN_TAB = "com.vylia.privacy.OPEN_TAB"
         const val EXTRA_PIN_PACKAGE = "com.vylia.privacy.PIN_PACKAGE"
-        const val TAB_REDUCE = "reduce"
+        const val TAB_MANAGE = "manage"
+        /** Analyser › Suivi. */
+        const val TAB_TRACKING = "tracking"
+        /** Sous-onglet de Gérer : [SECTION_APPS] ou [SECTION_PERMISSIONS]. */
+        const val EXTRA_OPEN_SECTION = "com.vylia.privacy.OPEN_SECTION"
+        const val SECTION_APPS = "apps"
+        const val SECTION_PERMISSIONS = "permissions"
     }
 }

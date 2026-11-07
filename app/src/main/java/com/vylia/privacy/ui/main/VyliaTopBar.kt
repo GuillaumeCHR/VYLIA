@@ -27,6 +27,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.R
 import com.vylia.privacy.ui.components.SearchField
 import com.vylia.privacy.ui.components.VyliaLogotype
@@ -68,7 +69,7 @@ fun MainTopBar(onSearch: () -> Unit, onHelp: () -> Unit, onSettings: () -> Unit)
     BarSurface {
         VyliaLogotype(modifier = Modifier.padding(start = 16.dp))
         Spacer(Modifier.width(6.dp))
-        Box(Modifier.weight(1f)) { ShieldControl() }
+        Box(Modifier.weight(1f)) { if (BuildConfig.SHIELD_ENABLED) ShieldControl() }
         BarIcon(R.drawable.ic_sym_search, R.string.home_search_hint, onSearch)
         BarIcon(R.drawable.ic_sym_help, R.string.topbar_help, onHelp)
         BarIcon(R.drawable.ic_sym_settings, R.string.settings_title, onSettings)
@@ -88,7 +89,7 @@ fun BackTopBar(@StringRes title: Int, onBack: () -> Unit) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier.padding(start = 4.dp, end = 8.dp).semantics { heading() },
         )
-        Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) { ShieldControl() }
+        Box(Modifier.weight(1f), contentAlignment = Alignment.CenterEnd) { if (BuildConfig.SHIELD_ENABLED) ShieldControl() }
         Spacer(Modifier.width(8.dp))
     }
 }

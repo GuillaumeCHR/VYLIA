@@ -28,6 +28,8 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -106,6 +108,9 @@ private fun ShieldIndicatorState.look(): PillLook = when (this) {
  * écrans. Quand la place manque (petit écran, grande police), seul le texte disparaît, l'icône et la description
  * accessible restent.
  */
+/** Ouvre la destination Se protéger ; fourni par l'écran principal, absent ailleurs (pas de lien alors). */
+val LocalOpenProtect = staticCompositionLocalOf<(() -> Unit)?> { null }
+
 @Composable
 fun ShieldControl(modifier: Modifier = Modifier, viewModel: ShieldViewModel = viewModel(factory = ShieldViewModel.Factory)) {
     val indicator by viewModel.indicator.collectAsStateWithLifecycle()
@@ -228,6 +233,13 @@ private fun ShieldBypassSheet(bypass: ShieldBypass, onDismiss: () -> Unit, onTur
                     Button(onClick = onTakeOver, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp), contentPadding = buttonPadding) {
                         Text(stringResource(R.string.shield_take_over))
                     }
+            }
+            // Le détail (bouclier, DNS privé, et ce qui les oppose) est dans Se protéger.
+            LocalOpenProtect.current?.let { openProtect ->
+                TextButton(
+                    onClick = { onDismiss(); openProtect() },
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
+                ) { Text(stringResource(R.string.shield_bypass_open_protect)) }
             }
         }
     }

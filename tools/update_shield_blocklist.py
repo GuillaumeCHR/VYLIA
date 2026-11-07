@@ -30,8 +30,15 @@ Prudence, pour ne pas casser d'apps :
   - les signatures Exodus qui ne sont pas des noms de domaine (expressions régulières, adresse IP, mot seul)
     sont écartées et listées.
 
+Un troisième groupe, « spyware », vient des indicateurs MVT (app/src/main/assets/mvt_iocs.json, produit par
+tools/update_mvt_iocs.py) : les domaines des campagnes de logiciels espions de surveillance ciblée (Pegasus,
+Predator…), bloqués dès que le bouclier tourne, quels que soient les réglages web et mobile, avec le nom de la
+campagne. Les domaines des stalkerwares n'y sont volontairement pas : couper en silence le serveur d'un stalkerware
+peut alerter la personne qui surveille le téléphone (Echap conseille de penser d'abord à sa sécurité).
+
 Usage : python3 tools/update_shield_blocklist.py [--exodus api.json] [--easyprivacy easyprivacy.txt]
                                                   [--easylist easylist.txt] [--adguard-mobile 11.txt]
+        python3 tools/update_shield_blocklist.py --spyware-only   # ne refait que le groupe spyware, sans réseau
 Produit shield/src/main/assets/shield_blocklist.json.
 """
 import argparse
@@ -56,6 +63,7 @@ EXTRA = {
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "shield/src/main/assets/shield_blocklist.json"
 OVERRIDES = ROOT / "tools/exodus_category_overrides.json"
+MVT = ROOT / "app/src/main/assets/mvt_iocs.json"
 
 BLOCKED_CATEGORIES = {"Advertisement", "Analytics", "Profiling", "Identification"}
 
@@ -87,6 +95,19 @@ def overrides():
 
 def is_protected(domain):
     return domain in NEVER_BLOCK
+
+
+def spyware_group():
+    """Groupe « spyware » : {nom de campagne: domaines}, depuis les indicateurs MVT embarqués dans l'app."""
+    mvt = json.loads(MVT.read_text(encoding="utf-8"))
+    trackers, seen = {}, set()
+    for campaign in mvt["campaigns"]:
+        domains = sorted(d for d in campaign["domains"] if DOMAIN.match(d) and not is_protected(d) and d not in seen)
+        seen.update(domains)
+        if domains:
+            trackers[campaign["name"]] = domains
+    source = {"name": "MVT, mvt-indicators", "url": mvt["url"], "license": "MIT", "version": mvt["commit"][:12]}
+    return {"trackers": trackers, "domains": []}, source
 
 
 def exodus_domains(api, mapping):
@@ -136,12 +157,23 @@ def main():
     parser.add_argument("--easyprivacy", help="easyprivacy.txt déjà téléchargé")
     parser.add_argument("--easylist", help="easylist.txt déjà téléchargé")
     parser.add_argument("--adguard-mobile", help="filtre AdGuard Mobile Ads (11.txt) déjà téléchargé")
+    parser.add_argument("--spyware-only", action="store_true", help="ne refait que le groupe spyware (MVT)")
     args = parser.parse_args()
+    if args.spyware_only:
+        snapshot = json.loads(OUTPUT.read_text(encoding="utf-8"))
+        spyware, source = spyware_group()
+        snapshot["groups"]["spyware"] = spyware
+        snapshot["sources"] = [s for s in snapshot["sources"] if not s["name"].startswith("MVT")] + [source]
+        OUTPUT.write_text(json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
+        count = sum(len(d) for d in spyware["trackers"].values())
+        print(f"spyware : {count} domaines, {len(spyware['trackers'])} campagnes -> {OUTPUT.relative_to(ROOT)}")
+        return
 
     api = json.loads(pathlib.Path(args.exodus).read_text(encoding="utf-8") if args.exodus else fetch(EXODUS_URL, "application/json"))
     def load_list(path, url):
         return pathlib.Path(path).read_text(encoding="utf-8") if path else fetch(url, "text/plain")
 
+    spyware, spyware_source = spyware_group()
     exodus, skipped = exodus_domains(api, overrides())
     easyprivacy, privacy_exceptions, privacy_version = adblock_domains(load_list(args.easyprivacy, EASYPRIVACY_URL))
     easylist, list_exceptions, list_version = adblock_domains(load_list(args.easylist, EASYLIST_URL))
@@ -180,8 +212,9 @@ def main():
             {"name": "EasyList", "url": EASYLIST_URL, "license": "GPL v3", "version": list_version},
             {"name": "AdGuard Mobile Ads filter", "url": ADGUARD_MOBILE_URL, "license": "GPL v3", "version": mobile_version},
             {"name": "VYLIA (complément maison)", "license": "GPL v3"},
+            spyware_source,
         ],
-        "groups": {"web": group_file(web), "mobile": group_file(mobile)},
+        "groups": {"web": group_file(web), "mobile": group_file(mobile), "spyware": spyware},
     }
     OUTPUT.write_text(json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
     print(f"Exodus : {len(exodus)} domaines ({len(skipped)} signatures écartées) ; EasyPrivacy {privacy_version} : "

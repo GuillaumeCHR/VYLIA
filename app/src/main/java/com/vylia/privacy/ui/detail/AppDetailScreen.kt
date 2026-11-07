@@ -218,8 +218,16 @@ private fun SecurityCard(result: ScoreResult) {
             Text(stringResource(R.string.security_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             // Stalkerware connu : son nom, puis la conduite à tenir, avant le détail des motifs.
             result.knownStalkerware?.let { name ->
-                Text("🕵️ " + stringResource(R.string.security_matched_stalkerware, name), fontWeight = FontWeight.Bold)
-                Text(stringResource(R.string.security_matched_stalkerware_safety), style = MaterialTheme.typography.bodyMedium)
+                // Stalkerware (un proche) ou surveillance ciblée (MVT) : les conseils et l'aide ne sont pas les mêmes.
+                val targeted = result.knownSpywareTargeted
+                Text(
+                    "🕵️ " + stringResource(if (targeted) R.string.security_matched_targeted else R.string.security_matched_stalkerware, name),
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    stringResource(if (targeted) R.string.security_matched_targeted_safety else R.string.security_matched_stalkerware_safety),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
             }
             result.securityFindings.forEach { finding ->
                 Text("⚠️ " + resources.securityLabel(finding), fontWeight = FontWeight.Bold)
@@ -228,7 +236,7 @@ private fun SecurityCard(result: ScoreResult) {
             result.securityScoreCap?.let {
                 Text(stringResource(R.string.security_cap, it), style = MaterialTheme.typography.labelLarge)
             }
-            // « Ce que l'app PEUT faire » : vrai des capacités, pas d'un stalkerware reconnu par la base d'Echap.
+            // « Ce que l'app PEUT faire » : vrai des capacités, pas d'un logiciel espion reconnu (Echap, MVT).
             if (result.securityFindings.any { it.id != KNOWN_STALKERWARE }) {
                 Text(stringResource(R.string.security_hint), style = MaterialTheme.typography.bodySmall)
             }

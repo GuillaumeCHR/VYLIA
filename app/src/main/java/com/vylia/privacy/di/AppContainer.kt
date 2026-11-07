@@ -13,6 +13,7 @@ import com.vylia.privacy.data.apps.UsageStatsReader
 import com.vylia.privacy.data.alternatives.AlternativesRepository
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rewards.PrefsRewardsStore
+import com.vylia.privacy.data.security.MvtRepository
 import com.vylia.privacy.data.security.StalkerwareRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
@@ -40,12 +41,16 @@ class AppContainer(context: Context) {
     val settingsRepository = SettingsRepository(context)
     val trackerUpdater = TrackerUpdater(context, settingsRepository)
     val stalkerwareRepository = StalkerwareRepository(context)
-    val ruleMatrixRepository = RuleMatrixRepository(context, stalkerwareRepository)
+    val mvtRepository = MvtRepository(context)
+    val ruleMatrixRepository = RuleMatrixRepository(context, stalkerwareRepository, mvtRepository)
     val badgesManager = BadgesManager(PrefsRewardsStore(context))
     val packageRemovalMonitor = PackageRemovalMonitor(context)
     val alternativesRepository = AlternativesRepository(context)
     val privateDnsRepository = PrivateDnsRepository(context)
-    val shieldController = ShieldController(context, onFirstBlock = badgesManager::onShieldBlocked)
+    val shieldController = ShieldController(context, onFirstBlock = badgesManager::onShieldBlocked).apply {
+        // Indicateurs MVT mis à jour depuis les Paramètres : leurs domaines remplacent ceux de la liste embarquée.
+        mvtRepository.current.value.takeIf { it.downloadedAt != null }?.let { setSpywareDomains(it.database.domains) }
+    }
     val usageStatsReader = UsageStatsReader(context)
     val historyRecorder = HistoryRecorder(FileHistoryStore(File(context.filesDir, "history.json")))
     val thresholdAlertRepository = ThresholdAlertRepository(context)

@@ -61,7 +61,14 @@ internal fun CreditsSection() {
             Heading(R.string.credits_stats_title)
             ProductionStats()
             Heading(R.string.credits_thanks_title)
-            listOf(R.string.credits_thanks_exodus, R.string.credits_thanks_echap, R.string.credits_thanks_lists, R.string.credits_thanks_apps).forEach { Body(it) }
+            listOf(
+                R.string.credits_thanks_exodus,
+                R.string.credits_thanks_echap,
+                R.string.credits_thanks_mvt,
+                R.string.credits_thanks_lists,
+                R.string.credits_thanks_alternativeto,
+                R.string.credits_thanks_apps,
+            ).forEach { Body(it) }
             Spacer(Modifier.height(12.dp))
             Note(stringResource(R.string.credits_outro))
             Note(stringResource(R.string.credits_post_credits))
@@ -79,7 +86,9 @@ private val CREDITS = listOf(
     CreditBlock(R.string.credits_engine, R.string.credits_engine_name, R.string.credits_engine_note),
     CreditBlock(R.string.credits_investigation, R.string.credits_investigation_name, R.string.credits_investigation_note),
     CreditBlock(R.string.credits_counter_spy, R.string.credits_counter_spy_name, R.string.credits_counter_spy_note),
+    CreditBlock(R.string.credits_targeted, R.string.credits_targeted_name, R.string.credits_targeted_note),
     CreditBlock(R.string.credits_shield, R.string.credits_shield_name, R.string.credits_shield_note),
+    CreditBlock(R.string.credits_casting, R.string.credits_casting_name, R.string.credits_casting_note),
     CreditBlock(R.string.credits_cast, R.string.credits_cast_name, R.string.credits_cast_note),
     CreditBlock(R.string.credits_font, R.string.credits_font_name, R.string.credits_font_note),
     CreditBlock(R.string.credits_hardware, R.string.credits_hardware_name, R.string.credits_hardware_note),

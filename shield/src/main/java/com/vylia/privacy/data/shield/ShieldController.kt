@@ -170,10 +170,31 @@ class ShieldController(
         ShieldTapResult.Done
     }
 
-    /** Liste embarquée, lue au premier démarrage du bouclier (environ 86 000 domaines). Appel bloquant. */
+    /**
+     * Liste embarquée, lue au premier démarrage du bouclier (environ 90 000 domaines), avec les domaines de logiciels
+     * espions mis à jour depuis l'app s'il y en a ([setSpywareDomains]). Appel bloquant.
+     */
     @Synchronized
-    fun blocklist(): Blocklist = blocklist ?: context.assets.open(ASSET).bufferedReader().use { Blocklist.parse(it.readText()) }
+    fun blocklist(): Blocklist = blocklist ?: embedded().let { base -> spywareDomains?.let(base::withSpyware) ?: base }
         .also { blocklist = it }
+
+    /** Liste en vigueur pour une requête : celle déjà chargée, sans attendre ni verrou. */
+    internal fun activeBlocklist(): Blocklist? = blocklist
+
+    @Volatile
+    private var spywareDomains: Map<String, String>? = null
+
+    /**
+     * Domaines de logiciels espions téléchargés par l'app (indicateurs MVT), à la place de ceux de la liste embarquée ;
+     * `null` revient à la liste embarquée. Pris en compte tout de suite, même bouclier actif.
+     */
+    @Synchronized
+    fun setSpywareDomains(domains: Map<String, String>?) {
+        spywareDomains = domains
+        if (blocklist != null) blocklist = embedded().let { base -> domains?.let(base::withSpyware) ?: base }
+    }
+
+    private fun embedded(): Blocklist = context.assets.open(ASSET).bufferedReader().use { Blocklist.parse(it.readText()) }
 
     /** Intention à lancer pour obtenir l'accord de l'utilisateur, ou `null` s'il est déjà donné. */
     fun consentIntent(): Intent? = VpnService.prepare(context)

@@ -379,6 +379,8 @@ private fun DatabasePage(modifier: Modifier, viewModel: SettingsViewModel, onBac
         ExodusCreditsCard()
         StalkerwareUpdateCard(viewModel)
         EchapCreditsCard()
+        MvtUpdateCard(viewModel)
+        MvtCreditsCard()
     }
 }
 
@@ -400,6 +402,44 @@ fun ExodusCreditsCard() {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = { openUrl(context, EXODUS_URL) }) { Text(stringResource(R.string.exodus_website)) }
             OutlinedButton(onClick = { openUrl(context, ODBL_URL) }) { Text(stringResource(R.string.exodus_odbl)) }
+        }
+    }
+}
+
+/** Indicateurs MVT des logiciels espions de surveillance ciblée : version en vigueur et mise à jour. */
+@Composable
+private fun MvtUpdateCard(viewModel: SettingsViewModel) {
+    val state by viewModel.mvt.collectAsStateWithLifecycle()
+    val updating by viewModel.mvtUpdating.collectAsStateWithLifecycle()
+    val message by viewModel.mvtMessage.collectAsStateWithLifecycle()
+    InfoCard(R.string.mvt_status) {
+        Text(
+            state.downloadedAt?.let { stringResource(R.string.mvt_downloaded, state.database.total, formatDate(it)) }
+                ?: stringResource(R.string.mvt_embedded, state.database.total, state.database.commit.take(7)),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        Hint(stringResource(R.string.mvt_update_hint))
+        Button(onClick = viewModel::updateMvt, enabled = !updating) {
+            if (updating) {
+                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(stringResource(R.string.database_updating))
+            } else {
+                Text(stringResource(R.string.mvt_update))
+            }
+        }
+        when (val m = message) {
+            is MvtMessage.Updated -> Text(
+                stringResource(R.string.mvt_update_success, m.campaigns, m.domains),
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.bodySmall,
+            )
+            is MvtMessage.Failed -> Text(
+                stringResource(R.string.database_update_error, m.detail ?: stringResource(R.string.rules_invalid_file)),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+            )
+            null -> Unit
         }
     }
 }
@@ -470,6 +510,31 @@ fun EchapCreditsCard() {
     }
 }
 
+/** Indicateurs MVT des logiciels espions de surveillance ciblée : qui, quelle licence, quelles limites. */
+@Composable
+fun MvtCreditsCard() {
+    val context = LocalContext.current
+    val repository = remember(context) {
+        (context.applicationContext as com.vylia.privacy.VyliaApplication).container.mvtRepository
+    }
+    val state by repository.current.collectAsStateWithLifecycle()
+    val mvt = state.database
+    InfoCard(R.string.mvt_title) {
+        Text(stringResource(R.string.mvt_intro), style = MaterialTheme.typography.bodyMedium)
+        Text(
+            stringResource(R.string.mvt_license, mvt.campaigns, state.downloadedAt?.let { formatDate(it) } ?: mvt.commit.take(7).ifEmpty { "?" }),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Hint(stringResource(R.string.mvt_limit))
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(onClick = { openUrl(context, MVT_URL) }) { Text(stringResource(R.string.mvt_website)) }
+            OutlinedButton(onClick = { openUrl(context, MIT_URL) }) { Text(stringResource(R.string.mvt_mit)) }
+        }
+    }
+}
+
+private const val MVT_URL = "https://github.com/mvt-project/mvt-indicators"
+private const val MIT_URL = "https://github.com/mvt-project/mvt-indicators/blob/main/LICENSE"
 private const val ECHAP_URL = "https://echap.eu.org/"
 private const val CC_BY_URL = "https://creativecommons.org/licenses/by/4.0/"
 private const val EXODUS_URL = "https://exodus-privacy.eu.org/"

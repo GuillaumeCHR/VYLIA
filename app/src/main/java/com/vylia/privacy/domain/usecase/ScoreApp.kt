@@ -28,6 +28,7 @@ internal fun InstalledApp.toAppScan(analysis: TrackerAnalysis): AppScan = AppSca
     signals = signals,
     signingCertDigests = signingCertDigests,
     webCategory = webCategory,
+    isSystemApp = isSystemApp,
 )
 
 /** Score qu'aurait l'app si les permissions [revoked] (noms courts) lui étaient retirées. */

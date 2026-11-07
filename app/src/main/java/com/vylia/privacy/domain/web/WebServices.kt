@@ -1,6 +1,7 @@
 package com.vylia.privacy.domain.web
 
 import com.vylia.privacy.domain.security.Untrusted
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import java.net.URI
@@ -24,7 +25,7 @@ data class WebService(
  * La liste des services web (`assets/web_services.json`), lue comme une donnée externe : une entrée dont l'adresse
  * n'est pas en https, dont un domaine ou un paquet est mal formé, est écartée.
  */
-class WebServices(val services: List<WebService>) {
+class WebServices(val services: List<WebService>, val noWeb: Set<String> = emptySet()) {
 
     /** Le service d'un site, d'après l'adresse de départ d'un WebAPK ; un sous-domaine compte (www.lemonde.fr). */
     fun forUrl(url: String?): WebService? {
@@ -46,13 +47,21 @@ class WebServices(val services: List<WebService>) {
         private val CATEGORY = Regex("[A-Z][A-Z0-9_]{0,63}")
 
         @Serializable
-        private data class File(val services: List<WebService> = emptyList())
+        private data class File(
+            val services: List<WebService> = emptyList(),
+            /** Apps sans site utilisable sur téléphone (messageries) : jamais proposées. */
+            @SerialName("no_web") val noWeb: List<String> = emptyList(),
+        )
 
         private val json = Json { ignoreUnknownKeys = true }
 
-        fun parse(content: String): WebServices = WebServices(
-            json.decodeFromString<File>(content).services.take(MAX_SERVICES).mapNotNull(::checked)
-        )
+        fun parse(content: String): WebServices {
+            val file = json.decodeFromString<File>(content)
+            return WebServices(
+                file.services.take(MAX_SERVICES).mapNotNull(::checked),
+                file.noWeb.take(MAX_SERVICES).filter(Untrusted::isPackage).toSet(),
+            )
+        }
 
         /** Domaine d'une adresse https, en minuscules ; `null` pour toute autre adresse. */
         fun hostOf(url: String?): String? = try {

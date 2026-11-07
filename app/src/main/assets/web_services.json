@@ -1,6 +1,7 @@
 {
   "version": 1,
-  "comment": "Services qui existent en site web installable (manifeste web vérifié), pour Gérer › WebAPK et la catégorie des WebAPK installés. packages : apps natives que la version web remplace. example : proposé en exemple dans l'onglet. Vérifiés le 2026-11-07 ; à ajouter après vérification dans Chrome : Libération, Leboncoin, SNCF Connect, Ouest-France, Booking.",
+  "comment": "Liste de référence (les autres apps sont proposées d'après les domaines qu'elles déclarent à Android). no_web : apps sans site utilisable sur téléphone ou dont le service passe par l'app (messageries, véhicule connecté, billettique), jamais proposées. Services qui existent en site web installable (manifeste web vérifié), pour Gérer › WebAPK et la catégorie des WebAPK installés. packages : apps natives que la version web remplace. example : proposé en exemple dans l'onglet. Vérifiés le 2026-11-07 ; à ajouter après vérification dans Chrome : Libération, Leboncoin, SNCF Connect, Ouest-France, Booking.",
+  "no_web": ["com.whatsapp", "com.whatsapp.w4b", "org.thoughtcrime.securesms", "com.facebook.orca", "com.snapchat.android", "com.viber.voip", "com.roole.roolemap", "de.mini.connected.mobile20.row", "com.applidium.vianavigo"],
   "services": [
     {
       "id": "lemonde",
@@ -55,6 +56,15 @@
       "category": "TRAVEL_LEISURE",
       "packages": ["com.airbnb.android"],
       "example": true
+    },
+    {
+      "id": "telegram",
+      "name": "Telegram",
+      "url": "https://web.telegram.org/",
+      "hosts": ["web.telegram.org"],
+      "category": "MESSAGING",
+      "packages": ["org.telegram.messenger"],
+      "example": false
     },
     {
       "id": "myswisslife",

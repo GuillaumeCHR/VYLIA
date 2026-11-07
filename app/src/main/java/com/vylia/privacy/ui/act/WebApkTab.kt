@@ -49,6 +49,8 @@ import com.vylia.privacy.domain.web.WebServices
 import com.vylia.privacy.ui.components.AppIcon
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.openAppSettings
+import com.vylia.privacy.data.web.AppSites
+import com.vylia.privacy.domain.web.SiteChooser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -72,11 +74,16 @@ internal fun WebApkTab(apps: List<AuditedApp>, webServices: WebServices) {
         resumes++
         onPauseOrDispose { }
     }
-    val installedSites by produceState(emptySet<String>(), resumes) { value = installedWebApkServices(context, webServices) }
     val browser = remember(resumes) { defaultBrowser(context) }
-    val candidates = remember(apps, webServices) {
-        apps.mapNotNull { app -> webServices.forPackage(app.app.packageName)?.let { Candidate(app, it) } }
+    // La liste de référence d'abord, puis le site que chaque app déclare à Android (lu en arrière-plan).
+    val declared by produceState(emptyList<WebService>(), apps, webServices) { value = declaredSites(context, apps, webServices) }
+    val known = remember(webServices, declared) { WebServices(webServices.services + declared, webServices.noWeb) }
+    val candidates = remember(apps, known) {
+        apps.filter { it.app.webStartUrl == null && it.app.packageName !in known.noWeb }
+            .mapNotNull { app -> known.forPackage(app.app.packageName)?.let { Candidate(app, it) } }
+            .sortedBy { it.app.score.value }
     }
+    val installedSites by produceState(emptySet<String>(), resumes, known) { value = installedWebApkServices(context, known) }
     val pending = candidates.filter { it.service.id in installedSites }
     val toInstall = candidates.filter { it.service.id !in installedSites }
     val examples = webServices.services.filter { s -> s.example && candidates.none { it.service.id == s.id } && s.id !in installedSites }
@@ -88,7 +95,7 @@ internal fun WebApkTab(apps: List<AuditedApp>, webServices: WebServices) {
         if (pending.isNotEmpty()) {
             items(pending, key = { "installed-${it.app.app.packageName}" }) { InstalledCard(it) }
         }
-        item { SectionHeader(stringResource(R.string.webapk_candidates_title), "") }
+        item { SectionHeader(stringResource(R.string.webapk_candidates_title), stringResource(R.string.webapk_candidates_hint)) }
         if (toInstall.isEmpty()) {
             item { Text(stringResource(R.string.webapk_candidates_empty), color = MaterialTheme.colorScheme.onSurfaceVariant) }
         }
@@ -236,6 +243,30 @@ private fun defaultBrowser(context: Context): Browser {
     if (pkg == null || pkg == "android") return Browser(null, makesWebApk = true)
     return Browser(info.loadLabel(pm).toString(), pkg in WEBAPK_BROWSERS)
 }
+
+/**
+ * Sites déclarés par les apps qui ne sont pas dans la liste de référence (voir [AppSites]). La catégorie est celle de
+ * l'app dans la grille de score.
+ */
+private suspend fun declaredSites(context: Context, apps: List<AuditedApp>, webServices: WebServices): List<WebService> =
+    withContext(Dispatchers.IO) {
+        val sites = AppSites(context)
+        apps.filter { it.app.webStartUrl == null && webServices.forPackage(it.app.packageName) == null && it.app.packageName !in webServices.noWeb }
+            // Un jeu n'a pas de version web qui le remplace.
+            .filter { it.result.categoryId != "GAME" }
+            .mapNotNull { audited ->
+                val url = sites.siteOf(audited.app.packageName, audited.app.label) ?: return@mapNotNull null
+                val host = WebServices.hostOf(url) ?: return@mapNotNull null
+                WebService(
+                    id = "app-${audited.app.packageName}",
+                    name = audited.app.label,
+                    url = url,
+                    hosts = listOf(SiteChooser.registrable(host)),
+                    category = audited.result.categoryId,
+                    packages = listOf(audited.app.packageName),
+                )
+            }
+    }
 
 /** Services dont un WebAPK est installé, d'après l'adresse de départ de chaque WebAPK. */
 private suspend fun installedWebApkServices(context: Context, webServices: WebServices): Set<String> = withContext(Dispatchers.IO) {

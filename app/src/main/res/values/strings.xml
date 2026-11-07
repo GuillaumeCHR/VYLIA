@@ -227,8 +227,9 @@
     <string name="webapk_no_score">VYLIA cannot measure a website\'s trackers, so it shows no score for the web version. A browser that blocks trackers adds to the gain.</string>
     <string name="webapk_show_intro">What is a WebAPK?</string>
     <string name="webapk_hide_intro">Hide</string>
-    <string name="webapk_candidates_title">Your apps that have a web version</string>
-    <string name="webapk_candidates_empty">None of your apps has a known web equivalent yet.</string>
+    <string name="webapk_candidates_title">Your apps that have a website</string>
+    <string name="webapk_candidates_hint">Found from the web addresses each app declares to Android, without connecting to anything. Most sites work well on a phone, but not all: if the site doesn\'t suit you, keep the app. The lowest scores first.</string>
+    <string name="webapk_candidates_empty">None of your apps declares a website.</string>
     <string name="webapk_candidate_native">App score: %1$d</string>
     <string name="webapk_candidate_nothing">No tracker or sensitive permission to remove: the gain would be small.</string>
     <string name="webapk_install">Install the web version</string>

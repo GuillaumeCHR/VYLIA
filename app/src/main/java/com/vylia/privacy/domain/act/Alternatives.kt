@@ -40,8 +40,8 @@ data class Alternative(
     @SerialName("open_source") val openSource: Boolean = false,
     /** Coût relevé sur AlternativeTo (« Free », « Freemium »…), `null` si inconnu. */
     val cost: String? = null,
-    /** Likes de la communauté AlternativeTo au moment du relevé : la popularité, pas un audit. */
-    val likes: Int? = null,
+    /** Note moyenne (étoiles) sur la fiche Google Play au moment du relevé ; absente si l'app n'y est pas notée. */
+    val rating: Double? = null,
     val pitch: Map<String, String>,
 )
 

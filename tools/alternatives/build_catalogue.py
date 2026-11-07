@@ -14,6 +14,11 @@ Règles (affichées aussi dans l'app, onglet Alternatives › « Comment cette l
   5. Disponibilité : identifiant vérifié sur le Play Store ou sur F-Droid (PACKAGES) ; le lien ouvert est celui du
      Play Store quand la fiche existe, sinon F-Droid.
   6. Trois apps par catégorie au plus (deux quand il n'y en a pas plus).
+  7. Remplacements choisis à la main (REPLACEMENTS), avec leur raison : une app que le classement F-Droid ne peut pas
+     proposer (absente de F-Droid) prend la place d'une autre.
+  8. Note affichée : les étoiles de la fiche Google Play (tools/alternatives/play_ratings.json, relevé par
+     fetch_play_ratings.py) ; rien si l'app n'est pas sur Google Play ou sans note. Les likes AlternativeTo servent
+     au classement seulement.
 """
 import json
 import sys
@@ -80,6 +85,17 @@ EXCLUSIONS = {
     "DNS66": "plus distribuée (retirée de F-Droid)",
     "AdAway": "bloqueur par VPN local : fait doublon avec le Bouclier VYLIA (un seul VPN à la fois)",
 }
+
+# Remplacements validés le 2026-11-07 : Bluesky, réseau social ouvert (protocole AT, app sous licence MIT) plus
+# répandu, à la place de Tusky, simple client Mastodon qui fait doublon avec l'app Mastodon. Absent de F-Droid.
+REPLACEMENTS = {
+    "Tusky": {
+        "name": "Bluesky", "package": "xyz.blueskyweb.app", "play": "xyz.blueskyweb.app", "open_source": True, "cost": "Free",
+        "pitch": {"en": "Open social network (AT Protocol), chronological or custom feeds, no ads.",
+                  "fr": "Réseau social ouvert (protocole AT), fil chronologique ou personnalisé, sans publicité."},
+    },
+}
+RATINGS = Path(__file__).resolve().parent / "play_ratings.json"
 
 # Identifiants vérifiés (2026-11-01) : play = fiche Play Store, fdroid = fiche F-Droid ; None si absente.
 PACKAGES = {
@@ -213,6 +229,7 @@ def main(xlsx: str):
     rows = list(load_workbook(xlsx, read_only=True)["Toutes les apps"].iter_rows(values_only=True))
     apps = [dict(zip(rows[0], r)) for r in rows[1:] if r[0]]
     groups, report = [], []
+    ratings = json.loads(RATINGS.read_text(encoding="utf-8")) if RATINGS.exists() else {}
     for gid, en, fr, types in PLAY:
         candidates = [a for a in apps if a["android"] == "oui" and a["categorie_source"] in types]
         # Gratuites d'abord, quelle que soit la licence, puis par likes (à égalité, ordre alphabétique).
@@ -234,6 +251,12 @@ def main(xlsx: str):
                 used_types.add(a["categorie_source"])
         alternatives = []
         for a in chosen:
+            if a["nom"] in REPLACEMENTS:
+                entry = dict(REPLACEMENTS[a["nom"]])
+                report.append(f"  {fr} : {a['nom']} remplacée par {entry['name']}")
+                rated(entry, ratings)
+                alternatives.append(entry)
+                continue
             play, fdroid = PACKAGES[a["nom"]]
             entry = {"name": a["nom"], "package": play or fdroid}
             if fdroid:
@@ -242,9 +265,9 @@ def main(xlsx: str):
                 entry["play"] = play
             entry["open_source"] = "Open Source" in (a["licence"] or "")
             entry["cost"] = a["cout"]
-            entry["likes"] = a["likes"] or 0
             pitch_en, pitch_fr = PITCH[a["nom"]]
             entry["pitch"] = {"en": pitch_en, "fr": pitch_fr}
+            rated(entry, ratings)
             alternatives.append(entry)
         group = {"id": gid, "title": {"en": en, "fr": fr}}
         if gid in REPLACES:
@@ -263,6 +286,15 @@ def main(xlsx: str):
     }
     write(catalogue)
     print("\n".join(report))
+
+
+def rated(entry: dict, ratings: dict):
+    """Étoiles Google Play, placées avant la présentation ; rien sans fiche Play ou sans note."""
+    pitch = entry.pop("pitch")
+    value = ratings.get(entry.get("play") or "")
+    if value is not None:
+        entry["rating"] = value
+    entry["pitch"] = pitch
 
 
 def write(catalogue: dict):

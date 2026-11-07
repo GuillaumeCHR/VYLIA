@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "last_update": "2026-11-01",
+  "last_update": "2026-11-07",
   "description": "Alternatives par catégorie du Play Store, choisies par tools/alternatives/build_catalogue.py depuis le classement AlternativeTo (filtre F-Droid). fdroid / play : identifiant sur le magasin, absent s'il n'y est pas.",
   "groups": [
     {
@@ -9,11 +9,11 @@
       "replaces": ["com.whatsapp", "com.facebook.orca", "com.viber.voip", "org.telegram.messenger", "com.snapchat.android", "com.android.chrome", "com.microsoft.emmx", "com.opera.browser", "com.sec.android.app.sbrowser", "com.google.android.gm", "com.microsoft.office.outlook", "com.yahoo.mobile.client.android.mail"],
       "categories": ["MESSAGING", "EMAIL", "BROWSER"],
       "alternatives": [
-        {"name": "Mozilla Firefox", "package": "org.mozilla.firefox", "play": "org.mozilla.firefox", "open_source": true, "cost": "Free", "likes": 7774,
+        {"name": "Mozilla Firefox", "package": "org.mozilla.firefox", "play": "org.mozilla.firefox", "open_source": true, "cost": "Free", "rating": 4.7,
          "pitch": {"en": "Independent browser that blocks many trackers by default and accepts add-ons.", "fr": "Navigateur indépendant qui bloque de nombreux traqueurs par défaut et accepte les extensions."}},
-        {"name": "Thunderbird", "package": "net.thunderbird.android", "fdroid": "net.thunderbird.android", "play": "net.thunderbird.android", "open_source": true, "cost": "Free", "likes": 2652,
+        {"name": "Thunderbird", "package": "net.thunderbird.android", "fdroid": "net.thunderbird.android", "play": "net.thunderbird.android", "open_source": true, "cost": "Free", "rating": 4.0,
          "pitch": {"en": "Email app from Mozilla, for all your accounts, without ads.", "fr": "Messagerie e-mail de Mozilla, pour tous vos comptes, sans publicité."}},
-        {"name": "Signal", "package": "org.thoughtcrime.securesms", "play": "org.thoughtcrime.securesms", "open_source": true, "cost": "Free", "likes": 1501,
+        {"name": "Signal", "package": "org.thoughtcrime.securesms", "play": "org.thoughtcrime.securesms", "open_source": true, "cost": "Free", "rating": 4.6,
          "pitch": {"en": "End-to-end encrypted messages and calls, run by a non-profit.", "fr": "Messages et appels chiffrés de bout en bout, par une fondation à but non lucratif."}}
       ]
     },
@@ -23,11 +23,11 @@
       "replaces": ["com.facebook.katana", "com.instagram.android", "com.twitter.android", "com.instagram.barcelona", "com.zhiliaoapp.musically"],
       "categories": ["SOCIAL"],
       "alternatives": [
-        {"name": "Mastodon", "package": "org.joinmastodon.android", "fdroid": "org.joinmastodon.android", "play": "org.joinmastodon.android", "open_source": true, "cost": "Free", "likes": 642,
+        {"name": "Mastodon", "package": "org.joinmastodon.android", "fdroid": "org.joinmastodon.android", "play": "org.joinmastodon.android", "open_source": true, "cost": "Free", "rating": 3.8,
          "pitch": {"en": "Official app of the decentralised social network, chronological feed, no ads.", "fr": "App officielle du réseau social décentralisé, fil chronologique, sans publicité."}},
-        {"name": "Tusky", "package": "com.keylesspalace.tusky", "fdroid": "com.keylesspalace.tusky", "play": "com.keylesspalace.tusky", "open_source": true, "cost": "Free", "likes": 54,
-         "pitch": {"en": "Light, fast Mastodon client.", "fr": "Client Mastodon léger et rapide."}},
-        {"name": "RedReader", "package": "org.quantumbadger.redreader", "fdroid": "org.quantumbadger.redreader", "play": "org.quantumbadger.redreader", "open_source": true, "cost": "Free", "likes": 34,
+        {"name": "Bluesky", "package": "xyz.blueskyweb.app", "play": "xyz.blueskyweb.app", "open_source": true, "cost": "Free", "rating": 3.6,
+         "pitch": {"en": "Open social network (AT Protocol), chronological or custom feeds, no ads.", "fr": "Réseau social ouvert (protocole AT), fil chronologique ou personnalisé, sans publicité."}},
+        {"name": "RedReader", "package": "org.quantumbadger.redreader", "fdroid": "org.quantumbadger.redreader", "play": "org.quantumbadger.redreader", "open_source": true, "cost": "Free", "rating": 4.4,
          "pitch": {"en": "Reddit reader without ads or tracking.", "fr": "Lecteur Reddit sans publicité ni pistage."}}
       ]
     },
@@ -37,11 +37,11 @@
       "replaces": ["com.spotify.music", "com.soundcloud.android", "com.deezer.android.app", "com.shazam.android"],
       "categories": ["MEDIA_PLAYER"],
       "alternatives": [
-        {"name": "AntennaPod", "package": "de.danoeh.antennapod", "fdroid": "de.danoeh.antennapod", "play": "de.danoeh.antennapod", "open_source": true, "cost": "Free", "likes": 218,
+        {"name": "AntennaPod", "package": "de.danoeh.antennapod", "fdroid": "de.danoeh.antennapod", "play": "de.danoeh.antennapod", "open_source": true, "cost": "Free", "rating": 4.9,
          "pitch": {"en": "Podcast player: subscriptions, downloads, no account.", "fr": "Lecteur de podcasts : abonnements, téléchargements, sans compte."}},
-        {"name": "Spotube", "package": "oss.krtirtho.spotube", "fdroid": "oss.krtirtho.spotube", "open_source": true, "cost": "Free", "likes": 164,
+        {"name": "Spotube", "package": "oss.krtirtho.spotube", "fdroid": "oss.krtirtho.spotube", "open_source": true, "cost": "Free",
          "pitch": {"en": "Music streaming client without a paid account or ads.", "fr": "Client de musique en streaming, sans compte payant ni publicité."}},
-        {"name": "Audile", "package": "com.mrsep.musicrecognizer", "fdroid": "com.mrsep.musicrecognizer", "open_source": true, "cost": "Free", "likes": 53,
+        {"name": "Audile", "package": "com.mrsep.musicrecognizer", "fdroid": "com.mrsep.musicrecognizer", "open_source": true, "cost": "Free",
          "pitch": {"en": "Recognises the song playing around you.", "fr": "Reconnaît la chanson qui passe autour de vous."}}
       ]
     },
@@ -50,11 +50,11 @@
       "title": {"en": "Video Players & Editors", "fr": "Lecteurs et éditeurs vidéo"},
       "replaces": ["com.google.android.youtube"],
       "alternatives": [
-        {"name": "VLC Media Player", "package": "org.videolan.vlc", "fdroid": "org.videolan.vlc", "play": "org.videolan.vlc", "open_source": true, "cost": "Free", "likes": 7953,
+        {"name": "VLC Media Player", "package": "org.videolan.vlc", "fdroid": "org.videolan.vlc", "play": "org.videolan.vlc", "open_source": true, "cost": "Free", "rating": 4.0,
          "pitch": {"en": "Plays almost any video or audio file, no ads.", "fr": "Lit presque tous les fichiers vidéo et audio, sans publicité."}},
-        {"name": "NewPipe", "package": "org.schabi.newpipe", "fdroid": "org.schabi.newpipe", "open_source": true, "cost": "Free", "likes": 733,
+        {"name": "NewPipe", "package": "org.schabi.newpipe", "fdroid": "org.schabi.newpipe", "open_source": true, "cost": "Free",
          "pitch": {"en": "Watch YouTube without a Google account or ads, with downloads.", "fr": "YouTube sans compte Google ni publicité, avec téléchargement."}},
-        {"name": "PeerTube", "package": "org.framasoft.peertube", "fdroid": "org.framasoft.peertube", "play": "org.framasoft.peertube", "open_source": true, "cost": "Free", "likes": 549,
+        {"name": "PeerTube", "package": "org.framasoft.peertube", "fdroid": "org.framasoft.peertube", "play": "org.framasoft.peertube", "open_source": true, "cost": "Free", "rating": 4.0,
          "pitch": {"en": "Decentralised video platform, run by independent hosts.", "fr": "Plateforme vidéo décentralisée, portée par des hébergeurs indépendants."}}
       ]
     },
@@ -64,11 +64,11 @@
       "replaces": ["com.google.android.apps.photos"],
       "categories": ["PHOTO_VIDEO"],
       "alternatives": [
-        {"name": "Open Camera", "package": "net.sourceforge.opencamera", "fdroid": "net.sourceforge.opencamera", "play": "net.sourceforge.opencamera", "open_source": true, "cost": "Free", "likes": 137,
+        {"name": "Open Camera", "package": "net.sourceforge.opencamera", "fdroid": "net.sourceforge.opencamera", "play": "net.sourceforge.opencamera", "open_source": true, "cost": "Free", "rating": 4.0,
          "pitch": {"en": "Full-featured camera, no ads, no data collection.", "fr": "Appareil photo complet, sans publicité ni collecte de données."}},
-        {"name": "Fossify Gallery", "package": "org.fossify.gallery", "fdroid": "org.fossify.gallery", "play": "org.fossify.gallery", "open_source": true, "cost": "Free", "likes": 122,
+        {"name": "Fossify Gallery", "package": "org.fossify.gallery", "fdroid": "org.fossify.gallery", "play": "org.fossify.gallery", "open_source": true, "cost": "Free", "rating": 4.5,
          "pitch": {"en": "Photo gallery that stays offline.", "fr": "Galerie photo qui reste hors ligne."}},
-        {"name": "Image Toolbox", "package": "ru.tech.imageresizershrinker", "fdroid": "ru.tech.imageresizershrinker", "play": "ru.tech.imageresizershrinker", "open_source": true, "cost": "Free", "likes": 88,
+        {"name": "Image Toolbox", "package": "ru.tech.imageresizershrinker", "fdroid": "ru.tech.imageresizershrinker", "play": "ru.tech.imageresizershrinker", "open_source": true, "cost": "Free", "rating": 4.7,
          "pitch": {"en": "Resize, crop, convert and edit images on the phone.", "fr": "Redimensionner, recadrer, convertir et retoucher des images sur le téléphone."}}
       ]
     },
@@ -78,11 +78,11 @@
       "replaces": ["com.google.android.keep", "com.evernote", "com.microsoft.office.onenote", "com.google.android.apps.docs", "com.microsoft.skydrive", "com.dropbox.android"],
       "categories": ["PRODUCTIVITY_CLOUD"],
       "alternatives": [
-        {"name": "LocalSend", "package": "org.localsend.localsend_app", "fdroid": "org.localsend.localsend_app", "play": "org.localsend.localsend_app", "open_source": true, "cost": "Free", "likes": 519,
+        {"name": "LocalSend", "package": "org.localsend.localsend_app", "fdroid": "org.localsend.localsend_app", "play": "org.localsend.localsend_app", "open_source": true, "cost": "Free", "rating": 4.6,
          "pitch": {"en": "Send files to nearby devices over Wi-Fi, without the cloud.", "fr": "Envoyer des fichiers aux appareils proches par le Wi-Fi, sans cloud."}},
-        {"name": "Super Productivity", "package": "com.superproductivity.superproductivity", "fdroid": "com.superproductivity.superproductivity", "play": "com.superproductivity.superproductivity", "open_source": true, "cost": "Free", "likes": 368,
+        {"name": "Super Productivity", "package": "com.superproductivity.superproductivity", "fdroid": "com.superproductivity.superproductivity", "play": "com.superproductivity.superproductivity", "open_source": true, "cost": "Free", "rating": 4.7,
          "pitch": {"en": "Tasks, timer and focus sessions, without an account.", "fr": "Tâches, minuteur et sessions de concentration, sans compte."}},
-        {"name": "Logseq", "package": "com.logseq.app", "fdroid": "com.logseq.app", "open_source": true, "cost": "Free", "likes": 359,
+        {"name": "Logseq", "package": "com.logseq.app", "fdroid": "com.logseq.app", "open_source": true, "cost": "Free",
          "pitch": {"en": "Notes and outlines kept on your device, in plain files.", "fr": "Notes et plans gardés sur votre appareil, en fichiers simples."}}
       ]
     },
@@ -92,11 +92,11 @@
       "replaces": ["com.google.android.inputmethod.latin", "com.touchtype.swiftkey", "com.samsung.android.honeyboard"],
       "categories": ["KEYBOARD"],
       "alternatives": [
-        {"name": "F-Droid", "package": "org.fdroid.fdroid", "fdroid": "org.fdroid.fdroid", "open_source": true, "cost": "Free", "likes": 974,
+        {"name": "F-Droid", "package": "org.fdroid.fdroid", "fdroid": "org.fdroid.fdroid", "open_source": true, "cost": "Free",
          "pitch": {"en": "Catalogue of free apps, checked and built from their source code.", "fr": "Catalogue d'apps libres, vérifiées et compilées depuis leur code source."}},
-        {"name": "HeliBoard", "package": "helium314.keyboard", "fdroid": "helium314.keyboard", "open_source": true, "cost": "Free", "likes": 119,
+        {"name": "HeliBoard", "package": "helium314.keyboard", "fdroid": "helium314.keyboard", "open_source": true, "cost": "Free",
          "pitch": {"en": "Keyboard with no Internet access, so nothing you type leaves the phone.", "fr": "Clavier sans accès à Internet : rien de ce que vous tapez ne quitte le téléphone."}},
-        {"name": "Amaze File Manager", "package": "com.amaze.filemanager", "fdroid": "com.amaze.filemanager", "play": "com.amaze.filemanager", "open_source": true, "cost": "Free", "likes": 104,
+        {"name": "Amaze File Manager", "package": "com.amaze.filemanager", "fdroid": "com.amaze.filemanager", "play": "com.amaze.filemanager", "open_source": true, "cost": "Free", "rating": 4.0,
          "pitch": {"en": "Simple file manager, no ads.", "fr": "Gestionnaire de fichiers simple, sans publicité."}}
       ]
     },
@@ -106,11 +106,11 @@
       "replaces": ["com.google.android.apps.authenticator2", "com.azure.authenticator", "com.authy.authy", "com.lastpass.lpandroid"],
       "categories": ["SECURITY_AUTH"],
       "alternatives": [
-        {"name": "Aegis Authenticator", "package": "com.beemdevelopment.aegis", "fdroid": "com.beemdevelopment.aegis", "play": "com.beemdevelopment.aegis", "open_source": true, "cost": "Free", "likes": 288,
+        {"name": "Aegis Authenticator", "package": "com.beemdevelopment.aegis", "fdroid": "com.beemdevelopment.aegis", "play": "com.beemdevelopment.aegis", "open_source": true, "cost": "Free", "rating": 4.8,
          "pitch": {"en": "Two-factor codes stored encrypted on the phone.", "fr": "Codes de double authentification stockés chiffrés sur le téléphone."}},
-        {"name": "I2P", "package": "net.i2p.android", "play": "net.i2p.android", "open_source": true, "cost": "Free", "likes": 258,
+        {"name": "I2P", "package": "net.i2p.android", "play": "net.i2p.android", "open_source": true, "cost": "Free", "rating": 3.4,
          "pitch": {"en": "Anonymous network that hides who talks to whom.", "fr": "Réseau anonyme qui masque qui communique avec qui."}},
-        {"name": "KeePassDX", "package": "com.kunzisoft.keepass.free", "fdroid": "com.kunzisoft.keepass.libre", "play": "com.kunzisoft.keepass.free", "open_source": true, "cost": "Free", "likes": 124,
+        {"name": "KeePassDX", "package": "com.kunzisoft.keepass.free", "fdroid": "com.kunzisoft.keepass.libre", "play": "com.kunzisoft.keepass.free", "open_source": true, "cost": "Free", "rating": 4.4,
          "pitch": {"en": "Password manager with an encrypted file you keep yourself.", "fr": "Gestionnaire de mots de passe dans un fichier chiffré que vous gardez vous-même."}}
       ]
     },
@@ -120,11 +120,11 @@
       "replaces": ["com.google.android.apps.maps", "com.waze"],
       "categories": ["NAVIGATION"],
       "alternatives": [
-        {"name": "Organic Maps", "package": "app.organicmaps", "fdroid": "app.organicmaps", "play": "app.organicmaps", "open_source": true, "cost": "Free", "likes": 240,
+        {"name": "Organic Maps", "package": "app.organicmaps", "fdroid": "app.organicmaps", "play": "app.organicmaps", "open_source": true, "cost": "Free", "rating": 4.4,
          "pitch": {"en": "Offline maps and navigation, from OpenStreetMap, no tracking.", "fr": "Cartes et navigation hors ligne, issues d'OpenStreetMap, sans pistage."}},
-        {"name": "StreetComplete", "package": "de.westnordost.streetcomplete", "fdroid": "de.westnordost.streetcomplete", "play": "de.westnordost.streetcomplete", "open_source": true, "cost": "Free", "likes": 49,
+        {"name": "StreetComplete", "package": "de.westnordost.streetcomplete", "fdroid": "de.westnordost.streetcomplete", "play": "de.westnordost.streetcomplete", "open_source": true, "cost": "Free", "rating": 5.0,
          "pitch": {"en": "Improve OpenStreetMap with simple questions about your surroundings.", "fr": "Améliorer OpenStreetMap par de petites questions sur votre quartier."}},
-        {"name": "KDE Itinerary", "package": "org.kde.itinerary", "play": "org.kde.itinerary", "open_source": true, "cost": "Free", "likes": 9,
+        {"name": "KDE Itinerary", "package": "org.kde.itinerary", "play": "org.kde.itinerary", "open_source": true, "cost": "Free", "rating": 4.3,
          "pitch": {"en": "Travel assistant: tickets and bookings in one place, kept on the phone.", "fr": "Assistant de voyage : billets et réservations réunis, gardés sur le téléphone."}}
       ]
     },
@@ -134,9 +134,9 @@
       "replaces": ["com.lachainemeteo.androidapp", "com.weather.Weather", "com.accuweather.android"],
       "categories": ["WEATHER"],
       "alternatives": [
-        {"name": "Breezy Weather", "package": "org.breezyweather", "fdroid": "org.breezyweather", "open_source": true, "cost": "Free", "likes": 85,
+        {"name": "Breezy Weather", "package": "org.breezyweather", "fdroid": "org.breezyweather", "open_source": true, "cost": "Free",
          "pitch": {"en": "Detailed forecasts from several sources, no ads.", "fr": "Prévisions détaillées de plusieurs sources, sans publicité."}},
-        {"name": "Bura", "package": "com.davidtakac.bura", "fdroid": "com.davidtakac.bura", "open_source": true, "cost": "Free", "likes": 39,
+        {"name": "Bura", "package": "com.davidtakac.bura", "fdroid": "com.davidtakac.bura", "open_source": true, "cost": "Free",
          "pitch": {"en": "Minimal, ad-free weather app.", "fr": "Météo épurée, sans publicité."}}
       ]
     },
@@ -145,11 +145,11 @@
       "title": {"en": "Finance", "fr": "Finances"},
       "categories": ["FINANCE_ACCOUNTS"],
       "alternatives": [
-        {"name": "MoneyManager Ex", "package": "com.money.manager.ex", "fdroid": "com.money.manager.ex", "open_source": true, "cost": "Free", "likes": 96,
+        {"name": "MoneyManager Ex", "package": "com.money.manager.ex", "fdroid": "com.money.manager.ex", "open_source": true, "cost": "Free",
          "pitch": {"en": "Budget and accounts kept on the phone.", "fr": "Budget et comptes gardés sur le téléphone."}},
-        {"name": "Unstoppable Wallet", "package": "io.horizontalsystems.bankwallet", "fdroid": "io.horizontalsystems.bankwallet", "play": "io.horizontalsystems.bankwallet", "open_source": true, "cost": "Free", "likes": 25,
+        {"name": "Unstoppable Wallet", "package": "io.horizontalsystems.bankwallet", "fdroid": "io.horizontalsystems.bankwallet", "play": "io.horizontalsystems.bankwallet", "open_source": true, "cost": "Free", "rating": 3.8,
          "pitch": {"en": "Crypto wallet where you alone hold the keys.", "fr": "Portefeuille crypto dont vous seul détenez les clés."}},
-        {"name": "Recurring Expense Tracker", "package": "de.dbauer.expensetracker", "fdroid": "de.dbauer.expensetracker", "play": "de.dbauer.expensetracker", "open_source": true, "cost": "Free", "likes": 16,
+        {"name": "Recurring Expense Tracker", "package": "de.dbauer.expensetracker", "fdroid": "de.dbauer.expensetracker", "play": "de.dbauer.expensetracker", "open_source": true, "cost": "Free",
          "pitch": {"en": "Keep track of your subscriptions and recurring costs.", "fr": "Suivre vos abonnements et dépenses récurrentes."}}
       ]
     },
@@ -158,11 +158,11 @@
       "title": {"en": "Health & Fitness", "fr": "Santé et remise en forme"},
       "categories": ["FITNESS", "HEALTH_TRACKING"],
       "alternatives": [
-        {"name": "log28", "package": "com.log28", "fdroid": "com.log28", "open_source": true, "cost": "Free", "likes": 282,
+        {"name": "log28", "package": "com.log28", "fdroid": "com.log28", "open_source": true, "cost": "Free",
          "pitch": {"en": "Period and symptom tracking that stays on the phone.", "fr": "Suivi du cycle et des symptômes qui reste sur le téléphone."}},
-        {"name": "Loop Habit Tracker", "package": "org.isoron.uhabits", "fdroid": "org.isoron.uhabits", "play": "org.isoron.uhabits", "open_source": true, "cost": "Free", "likes": 137,
+        {"name": "Loop Habit Tracker", "package": "org.isoron.uhabits", "fdroid": "org.isoron.uhabits", "play": "org.isoron.uhabits", "open_source": true, "cost": "Free", "rating": 4.7,
          "pitch": {"en": "Build habits with simple charts, no account.", "fr": "Prendre de bonnes habitudes avec des graphiques simples, sans compte."}},
-        {"name": "Open Food Facts", "package": "org.openfoodfacts.scanner", "play": "org.openfoodfacts.scanner", "open_source": true, "cost": "Free", "likes": 98,
+        {"name": "Open Food Facts", "package": "org.openfoodfacts.scanner", "play": "org.openfoodfacts.scanner", "open_source": true, "cost": "Free", "rating": 4.7,
          "pitch": {"en": "Scan food to see its ingredients and Nutri-Score, from an open database.", "fr": "Scanner un aliment pour voir sa composition et son Nutri-Score, depuis une base ouverte."}}
       ]
     },
@@ -170,11 +170,11 @@
       "id": "books",
       "title": {"en": "Books & Reference", "fr": "Livres et références"},
       "alternatives": [
-        {"name": "Wikipedia", "package": "org.wikipedia", "fdroid": "org.wikipedia", "play": "org.wikipedia", "open_source": true, "cost": "Free", "likes": 1702,
+        {"name": "Wikipedia", "package": "org.wikipedia", "fdroid": "org.wikipedia", "play": "org.wikipedia", "open_source": true, "cost": "Free", "rating": 4.3,
          "pitch": {"en": "The official encyclopedia app, with offline reading lists.", "fr": "L'app officielle de l'encyclopédie, avec listes de lecture hors ligne."}},
-        {"name": "MuPDF", "package": "com.artifex.mupdf.viewer.app", "fdroid": "com.artifex.mupdf.viewer.app", "play": "com.artifex.mupdf.viewer.app", "open_source": true, "cost": "Free", "likes": 165,
+        {"name": "MuPDF", "package": "com.artifex.mupdf.viewer.app", "fdroid": "com.artifex.mupdf.viewer.app", "play": "com.artifex.mupdf.viewer.app", "open_source": true, "cost": "Free", "rating": 4.5,
          "pitch": {"en": "Fast PDF and ebook reader.", "fr": "Lecteur PDF et livres numériques rapide."}},
-        {"name": "AnkiDroid", "package": "com.ichi2.anki", "fdroid": "com.ichi2.anki", "play": "com.ichi2.anki", "open_source": true, "cost": "Free", "likes": 163,
+        {"name": "AnkiDroid", "package": "com.ichi2.anki", "fdroid": "com.ichi2.anki", "play": "com.ichi2.anki", "open_source": true, "cost": "Free", "rating": 4.8,
          "pitch": {"en": "Flashcards with spaced repetition to memorise anything.", "fr": "Cartes mémoire à répétition espacée pour tout retenir."}}
       ]
     },
@@ -183,11 +183,11 @@
       "title": {"en": "News & Magazines", "fr": "Actualités et magazines"},
       "categories": ["NEWS_READING"],
       "alternatives": [
-        {"name": "Feeder", "package": "com.nononsenseapps.feeder.play", "fdroid": "com.nononsenseapps.feeder", "play": "com.nononsenseapps.feeder.play", "open_source": true, "cost": "Free", "likes": 88,
+        {"name": "Feeder", "package": "com.nononsenseapps.feeder.play", "fdroid": "com.nononsenseapps.feeder", "play": "com.nononsenseapps.feeder.play", "open_source": true, "cost": "Free", "rating": 4.4,
          "pitch": {"en": "Follow sites by RSS, without an account or tracking.", "fr": "Suivre des sites par RSS, sans compte ni pistage."}},
-        {"name": "Read You", "package": "me.ash.reader", "fdroid": "me.ash.reader", "open_source": true, "cost": "Free", "likes": 25,
+        {"name": "Read You", "package": "me.ash.reader", "fdroid": "me.ash.reader", "open_source": true, "cost": "Free",
          "pitch": {"en": "Elegant RSS reader.", "fr": "Lecteur RSS élégant."}},
-        {"name": "FeedFlow", "package": "com.prof18.feedflow", "fdroid": "com.prof18.feedflow", "play": "com.prof18.feedflow", "open_source": true, "cost": "Free", "likes": 19,
+        {"name": "FeedFlow", "package": "com.prof18.feedflow", "fdroid": "com.prof18.feedflow", "play": "com.prof18.feedflow", "open_source": true, "cost": "Free", "rating": 4.7,
          "pitch": {"en": "RSS reader that syncs without a dedicated account.", "fr": "Lecteur RSS synchronisable sans compte dédié."}}
       ]
     },
@@ -195,11 +195,11 @@
       "id": "personalization",
       "title": {"en": "Personalization", "fr": "Personnalisation"},
       "alternatives": [
-        {"name": "Lawnchair", "package": "app.lawnchair.play", "play": "app.lawnchair.play", "open_source": true, "cost": "Free", "likes": 103,
+        {"name": "Lawnchair", "package": "app.lawnchair.play", "play": "app.lawnchair.play", "open_source": true, "cost": "Free",
          "pitch": {"en": "Customisable home screen close to the Pixel one.", "fr": "Écran d'accueil personnalisable, proche de celui des Pixel."}},
-        {"name": "Paperize", "package": "com.anthonyla.paperize", "fdroid": "com.anthonyla.paperize", "open_source": true, "cost": "Free", "likes": 18,
+        {"name": "Paperize", "package": "com.anthonyla.paperize", "fdroid": "com.anthonyla.paperize", "open_source": true, "cost": "Free",
          "pitch": {"en": "Rotates your wallpapers automatically.", "fr": "Change vos fonds d'écran automatiquement."}},
-        {"name": "Kvæsitso", "package": "de.mm20.launcher2.release", "fdroid": "de.mm20.launcher2.release", "open_source": true, "cost": "Free", "likes": 99,
+        {"name": "Kvæsitso", "package": "de.mm20.launcher2.release", "fdroid": "de.mm20.launcher2.release", "open_source": true, "cost": "Free",
          "pitch": {"en": "Search-centred launcher, everything one swipe away.", "fr": "Lanceur centré sur la recherche, tout à portée d'un geste."}}
       ]
     },
@@ -207,11 +207,11 @@
       "id": "ai",
       "title": {"en": "AI", "fr": "Intelligence artificielle"},
       "alternatives": [
-        {"name": "FUTO Voice Input", "package": "org.futo.voiceinput", "play": "org.futo.voiceinput", "open_source": false, "cost": "Free", "likes": 44,
+        {"name": "FUTO Voice Input", "package": "org.futo.voiceinput", "play": "org.futo.voiceinput", "open_source": false, "cost": "Free", "rating": 4.3,
          "pitch": {"en": "Voice typing recognised on the phone itself, nothing sent online.", "fr": "Dictée vocale reconnue sur le téléphone même, rien n'est envoyé en ligne."}},
-        {"name": "Dicio", "package": "org.stypox.dicio", "fdroid": "org.stypox.dicio", "open_source": true, "cost": "Free", "likes": 22,
+        {"name": "Dicio", "package": "org.stypox.dicio", "fdroid": "org.stypox.dicio", "open_source": true, "cost": "Free",
          "pitch": {"en": "Voice assistant that works offline.", "fr": "Assistant vocal qui fonctionne hors ligne."}},
-        {"name": "Maid (AI)", "package": "com.danemadsen.maid", "fdroid": "com.danemadsen.maid", "play": "com.danemadsen.maid", "open_source": true, "cost": "Free", "likes": 20,
+        {"name": "Maid (AI)", "package": "com.danemadsen.maid", "fdroid": "com.danemadsen.maid", "play": "com.danemadsen.maid", "open_source": true, "cost": "Free",
          "pitch": {"en": "Chat with AI models that can run on the phone itself.", "fr": "Discuter avec des modèles d'IA qui peuvent tourner sur le téléphone même."}}
       ]
     }

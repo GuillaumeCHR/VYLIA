@@ -181,7 +181,16 @@ fun MainScreen(
                     tab = analyzeSection,
                     onTab = { analyzeSection = it },
                 )
-                AppTab.MANAGE -> ManageScreen(modifier, pinnedPackage = pinned, section = manageSection, onSection = { manageSection = it })
+                AppTab.MANAGE -> ManageScreen(
+                    modifier,
+                    pinnedPackage = pinned,
+                    section = manageSection,
+                    onSection = { manageSection = it },
+                    onOpenWebApk = {
+                        filterSection = FilterSection.WEBAPK
+                        currentTab = AppTab.PROTECT
+                    },
+                )
                 AppTab.PROTECT -> ProtectScreen(modifier, section = filterSection, onSection = { filterSection = it })
                 AppTab.CELEBRATE -> CelebrateScreen(modifier)
             }

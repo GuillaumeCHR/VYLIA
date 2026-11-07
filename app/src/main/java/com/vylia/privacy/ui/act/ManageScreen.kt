@@ -78,6 +78,8 @@ fun ManageScreen(
     /** Sous-onglet affiché, gardé par l'écran principal pour toute la session. */
     section: ManageSection = ManageSection.PERMISSIONS,
     onSection: (ManageSection) -> Unit = {},
+    /** Lien de l'onglet Alternatives vers Filtrer › WebAPK. */
+    onOpenWebApk: () -> Unit = {},
     viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
     actViewModel: ActViewModel = viewModel(factory = ActViewModel.Factory),
 ) {
@@ -108,7 +110,7 @@ fun ManageScreen(
             userApps.isEmpty() -> ActPlaceholder(stringResource(R.string.act_empty_scan))
             else -> ReduceTab(
                 revocations, removals, usage, section, onSection,
-                alternatives = { AlternativesTab(state.scannedApps, userApps, actViewModel.catalogue) },
+                alternatives = { AlternativesTab(state.scannedApps, actViewModel.catalogue, onOpenWebApk) },
             )
         }
     }

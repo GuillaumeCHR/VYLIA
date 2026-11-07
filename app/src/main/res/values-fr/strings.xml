@@ -553,7 +553,7 @@
     <string name="help_replace_title">Remplacer une app</string>
     <string name="help_replace_intro">Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l\'app d\'origine demande et embarque : ses permissions et ses traqueurs.</string>
     <string name="help_celebrate_title">Célébrer vos progrès</string>
-    <string name="help_celebrate_intro">Le score de votre téléphone, vos progrès et vos badges. Le partage montre le score et les progrès, jamais la liste de vos apps.</string>
+    <string name="help_celebrate_intro">Le score de votre téléphone, vos progrès et vos badges. Le partage fait une image de votre score, de vos progrès, de vos traqueurs, du bouclier ou de vos trophées : seulement des chiffres d\'ensemble, jamais le nom d\'une app.</string>
     <string name="help_scoring_title">Calcul du score</string>
     <string name="help_scoring_intro">Comment la grille en vigueur transforme les permissions et les traqueurs d\'une app en score.</string>
     <plurals name="badge_rule_trackers_in_categories">

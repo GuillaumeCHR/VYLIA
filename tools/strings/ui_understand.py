@@ -152,7 +152,7 @@ S = [
  ("help_replace_title", "Replacing an app", "Remplacer une app"),
  ("help_replace_intro", "Alternatives to the most intrusive apps, sorted by Play Store category. The glossaries say what the original app asks for and embeds: its permissions and its trackers.", "Des alternatives aux apps les plus intrusives, rangées par catégorie du Play Store. Les lexiques disent ce que l'app d'origine demande et embarque : ses permissions et ses traqueurs."),
  ("help_celebrate_title", "Celebrating your progress", "Célébrer vos progrès"),
- ("help_celebrate_intro", "Your phone's score, your progress and your badges. Sharing shows the score and progress, never your list of apps.", "Le score de votre téléphone, vos progrès et vos badges. Le partage montre le score et les progrès, jamais la liste de vos apps."),
+ ("help_celebrate_intro", "Your phone's score, your progress and your badges. Sharing makes an image of your score, progress, trackers, shield or trophies: overall figures only, never the name of an app.", "Le score de votre téléphone, vos progrès et vos badges. Le partage fait une image de votre score, de vos progrès, de vos traqueurs, du bouclier ou de vos trophées : seulement des chiffres d'ensemble, jamais le nom d'une app."),
  ("help_scoring_title", "How the score works", "Calcul du score"),
  ("help_scoring_intro", "How the current grid turns an app's permissions and trackers into a score.", "Comment la grille en vigueur transforme les permissions et les traqueurs d'une app en score."),
 ]

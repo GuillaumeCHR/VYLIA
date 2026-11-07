@@ -537,7 +537,7 @@
     <string name="help_replace_title">Replacing an app</string>
     <string name="help_replace_intro">Alternatives to the most intrusive apps, sorted by Play Store category. The glossaries say what the original app asks for and embeds: its permissions and its trackers.</string>
     <string name="help_celebrate_title">Celebrating your progress</string>
-    <string name="help_celebrate_intro">Your phone\'s score, your progress and your badges. Sharing shows the score and progress, never your list of apps.</string>
+    <string name="help_celebrate_intro">Your phone\'s score, your progress and your badges. Sharing makes an image of your score, progress, trackers, shield or trophies: overall figures only, never the name of an app.</string>
     <string name="help_scoring_title">How the score works</string>
     <string name="help_scoring_intro">How the current grid turns an app\'s permissions and trackers into a score.</string>
     <plurals name="badge_rule_trackers_in_categories">

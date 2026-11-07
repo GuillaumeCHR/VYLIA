@@ -3,7 +3,7 @@ B = [
  ("PERM_ON_TARGET", ("Bullseye", "Dans le mille"), ("Every sensitive permission granted fits the app's purpose.", "Toutes les permissions sensibles accordées collent à la finalité de l'app.")),
  ("PERM_NOSY", ("Nosy", "Fouineuse"), ("At least one permission unexpected for this type of app is granted.", "Au moins une permission inattendue pour ce type d'app est accordée.")),
  ("PERM_FISHING", ("Fishing trip", "Pêche à la ligne"), ("Asks for permissions forbidden for this type of app, which you refused.", "Demande des permissions interdites pour ce type d'app, que vous avez refusées.")),
- ("PERM_OUTLAW", ("Outlaw", "Hors-la-loi"), ("At least one permission forbidden for this type of app is granted.", "Au moins une permission interdite pour ce type d'app est accordée.")),
+ ("PERM_OUTLAW", ("Off the road", "Sortie de route"), ("At least one permission forbidden for this type of app is granted.", "Au moins une permission interdite pour ce type d'app est accordée.")),
  ("PERM_GLUTTON", ("Glutton", "Goinfre"), ("So many permissions that the penalty cap is reached.", "Tellement de permissions que le plafond de pénalité est atteint.")),
  ("SEC_WANTED", ("Wanted", "Avis de recherche"), ("Recognised as known stalkerware by Echap's database: an app made to spy on someone in secret.", "Reconnue comme stalkerware connu par la base d'Echap : une app faite pour espionner quelqu'un en cachette.")),
  ("SEC_BIG_EARS", ("Big ears", "Grandes oreilles"), ("Can record the microphone or camera in the background.", "Peut enregistrer le micro ou la caméra en arrière-plan.")),

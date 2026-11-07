@@ -86,6 +86,7 @@ fun badgeEmoji(badge: BadgeDef): String = when (badge.icon) {
     "ic_badge_nosy" -> "👀"
     "ic_badge_fishhook" -> "🎣"
     "ic_badge_mask" -> "🥷"
+    "ic_badge_detour" -> "🚧"
     "ic_badge_glutton" -> "🍔"
     "ic_badge_spy" -> "🕵️"
     "ic_badge_ear" -> "👂"

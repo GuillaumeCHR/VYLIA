@@ -23,7 +23,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.PathEffect
@@ -123,15 +125,21 @@ private fun CurveCard(history: History, alert: ThresholdAlertRepository.State, o
             )
             if (points.size > 1) {
                 val delta = last.average - first.average
+                // Sous 0,05 point, l'écart s'arrondit à 0 : ni signe ni couleur, ce n'est ni une hausse ni une baisse.
+                val stable = abs(delta) < 0.05
                 val format = DateFormat.getDateInstance(DateFormat.MEDIUM, locale)
                 Text(
                     stringResource(
                         R.string.tracking_curve_since,
-                        (if (delta >= 0) "+" else "−") + abs(delta).formatted(locale, decimals = 1),
+                        if (stable) "0" else (if (delta > 0) "+" else "−") + abs(delta).formatted(locale, decimals = 1),
                         format.format(Date(first.at)),
                     ),
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (delta >= 0) Color(0xFF10B981) else MaterialTheme.colorScheme.error,
+                    color = when {
+                        stable -> MaterialTheme.colorScheme.onSurfaceVariant
+                        delta > 0 -> Color(0xFF10B981)
+                        else -> MaterialTheme.colorScheme.error
+                    },
                 )
             }
             ThresholdStatus(alert, last.score, onOpenAutomation, onOpenReduce)
@@ -222,6 +230,7 @@ private fun Curve(
     val thresholdColor = MaterialTheme.colorScheme.onSurface
     val markerColor = MaterialTheme.colorScheme.error
     val labelStyle = MaterialTheme.typography.labelSmall.copy(color = thresholdColor)
+    val labelBackground = MaterialTheme.colorScheme.surfaceContainerHighest
     val label = threshold?.let { stringResource(R.string.tracking_threshold_label, it) }
     val measurer = rememberTextMeasurer()
     val points = history.snapshots
@@ -268,9 +277,18 @@ private fun Curve(
             val ty = y(threshold.toDouble())
             drawLine(thresholdColor, Offset(0f, ty), Offset(size.width, ty), 2.dp.toPx(), pathEffect = PathEffect.dashPathEffect(floatArrayOf(16f, 10f)))
             val text = measurer.measure(label, labelStyle)
-            // Étiquette au-dessus de la ligne, ou dessous si le seuil est tout en haut.
-            val top = if (ty - text.size.height - 2.dp.toPx() >= 0) ty - text.size.height - 2.dp.toPx() else ty + 2.dp.toPx()
-            drawText(text, topLeft = Offset(size.width - text.size.width - 4.dp.toPx(), top))
+            // Étiquette à gauche, sur un fond : lisible même quand la courbe passe au ras du seuil. Au-dessus de la
+            // ligne, ou dessous si le seuil est tout en haut.
+            val pad = 4.dp.toPx()
+            val height = text.size.height + 2 * pad
+            val top = if (ty - height - 2.dp.toPx() >= 0) ty - height - 2.dp.toPx() else ty + 2.dp.toPx()
+            drawRoundRect(
+                labelBackground,
+                topLeft = Offset(pad, top),
+                size = Size(text.size.width + 2 * pad, height),
+                cornerRadius = CornerRadius(pad, pad),
+            )
+            drawText(text, topLeft = Offset(2 * pad, top + pad))
         }
         crossings.forEach { c ->
             val center = Offset(x(c.at), y(c.score.toDouble()))

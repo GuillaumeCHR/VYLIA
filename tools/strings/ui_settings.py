@@ -49,7 +49,6 @@ S = [
  ("automation_threshold_no_score", "Current score: no full scan yet", "Score actuel : pas encore de scan complet"),
  ("automation_threshold_slider", "Alert threshold", "Seuil d'alerte"),
  ("automation_threshold_marks", "Grade boundaries", "Repères des notes"),
- ("automation_threshold_mark_description", "Set the threshold to %2$d, the lower bound of grade %1$s", "Placer le seuil à %2$d, borne de la note %1$s"),
  ("automation_threshold_below", "Your score is already below this threshold. You will be warned if it climbs back up then drops again.", "Votre score est déjà sous ce seuil. Vous serez alerté s'il remonte puis redescend."),
  ("notif_channel_threshold", "Threshold alert", "Alerte de seuil"),
  ("notif_channel_threshold_description", "When the device score drops below the threshold you chose.", "Quand le score de l'appareil passe sous le seuil choisi."),

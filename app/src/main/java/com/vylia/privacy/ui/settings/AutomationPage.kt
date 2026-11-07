@@ -251,17 +251,17 @@ private fun ThresholdCard(
             onValueChangeFinished = { onThreshold(dragged.roundToInt()) },
             valueRange = 0f..100f,
             steps = 99,
-            modifier = Modifier.fillMaxWidth().semantics { contentDescription = sliderLabel },
+            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp).semantics { contentDescription = sliderLabel },
         )
         Text(stringResource(R.string.automation_threshold_marks), style = MaterialTheme.typography.labelLarge)
         FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             marks.forEach { grade ->
-                val description = stringResource(R.string.automation_threshold_mark_description, grade.grade, grade.min)
+                // Le libellé du bouton est lu tel quel (« B · 70 ») avec son état choisi ou non : rien à y ajouter.
                 FilterChip(
                     selected = shown == grade.min,
                     onClick = { dragged = grade.min.toFloat(); onThreshold(grade.min) },
                     label = { Text("${grade.grade} · ${grade.min}") },
-                    modifier = Modifier.heightIn(min = 48.dp).semantics { contentDescription = description },
+                    modifier = Modifier.heightIn(min = 48.dp),
                 )
             }
         }

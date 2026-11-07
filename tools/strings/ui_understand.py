@@ -164,6 +164,7 @@ S = [
  ("help_intro", "Everything to read VYLIA: what each screen shows, how the score is calculated, the badges, and what each tracker and permission reveals about you.", "Tout pour lire VYLIA : ce que montre chaque écran, comment le score est calculé, les badges, et ce que chaque traqueur et chaque permission révèle de vous."),
  ("help_section_expanded", "Expanded", "Déplié"),
  ("help_section_collapsed", "Collapsed", "Replié"),
+ ("help_badges_family", "%1$s (%2$d)", "%1$s (%2$d)"),
  ("help_scan_title", "Reading the Scan", "Lire le Scan"),
  ("help_scan_intro", "Each app starts at 100 points and loses some for its permissions and trackers. The three icons at the top sort apps by risk, by category or by badge. Tap an app's icon to open its Android settings.", "Chaque app part de 100 points et en perd pour ses permissions et ses traqueurs. Les trois icônes du haut trient les apps par risque, par catégorie ou par badge. Touchez l'icône d'une app pour ouvrir ses réglages Android."),
  ("help_analyze_title", "Reading the Analysis", "Lire l'Analyse"),

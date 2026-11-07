@@ -31,7 +31,7 @@ class BadgeEngineTest {
     }
 
     @Test
-    fun `permission interdite accordee - hors-la-loi remplace peche a la ligne`() {
+    fun `permission interdite accordee - sortie de route remplace peche a la ligne`() {
         // Jeu : contacts accordés, SMS seulement demandés, tous deux interdits.
         val result = score(declared = setOf("READ_CONTACTS", "READ_SMS"), granted = setOf("READ_CONTACTS"), category = "CATEGORY_GAME")
         assertTrue("PERM_OUTLAW" in result.ids())

@@ -580,6 +580,7 @@
     <string name="help_intro">Tout pour lire VYLIA : ce que montre chaque écran, comment le score est calculé, les badges, et ce que chaque traqueur et chaque permission révèle de vous.</string>
     <string name="help_section_expanded">Déplié</string>
     <string name="help_section_collapsed">Replié</string>
+    <string name="help_badges_family">%1$s (%2$d)</string>
     <string name="help_scan_title">Lire le Scan</string>
     <string name="help_scan_intro">Chaque app part de 100 points et en perd pour ses permissions et ses traqueurs. Les trois icônes du haut trient les apps par risque, par catégorie ou par badge. Touchez l\'icône d\'une app pour ouvrir ses réglages Android.</string>
     <string name="help_analyze_title">Lire l\'Analyse</string>
@@ -678,7 +679,6 @@
     <string name="automation_threshold_no_score">Score actuel : pas encore de scan complet</string>
     <string name="automation_threshold_slider">Seuil d\'alerte</string>
     <string name="automation_threshold_marks">Repères des notes</string>
-    <string name="automation_threshold_mark_description">Placer le seuil à %2$d, borne de la note %1$s</string>
     <string name="automation_threshold_below">Votre score est déjà sous ce seuil. Vous serez alerté s\'il remonte puis redescend.</string>
     <string name="notif_channel_threshold">Alerte de seuil</string>
     <string name="notif_channel_threshold_description">Quand le score de l\'appareil passe sous le seuil choisi.</string>
@@ -901,7 +901,7 @@
     <string name="badgedef_perm_nosy_description">Au moins une permission inattendue pour ce type d\'app est accordée.</string>
     <string name="badgedef_perm_fishing">Pêche à la ligne</string>
     <string name="badgedef_perm_fishing_description">Demande des permissions interdites pour ce type d\'app, que vous avez refusées.</string>
-    <string name="badgedef_perm_outlaw">Hors-la-loi</string>
+    <string name="badgedef_perm_outlaw">Sortie de route</string>
     <string name="badgedef_perm_outlaw_description">Au moins une permission interdite pour ce type d\'app est accordée.</string>
     <string name="badgedef_perm_glutton">Goinfre</string>
     <string name="badgedef_perm_glutton_description">Tellement de permissions que le plafond de pénalité est atteint.</string>

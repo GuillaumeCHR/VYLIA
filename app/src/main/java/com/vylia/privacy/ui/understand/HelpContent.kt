@@ -688,27 +688,8 @@ private fun LearnCard(title: String, content: @Composable ColumnScope.() -> Unit
         }
         // Dans un accordéon : le titre seul, touché pour déplier la section (et replier celle qui était ouverte).
         val open = accordion.open == title
-        val state = stringResource(if (open) R.string.help_section_expanded else R.string.help_section_collapsed)
         Column(modifier = Modifier.fillMaxWidth()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable(role = Role.Button) { accordion.toggle(title) }
-                    .heightIn(min = 56.dp)
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-                    .semantics {
-                        heading()
-                        stateDescription = state
-                    },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
-                Icon(
-                    if (open) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                    contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            AccordionHeader(title, open) { accordion.toggle(title) }
             AnimatedVisibility(visible = open) {
                 Column(
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
@@ -716,6 +697,34 @@ private fun LearnCard(title: String, content: @Composable ColumnScope.() -> Unit
                 ) { content() }
             }
         }
+    }
+}
+
+/**
+ * Titre d'une section repliable de l'Aide (onglets Score et Badges) : 56 dp de haut, lu comme un titre avec son état
+ * (déplié ou replié), et une flèche qui le montre.
+ */
+@Composable
+internal fun AccordionHeader(title: String, open: Boolean, onToggle: () -> Unit) {
+    val state = stringResource(if (open) R.string.help_section_expanded else R.string.help_section_collapsed)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(role = Role.Button, onClick = onToggle)
+            .heightIn(min = 56.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .semantics {
+                heading()
+                stateDescription = state
+            },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+        Icon(
+            if (open) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
     }
 }
 

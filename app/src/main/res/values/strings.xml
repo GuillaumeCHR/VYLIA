@@ -564,6 +564,7 @@
     <string name="help_intro">Everything to read VYLIA: what each screen shows, how the score is calculated, the badges, and what each tracker and permission reveals about you.</string>
     <string name="help_section_expanded">Expanded</string>
     <string name="help_section_collapsed">Collapsed</string>
+    <string name="help_badges_family">%1$s (%2$d)</string>
     <string name="help_scan_title">Reading the Scan</string>
     <string name="help_scan_intro">Each app starts at 100 points and loses some for its permissions and trackers. The three icons at the top sort apps by risk, by category or by badge. Tap an app\'s icon to open its Android settings.</string>
     <string name="help_analyze_title">Reading the Analysis</string>
@@ -654,7 +655,6 @@
     <string name="automation_threshold_no_score">Current score: no full scan yet</string>
     <string name="automation_threshold_slider">Alert threshold</string>
     <string name="automation_threshold_marks">Grade boundaries</string>
-    <string name="automation_threshold_mark_description">Set the threshold to %2$d, the lower bound of grade %1$s</string>
     <string name="automation_threshold_below">Your score is already below this threshold. You will be warned if it climbs back up then drops again.</string>
     <string name="notif_channel_threshold">Threshold alert</string>
     <string name="notif_channel_threshold_description">When the device score drops below the threshold you chose.</string>
@@ -872,7 +872,7 @@
     <string name="badgedef_perm_nosy_description">At least one permission unexpected for this type of app is granted.</string>
     <string name="badgedef_perm_fishing">Fishing trip</string>
     <string name="badgedef_perm_fishing_description">Asks for permissions forbidden for this type of app, which you refused.</string>
-    <string name="badgedef_perm_outlaw">Outlaw</string>
+    <string name="badgedef_perm_outlaw">Off the road</string>
     <string name="badgedef_perm_outlaw_description">At least one permission forbidden for this type of app is granted.</string>
     <string name="badgedef_perm_glutton">Glutton</string>
     <string name="badgedef_perm_glutton_description">So many permissions that the penalty cap is reached.</string>

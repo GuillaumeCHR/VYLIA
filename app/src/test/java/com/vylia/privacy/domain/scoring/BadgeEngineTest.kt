@@ -31,7 +31,7 @@ class BadgeEngineTest {
     }
 
     @Test
-    fun `permission interdite accordee - hors-la-loi remplace peche a la ligne`() {
+    fun `permission interdite accordee - sortie de route remplace peche a la ligne`() {
         // Jeu : contacts accordés, SMS seulement demandés, tous deux interdits.
         val result = score(declared = setOf("READ_CONTACTS", "READ_SMS"), granted = setOf("READ_CONTACTS"), category = "CATEGORY_GAME")
         assertTrue("PERM_OUTLAW" in result.ids())
@@ -108,10 +108,30 @@ class BadgeEngineTest {
 
     @Test
     fun `base d indicateurs - stalkerware connu, score a 0`() {
-        val withIoc = PrivacyScorer(TestFixtures.rules, IocDatabase(setOf("com.spy.app"), emptySet()))
+        val withIoc = PrivacyScorer(TestFixtures.rules, IocDatabase(mapOf("com.spy.app" to "SpyApp"), emptyMap()))
         val result = withIoc.score(AppScan("com.spy.app", 35, "CATEGORY_UNDEFINED", emptySet(), emptySet(), emptyList()))
         assertEquals(0, result.score)
         assertTrue("SEC_WANTED" in result.ids())
+        assertEquals("SpyApp", result.knownStalkerware)
+    }
+
+    @Test
+    fun `base d Echap embarquee - reconnait un stalkerware renomme par son certificat`() {
+        val loaded = com.vylia.privacy.domain.security.StalkerwareDatabase.parse(
+            java.io.File("src/main/assets/stalkerware_iocs.json").readText()
+        )
+        assertTrue(loaded.apps > 100)
+        assertTrue(loaded.commit.length == 40)
+        val scorer = PrivacyScorer(TestFixtures.rules, loaded.iocs)
+        // TheTruthSpy, sous un nom de paquet inventé : seule l'empreinte SHA-1 de son certificat le trahit.
+        val renamed = AppScan("org.example.innocent", 35, "CATEGORY_UNDEFINED", emptySet(), emptySet(), emptyList())
+            .copy(signingCertDigests = setOf("31:a6:ec:ec:d9:7c:f3:9b:c4:12:6b:87:45:cd:94:a7:c3:0b:f8:1c"))
+        val result = scorer.score(renamed)
+        assertEquals("TheTruthSpy", result.knownStalkerware)
+        assertEquals(0, result.score)
+        assertTrue("SEC_WANTED" in result.ids())
+        // Une app ordinaire n'y est pas.
+        assertNull(scorer.score(AppScan("org.mozilla.firefox", 35, "CATEGORY_UNDEFINED", emptySet(), emptySet(), emptyList())).knownStalkerware)
     }
 
     @Test

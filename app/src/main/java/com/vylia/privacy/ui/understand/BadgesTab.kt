@@ -13,6 +13,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
@@ -38,6 +42,9 @@ import com.vylia.privacy.ui.components.securityLabel
 import com.vylia.privacy.domain.scoring.SecurityFinding
 
 /** Axes des badges, dans l'ordre d'affichage des règles (sécurité d'abord), puis les combinaisons. */
+/** Vert (bonne pratique), bleu, gris, orange (à surveiller), rouge (danger). */
+private val SeverityRank = listOf("success", "pro", "neutral", "warning", "danger").withIndex().associate { (i, s) -> s to i }
+
 private val AxisTitles = listOf(
     "permissions" to R.string.badge_axis_permissions,
     "security" to R.string.badge_axis_security,
@@ -64,7 +71,12 @@ internal fun BadgesTab(rules: Rules, scannedApps: List<AuditedApp>, query: Strin
                 query.matchesAny(listOfNotNull(resources.badgeLabel(badge), resources.badgeDescription(badge), resources.ruleText(badge.rule, rules)))
             }
             .groupBy { it.axis }
+            // Dans chaque famille, du vert au rouge ; à couleur égale, l'ordre de la grille.
+            .mapValues { (_, badges) -> badges.sortedBy { SeverityRank[it.severity] ?: SeverityRank.size } }
     }
+    // En accordéon par famille, une ouverte à la fois ; pendant une recherche, toutes les familles trouvées s'ouvrent.
+    var open by rememberSaveable { mutableStateOf<String?>(null) }
+    val searching = query.isNotBlank()
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
         item {
             Text(
@@ -78,15 +90,16 @@ internal fun BadgesTab(rules: Rules, scannedApps: List<AuditedApp>, query: Strin
         }
         AxisTitles.forEach { (axis, title) ->
             val badges = byAxis[axis] ?: return@forEach
+            val expanded = searching || open == axis
             item(key = "axis-$axis") {
-                Text(
-                    stringResource(title),
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(top = 8.dp),
-                )
+                VyliaCard(modifier = Modifier.fillMaxWidth()) {
+                    AccordionHeader(
+                        stringResource(R.string.help_badges_family, stringResource(title), badges.size),
+                        expanded,
+                    ) { if (!searching) open = if (open == axis) null else axis }
+                }
             }
-            items(badges, key = { it.id }) { badge -> BadgeCard(badge, rules, counts[badge.id] ?: 0) }
+            if (expanded) items(badges, key = { it.id }) { badge -> BadgeCard(badge, rules, counts[badge.id] ?: 0) }
         }
     }
 }

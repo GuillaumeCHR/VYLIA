@@ -1,6 +1,7 @@
 package com.vylia.privacy.data.backup
 
 import com.vylia.privacy.BuildConfig
+import com.vylia.privacy.data.alert.ThresholdAlertRepository
 import com.vylia.privacy.data.preferences.SettingsRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.TrackerScanCache
@@ -32,6 +33,8 @@ class BackupRepository(
     private val language: () -> String?,
     /** Compteur de requêtes bloquées par le bouclier, effacé avec le reste. */
     private val clearShieldCounter: () -> Unit = {},
+    /** Franchissements de l'alerte de seuil : sauvegardés, restaurés et effacés avec le Suivi. */
+    private val alerts: ThresholdAlertRepository? = null,
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
     suspend fun export(out: OutputStream) {
@@ -47,6 +50,7 @@ class BackupRepository(
                 language = language(),
             ),
             importedRules = withContext(Dispatchers.IO) { rules.importedContent() },
+            thresholdCrossings = alerts?.current?.value?.crossings.orEmpty(),
         )
         withContext(Dispatchers.IO) {
             out.write(json.encodeToString(file).toByteArray(Charsets.UTF_8))
@@ -61,9 +65,11 @@ class BackupRepository(
         val now = clock()
         val h = history.merge { current -> BackupMerge.history(current, file.history, now).let { it.value to it } }
         val r = rewards.merge { current -> BackupMerge.rewards(current, file.rewards, now).let { it.value to it } }
+        val crossings = alerts?.mergeCrossings(file.thresholdCrossings.filter { it.at <= now }) ?: 0
         return RestoreReport(
             snapshotsAdded = h.added,
-            eventsAdded = h.addedEvents,
+            // Les franchissements de seuil sont des événements du Suivi.
+            eventsAdded = h.addedEvents + crossings,
             rewardsAdded = r.added,
             alreadyThere = h.alreadyThere + r.alreadyThere,
             invalid = rejected + h.invalid + r.invalid,
@@ -78,6 +84,7 @@ class BackupRepository(
      */
     suspend fun deleteAll() {
         history.clear()
+        alerts?.clearCrossings()
         rewards.clear()
         trackerCache.clear()
         settings.clearScanTimestamps()

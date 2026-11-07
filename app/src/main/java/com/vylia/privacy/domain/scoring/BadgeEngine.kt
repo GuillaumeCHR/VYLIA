@@ -5,7 +5,7 @@ package com.vylia.privacy.domain.scoring
  *
  * Deux passes :
  *  1. badges « de base » (permissions, sécurité, traqueurs), puis résolution des `supersedes`
- *     (Hors-la-loi remplace Pêche à la ligne, Régie publicitaire remplace Homme-sandwich…) ;
+ *     (Sortie de route remplace Pêche à la ligne, Régie publicitaire remplace Homme-sandwich…) ;
  *  2. badges « combo » (types axes_*), évalués sur le résultat de la passe 1.
  *
  * Les ensembles « @… » des règles sont déjà développés (voir [expandSets]).

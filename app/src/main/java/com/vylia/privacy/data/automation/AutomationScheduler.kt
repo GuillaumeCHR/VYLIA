@@ -17,7 +17,9 @@ class AutomationScheduler(private val context: Context, private val settings: Se
 
     /** Aligne les tâches programmées sur les réglages. Sans effet sur une tâche déjà programmée à la bonne fréquence. */
     fun sync() {
-        ensure(INSTALL_JOB, if (settings.installAlerts.value) INSTALL_CHECK_INTERVAL else null, batteryNotLow = false)
+        // Le contrôle des installations sert aux deux alertes : nouvelle app, et stalkerware installé.
+        val watchInstalls = settings.installAlerts.value || settings.stalkerwareAlerts.value
+        ensure(INSTALL_JOB, if (watchInstalls) INSTALL_CHECK_INTERVAL else null, batteryNotLow = false)
         val scan = settings.backgroundScan.value
         ensure(SCAN_JOB, if (scan == BackgroundScan.OFF) null else TimeUnit.DAYS.toMillis(scan.intervalDays), batteryNotLow = true)
     }

@@ -4,7 +4,7 @@ S = [
  ("tab_reduce", "Reduce", "Réduire"),
  ("tab_replace", "Replace", "Remplacer"),
  ("tab_celebrate", "Celebrate", "Célébrer"),
- ("topbar_help", "Help on this screen", "Aide sur cet écran"),
+ ("topbar_help", "Help", "Aide"),
  ("search_prompt", "Type the name of an app to open its sheet.", "Tapez le nom d'une app pour ouvrir sa fiche."),
  ("back", "Back", "Retour"),
  ("label_colon", "%1$s: ", "%1$s : "),

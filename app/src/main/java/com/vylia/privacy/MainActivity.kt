@@ -9,6 +9,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.vylia.privacy.domain.security.Untrusted
+import com.vylia.privacy.ui.main.AppTab
 import com.vylia.privacy.ui.scan.components.LocalCardStyle
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -33,11 +35,15 @@ class MainActivity : AppCompatActivity() {
                 // Instancié dès le splash : le scan démarre pendant l'animation. Même instance que l'écran Scan.
                 viewModel<ScanViewModel>(factory = ScanViewModel.Factory)
                 // Ouverte depuis une notification d'installation : directement la fiche de l'app, sans splash.
-                val openPackage = intent.getStringExtra(EXTRA_OPEN_PACKAGE)
-                var showSplash by rememberSaveable { mutableStateOf(openPackage == null) }
+                val openPackage = intent.getStringExtra(EXTRA_OPEN_PACKAGE)?.takeIf(Untrusted::isPackage)
+                // Ouverte depuis une alerte de seuil : Réduire, l'app en cause en tête. L'activité est exportée :
+                // seuls un onglet connu et un nom de paquet valide sont repris.
+                val openTab = if (intent.getStringExtra(EXTRA_OPEN_TAB) == TAB_REDUCE) AppTab.REDUCE else null
+                val pinPackage = intent.getStringExtra(EXTRA_PIN_PACKAGE)?.takeIf(Untrusted::isPackage)
+                var showSplash by rememberSaveable { mutableStateOf(openPackage == null && openTab == null) }
                 // Fondu court : le logotype de l'intro est déjà à la place du titre de l'écran Scan.
                 Crossfade(targetState = showSplash, animationSpec = tween(250), label = "splash") { splash ->
-                    if (splash) VyliaSplashScreen(onFinished = { showSplash = false }) else MainScreen(initialPackage = openPackage)
+                    if (splash) VyliaSplashScreen(onFinished = { showSplash = false }) else MainScreen(initialPackage = openPackage, initialTab = openTab, pinnedPackage = pinPackage)
                 }
             } }
         }
@@ -46,5 +52,9 @@ class MainActivity : AppCompatActivity() {
     companion object {
         /** Paquet dont la fiche s'ouvre au lancement (notification d'installation). */
         const val EXTRA_OPEN_PACKAGE = "com.vylia.privacy.OPEN_PACKAGE"
+        /** Onglet ouvert au lancement ([TAB_REDUCE] seulement) et app mise en tête de Réduire (alerte de seuil). */
+        const val EXTRA_OPEN_TAB = "com.vylia.privacy.OPEN_TAB"
+        const val EXTRA_PIN_PACKAGE = "com.vylia.privacy.PIN_PACKAGE"
+        const val TAB_REDUCE = "reduce"
     }
 }

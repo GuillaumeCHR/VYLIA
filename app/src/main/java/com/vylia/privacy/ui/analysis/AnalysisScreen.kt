@@ -65,6 +65,9 @@ private const val PreviewCount = 5
 fun AnalysisScreen(
     modifier: Modifier = Modifier,
     onAppClick: (AuditedApp) -> Unit = {},
+    /** Lien « Modifier » ou « Définir un seuil d'alerte » du Suivi : Paramètres › Automatisations. */
+    onOpenAutomation: () -> Unit = {},
+    onOpenReduce: () -> Unit = {},
     settingsViewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
@@ -92,7 +95,8 @@ fun AnalysisScreen(
         )
     }
     if (tab == 1) {
-        TrackingTab(history)
+        val alert by settingsViewModel.thresholdAlert.collectAsStateWithLifecycle()
+        TrackingTab(history, alert, onOpenAutomation, onOpenReduce)
         return@Column
     }
     LazyColumn(

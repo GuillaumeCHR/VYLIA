@@ -73,6 +73,9 @@ fun Resources.badgeDescription(badge: BadgeDef): String? =
 fun Resources.securityLabel(finding: SecurityFinding): String =
     SecurityTexts[finding.id]?.first?.let(::getString) ?: finding.label
 
+/** Libellé d'un motif de sécurité d'après son seul identifiant (cause d'une baisse du score). */
+fun Resources.securityLabel(id: String): String = SecurityTexts[id]?.first?.let(::getString) ?: id
+
 fun Resources.securityDescription(finding: SecurityFinding): String? =
     SecurityTexts[finding.id]?.second?.let(::getString) ?: finding.description
 
@@ -83,6 +86,7 @@ fun badgeEmoji(badge: BadgeDef): String = when (badge.icon) {
     "ic_badge_nosy" -> "👀"
     "ic_badge_fishhook" -> "🎣"
     "ic_badge_mask" -> "🥷"
+    "ic_badge_detour" -> "🚧"
     "ic_badge_glutton" -> "🍔"
     "ic_badge_spy" -> "🕵️"
     "ic_badge_ear" -> "👂"

@@ -14,6 +14,7 @@ import com.vylia.privacy.domain.rewards.RewardsState
 import com.vylia.privacy.domain.scoring.ConditionParser
 import com.vylia.privacy.domain.scoring.RulesValidator
 import com.vylia.privacy.domain.scoring.TestFixtures
+import com.vylia.privacy.domain.security.StalkerwareDatabase
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThrows
 import org.junit.Assert.assertTrue
@@ -61,20 +62,107 @@ class ExternalDataSecurityTest {
     }
 
     @Test
+    fun `backup threshold crossings out of range or with bad names are set aside`() {
+        fun crossing(score: Int, pkg: String?) = com.vylia.privacy.domain.alert.ThresholdCrossing(
+            at = 1, score = score, threshold = 70,
+            cause = com.vylia.privacy.domain.alert.DropCause(com.vylia.privacy.domain.alert.DropCause.Type.INSTALLED, pkg, "Spy\u202Eapp", 20),
+        )
+        val file = BackupFile(exportedAt = 1, app = "test", thresholdCrossings = listOf(crossing(60, "com.ok"), crossing(150, "com.ok"), crossing(60, "bad name;")))
+        val clean = BackupSanitizer.clean(file)
+        assertEquals(listOf("com.ok"), clean.file.thresholdCrossings.map { it.cause.packageName })
+        assertEquals("Spyapp", clean.file.thresholdCrossings.single().cause.label)
+        assertEquals(2, clean.invalid)
+    }
+
+    @Test
+    fun `stalkerware database entries with bad identifiers are set aside`() {
+        val loaded = StalkerwareDatabase.parse(
+            "{\"commit\":\"not a commit\",\"apps\":[{\"name\":\"Spy\\u202Eware\",\"packages\":[\"com.spy.app\",\"bad name;\"]," +
+                "\"certificates\":[\"31A6ECECD97CF39BC4126B8745CD94A7C30BF81C\",\"zz\"]}]}"
+        )
+        assertEquals("", loaded.commit)
+        val scan = com.vylia.privacy.domain.scoring.AppScan("com.spy.app", 35, "CATEGORY_UNDEFINED", emptySet(), emptySet(), emptyList())
+        assertEquals("Spyware", loaded.iocs.match(scan))
+        assertEquals(null, loaded.iocs.match(scan.copy(packageName = "bad name;")))
+    }
+
+    @Test
     fun `bundled rules pass the import checks`() {
-        RulesValidator.validate(TestFixtures.rules, TestFixtures.rules.excludedPackages)
+        val raw = java.io.File("src/main/assets/vylia_rules_v3.json").readText()
+        RulesValidator.checkDocument(raw)
+        RulesValidator.validate(TestFixtures.rules, TestFixtures.rules)
+        // Le fichier exporté est celui-ci : il se réimporte tel quel.
+        com.vylia.privacy.data.rules.RuleMatrixRepository.checked(raw, TestFixtures.rules)
     }
 
     @Test
     fun `imported rules cannot hide an app nor use out of range values`() {
         val rules = TestFixtures.rules
         fun refused(r: com.vylia.privacy.domain.scoring.Rules) =
-            assertThrows(IllegalArgumentException::class.java) { RulesValidator.validate(r, rules.excludedPackages) }
+            assertThrows(IllegalArgumentException::class.java) { RulesValidator.validate(r, rules) }
         refused(rules.copy(excludedPackages = rules.excludedPackages + "com.spy.app"))
         refused(rules.copy(permissionWeights = rules.permissionWeights + ("CAMERA" to -50)))
         refused(rules.copy(scoring = rules.scoring.copy(declaredOnlyFactor = Double.NaN)))
         refused(rules.copy(scoring = rules.scoring.copy(permissionCap = 10_000)))
         refused(rules.copy(categories = rules.categories - "DEFAULT"))
+    }
+
+    @Test
+    fun `imported rules cannot crash the engine`() {
+        val rules = TestFixtures.rules
+        fun refused(r: com.vylia.privacy.domain.scoring.Rules) =
+            assertThrows(IllegalArgumentException::class.java) { RulesValidator.validate(r, rules) }
+        // Sans note à 0, un score bas n'aurait pas de note : le moteur planterait à chaque scan.
+        refused(rules.copy(scoring = rules.scoring.copy(grades = rules.scoring.grades.filter { it.min > 0 })))
+        refused(rules.copy(scoring = rules.scoring.copy(contextMultipliers = rules.scoring.contextMultipliers - "forbidden")))
+        refused(rules.copy(scoring = rules.scoring.copy(grades = rules.scoring.grades + rules.scoring.grades.first())))
+        refused(rules.copy(scoring = rules.scoring.copy(grades = rules.scoring.grades.map { it.copy(grade = "=1") })))
+        refused(rules.copy(packageOverrides = rules.packageOverrides + ("com.example.app" to "NO_SUCH_CATEGORY")))
+    }
+
+    @Test
+    fun `imported rules cannot weaken the security checks`() {
+        val rules = TestFixtures.rules
+        val security = rules.security
+        fun refused(r: com.vylia.privacy.domain.scoring.SecurityRules) =
+            assertThrows(IllegalArgumentException::class.java) { RulesValidator.validate(rules.copy(security = r), rules) }
+        val (id, pattern) = security.patterns.entries.first { security.severityEffects[it.value.severity]?.scoreCap != null }
+        refused(security.copy(patterns = security.patterns - id))
+        refused(security.copy(patterns = security.patterns + (id to pattern.copy(condition = "false"))))
+        refused(security.copy(patterns = security.patterns + (id to pattern.copy(exemptPackages = setOf("com.spy.app")))))
+        refused(security.copy(patterns = security.patterns + (id to pattern.copy(severity = "medium"))))
+        refused(security.copy(severityEffects = security.severityEffects.mapValues { it.value.copy(scoreCap = null) }))
+        // Durcir reste permis : un plafond plus bas pour tous.
+        RulesValidator.validate(
+            rules.copy(security = security.copy(severityEffects = security.severityEffects.mapValues { it.value.copy(scoreCap = 0) })),
+            rules,
+        )
+    }
+
+    @Test
+    fun `imported rules are refused with invalid names`() {
+        val rules = TestFixtures.rules
+        fun refused(r: com.vylia.privacy.domain.scoring.Rules) =
+            assertThrows(IllegalArgumentException::class.java) { RulesValidator.validate(r, rules) }
+        refused(rules.copy(permissionWeights = rules.permissionWeights + ("CAMERA; DROP" to 5)))
+        refused(rules.copy(packageOverrides = rules.packageOverrides + ("not a package" to "DEFAULT")))
+        refused(rules.copy(categories = rules.categories + ("../evil" to rules.categories.getValue("DEFAULT"))))
+        refused(rules.copy(badges = rules.badges.copy(definitions = listOf(rules.badges.definitions.first().copy(icon = "../../x")))))
+    }
+
+    @Test
+    fun `imported rules file is refused with hidden characters or deep nesting`() {
+        val raw = java.io.File("src/main/assets/vylia_rules_v3.json").readText()
+        fun refused(content: String) =
+            assertThrows(IllegalArgumentException::class.java) { RulesValidator.checkDocument(content) }
+        // Inversion bidirectionnelle (U+202E) dans un libellé, écrite en clair ou en échappement JSON.
+        refused(raw.replaceFirst("\"Stalkerware connu\"", "\"Stalkerware \u202Econnu\""))
+        refused(raw.replaceFirst("\"Stalkerware connu\"", "\"Stalkerware \\u202Econnu\""))
+        refused(raw.replaceFirst("\"Stalkerware connu\"", "\"Stalkerware\\u0000connu\""))
+        // Une clé inconnue, ignorée par le décodeur, n'est pas pour autant ignorée par le contrôle.
+        refused(raw.replaceFirst("{", "{\"x\u200B\": 1,"))
+        refused(raw.replaceFirst("{", "{\"deep\": " + "[".repeat(5_000) + "]".repeat(5_000) + ","))
+        assertEquals(1, RulesValidator.depthOf("{\"a\": \"[[[[\"}"))
     }
 
     @Test

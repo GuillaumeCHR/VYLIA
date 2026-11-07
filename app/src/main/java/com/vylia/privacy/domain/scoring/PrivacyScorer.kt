@@ -208,7 +208,8 @@ data class AppScan(
     /** Signaux de sécurité collectés par SecuritySignalCollector (ids de security.signals). */
     val signals: Set<String> = emptySet(),
     /** Empreintes SHA-256 des certificats de signature, hex minuscule sans séparateur. */
-    val signingCertsSha256: Set<String> = emptySet(),
+    /** Empreintes SHA-1 et SHA-256 des certificats de signature, en hexadécimal. */
+    val signingCertDigests: Set<String> = emptySet(),
 )
 
 data class Tracker(val name: String, val exodusCategories: Set<String>)
@@ -250,6 +251,8 @@ data class ScoreResult(
     /** Score avant le plafond de sécurité : s'il dépasse [score], le plafond s'applique. */
     val uncappedScore: Int = score,
     val securityFindings: List<SecurityFinding> = emptyList(),
+    /** Nom du stalkerware connu auquel l'app correspond (base d'Echap), `null` sinon. */
+    val knownStalkerware: String? = null,
     /** Tous les badges attribués, dans l'ordre des définitions. */
     val badges: List<BadgeDef> = emptyList(),
     /** Badges à afficher sur la fiche (triés par gravité, limités à display.max_shown). */
@@ -259,15 +262,26 @@ data class ScoreResult(
     val isCapped: Boolean get() = securityScoreCap != null && score < uncappedScore
 }
 
-/** Base d'indicateurs (ex. stalkerware-indicators d'Echap), chargée séparément des règles. */
-class IocDatabase(private val packages: Set<String>, certificatesSha256: Set<String>) {
-    private val certs = certificatesSha256.map(::normalizeHash).toSet()
+/**
+ * Stalkerwares connus (base stalkerware-indicators d'Echap, embarquée dans l'app), chargée séparément des règles :
+ * un import de règles ne peut pas la modifier. Une app y correspond par son nom de paquet ou par l'empreinte
+ * (SHA-1 ou SHA-256) d'un de ses certificats de signature, qui la trahit même renommée.
+ */
+class IocDatabase(packages: Map<String, String>, certificates: Map<String, String>) {
+    private val packages = packages.toMap()
+    private val certs = certificates.mapKeys { normalizeHash(it.key) }
 
-    fun matches(scan: AppScan): Boolean =
-        scan.packageName in packages || scan.signingCertsSha256.any { normalizeHash(it) in certs }
+    /** Nom du stalkerware reconnu, `null` sinon. */
+    fun match(scan: AppScan): String? =
+        packages[scan.packageName] ?: scan.signingCertDigests.firstNotNullOfOrNull { certs[normalizeHash(it)] }
+
+    val size: Int get() = (packages.values + certs.values).toSet().size
+
+    /** Contenu complet (paquets, empreintes), pour comparer deux bases dans les tests. */
+    internal fun entries(): Pair<Map<String, String>, Map<String, String>> = packages to certs
 
     companion object {
-        val EMPTY = IocDatabase(emptySet(), emptySet())
+        val EMPTY = IocDatabase(emptyMap(), emptyMap())
         fun normalizeHash(h: String) = h.replace(":", "").replace(" ", "").lowercase()
     }
 }
@@ -305,6 +319,18 @@ class PrivacyScorer(
     }
 
     private val neutralPermissions = rules.neutralPermissions.toSet()
+
+    /**
+     * Score qu'aurait l'app sans les motifs de sécurité [ignored] : les autres motifs gardent leur plafond. Sert à
+     * mesurer ce qu'un nouveau motif coûte au score de l'appareil (cause d'une baisse).
+     */
+    fun scoreIgnoringPatterns(result: ScoreResult, ignored: Set<String>): Int {
+        val cap = result.securityFindings
+            .filter { it.id !in ignored }
+            .mapNotNull { rules.security.severityEffects[it.severity]?.scoreCap }
+            .minOrNull()
+        return if (cap != null) min(result.uncappedScore, cap) else result.uncappedScore
+    }
 
     fun score(scan: AppScan): ScoreResult {
         val categoryId = resolveCategory(scan)
@@ -347,7 +373,8 @@ class PrivacyScorer(
         }
 
         // 3. Sécurité : patterns de capacités + IOC, qui plafonnent le score
-        val signals = if (iocs.matches(scan)) scan.signals + SIGNAL_IOC_MATCH else scan.signals
+        val knownStalkerware = iocs.match(scan)
+        val signals = if (knownStalkerware != null) scan.signals + SIGNAL_IOC_MATCH else scan.signals
         val securityFindings = securityDetector.detect(
             scan = scan.copy(signals = signals),
             categoryId = categoryId,
@@ -383,6 +410,7 @@ class PrivacyScorer(
             trackerPenalty = trackerPenalty,
             securityScoreCap = securityScoreCap,
             uncappedScore = raw,
+            knownStalkerware = knownStalkerware,
             permissionFindings = permissionFindings.sortedByDescending { it.penalty },
             trackerFindings = trackerFindings.sortedByDescending { it.penalty },
             securityFindings = securityFindings,

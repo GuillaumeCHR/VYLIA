@@ -220,7 +220,9 @@ PERMISSION_REQUIRES = {
 # Accord de l'utilisateur redemandé à chaque usage : jamais acquis d'avance.
 CONSENT_EACH_TIME = ["FOREGROUND_SERVICE_MEDIA_PROJECTION"]
 POLARITY = {"negative": "Point d’attention", "positive": "Bonne pratique"}
-BADGE_EMOJI = {"ic_badge_clapper": "🎬", "ic_badge_owl": "🦉", "ic_badge_moon": "🌙"}
+BADGE_EMOJI = {"ic_badge_clapper": "🎬", "ic_badge_owl": "🦉", "ic_badge_moon": "🌙", "ic_badge_detour": "🚧"}
+# Badges de la v2.1 renommés (validé le 2026-11-07) : « Hors-la-loi » pouvait se lire au premier degré.
+BADGE_RENAMES = {"PERM_OUTLAW": {"label": "Sortie de route", "icon": "ic_badge_detour"}}
 
 THEME_ORDER = ["Localisation", "Messages et appels", "Identité, contacts et comptes", "Micro et caméra", "Agenda",
                "Capteurs, santé et activité", "Photos, vidéos et fichiers", "Appareils à proximité", "Vos applications",
@@ -278,6 +280,8 @@ def build():
     # Avant les combinaisons, qui s'évaluent sur les badges de base.
     first_combo = next(i for i, d in enumerate(defs) if d["rule"]["type"].startswith("axes_"))
     defs[first_combo:first_combo] = copy.deepcopy(NEW_BADGES)
+    for d in defs:
+        d.update(BADGE_RENAMES.get(d["id"], {}))
     for perm, spec in NEW.items():
         v3["permission_weights"][perm] = spec["w"]
         for cid, cat in v3["categories"].items():

@@ -1359,8 +1359,8 @@
       },
       {
         "id": "PERM_OUTLAW",
-        "label": "Hors-la-loi",
-        "icon": "ic_badge_mask",
+        "label": "Sortie de route",
+        "icon": "ic_badge_detour",
         "axis": "permissions",
         "polarity": "negative",
         "severity": "danger",

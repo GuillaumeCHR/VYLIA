@@ -8,6 +8,8 @@ import android.widget.Toast
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -44,6 +46,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -86,10 +89,13 @@ private class OpenFromDownloads : ActivityResultContracts.OpenDocument() {
 }
 
 // Les fichiers .json de Téléchargements sont souvent typés application/octet-stream.
+/** Même nom que le fichier intégré : l'export se réimporte tel quel. */
+private const val RulesExportFileName = "vylia_rules_v3.json"
+
 private val RuleFileMimeTypes = arrayOf("application/json", "text/plain", "application/octet-stream")
 
 /** Sous-menus des Paramètres : une page par grande entrée du menu principal. */
-private enum class SettingsPage { MAIN, RULES, GRID, DATABASE, AUTOMATION, DATA, ABOUT }
+private enum class SettingsPage { MAIN, RULES, DATABASE, AUTOMATION, DATA, ABOUT }
 
 /**
  * Paramètres : réglages généraux (langue, mode d'analyse) en tête, puis une entrée par sous-menu
@@ -98,21 +104,17 @@ private enum class SettingsPage { MAIN, RULES, GRID, DATABASE, AUTOMATION, DATA,
 @Composable
 fun SettingsScreen(
     modifier: Modifier = Modifier,
-    onOpenLearn: () -> Unit = {},
+    /** Ouvrir directement Automatisations (lien « Modifier » de l'alerte de seuil, dans le Suivi). */
+    openAutomation: Boolean = false,
     viewModel: SettingsViewModel = viewModel(factory = SettingsViewModel.Factory),
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
-    var page by rememberSaveable { mutableStateOf(SettingsPage.MAIN) }
-    // La grille est un sous-menu des règles de score : Retour y ramène.
-    val back = { page = if (page == SettingsPage.GRID) SettingsPage.RULES else SettingsPage.MAIN }
+    var page by rememberSaveable { mutableStateOf(if (openAutomation) SettingsPage.AUTOMATION else SettingsPage.MAIN) }
+    val back = { page = SettingsPage.MAIN }
     BackHandler(enabled = page != SettingsPage.MAIN) { back() }
     when (page) {
         SettingsPage.MAIN -> SettingsHome(modifier, viewModel, onOpen = { page = it })
-        SettingsPage.RULES -> RulesPage(modifier, viewModel, homeViewModel, onOpenLearn, { page = SettingsPage.GRID }, back)
-        SettingsPage.GRID -> {
-            val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
-            ScoringGridScreen(modifier, loadedRules.rules, back)
-        }
+        SettingsPage.RULES -> RulesPage(modifier, viewModel, back)
         SettingsPage.DATABASE -> DatabasePage(modifier, viewModel, back)
         SettingsPage.AUTOMATION -> AutomationPage(modifier, viewModel, back)
         SettingsPage.DATA -> DataPage(modifier, viewModel, homeViewModel, back)
@@ -259,20 +261,15 @@ private fun <T> RadioCard(
 
 // --- Règles de score --------------------------------------------------------------------------
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun RulesPage(
-    modifier: Modifier,
-    viewModel: SettingsViewModel,
-    homeViewModel: ScanViewModel,
-    onOpenLearn: () -> Unit,
-    onOpenGrid: () -> Unit,
-    onBack: () -> Unit,
-) {
+private fun RulesPage(modifier: Modifier, viewModel: SettingsViewModel, onBack: () -> Unit) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
-    val scoring = loadedRules.rules.scoring
     val rulesLauncher = rememberLauncherForActivityResult(OpenFromDownloads()) { uri: Uri? ->
         uri?.let(viewModel::importRules)
+    }
+    val exportLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri: Uri? ->
+        uri?.let(viewModel::exportRules)
     }
     SubPage(modifier, R.string.settings_rules, onBack) {
         InfoCard(R.string.rules_current) {
@@ -285,9 +282,12 @@ private fun RulesPage(
                 fontWeight = FontWeight.Bold
             )
             Hint(stringResource(R.string.rules_import_hint))
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = { rulesLauncher.launch(RuleFileMimeTypes) }) {
                     Text(stringResource(R.string.rules_import))
+                }
+                OutlinedButton(onClick = { exportLauncher.launch(RulesExportFileName) }) {
+                    Text(stringResource(R.string.rules_export))
                 }
                 if (state.rulesImported) {
                     OutlinedButton(onClick = viewModel::resetRules) {
@@ -299,23 +299,9 @@ private fun RulesPage(
                 Text(
                     text = rulesMessage(message),
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (message is RulesMessage.Rejected) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary,
+                    color = if (message is RulesMessage.Rejected || message is RulesMessage.ExportFailed) MaterialTheme.colorScheme.error
+                    else MaterialTheme.colorScheme.primary,
                 )
-            }
-        }
-        InfoCard(R.string.rules_algorithm) {
-            Text(stringResource(R.string.rules_algorithm_text, scoring.base), style = MaterialTheme.typography.bodyMedium)
-            Surface(color = MaterialTheme.colorScheme.surfaceVariant, shape = RoundedCornerShape(8.dp), modifier = Modifier.fillMaxWidth()) {
-                Text(
-                    stringResource(R.string.learn_overview_formula, scoring.base, scoring.permissionCap, scoring.trackerCap),
-                    modifier = Modifier.padding(10.dp),
-                    fontFamily = FontFamily.Monospace,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                Button(onClick = onOpenGrid) { Text(stringResource(R.string.rules_open_grid)) }
-                OutlinedButton(onClick = onOpenLearn) { Text(stringResource(R.string.rules_open_learn)) }
             }
         }
     }
@@ -329,6 +315,11 @@ private fun rulesMessage(message: RulesMessage): String = when (message) {
         message.detail ?: stringResource(R.string.rules_invalid_file),
     )
     RulesMessage.Reset -> stringResource(R.string.rules_reset_message)
+    RulesMessage.Exported -> stringResource(R.string.rules_exported_message)
+    is RulesMessage.ExportFailed -> stringResource(
+        R.string.rules_export_failed_message,
+        message.detail ?: stringResource(R.string.rules_invalid_file),
+    )
 }
 
 // --- Base de traqueurs ------------------------------------------------------------------------
@@ -379,6 +370,8 @@ private fun DatabasePage(modifier: Modifier, viewModel: SettingsViewModel, onBac
             }
         }
         ExodusCreditsCard()
+        StalkerwareUpdateCard(viewModel)
+        EchapCreditsCard()
     }
 }
 
@@ -404,6 +397,74 @@ fun ExodusCreditsCard() {
     }
 }
 
+/** Base des stalkerwares connus : version en vigueur et mise à jour, comme pour la base Exodus. */
+@Composable
+private fun StalkerwareUpdateCard(viewModel: SettingsViewModel) {
+    val state by viewModel.stalkerware.collectAsStateWithLifecycle()
+    val updating by viewModel.stalkerwareUpdating.collectAsStateWithLifecycle()
+    val message by viewModel.stalkerwareMessage.collectAsStateWithLifecycle()
+    InfoCard(R.string.stalkerware_status) {
+        Text(
+            state.downloadedAt?.let { stringResource(R.string.stalkerware_downloaded, state.database.apps, formatDate(it)) }
+                ?: stringResource(R.string.stalkerware_embedded, state.database.apps, state.database.commit.take(7)),
+            style = MaterialTheme.typography.bodyLarge,
+        )
+        Hint(stringResource(R.string.stalkerware_update_hint))
+        Button(onClick = viewModel::updateStalkerware, enabled = !updating) {
+            if (updating) {
+                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(stringResource(R.string.database_updating))
+            } else {
+                Text(stringResource(R.string.stalkerware_update))
+            }
+        }
+        when (val m = message) {
+            is StalkerwareMessage.Updated -> Text(
+                stringResource(R.string.stalkerware_update_success, m.count),
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.bodySmall,
+            )
+            is StalkerwareMessage.Failed -> Text(
+                stringResource(R.string.database_update_error, m.detail ?: stringResource(R.string.rules_invalid_file)),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+            )
+            null -> Unit
+        }
+    }
+}
+
+/** Echap et sa base de stalkerwares, sur le modèle de la carte Exodus : qui, quelle licence, quelles limites. */
+@Composable
+fun EchapCreditsCard() {
+    val context = LocalContext.current
+    val repository = remember(context) {
+        (context.applicationContext as com.vylia.privacy.VyliaApplication).container.stalkerwareRepository
+    }
+    val state by repository.current.collectAsStateWithLifecycle()
+    val stalkerware = state.database
+    val version = state.downloadedAt?.let { formatDate(it) } ?: stalkerware.commit.take(7).ifEmpty { "?" }
+    InfoCard(R.string.echap_title) {
+        Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            // Pas de logo : celui d'Echap lui appartient. Le badge « Avis de recherche » dit de quoi il s'agit.
+            Text("🕵️", style = MaterialTheme.typography.headlineMedium, modifier = Modifier.clearAndSetSemantics {})
+            Text(stringResource(R.string.echap_intro), style = MaterialTheme.typography.bodyMedium, modifier = Modifier.weight(1f))
+        }
+        Text(
+            stringResource(R.string.echap_license, stalkerware.apps, version),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Hint(stringResource(R.string.echap_limit))
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(onClick = { openUrl(context, ECHAP_URL) }) { Text(stringResource(R.string.echap_website)) }
+            OutlinedButton(onClick = { openUrl(context, CC_BY_URL) }) { Text(stringResource(R.string.echap_cc_by)) }
+        }
+    }
+}
+
+private const val ECHAP_URL = "https://echap.eu.org/"
+private const val CC_BY_URL = "https://creativecommons.org/licenses/by/4.0/"
 private const val EXODUS_URL = "https://exodus-privacy.eu.org/"
 private const val ODBL_URL = "https://opendatacommons.org/licenses/odbl/1-0/"
 

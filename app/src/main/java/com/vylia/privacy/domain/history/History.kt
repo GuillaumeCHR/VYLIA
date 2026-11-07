@@ -1,5 +1,6 @@
 package com.vylia.privacy.domain.history
 
+import com.vylia.privacy.domain.model.PrivacyScore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -8,13 +9,33 @@ import java.util.Calendar
 import java.util.TimeZone
 import kotlin.math.sqrt
 
-/** Une app utilisateur à un instant donné : son score et ses permissions notées accordées. */
+/**
+ * Une app utilisateur à un instant donné : son score, ses permissions notées accordées, et de quoi expliquer une baisse
+ * d'un scan à l'autre (noms des traqueurs, motifs de sécurité). [trackers] et [security] valent `null` dans les points
+ * enregistrés avant qu'ils existent : inconnus, ils ne sont pas comparés.
+ */
 @Serializable
-data class AppPoint(val label: String, val score: Int, val granted: Set<String> = emptySet())
+data class AppPoint(
+    val label: String,
+    val score: Int,
+    val granted: Set<String> = emptySet(),
+    val trackers: Set<String>? = null,
+    val security: Set<String>? = null,
+)
 
 /** Un point de la courbe : moyenne et écart-type des scores, et l'état de chaque app (pour les événements). */
 @Serializable
-data class ScoreSnapshot(val at: Long, val average: Double, val stdDev: Double, val apps: Map<String, AppPoint>)
+data class ScoreSnapshot(
+    val at: Long,
+    val average: Double,
+    val stdDev: Double,
+    val apps: Map<String, AppPoint>,
+    /** Empreinte des règles de score (et de la base des stalkerwares) en vigueur ; vide dans les anciens points. */
+    val rules: String = "",
+) {
+    /** Score de l'appareil à ce point, arrondi comme partout ailleurs. */
+    val score: Int get() = PrivacyScore.ofAverage(average).value
+}
 
 enum class EventType { INSTALLED, REMOVED, PERMISSION_GRANTED, PERMISSION_REVOKED }
 
@@ -41,7 +62,7 @@ data class History(val snapshots: List<ScoreSnapshot> = emptyList(), val events:
         val reference = snapshots.lastOrNull { it.at <= last.at - periodMs } ?: snapshots.first()
         if (reference === last) return null
         return Progress(
-            points = kotlin.math.round(last.average).toInt() - kotlin.math.round(reference.average).toInt(),
+            points = last.score - reference.score,
             sinceStart = reference === snapshots.first() && last.at - reference.at < periodMs,
         )
     }
@@ -75,7 +96,7 @@ class HistoryRecorder(
     val history: StateFlow<History> = _history.asStateFlow()
 
     @Synchronized
-    fun record(apps: Map<String, AppPoint>) {
+    fun record(apps: Map<String, AppPoint>, rules: String = "") {
         if (apps.isEmpty()) return
         val now = clock()
         val current = _history.value
@@ -83,7 +104,7 @@ class HistoryRecorder(
         val events = previous?.let { diff(it.apps, apps, now) }.orEmpty()
         val scores = apps.values.map { it.score.toDouble() }
         val mean = scores.average()
-        val snapshot = ScoreSnapshot(now, mean, sqrt(scores.sumOf { (it - mean) * (it - mean) } / scores.size), apps)
+        val snapshot = ScoreSnapshot(now, mean, sqrt(scores.sumOf { (it - mean) * (it - mean) } / scores.size), apps, rules)
         val snapshots = if (previous != null && sameDay(previous.at, now)) current.snapshots.dropLast(1) + snapshot else current.snapshots + snapshot
         update(History(snapshots.takeLast(MAX_SNAPSHOTS), (events.sortedByDescending { it.at } + current.events).take(MAX_EVENTS)))
     }

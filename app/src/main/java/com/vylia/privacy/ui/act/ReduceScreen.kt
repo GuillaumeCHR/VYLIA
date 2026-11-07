@@ -72,6 +72,8 @@ internal fun ActPlaceholder(text: String?, modifier: Modifier = Modifier) {
 @Composable
 fun ReduceScreen(
     modifier: Modifier = Modifier,
+    /** App mise en tête des listes (cause d'une alerte de seuil). */
+    pinnedPackage: String? = null,
     viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
     actViewModel: ActViewModel = viewModel(factory = ActViewModel.Factory),
 ) {
@@ -89,8 +91,12 @@ fun ReduceScreen(
 
     val userApps = remember(state.scannedApps) { state.scannedApps.filter { AppFilter.USER.matches(it.app) } }
     val scorer = loadedRules.scorer
-    val revocations = remember(userApps, scorer) { ReductionAdvisor.revocations(userApps, scorer) }
-    val removals = remember(userApps, usage) { ReductionAdvisor.removals(userApps, usage.lastUsed, System.currentTimeMillis()) }
+    val revocations = remember(userApps, scorer, pinnedPackage) {
+        ReductionAdvisor.revocations(userApps, scorer).pinnedFirst(pinnedPackage) { it.app.app.packageName }
+    }
+    val removals = remember(userApps, usage, pinnedPackage) {
+        ReductionAdvisor.removals(userApps, usage.lastUsed, System.currentTimeMillis()).pinnedFirst(pinnedPackage) { it.app.app.packageName }
+    }
     val projected = remember(userApps, revocations, removals, scorer) {
         ReductionAdvisor.projectedAverage(userApps, revocations, removals, scorer)
     }
@@ -151,3 +157,7 @@ private fun SummaryCard(current: PrivacyScore?, projected: PrivacyScore?, revoca
         }
     }
 }
+
+/** Les éléments de l'app [pinned] d'abord, dans leur ordre ; le reste ensuite, inchangé. */
+private fun <T> List<T>.pinnedFirst(pinned: String?, packageOf: (T) -> String): List<T> =
+    if (pinned == null) this else sortedBy { if (packageOf(it) == pinned) 0 else 1 }

@@ -16,11 +16,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.vylia.privacy.VyliaApplication
+import com.vylia.privacy.data.alert.ThresholdAlertRepository
+import com.vylia.privacy.domain.history.HistoryRecorder
 import com.vylia.privacy.data.automation.AutomationScheduler
 import com.vylia.privacy.data.automation.InstallWatcher
 import com.vylia.privacy.data.preferences.BackgroundScan
 import com.vylia.privacy.data.preferences.CardStyle
 import com.vylia.privacy.data.preferences.SettingsRepository
+import com.vylia.privacy.data.security.StalkerwareRepository
 import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
 import com.vylia.privacy.data.trackers.TrackerUpdater
@@ -31,12 +34,20 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
+/** Résultat d'une mise à jour de la base Echap, traduit par l'écran. */
+sealed interface StalkerwareMessage {
+    data class Updated(val count: Int) : StalkerwareMessage
+    data class Failed(val detail: String?) : StalkerwareMessage
+}
+
 /** Résultat d'une action sur les règles de score, traduit par l'écran. */
 sealed interface RulesMessage {
     data class Imported(val categoryCount: Int) : RulesMessage
     /** [detail] : cause technique, affichée telle quelle (peut être absente). */
     data class Rejected(val detail: String?) : RulesMessage
     data object Reset : RulesMessage
+    data object Exported : RulesMessage
+    data class ExportFailed(val detail: String?) : RulesMessage
 }
 
 data class SettingsUiState(
@@ -67,6 +78,7 @@ data class AutomationUiState(
     val installAlerts: Boolean = false,
     val backgroundScan: BackgroundScan = BackgroundScan.OFF,
     val lastBackgroundScan: Long? = null,
+    val stalkerwareAlerts: Boolean = false,
 )
 
 class SettingsViewModel(
@@ -74,11 +86,39 @@ class SettingsViewModel(
     private val trackerUpdater: TrackerUpdater,
     private val trackerSignatureRepository: AssetTrackerSignatureRepository,
     private val ruleMatrixRepository: RuleMatrixRepository,
+    private val stalkerwareRepository: StalkerwareRepository,
     private val installWatcher: InstallWatcher,
     private val automationScheduler: AutomationScheduler,
+    private val thresholdAlertRepository: ThresholdAlertRepository,
+    private val historyRecorder: HistoryRecorder,
     private val backupRepository: BackupRepository,
     private val contentResolver: ContentResolver,
 ) : ViewModel() {
+
+    /** Base des stalkerwares connus (Echap) : en vigueur, mise à jour en cours, résultat de la dernière. */
+    val stalkerware: StateFlow<StalkerwareRepository.State> = stalkerwareRepository.current
+
+    private val _stalkerwareUpdating = MutableStateFlow(false)
+    val stalkerwareUpdating: StateFlow<Boolean> = _stalkerwareUpdating
+
+    private val _stalkerwareMessage = MutableStateFlow<StalkerwareMessage?>(null)
+    val stalkerwareMessage: StateFlow<StalkerwareMessage?> = _stalkerwareMessage
+
+    fun updateStalkerware() {
+        if (_stalkerwareUpdating.value) return
+        viewModelScope.launch {
+            _stalkerwareUpdating.value = true
+            _stalkerwareMessage.value = stalkerwareRepository.update().fold(
+                onSuccess = { count ->
+                    // Les scores se recalculent avec la nouvelle base (ScanViewModel observe les règles).
+                    ruleMatrixRepository.refreshStalkerware()
+                    StalkerwareMessage.Updated(count)
+                },
+                onFailure = { error -> StalkerwareMessage.Failed(error.localizedMessage) },
+            )
+            _stalkerwareUpdating.value = false
+        }
+    }
 
     private val _dataMessage = MutableStateFlow<DataMessage?>(null)
     val dataMessage: StateFlow<DataMessage?> = _dataMessage
@@ -130,14 +170,40 @@ class SettingsViewModel(
         settingsRepository.installAlerts,
         settingsRepository.backgroundScan,
         settingsRepository.lastBackgroundScan,
+        settingsRepository.stalkerwareAlerts,
         ::AutomationUiState,
     ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AutomationUiState())
 
+    /** Le contrôle des installations repart de maintenant s'il ne tournait pas déjà pour l'autre alerte. */
+    private fun startWatchingInstalls() {
+        if (!settingsRepository.installAlerts.value && !settingsRepository.stalkerwareAlerts.value) installWatcher.start()
+    }
+
     /** Seules les apps installées après l'activation seront signalées. */
     fun setInstallAlerts(enabled: Boolean) {
-        if (enabled && !settingsRepository.installAlerts.value) installWatcher.start()
+        if (enabled) startWatchingInstalls()
         settingsRepository.setInstallAlerts(enabled)
         automationScheduler.sync()
+    }
+
+    /** Alerte stalkerware : à l'installation d'une app reconnue, et lors des scans de fond. */
+    fun setStalkerwareAlerts(enabled: Boolean) {
+        if (enabled) startWatchingInstalls()
+        settingsRepository.setStalkerwareAlerts(enabled)
+        automationScheduler.sync()
+    }
+
+    /** Alerte de seuil : réglage, état et franchissements ; le score de référence est le dernier point du Suivi. */
+    val thresholdAlert: StateFlow<ThresholdAlertRepository.State> = thresholdAlertRepository.current
+
+    val deviceScore: Int? get() = historyRecorder.history.value.snapshots.lastOrNull()?.score
+
+    fun setThresholdAlert(enabled: Boolean) =
+        thresholdAlertRepository.setSetting(thresholdAlert.value.setting.copy(enabled = enabled), deviceScore)
+
+    fun setThreshold(threshold: Int) {
+        val setting = thresholdAlert.value.setting
+        if (setting.threshold != threshold) thresholdAlertRepository.setSetting(setting.copy(threshold = threshold), deviceScore)
     }
 
     fun setBackgroundScan(frequency: BackgroundScan) {
@@ -220,6 +286,15 @@ class SettingsViewModel(
         }
     }
 
+    fun exportRules(uri: Uri) {
+        viewModelScope.launch {
+            _rulesMessage.value = ruleMatrixRepository.export(uri).fold(
+                onSuccess = { RulesMessage.Exported },
+                onFailure = { error -> RulesMessage.ExportFailed(error.localizedMessage) },
+            )
+        }
+    }
+
     fun resetRules() {
         ruleMatrixRepository.resetToBundled()
         _rulesMessage.value = RulesMessage.Reset
@@ -235,8 +310,11 @@ class SettingsViewModel(
                     container.trackerUpdater,
                     container.trackerSignatureRepository,
                     container.ruleMatrixRepository,
+                    container.stalkerwareRepository,
                     container.installWatcher,
                     container.automationScheduler,
+                    container.thresholdAlertRepository,
+                    container.historyRecorder,
                     container.backupRepository,
                     app.contentResolver,
                 )

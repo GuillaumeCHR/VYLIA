@@ -56,15 +56,32 @@ import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.components.formatted
 import com.vylia.privacy.ui.components.trackerCategoryName
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.vylia.privacy.ui.components.categoryName
+import com.vylia.privacy.domain.learn.CategoryRationale
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.FilterChip
 import com.vylia.privacy.ui.components.securityLabel
 import com.vylia.privacy.domain.scoring.SecurityFinding
 import android.content.res.Resources
 import java.text.Normalizer
 import java.util.Locale
 
-/** Onglets de l'écran Comprendre : chaque contenu est à un toucher, sans long défilement. */
-/** [searchHint] : texte du champ de recherche ; `null` pour un onglet sans recherche (Score). */
+/**
+ * Onglets de l'Aide : chaque contenu est à un toucher, sans long défilement.
+ * [searchHint] : texte du champ de recherche ; `null` pour un onglet sans recherche (Écrans, Score).
+ */
 internal enum class UnderstandTab(@param:StringRes val title: Int, @param:StringRes val searchHint: Int?) {
+    SCREENS(R.string.understand_tab_screens, null),
     SCORE(R.string.understand_tab_score, null),
     BADGES(R.string.understand_tab_badges, R.string.learn_search_badges_hint),
     TRACKERS(R.string.understand_tab_trackers, R.string.learn_search_trackers_hint),
@@ -72,21 +89,22 @@ internal enum class UnderstandTab(@param:StringRes val title: Int, @param:String
 }
 
 /**
- * Contenu de l'aide d'un écran : un titre, une courte introduction propre à l'écran, puis les lexiques utiles
- * ([tabs], valeurs lues dans les règles en vigueur). Sans barre d'onglets s'il n'y en a qu'un.
+ * Contenu de l'Aide, le même d'où qu'on l'ouvre : titre, introduction, puis tous les onglets (valeurs lues dans les
+ * règles en vigueur). [initialTab] : l'onglet affiché à l'ouverture.
  */
 @Composable
 internal fun HelpContent(
-    title: String,
-    intro: String,
-    tabs: List<UnderstandTab>,
+    initialTab: UnderstandTab = UnderstandTab.SCREENS,
     modifier: Modifier = Modifier,
     homeViewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory)
 ) {
     val loadedRules by homeViewModel.rules.collectAsStateWithLifecycle()
     val rules = loadedRules.rules
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
-    var tab by rememberSaveable(tabs) { mutableStateOf(tabs.first()) }
+    val tabs = UnderstandTab.entries
+    val title = stringResource(R.string.help_title)
+    val intro = stringResource(R.string.help_intro)
+    var tab by rememberSaveable { mutableStateOf(initialTab) }
     var query by rememberSaveable { mutableStateOf("") }
     var searchOpen by rememberSaveable { mutableStateOf(false) }
     val searchHint = tab.searchHint?.let { stringResource(it) }
@@ -120,7 +138,8 @@ internal fun HelpContent(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        if (tabs.size > 1) PrimaryTabRow(selectedTabIndex = tabs.indexOf(tab)) {
+        // Cinq onglets : la barre défile plutôt que de couper « Traqueurs » ou « Permissions » sur un petit écran.
+        PrimaryScrollableTabRow(selectedTabIndex = tabs.indexOf(tab), edgePadding = 16.dp) {
             tabs.forEach { entry ->
                 Tab(
                     selected = tab == entry,
@@ -132,20 +151,13 @@ internal fun HelpContent(
                         }
                         tab = entry
                     },
-                    // Une ligne par onglet : le libellé rétrécit plutôt que de se couper.
-                    text = {
-                        Text(
-                            stringResource(entry.title),
-                            maxLines = 1,
-                            softWrap = false,
-                            autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = LocalTextStyle.current.fontSize),
-                        )
-                    },
+                    text = { Text(stringResource(entry.title), maxLines = 1, softWrap = false) },
                 )
             }
         }
         when (tab) {
-            UnderstandTab.SCORE -> ScoreTab(rules)
+            UnderstandTab.SCREENS -> ScreensTab()
+            UnderstandTab.SCORE -> ScoreTab(rules, stalkerwareCount = loadedRules.iocs.size)
             UnderstandTab.BADGES -> BadgesTab(rules, homeState.scannedApps, query)
             UnderstandTab.TRACKERS -> TrackersTab(rules, homeState.scannedApps, query)
             UnderstandTab.PERMISSIONS -> PermissionsTab(rules, homeState.scannedApps, query)
@@ -156,14 +168,35 @@ internal fun HelpContent(
 private val TabContentPadding = PaddingValues(16.dp)
 
 @Composable
-private fun ScoreTab(rules: Rules) {
+private fun ScoreTab(rules: Rules, stalkerwareCount: Int) {
+    // Six sections longues : en accordéon, leurs titres tiennent sur un écran et l'on va droit à celle qu'on cherche.
+    var open by rememberSaveable { mutableStateOf<String?>(null) }
+    CompositionLocalProvider(LocalAccordion provides Accordion(open) { title -> open = if (open == title) null else title }) {
+        LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            item { ScoreOverview(rules) }
+            item { PermissionScoring(rules) }
+            item { TrackerScoring(rules) }
+            item { CategoryResolution(rules) }
+            item { SecurityCapabilities(rules, stalkerwareCount) }
+            item { BadgesSummary() }
+        }
+    }
+}
+
+/** Mode d'emploi des cinq écrans, dans l'ordre de la barre du bas. */
+@Composable
+private fun ScreensTab() {
+    val screens = listOf(
+        R.string.help_scan_title to R.string.help_scan_intro,
+        R.string.help_analyze_title to R.string.help_analyze_intro,
+        R.string.help_reduce_title to R.string.help_reduce_intro,
+        R.string.help_replace_title to R.string.help_replace_intro,
+        R.string.help_celebrate_title to R.string.help_celebrate_intro,
+    )
     LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { ScoreOverview(rules) }
-        item { PermissionScoring(rules) }
-        item { TrackerScoring(rules) }
-        item { CategoryResolution(rules) }
-        item { SecurityCapabilities(rules) }
-        item { BadgesSummary() }
+        items(screens, key = { it.first }) { (title, text) ->
+            LearnCard(stringResource(title)) { Paragraph(stringResource(text)) }
+        }
     }
 }
 
@@ -254,6 +287,7 @@ private fun ScoreOverview(rules: Rules) {
         BulletLine(stringResource(R.string.learn_zone_green))
         BulletLine(stringResource(R.string.learn_zone_orange))
         BulletLine(stringResource(R.string.learn_zone_red))
+        Paragraph(stringResource(R.string.learn_overview_rules))
     }
 }
 
@@ -334,11 +368,19 @@ private fun TrackerScoring(rules: Rules) {
 
 /** Patterns de sécurité des règles et le plafond qu'ils imposent au score. */
 @Composable
-private fun SecurityCapabilities(rules: Rules) {
+private fun SecurityCapabilities(rules: Rules, stalkerwareCount: Int) {
     val security = rules.security
     if (security.patterns.isEmpty()) return
     val resources = LocalResources.current
     LearnCard(stringResource(R.string.learn_security_title)) {
+        // Stalkerwares connus (base d'Echap) : ce que VYLIA vérifie, ses limites, et quoi faire si l'un est trouvé.
+        if (stalkerwareCount > 0) {
+            Subtitle(stringResource(R.string.learn_stalkerware_title))
+            Paragraph(stringResource(R.string.learn_stalkerware_text, stalkerwareCount))
+            Paragraph(stringResource(R.string.learn_stalkerware_limit))
+            Subtitle(stringResource(R.string.learn_stalkerware_help_title))
+            Paragraph(stringResource(R.string.learn_stalkerware_help))
+        }
         Paragraph(stringResource(R.string.learn_security_text))
         security.patterns.entries
             .mapNotNull { (id, pattern) -> security.severityEffects[pattern.severity]?.scoreCap?.let { Triple(id, pattern, it) } }
@@ -359,11 +401,74 @@ private fun BadgesSummary() {
 
 @Composable
 private fun CategoryResolution(rules: Rules) {
+    val resources = LocalResources.current
+    val locale = currentLocale()
+    val multipliers = rules.scoring.contextMultipliers
+    // « Non catégorisée » est expliquée au-dessus ; les autres, par ordre alphabétique de leur nom affiché.
+    val categories = remember(rules, resources) {
+        rules.categories.keys.filter { it != "DEFAULT" }.sortedBy { resources.categoryName(it, rules) }
+    }
+    var selected by rememberSaveable { mutableStateOf(categories.firstOrNull()) }
     LearnCard(stringResource(R.string.learn_category_title)) {
         Paragraph(stringResource(R.string.learn_category_text, rules.categories.size))
         Paragraph(stringResource(R.string.learn_category_default))
+        if (categories.isEmpty()) return@LearnCard
+        Subtitle(stringResource(R.string.learn_category_grid_title))
+        Paragraph(
+            stringResource(
+                R.string.learn_category_grid_hint,
+                categories.size,
+                multipliers["allowed"].formatted(locale),
+                multipliers["tolerated"].formatted(locale),
+                multipliers["forbidden"].formatted(locale),
+                multipliers["unexpected"].formatted(locale),
+            )
+        )
+        Row(modifier = Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            categories.forEach { id ->
+                FilterChip(
+                    selected = id == selected,
+                    onClick = { selected = id },
+                    label = { Text(resources.categoryName(id, rules)) },
+                    modifier = Modifier.heightIn(min = 48.dp),
+                )
+            }
+        }
+        val id = selected ?: return@LearnCard
+        val category = rules.categories[id] ?: return@LearnCard
+        Text(resources.categoryName(id, rules), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        (CategoryRationale.of(id)?.let { stringResource(it) } ?: category.description)?.let {
+            Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        CategoryContext(R.string.learn_category_allowed, category.allowed)
+        CategoryContext(R.string.learn_category_tolerated, category.tolerated)
+        CategoryContext(R.string.learn_category_forbidden, category.forbidden)
+        if (rules.packageExceptions.isNotEmpty()) {
+            val exceptions = rules.packageExceptions.entries.joinToString { (pkg, exception) ->
+                resources.getString(R.string.learn_category_exception, pkg, exception.allowedExtra.joinToString { resources.permissionLabel(it) }.lowercase(locale))
+            }
+            Paragraph(stringResource(R.string.learn_category_exceptions, exceptions))
+        }
     }
 }
+
+/** Une colonne de la grille pour une catégorie : son nom et son nombre (pas seulement une couleur), puis les permissions. */
+@Composable
+private fun CategoryContext(@StringRes label: Int, permissions: Set<String>) {
+    val resources = LocalResources.current
+    Column(modifier = Modifier.padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(stringResource(label, permissions.size), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+        Text(
+            if (permissions.isEmpty()) stringResource(R.string.expectations_none)
+            else permissions.map { resources.permissionLabel(it) }.sorted().joinToString(" · "),
+            style = MaterialTheme.typography.bodySmall,
+        )
+    }
+}
+
+/** Nom d'une permission ou d'un ensemble de permissions (« @… ») tel que le lexique le présente. */
+private fun Resources.permissionLabel(key: String): String =
+    PermissionGlossary.titleOf(key)?.let(::getString) ?: key.removePrefix("@").substringAfterLast('.')
 
 @Composable
 private fun GradeRiskLine(band: GradeBand, scoring: Scoring) {
@@ -572,13 +677,61 @@ private fun String.normalized(): String =
 
 @Composable
 private fun LearnCard(title: String, content: @Composable ColumnScope.() -> Unit) {
+    val accordion = LocalAccordion.current
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            content()
+        if (accordion == null) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                content()
+            }
+            return@VyliaCard
+        }
+        // Dans un accordéon : le titre seul, touché pour déplier la section (et replier celle qui était ouverte).
+        val open = accordion.open == title
+        Column(modifier = Modifier.fillMaxWidth()) {
+            AccordionHeader(title, open) { accordion.toggle(title) }
+            AnimatedVisibility(visible = open) {
+                Column(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) { content() }
+            }
         }
     }
 }
+
+/**
+ * Titre d'une section repliable de l'Aide (onglets Score et Badges) : 56 dp de haut, lu comme un titre avec son état
+ * (déplié ou replié), et une flèche qui le montre.
+ */
+@Composable
+internal fun AccordionHeader(title: String, open: Boolean, onToggle: () -> Unit) {
+    val state = stringResource(if (open) R.string.help_section_expanded else R.string.help_section_collapsed)
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(role = Role.Button, onClick = onToggle)
+            .heightIn(min = 56.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .semantics {
+                heading()
+                stateDescription = state
+            },
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+        Icon(
+            if (open) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
+
+/** Accordéon de l'onglet Score : une seule section ouverte à la fois, repérée par son titre. */
+private class Accordion(val open: String?, val toggle: (String) -> Unit)
+
+private val LocalAccordion = staticCompositionLocalOf<Accordion?> { null }
 
 @Composable
 private fun Paragraph(text: String) {

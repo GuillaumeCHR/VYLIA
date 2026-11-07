@@ -11,6 +11,7 @@ import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.os.PowerManager
+import java.security.MessageDigest
 import android.os.Build
 import android.provider.Settings
 import androidx.core.app.NotificationManagerCompat
@@ -183,6 +184,7 @@ class AppScanner(
             declaredPermissions = permissions.mapTo(HashSet(), ::shortName),
             grantedPermissions = granted.mapTo(HashSet(), ::shortName),
             signals = signals,
+            signingCertDigests = signingCertDigests(packageName),
             requestedPermissions = permissions,
             permissions = PermissionRegistry.strongestByFamily(permissions).map { strongest ->
                 val familyGranted = permissions.any { permission ->
@@ -223,6 +225,32 @@ class AppScanner(
             else -> granted -= permission
         }
     }
+
+    /**
+     * Empreintes des certificats de signature, lues app par app : les ajouter à la requête groupée de tous les paquets
+     * l'alourdirait trop. Sur Android 9+, l'historique des certificats compte aussi (une clé remplacée reste connue).
+     */
+    @Suppress("DEPRECATION")
+    private fun signingCertDigests(packageName: String): Set<String> = try {
+        val certificates = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            val info = packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNING_CERTIFICATES).signingInfo
+            when {
+                info == null -> emptyList()
+                info.hasMultipleSigners() -> info.apkContentsSigners.toList()
+                else -> info.signingCertificateHistory.toList()
+            }
+        } else {
+            packageManager.getPackageInfo(packageName, PackageManager.GET_SIGNATURES).signatures.orEmpty().toList()
+        }
+        certificates.flatMapTo(HashSet()) { signature ->
+            val bytes = signature.toByteArray()
+            listOf("SHA-1", "SHA-256").map { algorithm -> hex(MessageDigest.getInstance(algorithm).digest(bytes)) }
+        }
+    } catch (_: PackageManager.NameNotFoundException) {
+        emptySet() // désinstallée pendant le scan
+    }
+
+    private fun hex(bytes: ByteArray): String = bytes.joinToString("") { "%02X".format(it) }
 
     private fun activeDeviceAdminPackages(): Set<String> =
         context.getSystemService(DevicePolicyManager::class.java)?.activeAdmins.orEmpty()

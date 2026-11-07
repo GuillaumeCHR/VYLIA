@@ -38,6 +38,19 @@ identification ; ODbL) et règles de domaine EasyPrivacy et EasyList (GPL v3), s
 `NEVER_BLOCK`. Après mise à jour : `./gradlew testDebugUnitTest` (`BlocklistTest` contrôle la liste embarquée).
 Détails : `docs/shield.md`.
 
+## Stalkerwares connus (Echap)
+
+```
+python3 tools/update_stalkerware_iocs.py          # télécharge ioc.yaml d'Echap (branche master)
+python3 tools/update_stalkerware_iocs.py --ioc ioc.yaml --commit <sha>
+```
+
+Produit `app/src/main/assets/stalkerware_iocs.json` depuis
+[stalkerware-indicators](https://github.com/AssoEchap/stalkerware-indicators) (CC BY 4.0) : pour chaque stalkerware,
+son nom, ses noms de paquet et les empreintes SHA-1 de ses certificats, avec le commit source. Nécessite PyYAML.
+Chaque valeur est vérifiée ; une entrée invalide fait échouer la génération. Après mise à jour :
+`./gradlew testDebugUnitTest` (`BadgeEngineTest` contrôle la base embarquée). L'écran À propos affiche la version.
+
 ## Textes traduits
 
 ```

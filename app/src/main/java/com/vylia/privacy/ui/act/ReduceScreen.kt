@@ -18,8 +18,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalResources
-import com.vylia.privacy.ui.components.trackerCategoryName
-import com.vylia.privacy.ui.share.ShareContent
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -45,30 +43,41 @@ import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.scan.ScanViewModel
 
-/** Les trois écrans issus de l'ancien onglet Agir, chacun dans la barre de navigation. */
-enum class ActSection(@param:StringRes val title: Int) {
-    REDUCE(R.string.reduce_title),
-    ALTERNATIVES(R.string.replace_title),
-    REWARDS(R.string.celebrate_title),
+import androidx.compose.ui.text.style.TextAlign
+
+/** En-tête des écrans Réduire, Remplacer et Célébrer : un titre et ce que l'écran propose. */
+@Composable
+internal fun ActHeader(@StringRes title: Int, @StringRes subtitle: Int?, modifier: Modifier = Modifier) {
+    Column(modifier = modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)) {
+        Text(stringResource(title), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
+        subtitle?.let {
+            Text(stringResource(it), style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+/** Centré dans la zone libre : en attendant le scan, ou quand l'écran n'a rien à montrer. */
+@Composable
+internal fun ActPlaceholder(text: String?, modifier: Modifier = Modifier) {
+    Box(modifier.fillMaxSize().padding(24.dp), contentAlignment = Alignment.Center) {
+        if (text == null) CircularProgressIndicator()
+        else Text(text, style = MaterialTheme.typography.bodyLarge, color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center)
+    }
 }
 
 /**
- * Réduire (avec en tête l'analyse globale : score moyen et score atteignable), Remplacer (alternatives) ou Célébrer
- * (récompenses et partage), selon [section]. Étape provisoire avant des écrans propres à chacun.
+ * Réduire : l'analyse globale (score moyen et score atteignable), puis les gestes classés par gain de score —
+ * autorisations à retirer, apps à désinstaller — et la protection réseau (DNS privé, bouclier).
  */
 @Composable
-fun ActScreen(
-    section: ActSection,
+fun ReduceScreen(
     modifier: Modifier = Modifier,
     viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
     actViewModel: ActViewModel = viewModel(factory = ActViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loadedRules by viewModel.rules.collectAsStateWithLifecycle()
-    val rewards by viewModel.rewards.collectAsStateWithLifecycle()
-    val recentRewards by viewModel.recentRewards.collectAsStateWithLifecycle()
     val usage by actViewModel.usage.collectAsStateWithLifecycle()
-    val tab = section
 
     // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
     LifecycleResumeEffect(Unit) {
@@ -87,16 +96,14 @@ fun ActScreen(
     }
 
     Column(modifier = modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Text(stringResource(section.title), style = MaterialTheme.typography.headlineMedium, modifier = Modifier.semantics { heading() })
-            if (!state.isLoading && section == ActSection.REDUCE) SummaryCard(state.userAverageScore, projected, revocations.size, removals.size)
+        ActHeader(R.string.reduce_title, R.string.reduce_subtitle)
+        if (!state.isLoading && userApps.isNotEmpty()) {
+            SummaryCard(state.userAverageScore, projected, revocations.size, removals.size, Modifier.padding(horizontal = 16.dp))
         }
         when {
-            state.isLoading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { CircularProgressIndicator() }
-            tab == ActSection.REDUCE -> ReduceTab(revocations, removals, usage) {
+            state.isLoading -> ActPlaceholder(null)
+            userApps.isEmpty() -> ActPlaceholder(stringResource(R.string.act_empty_scan))
+            else -> ReduceTab(revocations, removals, usage) {
                 val dnsCatalogue by actViewModel.dnsCatalogue.collectAsStateWithLifecycle()
                 val dnsStatus by actViewModel.dnsStatus.collectAsStateWithLifecycle()
                 val dnsListUpdate by actViewModel.dnsListUpdate.collectAsStateWithLifecycle()
@@ -119,27 +126,14 @@ fun ActScreen(
                     )
                 }
             }
-            tab == ActSection.ALTERNATIVES -> AlternativesTab(state.scannedApps, actViewModel.catalogue)
-            else -> {
-                val history by viewModel.history.collectAsStateWithLifecycle()
-                val shield by actViewModel.shield.collectAsStateWithLifecycle()
-                val resources = LocalResources.current
-                // Calculé à l'ouverture du partage seulement (analyse des traqueurs de toutes les apps).
-                val shareContent = {
-                    state.userAverageScore?.value?.let { score ->
-                        ShareContent.from(score, userApps, history, rewards, shield.blockedTotal) { resources.trackerCategoryName(it) }
-                    }
-                }
-                RewardsTab(shareContent, rewards, recentRewards, viewModel::dismissRecentRewards)
-            }
         }
     }
 }
 
 /** Analyse globale : score moyen actuel, score atteignable, et ce qu'il faut faire pour y arriver. */
 @Composable
-private fun SummaryCard(current: PrivacyScore?, projected: PrivacyScore?, revocations: Int, removals: Int) {
-    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+private fun SummaryCard(current: PrivacyScore?, projected: PrivacyScore?, revocations: Int, removals: Int, modifier: Modifier = Modifier) {
+    VyliaCard(modifier = modifier.fillMaxWidth()) {
         Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             current?.let { ScoreBadge(it) }
             Column(modifier = Modifier.weight(1f)) {

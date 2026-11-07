@@ -26,8 +26,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.learn.GradeBands
-import com.vylia.privacy.ui.act.ActScreen
-import com.vylia.privacy.ui.act.ActSection
+import com.vylia.privacy.ui.act.CelebrateScreen
+import com.vylia.privacy.ui.act.ReduceScreen
+import com.vylia.privacy.ui.act.ReplaceScreen
 import com.vylia.privacy.ui.analysis.AnalysisScreen
 import com.vylia.privacy.ui.components.categoryName
 import com.vylia.privacy.ui.detail.AppDetailScreen
@@ -134,9 +135,9 @@ fun MainScreen(
             null -> when (currentTab) {
                 AppTab.SCAN -> ScanScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
                 AppTab.ANALYZE -> AnalysisScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
-                AppTab.REDUCE -> ActScreen(ActSection.REDUCE, modifier)
-                AppTab.REPLACE -> ActScreen(ActSection.ALTERNATIVES, modifier)
-                AppTab.CELEBRATE -> ActScreen(ActSection.REWARDS, modifier)
+                AppTab.REDUCE -> ReduceScreen(modifier)
+                AppTab.REPLACE -> ReplaceScreen(modifier)
+                AppTab.CELEBRATE -> CelebrateScreen(modifier)
             }
         }
     }

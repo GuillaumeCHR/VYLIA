@@ -30,7 +30,29 @@ data class HistoryEvent(
 )
 
 @Serializable
-data class History(val snapshots: List<ScoreSnapshot> = emptyList(), val events: List<HistoryEvent> = emptyList())
+data class History(val snapshots: List<ScoreSnapshot> = emptyList(), val events: List<HistoryEvent> = emptyList()) {
+
+    /**
+     * Évolution du score moyen sur [periodMs] : dernier point moins le plus récent point d'au moins [periodMs], ou le
+     * tout premier point si l'historique est plus court. `null` avec moins de deux jours de points.
+     */
+    fun progress(periodMs: Long = PROGRESS_PERIOD_MS): Progress? {
+        val last = snapshots.lastOrNull() ?: return null
+        val reference = snapshots.lastOrNull { it.at <= last.at - periodMs } ?: snapshots.first()
+        if (reference === last) return null
+        return Progress(
+            points = kotlin.math.round(last.average).toInt() - kotlin.math.round(reference.average).toInt(),
+            sinceStart = reference === snapshots.first() && last.at - reference.at < periodMs,
+        )
+    }
+
+    /** [sinceStart] : l'historique couvre moins que la période demandée, l'écart part du premier scan. */
+    data class Progress(val points: Int, val sinceStart: Boolean)
+
+    companion object {
+        const val PROGRESS_PERIOD_MS = 30L * 24 * 60 * 60 * 1000
+    }
+}
 
 interface HistoryStore {
     fun load(): History?

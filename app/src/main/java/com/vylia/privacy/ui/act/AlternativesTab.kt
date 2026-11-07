@@ -44,6 +44,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.text.style.TextOverflow
+import com.vylia.privacy.domain.rewards.BadgesManager
+import com.vylia.privacy.ui.components.AppIcon
+import com.vylia.privacy.ui.components.ScoreBadge
+import kotlinx.coroutines.launch
 import com.vylia.privacy.domain.act.Alternative
 import com.vylia.privacy.domain.act.AlternativeCatalogue
 import com.vylia.privacy.domain.act.AlternativeGroup
@@ -59,14 +66,44 @@ import java.text.NumberFormat
  * choisie, et en deux phrases la façon dont la liste est construite. Les alternatives déjà installées sont repérées.
  */
 @Composable
-internal fun AlternativesTab(allApps: List<AuditedApp>, catalogue: AlternativeCatalogue) {
+internal fun AlternativesTab(allApps: List<AuditedApp>, userApps: List<AuditedApp>, catalogue: AlternativeCatalogue) {
     val language = currentLocale().language
     val installed = remember(allApps) { allApps.map { it.app.packageName }.toSet() }
-    var selectedId by rememberSaveable { mutableStateOf(catalogue.groups.firstOrNull()?.id) }
+    // Les apps intrusives d'abord : celles qu'une catégorie d'alternatives couvre, puis celles qu'aucune ne couvre.
+    val intrusive = remember(userApps) {
+        userApps.filter { it.score.value < BadgesManager.INTRUSIVE_THRESHOLD }.sortedBy { it.score.value }
+    }
+    val matched = remember(intrusive, catalogue) { intrusive.mapNotNull { app -> catalogue.groupFor(app)?.let { app to it } } }
+    val unmatched = remember(intrusive, matched) { intrusive - matched.map { it.first }.toSet() }
+    var selectedId by rememberSaveable { mutableStateOf(matched.firstOrNull()?.second?.id ?: catalogue.groups.firstOrNull()?.id) }
     val selected = catalogue.groups.firstOrNull { it.id == selectedId } ?: catalogue.groups.firstOrNull()
-    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        item { Intro() }
-        item { CategoryMenu(catalogue.groups, selected, language) { selectedId = it.id } }
+    val listState = rememberLazyListState()
+    val scope = rememberCoroutineScope()
+    // Rang du menu des catégories dans la liste : en-tête, apps couvertes, ligne des apps non couvertes, introduction.
+    val menuIndex = 1 + matched.size + (if (unmatched.isNotEmpty()) 1 else 0) + 1
+
+    LazyColumn(state = listState, contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        item {
+            SectionHeader(
+                stringResource(R.string.replace_for_you),
+                stringResource(if (intrusive.isEmpty()) R.string.replace_for_you_empty else R.string.replace_for_you_hint),
+            )
+        }
+        items(matched, key = { "swap-${it.first.app.packageName}" }) { (app, group) ->
+            SwapCard(app, group.title.localized(language)) {
+                selectedId = group.id
+                scope.launch { listState.animateScrollToItem(menuIndex) }
+            }
+        }
+        if (unmatched.isNotEmpty()) item {
+            Text(
+                stringResource(R.string.replace_no_match, unmatched.joinToString { it.app.label }),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        item { Intro(Modifier.padding(top = 12.dp)) }
+        item(key = "menu") { CategoryMenu(catalogue.groups, selected, language) { selectedId = it.id } }
         if (selected != null) {
             items(selected.alternatives, key = { "${selected.id}-${it.packageName}" }) { alt ->
                 AlternativeCard(alt, alt.packageName in installed, language)
@@ -76,9 +113,31 @@ internal fun AlternativesTab(allApps: List<AuditedApp>, catalogue: AlternativeCa
     }
 }
 
+/** Une app intrusive installée et la catégorie d'alternatives qui la couvre. */
 @Composable
-private fun Intro() {
-    Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+private fun SwapCard(audited: AuditedApp, category: String, onShow: () -> Unit) {
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                AppIcon(audited.app.icon, 32.dp)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(audited.app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(
+                        stringResource(R.string.replace_category, category),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                ScoreBadge(audited.score)
+            }
+            OutlinedButton(onClick = onShow) { Text(stringResource(R.string.replace_show)) }
+        }
+    }
+}
+
+@Composable
+private fun Intro(modifier: Modifier = Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(6.dp)) {
         Text(stringResource(R.string.alt_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
         Text(stringResource(R.string.alt_intro), style = MaterialTheme.typography.bodyMedium)
         Text(stringResource(R.string.alt_reduce_first), style = MaterialTheme.typography.bodyMedium)

@@ -3,7 +3,6 @@ package com.vylia.privacy.ui.act
 import android.content.Context
 import android.content.Intent
 import android.provider.Settings
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -22,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -131,7 +131,7 @@ private fun RevokeRow(suggestion: RevokeSuggestion) {
     val context = LocalContext.current
     val app = suggestion.app.app
     val permission = PermissionGlossary.titleOf(suggestion.finding.permission)?.let { stringResource(it) } ?: suggestion.finding.permission
-    VyliaCard(modifier = Modifier.fillMaxWidth().clickable { openAppSettings(context, app.packageName) }) {
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 AppIcon(app.icon, 32.dp)
@@ -152,6 +152,9 @@ private fun RevokeRow(suggestion: RevokeSuggestion) {
                     suggestion.badgesLost.forEach { Text(stringResource(R.string.reduce_badge_lost), style = MaterialTheme.typography.labelSmall); BadgeChip(it) }
                 }
             }
+            OutlinedButton(onClick = { openAppSettings(context, app.packageName) }) {
+                Text(stringResource(R.string.reduce_action_permissions))
+            }
         }
     }
 }
@@ -160,15 +163,21 @@ private fun RevokeRow(suggestion: RevokeSuggestion) {
 private fun RemovalRow(suggestion: RemovalSuggestion, usageKnown: Boolean) {
     val context = LocalContext.current
     val app = suggestion.app.app
-    VyliaCard(modifier = Modifier.fillMaxWidth().clickable { openAppSettings(context, app.packageName) }) {
-        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            AppIcon(app.icon, 32.dp)
-            Column(modifier = Modifier.weight(1f)) {
-                Text(app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                Text(lastUsedText(suggestion.lastUsedAt, usageKnown), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                AppIcon(app.icon, 32.dp)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(lastUsedText(suggestion.lastUsedAt, usageKnown), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
+                if (suggestion.points > 0) Gain(stringResource(R.string.reduce_reward_points, suggestion.points))
+                ScoreBadge(suggestion.app.score)
             }
-            if (suggestion.points > 0) Gain(stringResource(R.string.reduce_reward_points, suggestion.points))
-            ScoreBadge(suggestion.app.score)
+            // La fiche Android de l'app, où se trouve le bouton Désinstaller : VYLIA ne désinstalle rien lui-même.
+            OutlinedButton(onClick = { openAppSettings(context, app.packageName) }) {
+                Text(stringResource(R.string.reduce_action_uninstall))
+            }
         }
     }
 }

@@ -78,11 +78,13 @@ internal fun RewardsTab(
     rewards: RewardsState,
     recentRewards: List<RemovedApp>,
     onDismissRecent: () -> Unit,
+    top: @Composable () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        top()
         RewardsSection(rewards, recentRewards, onDismissRecent, Modifier.fillMaxWidth())
         ShareEntry(shareContent)
     }

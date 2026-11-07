@@ -14,9 +14,7 @@ import android.system.Os
 import android.system.OsConstants
 import android.system.StructPollfd
 import android.util.Log
-import com.vylia.privacy.BuildConfig
-import com.vylia.privacy.MainActivity
-import com.vylia.privacy.VyliaApplication
+import com.vylia.privacy.shield.BuildConfig
 import com.vylia.privacy.domain.shield.Blocklist
 import com.vylia.privacy.domain.shield.DnsQuery
 import com.vylia.privacy.domain.shield.ShieldStatus
@@ -45,7 +43,7 @@ import java.util.concurrent.TimeUnit
  */
 class ShieldVpnService : VpnService() {
 
-    private val controller get() = (application as VyliaApplication).container.shieldController
+    private val controller get() = (application as ShieldHost).shieldController
 
     @Volatile private var tunnel: ParcelFileDescriptor? = null
     @Volatile private var running = false
@@ -128,7 +126,7 @@ class ShieldVpnService : VpnService() {
             // VYLIA hors du tunnel : ses requêtes vers le DNS du réseau ne reviennent pas dans le bouclier.
             .addDisallowedApplication(packageName)
             .setConfigureIntent(
-                PendingIntent.getActivity(this, 0, Intent(this, MainActivity::class.java), PendingIntent.FLAG_IMMUTABLE),
+                PendingIntent.getActivity(this, 0, openAppIntent(this), PendingIntent.FLAG_IMMUTABLE),
             )
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) builder.setMetered(false) // suit le réseau sous-jacent
         underlying?.let { builder.setUnderlyingNetworks(arrayOf(it)) }

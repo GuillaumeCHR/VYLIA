@@ -1,6 +1,5 @@
 package com.vylia.privacy.domain.shield
 
-import com.vylia.privacy.domain.security.Untrusted
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
@@ -69,7 +68,7 @@ class Blocklist(private val web: Map<String, String?>, private val mobile: Map<S
             fun rules(group: Group?): Map<String, String?> {
                 val rules = HashMap<String, String?>((group?.domains?.size ?: 0) + 1_000)
                 group?.trackers?.forEach { (name, domains) ->
-                    val tracker = Untrusted.text(name, 100)
+                    val tracker = visibleText(name, 100)
                     domains.forEach { if (budget > 0 && DOMAIN.matches(it) && rules.put(it, tracker) == null) budget-- }
                 }
                 group?.domains?.forEach { if (budget > 0 && DOMAIN.matches(it) && !rules.containsKey(it)) { rules[it] = null; budget-- } }
@@ -80,3 +79,18 @@ class Blocklist(private val web: Map<String, String?>, private val mobile: Map<S
         }
     }
 }
+
+/**
+ * Nom affichable venu de la liste : sans caractères de contrôle ni de mise en forme invisibles, espaces normalisés,
+ * longueur bornée. Même règle que `Untrusted.text` de l'app, recopiée pour que le module n'en dépende pas.
+ */
+internal fun visibleText(s: String, max: Int): String {
+    val visible = s.replace(WHITESPACE, " ").filter { c ->
+        val type = Character.getType(c)
+        type != Character.CONTROL.toInt() && type != Character.FORMAT.toInt() &&
+            type != Character.UNASSIGNED.toInt() && type != Character.PRIVATE_USE.toInt()
+    }
+    return visible.replace(WHITESPACE, " ").trim().take(max).ifEmpty { "?" }
+}
+
+private val WHITESPACE = Regex("\\s+")

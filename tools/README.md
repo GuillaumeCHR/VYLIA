@@ -33,7 +33,7 @@ python3 tools/update_shield_blocklist.py          # télécharge Exodus, EasyPri
 python3 tools/update_shield_blocklist.py --exodus api.json --easyprivacy easyprivacy.txt --easylist easylist.txt
 ```
 
-Produit `app/src/main/assets/shield_blocklist.json` : domaines de traçage Exodus (pub, analytics, profilage,
+Produit `shield/src/main/assets/shield_blocklist.json` : domaines de traçage Exodus (pub, analytics, profilage,
 identification ; ODbL) et règles de domaine EasyPrivacy et EasyList (GPL v3), sans les domaines de plateformes listés dans
 `NEVER_BLOCK`. Après mise à jour : `./gradlew testDebugUnitTest` (`BlocklistTest` contrôle la liste embarquée).
 Détails : `docs/shield.md`.

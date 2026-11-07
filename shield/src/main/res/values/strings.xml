@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shield_tile_label">VYLIA Shield</string>
+    <string name="shield_tile_active">On</string>
+    <string name="shield_tile_inactive">Off</string>
+    <string name="shield_tile_starting">Starting</string>
+    <string name="shield_tile_bypassed">Bypassed</string>
+</resources>

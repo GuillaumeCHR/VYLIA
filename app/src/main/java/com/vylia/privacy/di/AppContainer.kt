@@ -37,7 +37,7 @@ class AppContainer(context: Context) {
     val packageRemovalMonitor = PackageRemovalMonitor(context)
     val alternativesRepository = AlternativesRepository(context)
     val privateDnsRepository = PrivateDnsRepository(context)
-    val shieldController = ShieldController(context, badgesManager)
+    val shieldController = ShieldController(context, onFirstBlock = badgesManager::onShieldBlocked)
     val usageStatsReader = UsageStatsReader(context)
     val historyRecorder = HistoryRecorder(FileHistoryStore(File(context.filesDir, "history.json")))
 

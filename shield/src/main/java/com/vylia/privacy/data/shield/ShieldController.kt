@@ -10,7 +10,6 @@ import android.net.NetworkRequest
 import android.net.VpnService
 import android.os.Build
 import android.os.Process
-import com.vylia.privacy.domain.rewards.BadgesManager
 import com.vylia.privacy.domain.shield.BlockMatch
 import com.vylia.privacy.domain.shield.BlockedRequest
 import com.vylia.privacy.domain.shield.Blocklist
@@ -54,7 +53,8 @@ sealed interface ShieldTapResult {
  */
 class ShieldController(
     private val context: Context,
-    private val badgesManager: BadgesManager,
+    /** Appelé à la première requête bloquée de chaque session (badge « Bouclier actif » côté app). */
+    private val onFirstBlock: () -> Unit = {},
 ) {
     private val prefs = context.getSharedPreferences("vylia_shield", Context.MODE_PRIVATE)
     private val _state = MutableStateFlow(
@@ -245,8 +245,7 @@ class ShieldController(
     /** Appelé par le fil de lecture du VPN, un seul à la fois. */
     internal fun onBlocked(domain: String, match: BlockMatch) {
         val next = _state.updateAndGet { it.onBlocked(BlockedRequest(domain, match.trackerName, System.currentTimeMillis())) }
-        // Badge « Bouclier actif » : débloqué au premier blocage (sans effet s'il l'est déjà).
-        if (next.blockedSession == 1L) badgesManager.onShieldBlocked()
+        if (next.blockedSession == 1L) onFirstBlock()
         if (++unsaved >= SAVE_EVERY) flush()
     }
 

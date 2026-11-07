@@ -59,19 +59,7 @@
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
-        <!-- Bouclier VYLIA : VPN local qui ne transporte que les requêtes DNS, filtrées sur le téléphone (Agir › Réduire
-             › Traçage pub). Seul Android peut s'y lier (BIND_VPN_SERVICE) ; compatible avec le VPN permanent. -->
-        <service
-            android:name=".data.shield.ShieldVpnService"
-            android:exported="false"
-            android:permission="android.permission.BIND_VPN_SERVICE">
-            <intent-filter>
-                <action android:name="android.net.VpnService" />
-            </intent-filter>
-            <meta-data
-                android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON"
-                android:value="true" />
-        </service>
+        <!-- Bouclier VYLIA : déclaré par le module :shield (service VPN et tuile). -->
 
         <provider
             android:name="androidx.core.content.FileProvider"

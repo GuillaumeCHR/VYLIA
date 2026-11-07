@@ -6,10 +6,13 @@
 .DS_Store
 /build/
 /app/build/
+/shield/build/
 /captures/
 .externalNativeBuild/
 .cxx/
 __pycache__/
+# Captures du navigateur de test (Playwright)
+/.playwright-mcp/
 
 # Clés de signature : jamais dans le dépôt
 *.jks

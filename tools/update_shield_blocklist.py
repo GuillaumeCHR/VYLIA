@@ -32,7 +32,7 @@ Prudence, pour ne pas casser d'apps :
 
 Usage : python3 tools/update_shield_blocklist.py [--exodus api.json] [--easyprivacy easyprivacy.txt]
                                                   [--easylist easylist.txt] [--adguard-mobile 11.txt]
-Produit app/src/main/assets/shield_blocklist.json.
+Produit shield/src/main/assets/shield_blocklist.json.
 """
 import argparse
 import datetime
@@ -54,7 +54,7 @@ EXTRA = {
     "Google Firebase Analytics": ("web", ["app-measurement.com"]),
 }
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-OUTPUT = ROOT / "app/src/main/assets/shield_blocklist.json"
+OUTPUT = ROOT / "shield/src/main/assets/shield_blocklist.json"
 OVERRIDES = ROOT / "tools/exodus_category_overrides.json"
 
 BLOCKED_CATEGORIES = {"Advertisement", "Analytics", "Profiling", "Identification"}

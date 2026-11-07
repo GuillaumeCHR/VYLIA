@@ -30,15 +30,22 @@ requêtes DNS vers les serveurs de traçage, avec un compteur en direct. Débloq
 
 ## Fichiers
 
+Le domaine et les données vivent dans le module Gradle `:shield`, qui ne dépend pas de `:app` : l'application
+implémente `ShieldHost` (elle fournit le `ShieldController`) et passe le rappel du premier blocage (badge). Le module
+déclare lui-même ses services dans son manifeste. Une variante sans bouclier (Google Play) retirera ce module et
+l'interface qui s'en sert (`ui/shield`, `ui/act/ShieldCard.kt`, onglet DNS privé).
+
 | Couche | Fichier | Rôle |
 |---|---|---|
 | domaine (pur, testé) | `domain/shield/Blocklist.kt` | liste, recherche par suffixe (`a.ads.com` bloqué par `ads.com`, jamais le TLD) |
 | | `domain/shield/DnsPacket.kt` | `DnsQuery` : lecture IPv4/UDP/DNS bornée, réponse NXDOMAIN, paquet de retour |
 | | `domain/shield/ShieldState.kt` | état, compteurs, derniers blocages (mémoire seulement) |
 | données | `data/shield/ShieldVpnService.kt` | le `VpnService` |
-| | `data/shield/ShieldController.kt` | état partagé UI ↔ service, total persisté, badge, accord VPN |
-| interface | `ui/act/ShieldCard.kt` | interrupteur, compteur, avertissements, derniers blocages |
-| outil | `tools/update_shield_blocklist.py` | génère `assets/shield_blocklist.json` |
+| | `data/shield/ShieldController.kt` | état partagé UI ↔ service ↔ tuile, total persisté, accord VPN |
+| | `data/shield/ShieldTileService.kt` | tuile des réglages rapides : même état et même appui que la pastille |
+| | `data/shield/ShieldHost.kt` | contrat avec l'app hôte |
+| interface (`:app`) | `ui/shield/ShieldControl.kt`, `ui/act/ShieldCard.kt` | interrupteur, compteur, avertissements, derniers blocages |
+| outil | `tools/update_shield_blocklist.py` | génère `shield/src/main/assets/shield_blocklist.json` |
 
 ## Liste de blocage
 

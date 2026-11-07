@@ -499,6 +499,13 @@
     <string name="learn_category_title">3. La catégorie de l\'app</string>
     <string name="learn_category_text">Ce qui est « justifié » dépend de ce que fait l\'app : le micro est normal pour Shazam, pas pour une calculatrice. VYLIA classe chaque app dans l\'une de %1$d catégories, d\'après une liste d\'apps connues ou, à défaut, la catégorie déclarée par l\'éditeur.</string>
     <string name="learn_category_default">Une app « Non catégorisée » n\'a aucun passe-droit : chaque permission sensible y est considérée comme inattendue.</string>
+    <string name="learn_category_grid_title">La grille, catégorie par catégorie</string>
+    <string name="learn_category_grid_hint">Choisissez l\'une des %1$d catégories pour voir ce que sa finalité justifie (×%2$s), tolère (×%3$s) ou interdit (×%4$s). Toute autre permission comptée y est inattendue (×%5$s).</string>
+    <string name="learn_category_allowed">Justifiées (%1$d)</string>
+    <string name="learn_category_tolerated">Tolérées (%1$d)</string>
+    <string name="learn_category_forbidden">Interdites (%1$d)</string>
+    <string name="learn_category_exceptions">Quelques apps connues ont leur propre exception : %1$s.</string>
+    <string name="learn_category_exception">%1$s (%2$s justifié)</string>
     <string name="learn_security_title">4. Les capacités d\'espionnage</string>
     <string name="learn_security_text">Certaines combinaisons sont typiques des logiciels espions : lire ce que vous tapez, enregistrer en arrière-plan, cacher son icône avec des accès sensibles, lire l\'écran et dessiner par-dessus les autres apps. Elles décrivent ce qu\'une app PEUT faire, pas ce qu\'elle fait, mais elles plafonnent son score :</string>
     <string name="learn_security_line">%1$s : %2$d au plus</string>
@@ -571,6 +578,8 @@
     <string name="risk_level_unknown">Risque indéterminé</string>
     <string name="help_title">Aide</string>
     <string name="help_intro">Tout pour lire VYLIA : ce que montre chaque écran, comment le score est calculé, les badges, et ce que chaque traqueur et chaque permission révèle de vous.</string>
+    <string name="help_section_expanded">Déplié</string>
+    <string name="help_section_collapsed">Replié</string>
     <string name="help_scan_title">Lire le Scan</string>
     <string name="help_scan_intro">Chaque app part de 100 points et en perd pour ses permissions et ses traqueurs. Les trois icônes du haut trient les apps par risque, par catégorie ou par badge. Touchez l\'icône d\'une app pour ouvrir ses réglages Android.</string>
     <string name="help_analyze_title">Lire l\'Analyse</string>

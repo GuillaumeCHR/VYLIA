@@ -56,6 +56,20 @@ import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.components.formatted
 import com.vylia.privacy.ui.components.trackerCategoryName
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.stateDescription
+import com.vylia.privacy.ui.components.categoryName
+import com.vylia.privacy.domain.learn.CategoryRationale
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.material3.FilterChip
 import com.vylia.privacy.ui.components.securityLabel
 import com.vylia.privacy.domain.scoring.SecurityFinding
 import android.content.res.Resources
@@ -124,7 +138,8 @@ internal fun HelpContent(
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
-        PrimaryTabRow(selectedTabIndex = tabs.indexOf(tab)) {
+        // Cinq onglets : la barre défile plutôt que de couper « Traqueurs » ou « Permissions » sur un petit écran.
+        PrimaryScrollableTabRow(selectedTabIndex = tabs.indexOf(tab), edgePadding = 16.dp) {
             tabs.forEach { entry ->
                 Tab(
                     selected = tab == entry,
@@ -136,15 +151,7 @@ internal fun HelpContent(
                         }
                         tab = entry
                     },
-                    // Une ligne par onglet : le libellé rétrécit plutôt que de se couper.
-                    text = {
-                        Text(
-                            stringResource(entry.title),
-                            maxLines = 1,
-                            softWrap = false,
-                            autoSize = TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = LocalTextStyle.current.fontSize),
-                        )
-                    },
+                    text = { Text(stringResource(entry.title), maxLines = 1, softWrap = false) },
                 )
             }
         }
@@ -162,13 +169,17 @@ private val TabContentPadding = PaddingValues(16.dp)
 
 @Composable
 private fun ScoreTab(rules: Rules, stalkerwareCount: Int) {
-    LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        item { ScoreOverview(rules) }
-        item { PermissionScoring(rules) }
-        item { TrackerScoring(rules) }
-        item { CategoryResolution(rules) }
-        item { SecurityCapabilities(rules, stalkerwareCount) }
-        item { BadgesSummary() }
+    // Six sections longues : en accordéon, leurs titres tiennent sur un écran et l'on va droit à celle qu'on cherche.
+    var open by rememberSaveable { mutableStateOf<String?>(null) }
+    CompositionLocalProvider(LocalAccordion provides Accordion(open) { title -> open = if (open == title) null else title }) {
+        LazyColumn(contentPadding = TabContentPadding, verticalArrangement = Arrangement.spacedBy(12.dp)) {
+            item { ScoreOverview(rules) }
+            item { PermissionScoring(rules) }
+            item { TrackerScoring(rules) }
+            item { CategoryResolution(rules) }
+            item { SecurityCapabilities(rules, stalkerwareCount) }
+            item { BadgesSummary() }
+        }
     }
 }
 
@@ -390,11 +401,74 @@ private fun BadgesSummary() {
 
 @Composable
 private fun CategoryResolution(rules: Rules) {
+    val resources = LocalResources.current
+    val locale = currentLocale()
+    val multipliers = rules.scoring.contextMultipliers
+    // « Non catégorisée » est expliquée au-dessus ; les autres, par ordre alphabétique de leur nom affiché.
+    val categories = remember(rules, resources) {
+        rules.categories.keys.filter { it != "DEFAULT" }.sortedBy { resources.categoryName(it, rules) }
+    }
+    var selected by rememberSaveable { mutableStateOf(categories.firstOrNull()) }
     LearnCard(stringResource(R.string.learn_category_title)) {
         Paragraph(stringResource(R.string.learn_category_text, rules.categories.size))
         Paragraph(stringResource(R.string.learn_category_default))
+        if (categories.isEmpty()) return@LearnCard
+        Subtitle(stringResource(R.string.learn_category_grid_title))
+        Paragraph(
+            stringResource(
+                R.string.learn_category_grid_hint,
+                categories.size,
+                multipliers["allowed"].formatted(locale),
+                multipliers["tolerated"].formatted(locale),
+                multipliers["forbidden"].formatted(locale),
+                multipliers["unexpected"].formatted(locale),
+            )
+        )
+        Row(modifier = Modifier.horizontalScroll(rememberScrollState()), horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+            categories.forEach { id ->
+                FilterChip(
+                    selected = id == selected,
+                    onClick = { selected = id },
+                    label = { Text(resources.categoryName(id, rules)) },
+                    modifier = Modifier.heightIn(min = 48.dp),
+                )
+            }
+        }
+        val id = selected ?: return@LearnCard
+        val category = rules.categories[id] ?: return@LearnCard
+        Text(resources.categoryName(id, rules), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        (CategoryRationale.of(id)?.let { stringResource(it) } ?: category.description)?.let {
+            Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        CategoryContext(R.string.learn_category_allowed, category.allowed)
+        CategoryContext(R.string.learn_category_tolerated, category.tolerated)
+        CategoryContext(R.string.learn_category_forbidden, category.forbidden)
+        if (rules.packageExceptions.isNotEmpty()) {
+            val exceptions = rules.packageExceptions.entries.joinToString { (pkg, exception) ->
+                resources.getString(R.string.learn_category_exception, pkg, exception.allowedExtra.joinToString { resources.permissionLabel(it) }.lowercase(locale))
+            }
+            Paragraph(stringResource(R.string.learn_category_exceptions, exceptions))
+        }
     }
 }
+
+/** Une colonne de la grille pour une catégorie : son nom et son nombre (pas seulement une couleur), puis les permissions. */
+@Composable
+private fun CategoryContext(@StringRes label: Int, permissions: Set<String>) {
+    val resources = LocalResources.current
+    Column(modifier = Modifier.padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(stringResource(label, permissions.size), style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
+        Text(
+            if (permissions.isEmpty()) stringResource(R.string.expectations_none)
+            else permissions.map { resources.permissionLabel(it) }.sorted().joinToString(" · "),
+            style = MaterialTheme.typography.bodySmall,
+        )
+    }
+}
+
+/** Nom d'une permission ou d'un ensemble de permissions (« @… ») tel que le lexique le présente. */
+private fun Resources.permissionLabel(key: String): String =
+    PermissionGlossary.titleOf(key)?.let(::getString) ?: key.removePrefix("@").substringAfterLast('.')
 
 @Composable
 private fun GradeRiskLine(band: GradeBand, scoring: Scoring) {
@@ -603,13 +677,52 @@ private fun String.normalized(): String =
 
 @Composable
 private fun LearnCard(title: String, content: @Composable ColumnScope.() -> Unit) {
+    val accordion = LocalAccordion.current
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-            Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-            content()
+        if (accordion == null) {
+            Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                content()
+            }
+            return@VyliaCard
+        }
+        // Dans un accordéon : le titre seul, touché pour déplier la section (et replier celle qui était ouverte).
+        val open = accordion.open == title
+        val state = stringResource(if (open) R.string.help_section_expanded else R.string.help_section_collapsed)
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable(role = Role.Button) { accordion.toggle(title) }
+                    .heightIn(min = 56.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .semantics {
+                        heading()
+                        stateDescription = state
+                    },
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, modifier = Modifier.weight(1f))
+                Icon(
+                    if (open) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+            AnimatedVisibility(visible = open) {
+                Column(
+                    modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) { content() }
+            }
         }
     }
 }
+
+/** Accordéon de l'onglet Score : une seule section ouverte à la fois, repérée par son titre. */
+private class Accordion(val open: String?, val toggle: (String) -> Unit)
+
+private val LocalAccordion = staticCompositionLocalOf<Accordion?> { null }
 
 @Composable
 private fun Paragraph(text: String) {

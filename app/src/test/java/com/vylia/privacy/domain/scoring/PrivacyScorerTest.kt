@@ -126,4 +126,15 @@ class PrivacyScorerTest {
         assertTrue(result.score < 100)
         println("Score de VYLIA : ${result.score} (${result.grade})")
     }
+
+    @Test
+    fun `les notifications ne sont jamais comptees, meme accordees ou avec un poids`() {
+        val notifications = setOf("POST_NOTIFICATIONS")
+        val result = scorer.score(AppScan("org.example.news", 34, "CATEGORY_NEWS", notifications, notifications, emptyList()))
+        assertTrue(result.permissionFindings.isEmpty())
+        assertEquals(0.0, result.permissionPenalty, 0.0)
+        // Une grille qui lui donnerait un poids ne la ferait pas compter : la liste des neutralisées l'emporte.
+        val weighted = PrivacyScorer(TestFixtures.rules.let { it.copy(permissionWeights = it.permissionWeights + ("POST_NOTIFICATIONS" to 12)) })
+        assertTrue(weighted.score(AppScan("org.example.news", 34, "CATEGORY_NEWS", notifications, notifications, emptyList())).permissionFindings.isEmpty())
+    }
 }

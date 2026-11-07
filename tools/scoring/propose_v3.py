@@ -204,10 +204,13 @@ NEW_BADGES = [
      "description": "Ne déclare aucun moyen de capter ou de tourner en arrière-plan : quand vous la fermez, elle s'arrête.",
      "rule": {"type": "permissions_absent", "permissions": BACKGROUND_SET}},
 ]
-# Permissions publicitaires neutralisées : le ciblage publicitaire est déjà sanctionné par les traqueurs (régies,
-# profilage) ; les compter aussi ici le pénaliserait deux fois. Listées dans les règles pour la transparence.
+# Permissions neutralisées, listées dans les règles pour la transparence ; le moteur ne les compte jamais.
+# - Publicitaires : le ciblage publicitaire est déjà sanctionné par les traqueurs (régies, profilage) ; les compter
+#   aussi ici le pénaliserait deux fois.
+# - Notifications (POST_NOTIFICATIONS, validé le 2026-11-07) : afficher des notifications ne donne accès à aucune
+#   donnée ; ce n'est pas un risque pour la vie privée, même si Android la demande dans une fenêtre.
 NEUTRAL_PERMISSIONS = ["ACCESS_ADSERVICES_TOPICS", "ACCESS_ADSERVICES_CUSTOM_AUDIENCE", "ACCESS_ADSERVICES_ATTRIBUTION",
-                       "ACCESS_ADSERVICES_AD_ID", AD, "AD_SERVICES_CONFIG"]
+                       "ACCESS_ADSERVICES_AD_ID", AD, "AD_SERVICES_CONFIG", "POST_NOTIFICATIONS"]
 # Capacités d'arrière-plan sans effet tant que l'accès dont elles dépendent n'est pas accordé (une seule suffit).
 PERMISSION_REQUIRES = {
     "FOREGROUND_SERVICE_MICROPHONE": ["RECORD_AUDIO"],

@@ -304,12 +304,15 @@ class PrivacyScorer(
         }
     }
 
+    private val neutralPermissions = rules.neutralPermissions.toSet()
+
     fun score(scan: AppScan): ScoreResult {
         val categoryId = resolveCategory(scan)
 
-        // 1. Permissions : poids intrinsèque × contexte × facteur d'octroi
+        // 1. Permissions : poids intrinsèque × contexte × facteur d'octroi. Les permissions neutralisées (publicité,
+        // notifications) ne comptent jamais, même si une grille leur donnait un poids.
         val findings = scan.declaredPermissions
-            .filter { it in rules.permissionWeights }
+            .filter { it in rules.permissionWeights && it !in neutralPermissions }
             .filterNot {
                 it == "READ_EXTERNAL_STORAGE" &&
                     scan.targetSdk > rules.permissionRules.readExternalStorageMaxTargetSdk

@@ -36,6 +36,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Tab
+import androidx.annotation.DrawableRes
+import androidx.compose.material3.PlainTooltip
+import androidx.compose.material3.TooltipAnchorPosition
+import androidx.compose.material3.TooltipBox
+import androidx.compose.material3.TooltipDefaults
+import androidx.compose.material3.rememberTooltipState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -145,7 +151,19 @@ fun ScanContent(
     Column(modifier = modifier) {
         PrimaryTabRow(selectedTabIndex = scanTab.ordinal) {
             ScanTab.entries.forEach { tab ->
-                Tab(selected = scanTab == tab, onClick = { onScanTab(tab) }, text = { Text(stringResource(tab.title)) })
+                // Icône seule : le libellé reste lu par TalkBack, et l'info-bulle l'affiche à l'appui long.
+                val title = stringResource(tab.title)
+                TooltipBox(
+                    positionProvider = TooltipDefaults.rememberTooltipPositionProvider(TooltipAnchorPosition.Below),
+                    tooltip = { PlainTooltip { Text(title) } },
+                    state = rememberTooltipState(),
+                ) {
+                    Tab(
+                        selected = scanTab == tab,
+                        onClick = { onScanTab(tab) },
+                        icon = { Icon(painterResource(tab.icon), contentDescription = title) },
+                    )
+                }
             }
         }
 
@@ -197,10 +215,10 @@ fun ScanContent(
 }
 
 /** Onglets de l'écran Scan : trois façons de parcourir les mêmes applis. */
-enum class ScanTab(@param:StringRes val title: Int) {
-    RISK(R.string.scan_tab_risk),
-    CATEGORY(R.string.scan_tab_category),
-    BADGES(R.string.scan_tab_badges),
+enum class ScanTab(@param:StringRes val title: Int, @param:DrawableRes val icon: Int) {
+    RISK(R.string.scan_tab_risk, R.drawable.ic_sym_warning),
+    CATEGORY(R.string.scan_tab_category, R.drawable.ic_sym_grid_view),
+    BADGES(R.string.scan_tab_badges, R.drawable.ic_sym_workspace_premium),
 }
 
 /** Par niveau de risque : de la plus intrusive à la plus vertueuse, filtrable par note. */
@@ -224,7 +242,7 @@ private fun RiskTab(
         header = {
             if (rules != null) {
                 GradeFilterRow(
-                    bands = bands,
+                    bands = bands.asReversed(), // E d'abord : les apps les plus à risque.
                     scoreBase = rules.scoring.base,
                     counts = apps.groupingBy { it.letter() }.eachCount(),
                     selected = gradeFilter,

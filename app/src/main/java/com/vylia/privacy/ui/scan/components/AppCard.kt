@@ -44,7 +44,7 @@ import com.vylia.privacy.domain.model.DetectedPermission
 import com.vylia.privacy.domain.model.TrackerAnalysis
 import com.vylia.privacy.ui.components.BadgeRow
 import com.vylia.privacy.ui.components.ScoreBadge
-import com.vylia.privacy.ui.components.openAppSettings
+import com.vylia.privacy.ui.components.rememberManageApp
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
@@ -77,7 +77,7 @@ private fun CompactAppCard(auditedApp: AuditedApp, modifier: Modifier, onClick: 
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            AppIcon(app.icon, label = app.label, packageName = app.packageName)
+            AppIcon(app.icon, label = app.label, auditedApp = auditedApp)
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(
                     text = app.label,
@@ -151,7 +151,7 @@ private fun DetailedAppCard(auditedApp: AuditedApp, modifier: Modifier, onClick:
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            AppIcon(app.icon, label = app.label, packageName = app.packageName)
+            AppIcon(app.icon, label = app.label, auditedApp = auditedApp)
             Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(6.dp)) {
                 Column {
                     Text(
@@ -178,8 +178,9 @@ private fun DetailedAppCard(auditedApp: AuditedApp, modifier: Modifier, onClick:
 }
 
 @Composable
-private fun AppIcon(drawable: android.graphics.drawable.Drawable, label: String, packageName: String) {
-    val context = LocalContext.current
+private fun AppIcon(drawable: android.graphics.drawable.Drawable, label: String, auditedApp: AuditedApp) {
+    // Fiche système de l'app ; une app à capacités de surveillance passe d'abord par un avertissement.
+    val manage = rememberManageApp()
     val sizePx = with(LocalDensity.current) { IconSize.roundToPx() }
     // Rasterisation mémorisée : faite une seule fois par icône visible.
     val bitmap = remember(drawable, sizePx) { drawable.toBitmap(sizePx, sizePx).asImageBitmap() }
@@ -188,7 +189,7 @@ private fun AppIcon(drawable: android.graphics.drawable.Drawable, label: String,
         contentDescription = stringResource(R.string.app_icon_manage, label),
         modifier = Modifier
             .clip(RoundedCornerShape(12.dp))
-            .clickable { openAppSettings(context, packageName) }
+            .clickable { manage(auditedApp) }
             .size(IconSize),
     )
 }

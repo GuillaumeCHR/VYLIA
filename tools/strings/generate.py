@@ -40,6 +40,7 @@ SCREENS = [
     ("Paramètres, À propos et grille de score", "ui_settings"),
     ("Badges et sécurité", "ui_badges"),
     ("Partage", "ui_share"),
+    ("Aide en cas de surveillance", "ui_safety"),
 ]
 ARG = re.compile(r"%\d+\$")
 

@@ -1,5 +1,9 @@
 package com.vylia.privacy.ui.detail
 
+import androidx.compose.foundation.layout.heightIn
+
+import androidx.compose.material3.Button
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +51,7 @@ import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.BadgeChip
 import com.vylia.privacy.ui.components.badgeDescription
 import com.vylia.privacy.ui.components.securityDescription
+import com.vylia.privacy.ui.safety.SurveillanceHelpDialog
 import com.vylia.privacy.ui.components.securityLabel
 import com.vylia.privacy.domain.scoring.ScoreResult
 import androidx.compose.ui.platform.LocalResources
@@ -213,6 +218,8 @@ private fun BadgesCard(result: ScoreResult) {
 @Composable
 private fun SecurityCard(result: ScoreResult) {
     val resources = LocalResources.current
+    var help by remember { mutableStateOf(false) }
+    if (help) SurveillanceHelpDialog(onDismiss = { help = false })
     VyliaCard(modifier = Modifier.fillMaxWidth(), containerColor = MaterialTheme.colorScheme.errorContainer) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text(stringResource(R.string.security_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
@@ -239,6 +246,10 @@ private fun SecurityCard(result: ScoreResult) {
             // « Ce que l'app PEUT faire » : vrai des capacités, pas d'un logiciel espion reconnu (Echap, MVT).
             if (result.securityFindings.any { it.id != KNOWN_STALKERWARE }) {
                 Text(stringResource(R.string.security_hint), style = MaterialTheme.typography.bodySmall)
+            }
+            // Avant tout geste : la ligne d'urgence, les précautions et l'aide selon la situation.
+            Button(onClick = { help = true }, modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)) {
+                Text(stringResource(R.string.safety_open))
             }
         }
     }

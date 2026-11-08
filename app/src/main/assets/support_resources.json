@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "updated": "2026-11-08",
+  "comment": "Exemples de ressources d'aide en cas de surveillance, internationales, présentées comme des exemples. path : PARTNER (un proche, conjoint ou ex), CRIMINAL (logiciel espion sophistiqué, auteur inconnu ou criminel), STATE (les autorités du pays ; jamais de kind AUTHORITY). Mis à jour par l'app depuis ce dépôt (Paramètres › Bases de données).",
+  "resources": [
+    {
+      "id": "stopstalkerware", "path": "PARTNER", "kind": "NGO",
+      "name": "Coalition Against Stalkerware", "url": "https://stopstalkerware.org/",
+      "description": {
+        "en": "International coalition: advice on stalkerware and a directory of support organisations by country.",
+        "fr": "Coalition internationale : conseils sur les stalkerwares et annuaire d'organisations d'aide par pays."
+      }
+    },
+    {
+      "id": "amnesty_securitylab", "path": "STATE", "kind": "LAB",
+      "name": "Amnesty International – Security Lab", "url": "https://securitylab.amnesty.org/",
+      "description": {
+        "en": "Investigates targeted surveillance against journalists, activists and human rights defenders.",
+        "fr": "Enquête sur la surveillance ciblée des journalistes, militant·es et défenseur·es des droits humains."
+      }
+    }
+  ]
+}

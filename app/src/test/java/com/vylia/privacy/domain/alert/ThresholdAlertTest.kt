@@ -289,4 +289,45 @@ class ThresholdAlertTest {
         val bad = app("org.ads.game", trackers = listOf("Google AdMob", "Facebook Ads", "Criteo"))
         assertEquals(DropCause.Type.INSTALLED, cause(stable, stable + bad, rules = "r2").type)
     }
+
+    // --- Discrétion en cas de capacités de surveillance ------------------------------------------------
+
+    private val keylogger get() = app("org.keyboard.app", signals = setOf("INTERNET", "IME_ENABLED"))
+
+    @Test
+    fun `cause sensible - motif de securite, l alerte ne nommera pas l app`() {
+        val before = app("org.keyboard.app", signals = setOf("INTERNET"))
+        val result = cause(stable + before, stable + keylogger)
+        assertEquals(DropCause.Type.SECURITY_PATTERN, result.type)
+        assertTrue(result.sensitive)
+    }
+
+    @Test
+    fun `cause sensible - app installee qui a des capacites de surveillance`() {
+        val result = cause(stable, stable + keylogger)
+        assertEquals(DropCause.Type.INSTALLED, result.type)
+        assertTrue(result.sensitive)
+        val ordinary = cause(stable, stable + app("org.ads.game", trackers = listOf("Google AdMob", "Facebook Ads", "Criteo")))
+        assertEquals(false, ordinary.sensitive)
+    }
+
+    @Test
+    fun `fiche systeme - avertissement exige pour une app a capacites de surveillance seulement`() {
+        assertTrue(com.vylia.privacy.ui.components.ManageAppGuard.needsWarning(keylogger.result))
+        assertEquals(false, com.vylia.privacy.ui.components.ManageAppGuard.needsWarning(stable.first().result))
+    }
+
+    @Test
+    fun `le partage n expose aucune detection`() {
+        val content = com.vylia.privacy.ui.share.ShareContent.from(
+            score = 50,
+            userApps = stable + keylogger,
+            history = com.vylia.privacy.domain.history.History(),
+            rewards = com.vylia.privacy.domain.rewards.RewardsState(),
+            shieldBlocked = 0,
+            categoryName = { it },
+        )
+        val shared = content.toString().lowercase()
+        listOf("keyboard", "keylogger", "stalker", "security", "sec_", "spy").forEach { assertTrue("partage : $it", it !in shared) }
+    }
 }

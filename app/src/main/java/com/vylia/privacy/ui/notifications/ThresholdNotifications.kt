@@ -28,7 +28,9 @@ class ThresholdNotifications(private val context: Context) : ThresholdNotifier {
         createChannel()
         val res = context.resources
         val title = res.getString(R.string.notif_threshold_title)
-        val text = res.getString(R.string.notif_threshold_text, crossing.score, crossing.threshold, res.dropCauseText(crossing.cause))
+        // Cause liée à une app à capacités de surveillance : ni son nom ni le motif, seulement un point à vérifier.
+        val text = if (crossing.cause.sensitive) res.getString(R.string.notif_threshold_sensitive, crossing.score, crossing.threshold)
+        else res.getString(R.string.notif_threshold_text, crossing.score, crossing.threshold, res.dropCauseText(crossing.cause))
         val open = PendingIntent.getActivity(
             context,
             REQUEST,

@@ -529,10 +529,10 @@
     <string name="learn_stalkerware_text">A stalkerware is an app installed in secret on someone\'s phone to spy on them: messages, location, calls, photos. VYLIA compares each app with the public database of the Echap association, which lists %1$d stalkerware apps by their package names and the fingerprints of their signing certificates: an app is recognised even under another name. The check runs on the phone, without any connection. A recognised app drops to 0 and gets the “Wanted” badge.</string>
     <string name="learn_stalkerware_limit">The database is kept by volunteers and cannot know every stalkerware: finding none is not a guarantee. The capability checks below look for the rest.</string>
     <string name="learn_stalkerware_help_title">If VYLIA finds one</string>
-    <string name="learn_stalkerware_help">Someone may have installed this app to watch you. Before uninstalling it, think about your safety: the person who installed it may notice, and the app can serve as evidence. Get help: in France, 3919 (Violences Femmes Info) is free and anonymous, and 17 is for emergencies. The stopstalkerware.org website also gives advice.</string>
+    <string name="learn_stalkerware_help">Someone may have installed this app to watch you. Before uninstalling it, think about your safety: the person may notice, and the app can serve as evidence. See “If you think you are being watched” in How it works.</string>
     <string name="learn_mvt_title">Targeted surveillance spyware (MVT)</string>
     <string name="learn_mvt_text">Spyware such as Pegasus, Predator or NoviSpy is sold to governments to watch journalists, activists or lawyers. VYLIA also compares each app with the public indicators of MVT, the tool of Amnesty International\'s Security Lab: %1$d campaigns are recognised by their package names or signing certificates. A recognised app drops to 0, like a stalkerware. When it is on, the shield also blocks the domains of these campaigns.</string>
-    <string name="learn_mvt_help">If VYLIA finds one, don\'t uninstall it right away: it is evidence. Amnesty International\'s Security Lab and Access Now\'s Digital Security Helpline (accessnow.org/help) examine phones for free and confidentially.</string>
+    <string name="learn_mvt_help">If VYLIA finds one, don\'t uninstall it right away: it is evidence. Pegasus-type spyware often leaves no visible app: VYLIA cannot detect it, and a good score does not prove a device is safe. See “If you think you are being watched” in How it works.</string>
     <string name="learn_badges_title">5. Badges</string>
     <string name="learn_badges_text">Badges sum up at a glance what an app does well and what deserves your attention. They do not change the score. Every badge and its rule are in the Badges tab.</string>
     <string name="learn_grade_line">%1$s · %2$d to %3$d</string>
@@ -714,11 +714,6 @@
     <string name="notif_threshold_title">Device score below your threshold</string>
     <string name="notif_threshold_text">%1$d, below your threshold of %2$d. Main cause: %3$s.</string>
     <string name="notif_threshold_public">%1$d, below your threshold of %2$d.</string>
-    <string name="notif_channel_stalkerware">Spyware detected</string>
-    <string name="notif_channel_stalkerware_description">When an app is recognised as known spyware (Echap\'s database, MVT indicators).</string>
-    <string name="notif_stalkerware_title">Known spyware detected</string>
-    <string name="notif_stalkerware_text">%1$s is recognised as %2$s. Before uninstalling it, think about your safety: open VYLIA to see what to do.</string>
-    <string name="notif_stalkerware_public">An app needs your attention.</string>
     <string name="notif_install_title">%1$s: %2$d/100</string>
     <string name="notif_install_if_all_granted">Nothing granted yet. If you grant everything it asks for: %1$d/100</string>
     <string name="notif_install_warnings">Warnings: %1$s</string>
@@ -918,6 +913,7 @@
     <string name="db_name_alternatives">VYLIA alternatives</string>
     <string name="db_name_web_services">VYLIA web services</string>
     <string name="db_name_private_dns">VYLIA private DNS list</string>
+    <string name="db_name_support_resources">VYLIA help resources</string>
     <string name="db_row_updated">Updated %1$s</string>
     <string name="db_row_embedded">Version built into the app</string>
     <string name="db_status_up_to_date">Up to date</string>
@@ -1060,9 +1056,9 @@
     <string name="security_hint">Capabilities typical of spyware: they describe what the app CAN do, not what it does. VYLIA does not see other apps\' network traffic.</string>
     <string name="security_cap">Score capped at %1$d because of this.</string>
     <string name="security_matched_stalkerware">Recognised as %1$s, a known stalkerware.</string>
-    <string name="security_matched_stalkerware_safety">Someone may have installed it to watch you. Before uninstalling it, think about your safety: the person may notice, and the app can serve as evidence. Get help, for free and anonymously: in France, call 3919 (Violences Femmes Info), or 17 if you are in danger. More in Help › Score.</string>
+    <string name="security_matched_stalkerware_safety">This app is listed as surveillance software. Before uninstalling it, think about your safety: see what to do.</string>
     <string name="security_matched_targeted">Recognised as %1$s, a targeted surveillance spyware (MVT indicators).</string>
-    <string name="security_matched_targeted_safety">This kind of spyware is sold to governments and mostly aimed at journalists, activists, lawyers or politicians. Don\'t uninstall it right away: it is evidence. Get free, confidential help to examine your phone: Amnesty International\'s Security Lab or Access Now\'s Digital Security Helpline (accessnow.org/help).</string>
+    <string name="security_matched_targeted_safety">This kind of spyware is used for targeted surveillance. Don\'t uninstall it right away: it is evidence. See what to do.</string>
     <string name="app_icon_manage">Manage %1$s in Android settings</string>
 
     <!-- Partage -->
@@ -1141,4 +1137,46 @@
         <item quantity="one">%1$d app</item>
         <item quantity="other">%1$d apps</item>
     </plurals>
+
+    <!-- Aide en cas de surveillance -->
+    <string name="safety_title">What to do?</string>
+    <string name="safety_open">What to do?</string>
+    <string name="safety_close">Close</string>
+    <string name="safety_emergency">In case of immediate danger, call your country\'s emergency number.</string>
+    <string name="safety_principles_title">Before doing anything</string>
+    <string name="safety_principle_wait">Do not uninstall in a hurry. Removing the app can alert the person who installed it, they may react dangerously, and evidence can be lost. If you fear for your safety, ask for help first: support services can help you plan before removing it.</string>
+    <string name="safety_principle_traces">Keep a record of what you saw: the app\'s name, the date, a screenshot of its VYLIA page. If you can, keep it off this device.</string>
+    <string name="safety_principle_device">To look for help, use another device that you have no reason to suspect.</string>
+    <string name="safety_principle_certainty">VYLIA describes what an app can do, not what it does. Only an app listed in a surveillance software database is identified as such.</string>
+    <string name="safety_question">Who could be behind this surveillance?</string>
+    <string name="safety_question_hint">Your answer only changes the advice shown. It is not saved.</string>
+    <string name="safety_choice_partner">Someone close to me, a partner or an ex-partner</string>
+    <string name="safety_choice_criminal">Sophisticated spyware, unknown or criminal origin</string>
+    <string name="safety_choice_state">The authorities of my country (activist, journalist, lawyer, rights defender…)</string>
+    <string name="safety_partner_title">If it may be someone close to you</string>
+    <string name="safety_partner_text">This is the most common case with stalkerware. Contact a local organisation that supports victims of domestic violence, in particular women\'s support organisations: they also deal with the digital side of violence, and can help you prepare to be safe before removing the app.</string>
+    <string name="safety_criminal_title">If it may be sophisticated spyware or a criminal</string>
+    <string name="safety_criminal_text">Ask your local police or judicial authorities about filing a complaint, and cybersecurity experts about having the device examined.</string>
+    <string name="safety_criminal_tips">Without any guarantee, these steps can help: update the system, restart the device regularly, turn on the system\'s enhanced protection modes if they exist. Do not reset the device before it has been examined: traces would be lost.</string>
+    <string name="safety_state_title">If it may be the authorities of your country</string>
+    <string name="safety_state_text">Contact organisations that defend human rights or protect journalists: many offer digital security help and device analysis, often for free and confidentially.</string>
+    <string name="safety_examples">For example:</string>
+    <string name="safety_resource_site">Website</string>
+    <string name="safety_resource_site_named">Open the website of %1$s</string>
+    <string name="safety_resource_call">Call %1$s</string>
+    <string name="safety_resources_note">These are examples. VYLIA is not affiliated with these organisations; links open in your browser.</string>
+    <string name="safety_limit_title">What VYLIA cannot see</string>
+    <string name="safety_limit_text">Spyware such as Pegasus does not install like a visible app: VYLIA cannot detect it. A good score does not prove that a device is safe.</string>
+    <string name="help_surveillance_title">If you think you are being watched</string>
+    <string name="help_surveillance_text">In case of immediate danger, call your country\'s emergency number. Do not uninstall anything in a hurry: ask for help first, from another device if you can. VYLIA cannot detect Pegasus-type spyware: a good score does not prove a device is safe.</string>
+    <string name="guard_title">Before uninstalling</string>
+    <string name="guard_text">This app has surveillance capabilities. Removing it can alert the person who installed it, they may react dangerously, and evidence can be lost. If you fear for your safety, ask for help first.</string>
+    <string name="guard_help">See what to do</string>
+    <string name="guard_continue">Continue</string>
+    <string name="notif_security_title">VYLIA</string>
+    <string name="notif_security_text">VYLIA has found something to check.</string>
+    <string name="notif_channel_security">Points to check</string>
+    <string name="notif_channel_security_description">Discreet notifications: they never name the app concerned.</string>
+    <string name="notif_install_public">VYLIA has analysed a new app.</string>
+    <string name="notif_threshold_sensitive">Device score: %1$d, below your threshold of %2$d. Something to check: open VYLIA.</string>
 </resources>

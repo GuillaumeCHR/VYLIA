@@ -11,12 +11,18 @@ import com.vylia.privacy.MainActivity
 import com.vylia.privacy.R
 import com.vylia.privacy.data.automation.InstallNotifier
 import com.vylia.privacy.domain.model.AuditedApp
+import com.vylia.privacy.ui.components.ManageAppGuard
 import com.vylia.privacy.ui.components.badgeLabel
 
 /** Notification « nouvelle app » : score et badges d'alerte ; un appui ouvre sa fiche dans VYLIA. */
 class InstallNotifications(private val context: Context) : InstallNotifier {
 
     override fun notify(app: AuditedApp, scoreIfAllGranted: Int) {
+        // Capacités de surveillance : ni nom d'app ni badge en clair, la notification discrète la remplace.
+        if (ManageAppGuard.needsWarning(app.result)) {
+            SecurityNotice.post(context, app.app.packageName)
+            return
+        }
         val manager = NotificationManagerCompat.from(context)
         if (!manager.areNotificationsEnabled()) return
         createChannel()
@@ -44,6 +50,14 @@ class InstallNotifications(private val context: Context) : InstallNotifier {
             .setContentIntent(open)
             .setAutoCancel(true)
             .setCategory(NotificationCompat.CATEGORY_STATUS)
+            .setVisibility(NotificationCompat.VISIBILITY_PRIVATE)
+            .setPublicVersion(
+                NotificationCompat.Builder(context, CHANNEL)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle(res.getString(R.string.app_name))
+                    .setContentText(res.getString(R.string.notif_install_public))
+                    .build(),
+            )
             .build()
         try {
             manager.notify(app.app.packageName, ID, notification)

@@ -23,6 +23,11 @@ data class DropCause(
     val appScore: Int? = null,
     /** Permission, traqueurs (séparés par des virgules) ou identifiant du motif de sécurité. */
     val detail: String? = null,
+    /**
+     * L'app en cause a des capacités de surveillance (ou la cause en est une) : la notification ne la nomme pas, la
+     * personne qui surveille peut avoir le téléphone en main.
+     */
+    val sensitive: Boolean = false,
 ) {
     /** [DATABASES_UPDATED] : traqueurs ou motifs nouvellement connus des bases, sur des apps inchangées ([detail] : leur nombre). */
     enum class Type { INSTALLED, REMOVED, PERMISSION_GRANTED, TRACKER_ADDED, SECURITY_PATTERN, RULES_UPDATED, DATABASES_UPDATED, SPREAD }

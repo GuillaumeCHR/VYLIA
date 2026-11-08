@@ -137,3 +137,15 @@ class ShieldListSource(
         Outcome.Installed(controller.lists.install(list, file).domains)
     }
 }
+
+/** Exemples de ressources d'aide en cas de surveillance, dépôt VYLIA. */
+class SupportResourcesSource(private val repository: com.vylia.privacy.data.safety.SupportResourcesRepository) : DatabaseSource {
+    override val id = "support_resources"
+    override val group = DatabaseGroup.ALTERNATIVES
+    override val name = "Ressources d'aide VYLIA"
+    override val attribution = "VYLIA · GPL v3"
+    override val checkUrl = com.vylia.privacy.data.safety.SupportResourcesRepository.REMOTE_URL
+    override val affectsScore = false
+    override fun entries(): Int = repository.size
+    override suspend fun update(fetch: Fetch): Outcome = repository.update(fetch)
+}

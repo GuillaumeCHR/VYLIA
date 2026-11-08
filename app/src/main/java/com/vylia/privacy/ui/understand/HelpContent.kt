@@ -1,5 +1,9 @@
 package com.vylia.privacy.ui.understand
 
+import androidx.compose.foundation.layout.heightIn
+
+import androidx.compose.material3.OutlinedButton
+
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,6 +54,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.vylia.privacy.BuildConfig
 import com.vylia.privacy.R
+import com.vylia.privacy.ui.safety.SurveillanceHelpDialog
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.ui.unit.sp
 import androidx.annotation.StringRes
@@ -230,6 +235,20 @@ private fun HowItWorksTab() {
         }
         items(screens, key = { it.first }) { (title, text) ->
             LearnCard(stringResource(title)) { Paragraph(stringResource(text)) }
+        }
+        item { SurveillanceCard() }
+    }
+}
+
+/** « Si vous pensez être surveillé·e » : l'essentiel en quelques lignes, puis l'écran complet (principes, parcours). */
+@Composable
+private fun SurveillanceCard() {
+    var open by remember { mutableStateOf(false) }
+    if (open) SurveillanceHelpDialog(onDismiss = { open = false })
+    LearnCard(stringResource(R.string.help_surveillance_title)) {
+        Paragraph(stringResource(R.string.help_surveillance_text))
+        OutlinedButton(onClick = { open = true }, modifier = Modifier.heightIn(min = 48.dp)) {
+            Text(stringResource(R.string.safety_open))
         }
     }
 }

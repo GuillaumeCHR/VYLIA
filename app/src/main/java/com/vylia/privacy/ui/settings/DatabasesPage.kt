@@ -237,6 +237,7 @@ private fun Resources.databaseName(row: DatabaseRow): String = when (row.id) {
     "alternatives" -> getString(R.string.db_name_alternatives)
     "web_services" -> getString(R.string.db_name_web_services)
     "private_dns" -> getString(R.string.db_name_private_dns)
+    "support_resources" -> getString(R.string.db_name_support_resources)
     else -> row.name
 }
 

@@ -109,11 +109,14 @@ object DropCauseAnalyzer {
         val best = candidates.maxByOrNull { it.contribution }?.takeIf { it.contribution > 0.0 }
         val drop = previous.average - average
         val rulesChanged = previous.rules.isNotEmpty() && rules.isNotEmpty() && previous.rules != rules
-        return when {
+        val cause = when {
             best?.cause?.type == DropCause.Type.DATABASES_UPDATED -> best.cause
             rulesChanged && (best == null || best.contribution < drop / 2) -> DropCause(DropCause.Type.RULES_UPDATED)
             best != null -> best.cause
             else -> DropCause(DropCause.Type.SPREAD)
         }
+        val sensitive = cause.type == DropCause.Type.SECURITY_PATTERN ||
+            apps.any { it.app.packageName == cause.packageName && it.result.securityFindings.isNotEmpty() }
+        return if (sensitive) cause.copy(sensitive = true) else cause
     }
 }

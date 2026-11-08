@@ -51,7 +51,7 @@ import com.vylia.privacy.ui.components.AppIcon
 import com.vylia.privacy.ui.components.BadgeChip
 import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.VyliaCard
-import com.vylia.privacy.ui.components.openAppSettings
+import com.vylia.privacy.ui.components.rememberManageApp
 
 /** Lignes affichées avant « Tout voir » dans chaque liste. */
 private const val PreviewCount = 8
@@ -145,7 +145,7 @@ private fun RevokeRow(entry: AppRevocations) {
         CompactRevokeRow(entry)
         return
     }
-    val context = LocalContext.current
+    val manage = rememberManageApp()
     val app = entry.app.app
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -177,7 +177,7 @@ private fun RevokeRow(entry: AppRevocations) {
                     entry.badgesLost.forEach { Text(stringResource(R.string.reduce_badge_lost), style = MaterialTheme.typography.labelSmall); BadgeChip(it) }
                 }
             }
-            OutlinedButton(onClick = { openAppSettings(context, app.packageName) }) {
+            OutlinedButton(onClick = { manage(entry.app) }) {
                 Text(stringResource(R.string.reduce_action_permissions))
             }
         }
@@ -190,7 +190,7 @@ private fun RevokeRow(entry: AppRevocations) {
  */
 @Composable
 private fun CompactRevokeRow(entry: AppRevocations) {
-    val context = LocalContext.current
+    val manage = rememberManageApp()
     val resources = LocalResources.current
     val app = entry.app.app
     val permissions = entry.suggestions.joinToString(" · ") { s ->
@@ -200,7 +200,7 @@ private fun CompactRevokeRow(entry: AppRevocations) {
     VyliaCard(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable(role = Role.Button, onClickLabel = action) { openAppSettings(context, app.packageName) },
+            .clickable(role = Role.Button, onClickLabel = action) { manage(entry.app) },
     ) {
         Row(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
@@ -224,7 +224,7 @@ private fun CompactRevokeRow(entry: AppRevocations) {
 
 @Composable
 private fun RemovalRow(suggestion: RemovalSuggestion, usageKnown: Boolean) {
-    val context = LocalContext.current
+    val manage = rememberManageApp()
     val app = suggestion.app.app
     VyliaCard(modifier = Modifier.fillMaxWidth()) {
         Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -238,7 +238,7 @@ private fun RemovalRow(suggestion: RemovalSuggestion, usageKnown: Boolean) {
                 ScoreBadge(suggestion.app.score)
             }
             // La fiche Android de l'app, où se trouve le bouton Désinstaller : VYLIA ne désinstalle rien lui-même.
-            OutlinedButton(onClick = { openAppSettings(context, app.packageName) }) {
+            OutlinedButton(onClick = { manage(suggestion.app) }) {
                 Text(stringResource(R.string.reduce_action_uninstall))
             }
         }

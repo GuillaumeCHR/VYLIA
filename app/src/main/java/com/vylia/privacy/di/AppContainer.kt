@@ -45,6 +45,8 @@ import com.vylia.privacy.data.databases.MvtSource
 import com.vylia.privacy.data.databases.PrivateDnsSource
 import com.vylia.privacy.data.databases.RulesSource
 import com.vylia.privacy.data.databases.ShieldListSource
+import com.vylia.privacy.data.databases.SupportResourcesSource
+import com.vylia.privacy.data.safety.SupportResourcesRepository
 import com.vylia.privacy.data.databases.WebServicesSource
 import com.vylia.privacy.data.shield.ShieldListStore
 import com.vylia.privacy.domain.shield.ExodusNetworkTracker
@@ -88,6 +90,7 @@ class AppContainer(context: Context) {
     val trackerSignatureRepository = AssetTrackerSignatureRepository(context, overrides = { exodusCategories.categories })
 
     val companiesRepository = CompaniesRepository(context)
+    val supportResourcesRepository = SupportResourcesRepository(context)
 
     /**
      * Bases téléchargeables (Paramètres › Bases de données). Les listes du bouclier viennent du module du bouclier,
@@ -118,6 +121,7 @@ class AppContainer(context: Context) {
                 AlternativesSource(alternativesRepository),
                 WebServicesSource(webServicesRepository),
                 PrivateDnsSource(privateDnsRepository),
+                SupportResourcesSource(supportResourcesRepository),
                 CompaniesSource(companiesRepository),
             )
         },

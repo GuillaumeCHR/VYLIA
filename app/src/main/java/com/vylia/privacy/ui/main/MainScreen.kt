@@ -11,6 +11,11 @@ import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -156,7 +161,13 @@ fun MainScreen(
         },
     ) { innerPadding ->
         if (help) HelpSheet(onDismiss = { help = false })
-        val modifier = Modifier.padding(innerPadding)
+        // Grands écrans (targetSdk 37 : tablettes, pliables, Chromebooks, sans blocage du portrait possible) : contenu
+        // centré et limité à une largeur de lecture. Sans effet sur téléphone, plus étroit que cette limite.
+        val modifier = Modifier
+            .padding(innerPadding)
+            .fillMaxSize()
+            .wrapContentWidth(Alignment.CenterHorizontally)
+            .widthIn(max = ReadableWidth)
         if (detailApp != null) {
             AppDetailScreen(
                 auditedApp = detailApp,
@@ -198,3 +209,6 @@ fun MainScreen(
     }
     }
 }
+
+/** Largeur maximale du contenu sur grand écran : une colonne de lecture confortable, comme dans Molkky Board. */
+private val ReadableWidth = 640.dp

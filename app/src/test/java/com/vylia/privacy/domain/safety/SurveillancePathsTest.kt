@@ -27,12 +27,4 @@ class SurveillancePathsTest {
             listOf("police", "plainte", "complaint", "judicia", "autorités", "authorities").forEach { assertTrue("$dir : $it", it !in text) }
         }
     }
-
-    @Test
-    fun `je ne sais pas - les trois parcours, le plus frequent en tete`() {
-        assertEquals(
-            listOf(SurveillancePath.PARTNER, SurveillancePath.CRIMINAL, SurveillancePath.STATE),
-            SurveillanceChoice.UNKNOWN.paths,
-        )
-    }
 }

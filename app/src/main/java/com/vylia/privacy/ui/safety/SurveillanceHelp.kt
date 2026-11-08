@@ -183,7 +183,6 @@ private fun SurveillanceChoice.label(): Int = when (this) {
     SurveillanceChoice.PARTNER -> R.string.safety_choice_partner
     SurveillanceChoice.CRIMINAL -> R.string.safety_choice_criminal
     SurveillanceChoice.STATE -> R.string.safety_choice_state
-    SurveillanceChoice.UNKNOWN -> R.string.safety_choice_unknown
 }
 
 private fun SurveillancePath.title(): Int = when (this) {

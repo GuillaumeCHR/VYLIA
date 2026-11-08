@@ -20,7 +20,6 @@ S = [
  ("safety_choice_partner", "Someone close to me, a partner or an ex-partner", "Un proche, un conjoint ou un ex-conjoint"),
  ("safety_choice_criminal", "Sophisticated spyware, unknown or criminal origin", "Un logiciel espion sophistiqué, auteur inconnu ou criminel"),
  ("safety_choice_state", "The authorities of my country (activist, journalist, lawyer, rights defender…)", "Les autorités de mon pays (militant·e, journaliste, avocat·e, défenseur·e des droits…)"),
- ("safety_choice_unknown", "I don't know", "Je ne sais pas"),
  # Parcours 1 : un proche
  ("safety_partner_title", "If it may be someone close to you", "Si c'est peut-être un proche"),
  ("safety_partner_text", "This is the most common case with stalkerware. Contact a local organisation that supports victims of domestic violence, in particular women's support organisations: they also deal with the digital side of violence, and can help you prepare to be safe before removing the app.",

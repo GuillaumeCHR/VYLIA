@@ -1198,7 +1198,6 @@
     <string name="safety_choice_partner">Un proche, un conjoint ou un ex-conjoint</string>
     <string name="safety_choice_criminal">Un logiciel espion sophistiqué, auteur inconnu ou criminel</string>
     <string name="safety_choice_state">Les autorités de mon pays (militant·e, journaliste, avocat·e, défenseur·e des droits…)</string>
-    <string name="safety_choice_unknown">Je ne sais pas</string>
     <string name="safety_partner_title">Si c\'est peut-être un proche</string>
     <string name="safety_partner_text">C\'est le cas le plus fréquent avec les stalkerwares. Rapprochez-vous d\'une association locale d\'aide aux victimes de violences conjugales, notamment les associations d\'aide aux femmes : elles accompagnent aussi la dimension numérique des violences, et peuvent vous aider à préparer votre mise en sécurité avant de supprimer l\'app.</string>
     <string name="safety_criminal_title">Si c\'est peut-être un logiciel espion sophistiqué ou un criminel</string>

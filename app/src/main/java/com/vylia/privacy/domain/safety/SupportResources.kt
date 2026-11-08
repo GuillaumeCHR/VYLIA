@@ -24,9 +24,6 @@ enum class SurveillanceChoice(val paths: List<SurveillancePath>) {
     PARTNER(listOf(SurveillancePath.PARTNER)),
     CRIMINAL(listOf(SurveillancePath.CRIMINAL)),
     STATE(listOf(SurveillancePath.STATE)),
-
-    /** Je ne sais pas : les trois parcours, le plus fréquent en tête. */
-    UNKNOWN(listOf(SurveillancePath.PARTNER, SurveillancePath.CRIMINAL, SurveillancePath.STATE)),
 }
 
 /** Nature d'une ressource ; [AUTHORITY] (police, justice, service de l'État) est exclue du parcours [SurveillancePath.STATE]. */

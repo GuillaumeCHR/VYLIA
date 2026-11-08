@@ -1153,7 +1153,6 @@
     <string name="safety_choice_partner">Someone close to me, a partner or an ex-partner</string>
     <string name="safety_choice_criminal">Sophisticated spyware, unknown or criminal origin</string>
     <string name="safety_choice_state">The authorities of my country (activist, journalist, lawyer, rights defender…)</string>
-    <string name="safety_choice_unknown">I don\'t know</string>
     <string name="safety_partner_title">If it may be someone close to you</string>
     <string name="safety_partner_text">This is the most common case with stalkerware. Contact a local organisation that supports victims of domestic violence, in particular women\'s support organisations: they also deal with the digital side of violence, and can help you prepare to be safe before removing the app.</string>
     <string name="safety_criminal_title">If it may be sophisticated spyware or a criminal</string>

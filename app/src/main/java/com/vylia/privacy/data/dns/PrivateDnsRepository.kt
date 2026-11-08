@@ -4,7 +4,6 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
 import android.util.Log
-import com.vylia.privacy.data.rules.RuleMatrixRepository
 import com.vylia.privacy.domain.act.PrivateDnsCatalogue
 import com.vylia.privacy.domain.act.PrivateDnsValidator
 import kotlinx.coroutines.Dispatchers
@@ -13,10 +12,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import com.vylia.privacy.domain.databases.Fetch
+import com.vylia.privacy.domain.databases.Outcome
+import com.vylia.privacy.domain.databases.text
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 /** DNS privé tel qu'Android l'applique au réseau actuel. */
 sealed interface PrivateDnsStatus {
@@ -31,37 +30,27 @@ sealed interface PrivateDnsStatus {
 }
 
 /**
- * Liste des services de DNS privé : celle de l'app, ou sa dernière version téléchargée à votre demande (« Mettre à
- * jour la liste »), contrôlée avant usage. Rien n'est téléchargé sans votre geste.
+ * Liste des services de DNS privé : celle de l'app, ou sa dernière version téléchargée (Paramètres › Bases de données,
+ * ou avant le scan périodique si l'option est active), contrôlée avant usage.
  */
 class PrivateDnsRepository(private val context: Context) {
     private val downloaded = File(context.filesDir, DOWNLOADED_FILE)
     private val _catalogue = MutableStateFlow(load())
     val catalogue: StateFlow<PrivateDnsCatalogue> = _catalogue.asStateFlow()
 
-    /** Télécharge la liste publiée avec le code source de VYLIA. Renvoie vrai si elle a changé. */
-    suspend fun update(): Result<Boolean> = withContext(Dispatchers.IO) {
-        runCatching {
-            val connection = URL(REMOTE_URL).openConnection() as HttpsURLConnection
-            connection.connectTimeout = 15_000
-            connection.readTimeout = 15_000
-            connection.instanceFollowRedirects = false
-            val text = try {
-                check(connection.responseCode == HttpURLConnection.HTTP_OK) { "HTTP ${connection.responseCode}" }
-                connection.inputStream.use { RuleMatrixRepository.readBounded(it, PrivateDnsCatalogue.MAX_BYTES) }
-            } finally {
-                connection.disconnect()
-            }
-            val fresh = parse(text)
-            require(fresh.version >= bundled().version) { "liste plus ancienne que celle de l'app" }
-            val changed = fresh != _catalogue.value
-            val tmp = File(context.filesDir, "$DOWNLOADED_FILE.tmp")
-            tmp.writeText(text)
-            check(tmp.renameTo(downloaded)) { "écriture impossible" }
-            _catalogue.value = fresh
-            changed
-        }
+    /** Télécharge la liste publiée avec le code source de VYLIA ; une liste plus ancienne que celle de l'app est refusée. */
+    suspend fun update(fetch: Fetch): Outcome = withContext(Dispatchers.IO) {
+        val text = fetch.text(REMOTE_URL, PrivateDnsCatalogue.MAX_BYTES.toLong()) ?: return@withContext Outcome.Unchanged
+        val fresh = parse(text)
+        require(fresh.version >= bundled().version) { "liste plus ancienne que celle de l'app" }
+        val tmp = File(context.filesDir, "$DOWNLOADED_FILE.tmp")
+        tmp.writeText(text)
+        check(tmp.renameTo(downloaded)) { "écriture impossible" }
+        _catalogue.value = fresh
+        Outcome.Installed(fresh.resolvers.size)
     }
+
+    val size: Int get() = _catalogue.value.resolvers.size
 
     fun status(): PrivateDnsStatus {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) return PrivateDnsStatus.Unsupported

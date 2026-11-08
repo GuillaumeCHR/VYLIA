@@ -17,8 +17,8 @@ android {
         applicationId = "com.vylia.privacy"
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 21
-        versionName = "0.9.4"
+        versionCode = 22
+        versionName = "0.9.5"
     }
 
     // Clé de signature release : jamais dans le dépôt. Ses coordonnées sont lues dans un fichier local

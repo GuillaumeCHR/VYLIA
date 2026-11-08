@@ -1,6 +1,8 @@
 package com.vylia.privacy.domain.alert
 
+import com.vylia.privacy.domain.history.HistoryRecorder
 import com.vylia.privacy.domain.history.ScoreSnapshot
+import com.vylia.privacy.domain.usecase.historyPoint
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.TrackerAnalysis
@@ -20,6 +22,9 @@ import com.vylia.privacy.domain.usecase.scoreWithoutTrackers
  *  - permission nouvellement accordée : l'app notée sans cette permission ;
  *  - traqueurs ajoutés (mise à jour) : l'app notée sans eux ;
  *  - nouveau motif de sécurité : l'app sans ce motif (les autres gardent leur plafond).
+ *  - traqueurs ou motifs apparus sur une app inchangée (même versionCode, mêmes permissions) alors qu'une base du
+ *    score a été mise à jour : ce n'est pas l'app, c'est la base. Toutes ces apps sont notées ensemble sans eux, et la
+ *    différence est la contribution de la mise à jour des bases ([DropCause.Type.DATABASES_UPDATED]).
  * Le changement qui contribue le plus l'emporte. Si les règles de score ont changé et qu'aucun changement d'app
  * n'explique au moins la moitié de la baisse, la cause est la mise à jour des règles ; sans changement d'app qui
  * fasse baisser la moyenne, la baisse est répartie sur plusieurs apps.
@@ -28,7 +33,13 @@ object DropCauseAnalyzer {
 
     private class Candidate(val cause: DropCause, val contribution: Double)
 
-    fun analyze(previous: ScoreSnapshot?, current: List<AuditedApp>, rules: String, scorer: PrivacyScorer): DropCause {
+    fun analyze(
+        previous: ScoreSnapshot?,
+        current: List<AuditedApp>,
+        rules: String,
+        scorer: PrivacyScorer,
+        databases: Map<String, String> = emptyMap(),
+    ): DropCause {
         val apps = current.filter { AppFilter.USER.matches(it.app) }
         if (previous == null || apps.isEmpty()) return DropCause(DropCause.Type.SPREAD)
         val scores = apps.associate { it.app.packageName to it.score.value.toDouble() }
@@ -39,6 +50,10 @@ object DropCauseAnalyzer {
             if (score == null) changed.remove(pkg) else changed[pkg] = score
             return if (changed.isEmpty()) average else changed.values.average()
         }
+
+        val basesChanged = HistoryRecorder.databasesChanged(previous, rules, databases)
+        /** Score sans ce que les bases ont fait apparaître, pour chaque app inchangée concernée. */
+        val withoutDatabases = HashMap<String, Double>()
 
         val candidates = buildList {
             apps.forEach { audited ->
@@ -57,6 +72,16 @@ object DropCauseAnalyzer {
                 }
                 val trackers = (audited.trackerAnalysis as? TrackerAnalysis.Analyzed)?.trackers?.map { it.name }?.toSet()
                 val newTrackers = if (trackers != null && before.trackers != null) trackers - before.trackers else emptySet()
+                val patterns = audited.result.securityFindings.map { it.id }.toSet()
+                val newPatterns = if (before.security != null) patterns - before.security else emptySet()
+                if (basesChanged && audited.historyPoint().sameAppAs(before) && (newTrackers.isNotEmpty() || newPatterns.isNotEmpty())) {
+                    // App inchangée : ses nouveaux traqueurs ou motifs viennent des bases, pas d'elle.
+                    var counterfactual = score.toDouble()
+                    if (newTrackers.isNotEmpty()) counterfactual += scorer.scoreWithoutTrackers(audited, newTrackers).score - score
+                    if (newPatterns.isNotEmpty()) counterfactual += scorer.scoreIgnoringPatterns(audited.result, newPatterns) - score
+                    withoutDatabases[pkg] = counterfactual.coerceAtMost(100.0)
+                    return@forEach
+                }
                 if (newTrackers.isNotEmpty()) {
                     val without = scorer.scoreWithoutTrackers(audited, newTrackers).score.toDouble()
                     add(
@@ -66,12 +91,14 @@ object DropCauseAnalyzer {
                         )
                     )
                 }
-                val patterns = audited.result.securityFindings.map { it.id }.toSet()
-                val newPatterns = if (before.security != null) patterns - before.security else emptySet()
                 newPatterns.forEach { id ->
                     val without = scorer.scoreIgnoringPatterns(audited.result, setOf(id)).toDouble()
                     add(Candidate(DropCause(DropCause.Type.SECURITY_PATTERN, pkg, label, score, id), averageWith(pkg, without) - average))
                 }
+            }
+            if (withoutDatabases.isNotEmpty()) {
+                val changed = scores.toMutableMap().apply { putAll(withoutDatabases) }
+                add(Candidate(DropCause(DropCause.Type.DATABASES_UPDATED, detail = withoutDatabases.size.toString()), changed.values.average() - average))
             }
             (previous.apps.keys - scores.keys).forEach { pkg ->
                 val before = previous.apps.getValue(pkg)
@@ -83,6 +110,7 @@ object DropCauseAnalyzer {
         val drop = previous.average - average
         val rulesChanged = previous.rules.isNotEmpty() && rules.isNotEmpty() && previous.rules != rules
         return when {
+            best?.cause?.type == DropCause.Type.DATABASES_UPDATED -> best.cause
             rulesChanged && (best == null || best.contribution < drop / 2) -> DropCause(DropCause.Type.RULES_UPDATED)
             best != null -> best.cause
             else -> DropCause(DropCause.Type.SPREAD)

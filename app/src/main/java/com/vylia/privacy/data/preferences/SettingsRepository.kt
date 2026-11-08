@@ -109,6 +109,29 @@ class SettingsRepository(context: Context) {
     }
 
     /** Dernier scan de fond réussi ; `null` s'il n'y en a pas encore eu. */
+    /** Mettre à jour les bases avant le scan périodique (activé d'office). */
+    private val _updateBeforeScan = MutableStateFlow(prefs.getBoolean(KEY_UPDATE_BEFORE_SCAN, true))
+    val updateBeforeScan: StateFlow<Boolean> = _updateBeforeScan.asStateFlow()
+
+    fun setUpdateBeforeScan(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_UPDATE_BEFORE_SCAN, enabled).apply()
+        _updateBeforeScan.value = enabled
+    }
+
+    /** Ne télécharger les bases qu'en Wi-Fi (réseau non facturé), lors de la mise à jour automatique. */
+    private val _updateWifiOnly = MutableStateFlow(prefs.getBoolean(KEY_UPDATE_WIFI_ONLY, true))
+    val updateWifiOnly: StateFlow<Boolean> = _updateWifiOnly.asStateFlow()
+
+    fun setUpdateWifiOnly(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_UPDATE_WIFI_ONLY, enabled).apply()
+        _updateWifiOnly.value = enabled
+    }
+
+    /** Dernière mise à jour automatique des bases, pour n'en faire qu'une par semaine au plus. */
+    var lastAutoUpdate: Long?
+        get() = prefs.getLong(KEY_LAST_AUTO_UPDATE, 0L).takeIf { it > 0 }
+        set(value) = prefs.edit().putLong(KEY_LAST_AUTO_UPDATE, value ?: 0L).apply()
+
     private val _lastBackgroundScan = MutableStateFlow(prefs.getLong(KEY_LAST_BACKGROUND_SCAN, 0L).takeIf { it > 0 })
     val lastBackgroundScan: StateFlow<Long?> = _lastBackgroundScan.asStateFlow()
 
@@ -141,6 +164,9 @@ class SettingsRepository(context: Context) {
 
     companion object {
         private const val KEY_CARD_STYLE = "card_style"
+        private const val KEY_UPDATE_BEFORE_SCAN = "update_before_scan"
+        private const val KEY_UPDATE_WIFI_ONLY = "update_wifi_only"
+        private const val KEY_LAST_AUTO_UPDATE = "last_auto_update"
         private const val KEY_INSTALL_ALERTS = "install_alerts"
         private const val KEY_STALKERWARE_ALERTS = "stalkerware_alerts"
         private const val KEY_HOW_IT_WORKS_SHOWN = "how_it_works_shown"

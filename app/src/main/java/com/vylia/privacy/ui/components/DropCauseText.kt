@@ -21,6 +21,7 @@ fun Resources.dropCauseText(cause: DropCause): String {
         DropCause.Type.TRACKER_ADDED -> getString(R.string.cause_trackers, label, cause.detail.orEmpty(), score)
         DropCause.Type.SECURITY_PATTERN -> getString(R.string.cause_security, label, securityLabel(cause.detail.orEmpty()), score)
         DropCause.Type.RULES_UPDATED -> getString(R.string.cause_rules)
+        DropCause.Type.DATABASES_UPDATED -> getString(R.string.cause_databases, cause.detail.orEmpty())
         DropCause.Type.SPREAD -> getString(R.string.cause_spread)
     }
 }

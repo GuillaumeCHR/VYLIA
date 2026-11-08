@@ -49,24 +49,41 @@ l'interface qui s'en sert (`ui/shield`, `ui/act/ShieldCard.kt`, onglet DNS priv�
 
 ## Liste de blocage
 
-`python3 tools/update_shield_blocklist.py` (poste de dev ; l'app ne télécharge rien pour le bouclier) fusionne :
+Deux chemins, qui produisent la même liste :
 
-- **Exodus Privacy** (`network_signature`, ODbL) : catégories Advertisement, Analytics, Profiling, Identification
-  seulement (catégories complétées comme pour le score). Le nom du traqueur est gardé et affiché à chaque blocage.
-- **EasyPrivacy** (pistage) et **EasyList** (publicité, surtout sa section des serveurs de pub) (GPL v3, compatible
-  avec la licence de VYLIA) : seules les règles `||domaine^` sans option ni chemin, moins les exceptions
-  `@@||domaine^` des deux listes.
-- **Jamais bloqués** : les domaines de plateformes (`google.com`, `facebook.com`, `amazonaws.com`…), qu'une
-  signature trop large bloquerait en entier ; un sous-domaine précis reste bloquable.
+- **Liste embarquée** : `python3 tools/update_shield_blocklist.py` (poste de dev) produit
+  `shield/src/main/assets/shield_blocklist.json`, utilisée tant qu'aucune liste n'a été téléchargée.
+- **Listes téléchargées par l'app** (Paramètres › Bases de données, « Tout mettre à jour », ou avant le scan
+  périodique) : `ShieldListStore` analyse chaque liste (`AdblockListParser`), n'en garde qu'un extrait compressé
+  (`filesDir/shield/<id>.gz`), puis `BlocklistBuilder` refait la fusion du script et écrit `compiled.bin`.
+  `ShieldController.rebuild()` remplace la liste à chaud : le tunnel n'est pas coupé.
 
-Au 2026-11-01 : 540 domaines Exodus, 43 318 EasyPrivacy, 42 851 EasyList, 86 431 après fusion, environ 1,9 Mo
-(compressé dans l'APK).
+Sources (mesures du 2026-11-08) :
 
-EasyList vise le web et ne couvre pas les régies des jeux mobiles : elles viennent du filtre **AdGuard Mobile Ads**
-(GPL v3, 924 domaines : ironSource, Meta Audience Network, Pangle, Mintegral, Unity Ads…). Ce qu'aucune liste ne
-couvre est ajouté domaine par domaine dans `MOBILE_EXTRA` du script, avec la raison (aujourd'hui
-`app-measurement.com`, Firebase Analytics). Total au 2026-11-01 : 87 191 domaines. `BlocklistTest` vérifie la
-couverture des principales régies mobiles.
+| Liste | Licence | Domaines DNS | Rôle |
+|---|---|---|---|
+| Exodus Privacy (`network_signature`) | ODbL | ~540 | traqueurs nommés ; depuis la base Exodus téléchargée par l'app (`ExodusShieldDomains`), catégories complétées par `exodus_category_overrides.json` |
+| AdGuard DNS filter | GPL v3 | 189 910 | base, compilée par AdGuard pour le DNS |
+| EasyList, EasyPrivacy | GPL v3 / CC BY-SA 3.0 | 44 851, 43 351 | EasyPrivacy apporte 11 000 domaines absents du DNS filter |
+| AdGuard Mobile Ads | GPL v3 | 925 | définit le groupe **mobile** |
+| AdGuard French | GPL v3 | 5 308 | sites français |
+| AdGuard CNAME trackers | MIT | 306 600 | **proposée** (2,4 Mo compressés) : +10 000 domaines |
+
+Écartées : Tracking Protection et Base (déjà compilées dans le DNS filter : 103 et 19 domaines en plus), URL
+Tracking (paramètres d'URL, rien au niveau DNS), Social Media et Fanboy Social (cosmétiques), Annoyances / Cookies
+(cosmétiques), Liste FR (doublon d'AdGuard French). Aucune liste de contrôle parental : le bouclier bloque des
+traqueurs, jamais un site pour son contenu (légal).
+
+Règles retenues : `||domaine^`, `||domaine^$important`, hosts, domaine seul ; `$badfilter` annule la règle visée ;
+`$third-party` et les autres modificateurs sont écartés (au niveau DNS, ils bloqueraient le site lui-même). Les
+exceptions (`@@||d^`, `@@||d^|`, `@@|d^|`) de toutes les listes protègent le domaine et ses sous-domaines, même si un
+parent est listé ; `NEVER_BLOCK` protège les plateformes.
+
+Mémoire : `DomainHashSet` (empreintes FNV-1a 64 bits triées) : 215 000 domaines en 1,9 Mo au lieu d'environ 25 Mo,
+libérés à l'arrêt du bouclier. Total au 2026-11-08 : 205 036 domaines web, 1 046 mobiles.
+
+Les domaines bloqués sans traqueur nommé sont nommés dans l'app grâce à AdGuard companiesdb (CC BY-SA 4.0,
+téléchargée seulement) : « Criteo · ciblage ».
 
 Les versions de développement journalisent les domaines autorisés (`adb logcat -s VyliaShield`) : c'est ainsi qu'on
 repère une régie oubliée en jouant à un jeu.
@@ -127,7 +144,6 @@ tests unitaires (liste, paquets, badge), essai sur téléphone (accord VPN, dém
    renvoyait le tunnel lui-même) : blocage, résolution, State.io et Mr Autofire OK. Reste : consommation sur une
    journée, passage Wi-Fi ↔ 4G, `app-measurement.com` (Firebase Analytics) absent des listes.
 2. Liste d'exceptions par l'utilisateur (« ne plus bloquer ce domaine ») depuis les derniers blocages.
-3. Crédits : ajouter EasyPrivacy, EasyList et AdGuard Mobile Ads (GPL v3) dans À propos à côté d'Exodus ; mentionner le bouclier dans la politique
-   de confidentialité.
-4. ~~EasyList~~, ~~régies mobiles~~, ~~pause~~ (faits). Mise à jour de la liste sur demande, comme la liste DNS.
+3. ~~Crédits~~ (faits). Politique de confidentialité (vylia-site) : dire que le bouclier télécharge ses listes.
+4. ~~EasyList~~, ~~régies mobiles~~, ~~pause~~, ~~mise à jour des listes depuis l'app~~ (faits, 0.9.5).
 5. Version 0.9.0 une fois validé.

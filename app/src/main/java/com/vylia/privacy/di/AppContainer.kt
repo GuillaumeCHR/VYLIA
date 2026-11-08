@@ -34,6 +34,24 @@ import com.vylia.privacy.data.backup.BackupRepository
 import com.vylia.privacy.ui.settings.AppLanguage
 import com.vylia.privacy.data.dns.PrivateDnsRepository
 import com.vylia.privacy.data.shield.ShieldController
+import com.vylia.privacy.data.databases.AlternativesSource
+import com.vylia.privacy.data.databases.CompaniesRepository
+import com.vylia.privacy.data.databases.CompaniesSource
+import com.vylia.privacy.data.databases.DatabaseCenter
+import com.vylia.privacy.data.databases.EchapSource
+import com.vylia.privacy.data.databases.ExodusCategoriesSource
+import com.vylia.privacy.data.databases.ExodusSource
+import com.vylia.privacy.data.databases.MvtSource
+import com.vylia.privacy.data.databases.PrivateDnsSource
+import com.vylia.privacy.data.databases.RulesSource
+import com.vylia.privacy.data.databases.ShieldListSource
+import com.vylia.privacy.data.databases.WebServicesSource
+import com.vylia.privacy.data.shield.ShieldListStore
+import com.vylia.privacy.domain.shield.ExodusNetworkTracker
+import com.vylia.privacy.data.databases.FileDatabaseMetaStore
+import com.vylia.privacy.data.databases.HttpsClient
+import com.vylia.privacy.data.trackers.ExodusCategoryOverrides
+import com.vylia.privacy.domain.databases.DatabaseUpdater
 import java.io.File
 
 /** Injection de dépendances manuelle : suffisante pour la V1, sans framework supplémentaire. */
@@ -59,13 +77,58 @@ class AppContainer(context: Context) {
     val scanCompletion = ScanCompletion(
         historyRecorder, thresholdAlertRepository, ThresholdNotifications(context), stalkerwareAlerts,
         rules = { ruleMatrixRepository.current.value },
+        databases = { databaseCenter.scoreVersions() },
     )
 
     private val scorer = { ruleMatrixRepository.current.value.scorer }
     val webServicesRepository = WebServicesRepository(context)
     private val appScanner = AppScanner(context, webServices = { webServicesRepository.services })
 
-    val trackerSignatureRepository = AssetTrackerSignatureRepository(context)
+    val exodusCategories = ExodusCategoryOverrides(context)
+    val trackerSignatureRepository = AssetTrackerSignatureRepository(context, overrides = { exodusCategories.categories })
+
+    val companiesRepository = CompaniesRepository(context)
+
+    /**
+     * Bases téléchargeables (Paramètres › Bases de données). Les listes du bouclier viennent du module du bouclier,
+     * par [shieldBridge] : une variante sans bouclier n'aura qu'à le retirer.
+     */
+    private val shieldBridge = object : DatabaseCenter.ShieldBridge {
+        override fun sources() = ShieldListStore.LISTS.map { ShieldListSource(it, shieldController) }
+        override fun setListEnabled(id: String, enabled: Boolean) {
+            ShieldListStore.LISTS.firstOrNull { it.id == id }?.let { shieldController.setListEnabled(it, enabled) }
+        }
+        override fun rebuild() {
+            val exodus = trackerSignatureRepository.networkTrackers()
+                ?.map { ExodusNetworkTracker(it.name, it.categories, it.networkSignature) }
+            shieldController.rebuild(exodus)
+        }
+        override fun setSpywareDomains(domains: Map<String, String>) = shieldController.setSpywareDomains(domains)
+    }
+
+    private val databaseUpdater = DatabaseUpdater(
+        sources = {
+            listOf(
+                ExodusSource(trackerUpdater) { null },
+                ExodusCategoriesSource(exodusCategories),
+                EchapSource(stalkerwareRepository),
+                MvtSource(mvtRepository),
+                RulesSource(ruleMatrixRepository),
+            ) + shieldBridge.sources() + listOf(
+                AlternativesSource(alternativesRepository),
+                WebServicesSource(webServicesRepository),
+                PrivateDnsSource(privateDnsRepository),
+                CompaniesSource(companiesRepository),
+            )
+        },
+        http = HttpsClient(),
+        metaStore = FileDatabaseMetaStore(File(context.filesDir, "databases.json")),
+        tempDir = context.cacheDir,
+    )
+
+    val databaseCenter = DatabaseCenter(
+        databaseUpdater, settingsRepository, trackerSignatureRepository, ruleMatrixRepository, mvtRepository, shieldBridge,
+    )
     private val trackerScanCache = TrackerScanCache(File(context.filesDir, "tracker_scan_cache.json"))
     private val trackerAnalyzer = DexTrackerAnalyzer(
         trackerSignatureRepository,

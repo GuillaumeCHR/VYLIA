@@ -95,11 +95,11 @@ private const val RulesExportFileName = "vylia_rules_v3.json"
 private val RuleFileMimeTypes = arrayOf("application/json", "text/plain", "application/octet-stream")
 
 /** Sous-menus des Paramètres : une page par grande entrée du menu principal. */
-private enum class SettingsPage { MAIN, RULES, DATABASE, AUTOMATION, DATA, ABOUT }
+private enum class SettingsPage { MAIN, RULES, DATABASES, AUTOMATION, DATA, ABOUT }
 
 /**
  * Paramètres : réglages généraux (langue, mode d'analyse) en tête, puis une entrée par sous-menu
- * (règles de score, base de traqueurs, données, à propos). Le bouton Retour ramène au menu principal.
+ * (règles de score, bases de données, données, à propos). Le bouton Retour ramène au menu principal.
  */
 @Composable
 fun SettingsScreen(
@@ -117,7 +117,7 @@ fun SettingsScreen(
     when (page) {
         SettingsPage.MAIN -> SettingsHome(modifier, viewModel, onOpen = { page = it }, onOpenHowItWorks = onOpenHowItWorks)
         SettingsPage.RULES -> RulesPage(modifier, viewModel, back)
-        SettingsPage.DATABASE -> DatabasePage(modifier, viewModel, back)
+        SettingsPage.DATABASES -> DatabasesPage(modifier, viewModel, back)
         SettingsPage.AUTOMATION -> AutomationPage(modifier, viewModel, back)
         SettingsPage.DATA -> DataPage(modifier, viewModel, homeViewModel, back)
         SettingsPage.ABOUT -> AboutScreen(modifier, back)
@@ -157,12 +157,12 @@ private fun SettingsHome(modifier: Modifier, viewModel: SettingsViewModel, onOpe
             ),
             onClick = { onOpen(SettingsPage.RULES) },
         )
+        val (databasesHint, databasesWarning) = databasesStatus(viewModel)
         SettingsLink(
             title = stringResource(R.string.settings_database),
-            hint = if (state.isObsolete) stringResource(R.string.settings_database_obsolete_short)
-            else stringResource(R.string.settings_database_hint, formatDate(state.lastUpdateTimestamp)),
-            hintColor = if (state.isObsolete) MaterialTheme.colorScheme.error else Color.Unspecified,
-            onClick = { onOpen(SettingsPage.DATABASE) },
+            hint = databasesHint,
+            hintColor = if (databasesWarning) MaterialTheme.colorScheme.error else Color.Unspecified,
+            onClick = { onOpen(SettingsPage.DATABASES) },
         )
 
         SettingsLink(
@@ -329,61 +329,6 @@ private fun rulesMessage(message: RulesMessage): String = when (message) {
     )
 }
 
-// --- Base de traqueurs ------------------------------------------------------------------------
-
-@Composable
-private fun DatabasePage(modifier: Modifier, viewModel: SettingsViewModel, onBack: () -> Unit) {
-    val state by viewModel.uiState.collectAsStateWithLifecycle()
-    SubPage(modifier, R.string.settings_database, onBack) {
-        InfoCard(R.string.database_status) {
-            Text(
-                stringResource(R.string.database_last_update, formatDate(state.lastUpdateTimestamp)),
-                style = MaterialTheme.typography.bodyLarge
-            )
-            if (state.isObsolete) {
-                Text(
-                    stringResource(R.string.database_obsolete),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            Hint(stringResource(R.string.database_update_hint))
-            Button(onClick = viewModel::updateDatabase, enabled = !state.isUpdating) {
-                if (state.isUpdating) {
-                    CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(stringResource(R.string.database_updating))
-                } else {
-                    Text(stringResource(R.string.database_update))
-                }
-            }
-            state.updateError?.let {
-                Text(
-                    text = stringResource(R.string.database_update_error, it),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
-                )
-            }
-            if (state.updateSuccess) {
-                Text(
-                    text = stringResource(R.string.database_update_success),
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.bodySmall
-                )
-                LaunchedEffect(Unit) {
-                    // reset success state after showing
-                    viewModel.resetSuccessState()
-                }
-            }
-        }
-        ExodusCreditsCard()
-        StalkerwareUpdateCard(viewModel)
-        EchapCreditsCard()
-        MvtUpdateCard(viewModel)
-        MvtCreditsCard()
-    }
-}
-
 /** Source des signatures de traqueurs : Exodus Privacy, son logo, sa licence et la limite de la détection. */
 @Composable
 fun ExodusCreditsCard() {
@@ -402,82 +347,6 @@ fun ExodusCreditsCard() {
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(onClick = { openUrl(context, EXODUS_URL) }) { Text(stringResource(R.string.exodus_website)) }
             OutlinedButton(onClick = { openUrl(context, ODBL_URL) }) { Text(stringResource(R.string.exodus_odbl)) }
-        }
-    }
-}
-
-/** Indicateurs MVT des logiciels espions de surveillance ciblée : version en vigueur et mise à jour. */
-@Composable
-private fun MvtUpdateCard(viewModel: SettingsViewModel) {
-    val state by viewModel.mvt.collectAsStateWithLifecycle()
-    val updating by viewModel.mvtUpdating.collectAsStateWithLifecycle()
-    val message by viewModel.mvtMessage.collectAsStateWithLifecycle()
-    InfoCard(R.string.mvt_status) {
-        Text(
-            state.downloadedAt?.let { stringResource(R.string.mvt_downloaded, state.database.total, formatDate(it)) }
-                ?: stringResource(R.string.mvt_embedded, state.database.total, state.database.commit.take(7)),
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Hint(stringResource(R.string.mvt_update_hint))
-        Button(onClick = viewModel::updateMvt, enabled = !updating) {
-            if (updating) {
-                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.database_updating))
-            } else {
-                Text(stringResource(R.string.mvt_update))
-            }
-        }
-        when (val m = message) {
-            is MvtMessage.Updated -> Text(
-                stringResource(R.string.mvt_update_success, m.campaigns, m.domains),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodySmall,
-            )
-            is MvtMessage.Failed -> Text(
-                stringResource(R.string.database_update_error, m.detail ?: stringResource(R.string.rules_invalid_file)),
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
-            )
-            null -> Unit
-        }
-    }
-}
-
-/** Base des stalkerwares connus : version en vigueur et mise à jour, comme pour la base Exodus. */
-@Composable
-private fun StalkerwareUpdateCard(viewModel: SettingsViewModel) {
-    val state by viewModel.stalkerware.collectAsStateWithLifecycle()
-    val updating by viewModel.stalkerwareUpdating.collectAsStateWithLifecycle()
-    val message by viewModel.stalkerwareMessage.collectAsStateWithLifecycle()
-    InfoCard(R.string.stalkerware_status) {
-        Text(
-            state.downloadedAt?.let { stringResource(R.string.stalkerware_downloaded, state.database.apps, formatDate(it)) }
-                ?: stringResource(R.string.stalkerware_embedded, state.database.apps, state.database.commit.take(7)),
-            style = MaterialTheme.typography.bodyLarge,
-        )
-        Hint(stringResource(R.string.stalkerware_update_hint))
-        Button(onClick = viewModel::updateStalkerware, enabled = !updating) {
-            if (updating) {
-                CircularProgressIndicator(modifier = Modifier.size(16.dp), strokeWidth = 2.dp)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.database_updating))
-            } else {
-                Text(stringResource(R.string.stalkerware_update))
-            }
-        }
-        when (val m = message) {
-            is StalkerwareMessage.Updated -> Text(
-                stringResource(R.string.stalkerware_update_success, m.count),
-                color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.bodySmall,
-            )
-            is StalkerwareMessage.Failed -> Text(
-                stringResource(R.string.database_update_error, m.detail ?: stringResource(R.string.rules_invalid_file)),
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
-            )
-            null -> Unit
         }
     }
 }

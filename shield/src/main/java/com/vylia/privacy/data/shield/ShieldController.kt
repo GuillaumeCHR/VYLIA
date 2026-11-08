@@ -170,13 +170,33 @@ class ShieldController(
         ShieldTapResult.Done
     }
 
+    /** Listes téléchargées depuis l'app (Paramètres › Bases de données) et leur compilation. */
+    val lists = ShieldListStore(context)
+
+    /** Listes actives : celles de base, sauf retirées, et les listes proposées que l'utilisateur a ajoutées. */
+    fun enabledLists(): List<ShieldList> =
+        ShieldListStore.LISTS.filter { prefs.getBoolean(KEY_LIST + it.id, !it.proposed) }
+
+    fun isListEnabled(list: ShieldList): Boolean = prefs.getBoolean(KEY_LIST + list.id, !list.proposed)
+
+    /** Ajoute ou retire une liste ; la liste du bouclier est à recompiler ensuite ([rebuild]). */
+    fun setListEnabled(list: ShieldList, enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_LIST + list.id, enabled).apply()
+        if (!enabled && list.proposed) lists.remove(list.id)
+    }
+
     /**
-     * Liste embarquée, lue au premier démarrage du bouclier (environ 90 000 domaines), avec les domaines de logiciels
-     * espions mis à jour depuis l'app s'il y en a ([setSpywareDomains]). Appel bloquant.
+     * Liste du bouclier, chargée au démarrage du VPN : la liste compilée depuis les listes téléchargées, sinon la liste
+     * embarquée, avec les domaines de logiciels espions mis à jour depuis l'app s'il y en a ([setSpywareDomains]).
+     * Appel bloquant. Elle est libérée à l'arrêt du bouclier.
      */
     @Synchronized
-    fun blocklist(): Blocklist = blocklist ?: embedded().let { base -> spywareDomains?.let(base::withSpyware) ?: base }
-        .also { blocklist = it }
+    fun blocklist(): Blocklist = blocklist ?: base().also { blocklist = it }
+
+    private fun base(): Blocklist {
+        val base = lists.loadCompiled() ?: embedded()
+        return spywareDomains?.let(base::withSpyware) ?: base
+    }
 
     /** Liste en vigueur pour une requête : celle déjà chargée, sans attendre ni verrou. */
     internal fun activeBlocklist(): Blocklist? = blocklist
@@ -191,10 +211,33 @@ class ShieldController(
     @Synchronized
     fun setSpywareDomains(domains: Map<String, String>?) {
         spywareDomains = domains
-        if (blocklist != null) blocklist = embedded().let { base -> domains?.let(base::withSpyware) ?: base }
+        if (blocklist != null) blocklist = base()
     }
 
-    private fun embedded(): Blocklist = context.assets.open(ASSET).bufferedReader().use { Blocklist.parse(it.readText()) }
+    /**
+     * Recompile la liste après une mise à jour des listes. Si le bouclier tourne, il passe à la nouvelle liste à la
+     * requête suivante, sans couper le tunnel. [exodus] : la base Exodus téléchargée par l'app, d'où viennent les
+     * traqueurs nommés ; `null` garde ceux de la liste embarquée. Renvoie le nombre de domaines. Appel bloquant.
+     */
+    fun rebuild(exodus: List<com.vylia.privacy.domain.shield.ExodusNetworkTracker>? = null): Int {
+        val result = lists.compile(enabledLists(), { embeddedSnapshot() }, exodus)
+        val size = result.web + result.mobile
+        prefs.edit().putInt(KEY_SIZE, size).apply()
+        synchronized(this) { if (blocklist != null) blocklist = base() }
+        return size
+    }
+
+    /** Nombre de domaines de la liste en vigueur, sans la garder en mémoire si le bouclier ne tourne pas. */
+    fun domainCount(): Int {
+        prefs.getInt(KEY_SIZE, 0).takeIf { it > 0 }?.let { return it }
+        return (blocklist ?: base()).size
+    }
+
+    private fun assetText(): String = context.assets.open(ASSET).bufferedReader().use { it.readText() }
+
+    private fun embedded(): Blocklist = Blocklist.parse(assetText())
+
+    private fun embeddedSnapshot(): Blocklist.Snapshot = Blocklist.snapshot(assetText())
 
     /** Intention à lancer pour obtenir l'accord de l'utilisateur, ou `null` s'il est déjà donné. */
     fun consentIntent(): Intent? = VpnService.prepare(context)
@@ -260,7 +303,11 @@ class ShieldController(
                 else -> it.copy(status = status)
             }
         }
-        if (status != ShieldStatus.ON && status != ShieldStatus.STARTING) flush()
+        if (status != ShieldStatus.ON && status != ShieldStatus.STARTING) {
+            flush()
+            // Bouclier arrêté : la liste (environ 2 Mo) n'a plus à rester en mémoire.
+            synchronized(this) { blocklist = null }
+        }
     }
 
     /** Appelé par le fil de lecture du VPN, un seul à la fois. */
@@ -287,6 +334,8 @@ class ShieldController(
         private const val KEY_TOTAL = "blocked_total"
         private const val KEY_FILTER = "filter_"
         private const val KEY_PAUSE_MINUTES = "pause_minutes"
+        private const val KEY_LIST = "list_"
+        private const val KEY_SIZE = "domain_count"
         /** Le total est écrit toutes les [SAVE_EVERY] requêtes bloquées, et à l'arrêt du bouclier. */
         private const val SAVE_EVERY = 25
     }

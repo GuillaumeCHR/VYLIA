@@ -31,6 +31,7 @@ fun AuditedApp.historyPoint(): AppPoint = AppPoint(
     // Traqueurs inconnus tant que l'analyse n'a pas eu lieu : rien à comparer au scan suivant.
     trackers = (trackerAnalysis as? TrackerAnalysis.Analyzed)?.trackers?.mapTo(HashSet()) { it.name },
     security = result.securityFindings.mapTo(HashSet()) { it.id },
+    version = app.versionCode.takeIf { it > 0 },
 )
 
 /** Score de l'appareil : moyenne des scores des apps utilisateur, arrondie comme partout ([PrivacyScore.ofAverage]). */

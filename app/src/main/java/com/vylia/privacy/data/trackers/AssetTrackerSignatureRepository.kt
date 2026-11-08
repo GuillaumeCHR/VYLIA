@@ -19,6 +19,8 @@ class AssetTrackerSignatureRepository(
     private val parser: ExodusTrackerParser = ExodusTrackerParser(),
     private val fileName: String = EXODUS_TRACKERS_ASSET,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
+    /** Catégories ajoutées aux traqueurs qu'Exodus ne catégorise pas (une base téléchargée en a besoin). */
+    private val overrides: () -> Map<String, List<String>> = { emptyMap() },
 ) : TrackerSignatureRepository {
 
     private class Loaded(val signatures: List<TrackerSignature>, val matcher: TrackerMatcher)
@@ -38,13 +40,26 @@ class AssetTrackerSignatureRepository(
             } else {
                 context.assets.open(fileName).bufferedReader().use { it.readText() }
             }
-            val signatures = parser.parse(jsonContent)
+            val signatures = parser.parse(jsonContent, overrides())
             Loaded(signatures, TrackerMatcher(signatures))
         }.also { cached = it }
     }
 
     fun invalidateCache() {
         cached = null
+    }
+
+    /** Version en service : la base téléchargée (sa date) ou celle de l'app. */
+    fun version(): String {
+        val downloadedFile = File(context.filesDir, TrackerUpdater.DOWNLOADED_FILE_NAME)
+        return if (downloadedFile.exists()) "dl-${downloadedFile.lastModified()}" else "app"
+    }
+
+    /** Traqueurs Exodus et leurs domaines, depuis la base téléchargée ; `null` sans elle (le bouclier garde sa liste). */
+    fun networkTrackers(): List<ExodusTrackerParser.NetworkTracker>? {
+        val downloadedFile = File(context.filesDir, TrackerUpdater.DOWNLOADED_FILE_NAME)
+        if (!downloadedFile.exists()) return null
+        return runCatching { parser.parseNetwork(downloadedFile.readText(), overrides()) }.getOrNull()
     }
 
     companion object {

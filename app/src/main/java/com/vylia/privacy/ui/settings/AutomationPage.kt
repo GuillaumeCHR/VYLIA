@@ -177,6 +177,19 @@ internal fun AutomationPage(
             state.lastBackgroundScan?.let {
                 Hint(stringResource(R.string.automation_scan_last, DateFormat.getDateInstance(DateFormat.MEDIUM, currentLocale()).format(Date(it))))
             }
+            // Mise à jour des bases, enchaînée avec le scan : une seule planification, celle du scan.
+            val scanOn = state.backgroundScan != BackgroundScan.OFF
+            SwitchRow(
+                stringResource(R.string.automation_update_switch),
+                checked = scanOn && state.updateBeforeScan,
+                onChange = viewModel::setUpdateBeforeScan,
+                enabled = scanOn,
+            )
+            Hint(stringResource(if (scanOn) R.string.automation_update_hint else R.string.automation_update_off_hint))
+            if (scanOn && state.updateBeforeScan) {
+                SwitchRow(stringResource(R.string.automation_update_wifi), checked = state.updateWifiOnly, onChange = viewModel::setUpdateWifiOnly)
+                Hint(stringResource(R.string.automation_update_wifi_hint))
+            }
         }
         InfoCard(R.string.automation_battery_title) {
             Text(stringResource(R.string.automation_battery_text), style = MaterialTheme.typography.bodyMedium)
@@ -185,17 +198,17 @@ internal fun AutomationPage(
 }
 
 @Composable
-private fun SwitchRow(label: String, checked: Boolean, onChange: (Boolean) -> Unit) {
+private fun SwitchRow(label: String, checked: Boolean, enabled: Boolean = true, onChange: (Boolean) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .toggleable(value = checked, role = Role.Switch, onValueChange = onChange)
+            .toggleable(value = checked, enabled = enabled, role = Role.Switch, onValueChange = onChange)
             .heightIn(min = 48.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(label, style = MaterialTheme.typography.bodyLarge, modifier = Modifier.weight(1f))
         Spacer(Modifier.width(16.dp))
-        Switch(checked = checked, onCheckedChange = null)
+        Switch(checked = checked, onCheckedChange = null, enabled = enabled)
     }
 }
 
@@ -226,7 +239,7 @@ private fun ThresholdCard(
 ) {
     val setting = state.setting
     InfoCard(R.string.automation_threshold_title) {
-        SwitchRow(stringResource(R.string.automation_threshold_switch), setting.enabled, onEnabled)
+        SwitchRow(stringResource(R.string.automation_threshold_switch), setting.enabled, onChange = onEnabled)
         Hint(stringResource(R.string.automation_threshold_hint))
         if (!setting.enabled) return@InfoCard
         // Valeur suivie pendant le glissement, enregistrée au lâcher : l'état n'est recalculé qu'une fois.

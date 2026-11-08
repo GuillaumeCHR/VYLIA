@@ -24,10 +24,11 @@ data class DropCause(
     /** Permission, traqueurs (séparés par des virgules) ou identifiant du motif de sécurité. */
     val detail: String? = null,
 ) {
-    enum class Type { INSTALLED, REMOVED, PERMISSION_GRANTED, TRACKER_ADDED, SECURITY_PATTERN, RULES_UPDATED, SPREAD }
+    /** [DATABASES_UPDATED] : traqueurs ou motifs nouvellement connus des bases, sur des apps inchangées ([detail] : leur nombre). */
+    enum class Type { INSTALLED, REMOVED, PERMISSION_GRANTED, TRACKER_ADDED, SECURITY_PATTERN, RULES_UPDATED, DATABASES_UPDATED, SPREAD }
 
     /** Une app à mettre en tête de Réduire : celle en cause, sauf si elle n'est plus installée. */
-    val pinnedPackage: String? get() = packageName.takeIf { type != Type.REMOVED && type != Type.RULES_UPDATED && type != Type.SPREAD }
+    val pinnedPackage: String? get() = packageName.takeIf { type != Type.REMOVED && type != Type.RULES_UPDATED && type != Type.DATABASES_UPDATED && type != Type.SPREAD }
 }
 
 /** Où ouvrir l'app depuis la notification d'un franchissement, selon sa cause. */
@@ -44,7 +45,7 @@ val DropCause.target: AlertTarget
         DropCause.Type.PERMISSION_GRANTED -> AlertTarget.MANAGE_PERMISSIONS
         DropCause.Type.TRACKER_ADDED, DropCause.Type.SECURITY_PATTERN ->
             if (packageName != null) AlertTarget.APP_DETAIL else AlertTarget.TRACKING
-        DropCause.Type.RULES_UPDATED, DropCause.Type.SPREAD -> AlertTarget.TRACKING
+        DropCause.Type.RULES_UPDATED, DropCause.Type.DATABASES_UPDATED, DropCause.Type.SPREAD -> AlertTarget.TRACKING
     }
 
 /** Un franchissement qui a déclenché une notification ; les 50 derniers alimentent les marqueurs du Suivi. */

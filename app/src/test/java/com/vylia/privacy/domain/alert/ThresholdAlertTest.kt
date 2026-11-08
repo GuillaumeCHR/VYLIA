@@ -156,6 +156,7 @@ class ThresholdAlertTest {
         trackers: List<String> = emptyList(),
         signals: Set<String> = emptySet(),
         category: String = "CATEGORY_GAME",
+        version: Long = 1L,
     ): AuditedApp = scorer.scoreApp(
         InstalledApp(
             label = pkg.substringAfterLast('.'),
@@ -171,6 +172,7 @@ class ThresholdAlertTest {
             category = null,
             apkPaths = emptyList(),
             lastUpdateTime = 0L,
+            versionCode = version,
             targetSdk = 35,
             appInfoCategory = category,
             declaredPermissions = granted,
@@ -182,12 +184,13 @@ class ThresholdAlertTest {
         TrackerAnalysis.Analyzed(trackers.mapIndexed { i, name -> Tracker(i, name, null, TestFixtures.exodusCategories.getValue(name).toList()) }),
     )
 
-    private fun snapshot(apps: List<AuditedApp>, rules: String = "r1") = ScoreSnapshot(
+    private fun snapshot(apps: List<AuditedApp>, rules: String = "r1", databases: Map<String, String> = emptyMap()) = ScoreSnapshot(
         at = 0,
         average = apps.map { it.score.value }.average(),
         stdDev = 0.0,
         apps = apps.associate { it.app.packageName to it.historyPoint() },
         rules = rules,
+        databases = databases,
     )
 
     private val stable = List(5) { app("org.clean.app$it") }
@@ -233,6 +236,29 @@ class ThresholdAlertTest {
         val result = cause(stable + before, stable + after)
         assertEquals(DropCause.Type.TRACKER_ADDED, result.type)
         assertEquals("Google AdMob", result.detail)
+    }
+
+    @Test
+    fun `cause - traqueur apparu avec la mise a jour des bases sur une app inchangee`() {
+        val before = app("org.game.app", trackers = listOf("Criteo"))
+        val after = app("org.game.app", trackers = listOf("Criteo", "Google AdMob"))
+        val result = DropCauseAnalyzer.analyze(
+            snapshot(stable + before, databases = mapOf("exodus" to "v1")), stable + after, "r1", scorer, mapOf("exodus" to "v2"),
+        )
+        assertEquals(DropCause.Type.DATABASES_UPDATED, result.type)
+        assertEquals("1", result.detail)
+        assertNull(result.pinnedPackage)
+        assertEquals(AlertTarget.TRACKING, result.target)
+    }
+
+    @Test
+    fun `cause - une app mise a jour garde son traqueur ajoute meme si les bases ont change`() {
+        val before = app("org.game.app", trackers = listOf("Criteo"))
+        val after = app("org.game.app", trackers = listOf("Criteo", "Google AdMob"), version = 2L)
+        val result = DropCauseAnalyzer.analyze(
+            snapshot(stable + before, databases = mapOf("exodus" to "v1")), stable + after, "r1", scorer, mapOf("exodus" to "v2"),
+        )
+        assertEquals(DropCause.Type.TRACKER_ADDED, result.type)
     }
 
     @Test

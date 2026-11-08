@@ -26,6 +26,7 @@ object BackupSanitizer {
     const val MAX_TRACKERS_PER_APP = 500
     const val MAX_PATTERNS_PER_APP = 50
     private const val MAX_DETAIL = 300
+    private const val MAX_DATABASES = 32
     private val IDENTIFIER = Regex("[A-Za-z][A-Za-z0-9_]{0,63}")
 
     data class Cleaned(val file: BackupFile, val invalid: Int)
@@ -62,6 +63,7 @@ object BackupSanitizer {
     private fun snapshot(s: ScoreSnapshot): ScoreSnapshot? {
         if (s.apps.size > MAX_APPS_PER_SNAPSHOT || !s.average.isFinite() || !s.stdDev.isFinite()) return null
         if (s.rules.length > 64 || !s.rules.all { it.isLetterOrDigit() || it == ':' }) return null
+        if (s.databases.size > MAX_DATABASES || s.databases.any { (id, version) -> !IDENTIFIER.matches(id) || version.length > 40 || !version.all { it.isLetterOrDigit() || it == '-' } }) return null
         val apps = s.apps.mapValues { (pkg, app) -> if (isPackage(pkg)) appPoint(app) else null }
         if (apps.values.any { it == null }) return null
         @Suppress("UNCHECKED_CAST")
@@ -89,7 +91,7 @@ object BackupSanitizer {
 
     private fun event(e: HistoryEvent): HistoryEvent? =
         if (!isPackage(e.packageName) || (e.permission != null && !isPermission(e.permission))) null
-        else e.copy(label = label(e.label))
+        else e.copy(label = label(e.label), detail = e.detail?.let { Untrusted.text(it, MAX_DETAIL) })
 
     private fun removedApp(a: RemovedApp): RemovedApp? =
         if (!isPackage(a.packageName) || a.trackerCount !in 0..1_000) null else a.copy(label = label(a.label))

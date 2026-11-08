@@ -15,12 +15,17 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
+import com.vylia.privacy.domain.databases.Fetch
+import com.vylia.privacy.domain.databases.Outcome
+import com.vylia.privacy.domain.databases.text
 import java.io.File
 
 /**
- * Règles de score v3 (`vylia_rules_v3.json`), 100 % locales :
- * 1. copie importée par l'utilisateur (sélecteur de fichiers, typiquement depuis Téléchargements),
- * 2. sinon, ou si la copie est illisible, règles intégrées dans `assets/`.
+ * Règles de score v3 (`vylia_rules_v3.json`) :
+ * 1. copie importée par l'utilisateur (sélecteur de fichiers, typiquement depuis Téléchargements) : elle l'emporte
+ *    toujours, une mise à jour ne la remplace pas ;
+ * 2. sinon, dernière version téléchargée depuis le dépôt VYLIA (Paramètres › Bases de données), validée comme un import ;
+ * 3. sinon, ou si ces copies sont illisibles, règles intégrées dans `assets/`.
  *
  * L'import et l'export passent par le Storage Access Framework : aucune permission de stockage n'est requise.
  * Un fichier importé passe par [RulesValidator] (texte brut puis règles décodées) avant de remplacer quoi que ce soit.
@@ -31,7 +36,7 @@ class RuleMatrixRepository(
     private val mvt: MvtRepository,
 ) {
 
-    enum class Source { IMPORTED, BUNDLED }
+    enum class Source { IMPORTED, DOWNLOADED, BUNDLED }
 
     /**
      * Le moteur reçoit aussi les logiciels espions connus (Echap, MVT), qui ne dépendent pas des règles importées. [fingerprint] :
@@ -43,6 +48,8 @@ class RuleMatrixRepository(
         val source: Source,
         val iocs: IocDatabase = IocDatabase.EMPTY,
         val fingerprint: String = "",
+        /** Change à chaque mise à jour d'une base du score (Exodus, catégories) : fait recalculer les notes. */
+        val revision: Int = 0,
     ) {
         val scorer = PrivacyScorer(rules, iocs)
     }
@@ -56,6 +63,7 @@ class RuleMatrixRepository(
     }
 
     private val importedFile = File(context.filesDir, IMPORTED_FILE_NAME)
+    private val downloadedFile = File(context.filesDir, DOWNLOADED_FILE_NAME)
 
     private val _current = MutableStateFlow(load())
     val current: StateFlow<LoadedRules> = _current.asStateFlow()
@@ -78,8 +86,26 @@ class RuleMatrixRepository(
     fun importedContent(): String? =
         if (_current.value.source == Source.IMPORTED && importedFile.exists()) importedFile.readText() else null
 
-    /** Le fichier des règles en vigueur, tel quel : la copie importée, sinon les règles intégrées. */
-    fun currentContent(): String = importedContent() ?: bundledContent()
+    /** Le fichier des règles en vigueur, tel quel : la copie importée, la version téléchargée, sinon les règles intégrées. */
+    fun currentContent(): String = importedContent()
+        ?: downloadedFile.takeIf { _current.value.source == Source.DOWNLOADED && it.exists() }?.readText()
+        ?: bundledContent()
+
+    /**
+     * Télécharge les règles publiées dans le dépôt VYLIA. Validées comme un import ; elles ne prennent effet que si
+     * aucune règle n'a été importée à la main (la version téléchargée est gardée pour plus tard). Les notes et les
+     * badges se recalculent aussitôt (ScanViewModel observe [current]).
+     */
+    suspend fun update(fetch: Fetch): Outcome = withContext(Dispatchers.IO) {
+        val content = fetch.text(REMOTE_URL, RulesValidator.MAX_BYTES.toLong()) ?: return@withContext Outcome.Unchanged
+        val rules = checked(content, loadBundled().rules)
+        val loaded = LoadedRules(rules, Source.DOWNLOADED, iocs, fingerprint(content))
+        val tmp = File(context.filesDir, "$DOWNLOADED_FILE_NAME.tmp")
+        tmp.writeText(content)
+        check(tmp.renameTo(downloadedFile)) { "installation des règles impossible" }
+        if (_current.value.source != Source.IMPORTED) _current.value = loaded
+        Outcome.Installed(rules.categories.size)
+    }
 
     /** Écrit les règles en vigueur dans le fichier choisi, pour les modifier ou les partager puis les réimporter. */
     suspend fun export(uri: Uri): Result<Unit> = withContext(Dispatchers.IO) {
@@ -96,9 +122,18 @@ class RuleMatrixRepository(
         _current.value = _current.value.copy(iocs = iocs, fingerprint = fingerprint(currentContent()))
     }
 
+    /**
+     * Après une mise à jour de la base Exodus ou de ses catégories : mêmes règles, publiées à nouveau pour que l'écran
+     * Scan recalcule notes et badges (et relance l'analyse des traqueurs si les signatures ont changé).
+     */
+    fun refreshDatabases() {
+        _current.value = _current.value.copy(revision = _current.value.revision + 1)
+    }
+
+    /** Retire les règles importées : la version téléchargée reprend la main s'il y en a une, sinon les règles intégrées. */
     fun resetToBundled() {
         importedFile.delete()
-        _current.value = loadBundled()
+        _current.value = loadDownloaded() ?: loadBundled()
     }
 
     private fun load(): LoadedRules {
@@ -112,7 +147,18 @@ class RuleMatrixRepository(
                 Log.w(TAG, "Règles importées invalides, retour aux règles intégrées", e)
             }
         }
-        return loadBundled()
+        return loadDownloaded() ?: loadBundled()
+    }
+
+    private fun loadDownloaded(): LoadedRules? {
+        if (!downloadedFile.exists()) return null
+        return try {
+            val content = downloadedFile.readText()
+            LoadedRules(checked(content, loadBundled().rules), Source.DOWNLOADED, iocs, fingerprint(content))
+        } catch (e: Exception) {
+            Log.w(TAG, "Règles téléchargées invalides, ignorées", e)
+            null
+        }
     }
 
     /** Les règles intégrées font partie de l'app : illisibles, c'est un bug de build, pas un cas à masquer. */
@@ -124,6 +170,8 @@ class RuleMatrixRepository(
         private const val TAG = "RuleMatrixRepository"
         const val BUNDLED_ASSET = "vylia_rules_v3.json"
         private const val IMPORTED_FILE_NAME = "imported_vylia_rules_v2.json"
+        private const val DOWNLOADED_FILE_NAME = "downloaded_vylia_rules_v3.json"
+        const val REMOTE_URL = "https://raw.githubusercontent.com/GuillaumeCHR/VYLIA/main/app/src/main/assets/vylia_rules_v3.json"
         private val json = Json { ignoreUnknownKeys = true }
 
         fun parse(content: String): Rules = json.decodeFromString(content.removePrefix("\uFEFF"))

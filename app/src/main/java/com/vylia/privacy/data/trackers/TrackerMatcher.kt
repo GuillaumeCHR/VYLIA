@@ -65,8 +65,12 @@ class TrackerMatcher(signatures: List<TrackerSignature>) {
         outputs = Array(nodeOutputs.size) { nodeOutputs[it].toIntArray() }
     }
 
-    /** Version de la base : invalide le cache persistant quand les signatures changent. */
-    val version: String = signatures.joinToString("\n") { "${it.tracker.id}:${it.codeSignature.pattern}:${it.tracker.categories}" }
+    /**
+     * Version de la détection : invalide le cache persistant quand les signatures de code changent. Les noms et les
+     * catégories n'y entrent pas : ils ne changent pas ce qui est détecté, et [trackersById] les relit dans la base en
+     * service. Une correction de catégories recalcule donc les notes sans relire le code des apps.
+     */
+    val version: String = signatures.joinToString("\n") { "${it.tracker.id}:${it.codeSignature.pattern}" }
         .hashCode().toString(16)
 
     fun trackersById(ids: List<Int>): List<Tracker> = ids.mapNotNull { id -> trackerIndexById[id]?.let(trackers::get) }

@@ -49,6 +49,28 @@ class HistoryRecorderTest {
     }
 
     @Test
+    fun `traqueur apparu avec une mise a jour des bases sur une app inchangee - evenement marque, sans cause app`() {
+        val game = AppPoint("Game", 60, trackers = setOf("Criteo"), security = emptySet(), version = 5)
+        recorder.record(mapOf("game" to game), rules = "r1", databases = mapOf("exodus" to "v1"))
+        now += day
+        recorder.record(mapOf("game" to game.copy(trackers = setOf("Criteo", "Google AdMob"))), rules = "r1", databases = mapOf("exodus" to "v2"))
+        val event = recorder.history.value.events.single()
+        assertEquals(EventType.TRACKERS_ADDED, event.type)
+        assertEquals("Google AdMob", event.detail)
+        assertTrue(event.fromDatabases)
+        assertEquals(mapOf("exodus" to "v2"), recorder.history.value.snapshots.last().databases)
+    }
+
+    @Test
+    fun `traqueur ajoute par une mise a jour de l app - evenement non marque`() {
+        val game = AppPoint("Game", 60, trackers = setOf("Criteo"), security = emptySet(), version = 5)
+        recorder.record(mapOf("game" to game), rules = "r1", databases = mapOf("exodus" to "v1"))
+        now += day
+        recorder.record(mapOf("game" to game.copy(trackers = setOf("Criteo", "Google AdMob"), version = 6)), rules = "r1", databases = mapOf("exodus" to "v2"))
+        assertEquals(false, recorder.history.value.events.single().fromDatabases)
+    }
+
+    @Test
     fun `un point par jour - le plus recent remplace celui du jour`() {
         recorder.record(mapOf("notes" to notes))
         now += 60_000

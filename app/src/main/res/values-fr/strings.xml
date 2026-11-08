@@ -858,6 +858,8 @@
     <string name="about_shield_lists">Le bouclier VYLIA filtre les requêtes DNS avec des listes publiques, embarquées dans l\'app : Exodus Privacy (ODbL 1.0), EasyList et EasyPrivacy des auteurs d\'EasyList (GPL v3), et le filtre AdGuard Mobile Ads d\'AdGuard (GPL v3). VYLIA n\'est ni affiliée à ces projets ni approuvée par eux.</string>
     <string name="about_source">Code source : %1$s</string>
     <string name="about_source_button">Voir le code source</string>
+    <string name="about_privacy_policy_button">Règles de confidentialité</string>
+    <string name="about_privacy_policy_url">https://guillaumechr.github.io/vylia-site/fr/confidentialite.html</string>
     <string name="about_license_button">Lire la GNU GPL v3</string>
     <string name="about_contact_title">Contact</string>
     <string name="about_contact">Un bug, une idée, une question ? Écrivez à Yogi Studio : %1$s</string>

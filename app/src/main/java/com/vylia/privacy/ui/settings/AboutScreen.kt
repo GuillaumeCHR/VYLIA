@@ -27,7 +27,7 @@ import com.vylia.privacy.ui.theme.CyanAccent
 
 /**
  * « À propos » : logo, version, éditeur (Yogi Studio), encart « Vie privée » (chaque phrase est vraie et
- * vérifiable), licence GPL v3 et code source, crédits Exodus Privacy.
+ * vérifiable, lien vers les règles de confidentialité), licence GPL v3 et code source, crédits Exodus Privacy.
  */
 @Composable
 fun AboutScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
@@ -62,6 +62,9 @@ fun AboutScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
             ).forEach {
                 Text(stringResource(it), style = MaterialTheme.typography.bodyMedium)
             }
+            // Règles de confidentialité du site, dans la langue de l'app (exigées par Google Play dans l'app).
+            val privacyUrl = stringResource(R.string.about_privacy_policy_url)
+            OutlinedButton(onClick = { openUrl(context, privacyUrl) }) { Text(stringResource(R.string.about_privacy_policy_button)) }
         }
 
         InfoCard(R.string.about_license_title) {

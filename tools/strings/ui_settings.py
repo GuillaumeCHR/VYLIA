@@ -203,6 +203,8 @@ S = [
  ("about_shield_lists", "The VYLIA Shield filters DNS requests with public lists, embedded in the app: Exodus Privacy (ODbL 1.0), EasyList and EasyPrivacy by the EasyList authors (GPL v3), and the AdGuard Mobile Ads filter by AdGuard (GPL v3). VYLIA is neither affiliated with nor endorsed by them.", "Le bouclier VYLIA filtre les requêtes DNS avec des listes publiques, embarquées dans l'app : Exodus Privacy (ODbL 1.0), EasyList et EasyPrivacy des auteurs d'EasyList (GPL v3), et le filtre AdGuard Mobile Ads d'AdGuard (GPL v3). VYLIA n'est ni affiliée à ces projets ni approuvée par eux."),
  ("about_source", "Source code: %1$s", "Code source : %1$s"),
  ("about_source_button", "View the source code", "Voir le code source"),
+ ("about_privacy_policy_button", "Privacy policy", "Règles de confidentialité"),
+ ("about_privacy_policy_url", "https://guillaumechr.github.io/vylia-site/privacy.html", "https://guillaumechr.github.io/vylia-site/fr/confidentialite.html"),
  ("about_license_button", "Read the GNU GPL v3", "Lire la GNU GPL v3"),
  ("about_contact_title", "Contact", "Contact"),
  ("about_contact", "A bug, an idea, a question? Write to Yogi Studio: %1$s", "Un bug, une idée, une question ? Écrivez à Yogi Studio : %1$s"),

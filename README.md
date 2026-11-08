@@ -2,8 +2,8 @@
 
 **Notez, réduisez et filtrez ce que vos applications Android savent de vous, 100 % sur le téléphone.** Une
 application de [Yogi Studio](#crédits) qui note chaque app installée de 0 à 100 selon les permissions qu'elle demande
-et les traqueurs qu'elle embarque, explique pourquoi, aide à faire le ménage et bloque les régies publicitaires sur
-tout l'appareil.
+et les traqueurs qu'elle embarque, explique pourquoi, aide à faire le ménage et bloque les traqueurs sur
+tout l'appareil avec un VPN anti-traqueurs local.
 
 **L'idée de départ : être le Yuka de la vie privée.** Comme on scanne un produit pour savoir ce qu'il contient, VYLIA
 scanne vos applications pour savoir ce qu'elles font de vos données. Le but est de mettre à la portée de tous une
@@ -41,9 +41,9 @@ dans l'ordre de la barre du bas :
    - **Alternatives** : des apps plus respectueuses par catégorie du Play Store, avec leur note Google Play. Aucune ne
      rend exactement le même service : c'est à vous de choisir.
 4. **Filtrer** : réduire l'exposition sans modifier vos apps.
-   - **Filtrage DNS** : le **bouclier VYLIA**, un VPN local qui répond « introuvable » aux domaines des régies et des
-     traqueurs, sur tout l'appareil et y compris dans les apps que vous gardez (filtrage web et mobile au choix, pause,
-     compteur en direct, tuile des réglages rapides). Ou le **DNS privé** d'Android, avec un guide pas à pas (NextDNS
+   - **Filtrage DNS** : le **bouclier VYLIA**, un VPN local qui répond « introuvable » aux domaines des traqueurs, sur tout
+     l'appareil et y compris dans les apps que vous gardez (filtrage web et mobile au choix, pause, compteur en direct,
+     tuile des réglages rapides). Ou le **DNS privé** d'Android, avec un guide pas à pas (NextDNS
      pour bloquer les traqueurs, Quad9 sans compte).
    - **WebAPK** : remplacer une app par la version web du même service, installée par le navigateur comme une app.
      L'app native, ses permissions et les traqueurs de son code disparaissent. VYLIA repère vos apps qui ont un site
@@ -59,6 +59,10 @@ Et aussi :
   interdit.
 - **Des traqueurs détectés localement** : VYLIA cherche dans le code de chaque app les signatures de la base publique
   [Exodus Privacy](https://exodus-privacy.eu.org/), sans rien envoyer.
+- **Un VPN anti-traqueurs** : le bouclier VYLIA est un VPN local, sur le téléphone, qui ne transporte que les requêtes
+  DNS. Il refuse celles des serveurs de traçage connus (plus de 87 000 domaines), pour toutes les apps à la fois,
+  sans serveur distant ni journal des sites visités. Facultatif, il s'active d'un interrupteur ou depuis les réglages
+  rapides, et se met en pause quand une app en a besoin.
 - **Des logiciels espions repérés** : la base publique de l'association [Echap](https://echap.eu.org/) (stalkerwares,
   pour espionner un proche) et les indicateurs de [MVT](https://github.com/mvt-project/mvt-indicators) (logiciels
   espions de surveillance ciblée comme Pegasus, Predator ou NoviSpy) sont intégrés ; une app reconnue tombe à 0 et

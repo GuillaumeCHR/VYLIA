@@ -1,0 +1,88 @@
+# Annuaire public VYLIA : chaque lundi, rapports Exodus → notes (même moteur que l'app) → directory.json → site
+# publié sur GitHub Pages. Voir directory/README.md.
+#
+# Prérequis : secret EXODUS_API_TOKEN (clé de l'API Exodus, accordée pour ce projet) et Pages réglé sur
+# « GitHub Actions ». Sans jeton, la génération échoue et rien n'est publié.
+name: Annuaire public
+
+on:
+  schedule:
+    - cron: "0 5 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write   # historique sur la branche directory-data
+  pages: write
+  id-token: write
+
+concurrency:
+  group: directory-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      # Historique des semaines précédentes (branche directory-data), absent à la première exécution.
+      - name: Historique
+        run: |
+          mkdir -p directory/history
+          if git fetch --depth=1 origin directory-data 2>/dev/null; then
+            git --work-tree=directory/history checkout FETCH_HEAD -- history 2>/dev/null || true
+            if [ -d directory/history/history ]; then mv directory/history/history/* directory/history/ && rmdir directory/history/history; fi
+          fi
+          ls directory/history | tail -3 || true
+
+      # Rapports Exodus de la semaine précédente : un rapport inchangé n'est pas retraité.
+      - uses: actions/cache@v4
+        with:
+          path: directory/cache
+          key: exodus-reports-${{ github.run_id }}
+          restore-keys: exodus-reports-
+
+      - name: Générer
+        env:
+          EXODUS_API_TOKEN: ${{ secrets.EXODUS_API_TOKEN }}
+        run: |
+          ./gradlew -q :directory-cli:installDist
+          CLI=directory-cli/build/install/directory-cli/bin/directory-cli
+          DATE=$(date -u +%F)
+          $CLI generate --date "$DATE"
+          $CLI validate
+          # Garde-fou : plus de 10 % de notes perdues depuis la semaine précédente → échec, rien n'est publié.
+          LAST=$(ls directory/history/*.json 2>/dev/null | sort | tail -1 || true)
+          if [ -n "$LAST" ]; then $CLI guard --previous "$LAST"; else $CLI guard; fi
+          cp directory/out/directory.json "directory/history/$DATE.json"
+          $CLI site
+          echo "DATE=$DATE" >> "$GITHUB_ENV"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: directory/out/site
+
+      - name: Conserver l'historique
+        run: |
+          git config user.name "vylia-annuaire"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          TMP=$(mktemp -d)
+          mkdir -p "$TMP/history" && cp directory/history/*.json "$TMP/history/"
+          cd "$TMP" && git init -q && git checkout -q -b directory-data
+          git add history && git commit -q -m "Annuaire : notes du $DATE"
+          git push -q --force "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" directory-data
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -159,7 +159,7 @@ object RulesValidator {
     }
 
     /** Profondeur maximale de `{` et `[` hors des chaînes, sans décoder le document. */
-    internal fun depthOf(content: String): Int {
+    fun depthOf(content: String): Int {
         var depth = 0
         var max = 0
         var inString = false
@@ -194,7 +194,7 @@ object RulesValidator {
         }
     }
 
-    internal fun isForbidden(c: Char): Boolean {
+    fun isForbidden(c: Char): Boolean {
         val code = c.code
         return (code < 0x20 && c != '\n' && c != '\t') ||
             code in 0x7F..0x9F || // DEL et contrôles C1

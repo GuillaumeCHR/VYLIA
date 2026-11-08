@@ -1,0 +1,832 @@
+{
+ "comment": "Liste de l'annuaire public : 100 apps populaires en Europe, choisies à la main d'après des classements publics de téléchargements (voir directory/README.md). Revue chaque trimestre. Ce n'est pas un classement officiel. La catégorie doit être celle de package_overrides dans app/src/main/assets/vylia_rules_v3.json.",
+ "reviewed": "2026-11-09",
+ "apps": [
+  {
+   "package": "com.openai.chatgpt",
+   "name": "ChatGPT",
+   "category": "AI_ASSISTANT",
+   "countries": [
+    "EU",
+    "FR",
+    "DE",
+    "ES",
+    "IT",
+    "PL"
+   ]
+  },
+  {
+   "package": "com.einnovation.temu",
+   "name": "Temu",
+   "category": "ECOMMERCE",
+   "countries": [
+    "EU",
+    "FR",
+    "ES"
+   ]
+  },
+  {
+   "package": "com.instagram.barcelona",
+   "name": "Threads",
+   "category": "SOCIAL",
+   "countries": [
+    "EU",
+    "FR",
+    "DE",
+    "ES"
+   ]
+  },
+  {
+   "package": "com.zhiliaoapp.musically",
+   "name": "TikTok",
+   "category": "SOCIAL",
+   "countries": [
+    "EU",
+    "FR"
+   ]
+  },
+  {
+   "package": "com.lemon.lvoverseas",
+   "name": "CapCut",
+   "category": "PHOTO_VIDEO",
+   "countries": [
+    "EU",
+    "FR",
+    "ES"
+   ]
+  },
+  {
+   "package": "com.google.android.apps.bard",
+   "name": "Gemini",
+   "category": "AI_ASSISTANT",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.whatsapp",
+   "name": "WhatsApp",
+   "category": "MESSAGING",
+   "countries": [
+    "EU",
+    "FR",
+    "DE",
+    "NL"
+   ]
+  },
+  {
+   "package": "com.revolut.revolut",
+   "name": "Revolut",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "fr.vinted",
+   "name": "Vinted",
+   "category": "ECOMMERCE",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.lidl.eci.lidlplus",
+   "name": "Lidl Plus",
+   "category": "ECOMMERCE",
+   "countries": [
+    "EU",
+    "NL"
+   ]
+  },
+  {
+   "package": "com.duolingo",
+   "name": "Duolingo",
+   "category": "EDUCATION_FAMILY",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.zzkko",
+   "name": "SHEIN",
+   "category": "ECOMMERCE",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.instagram.android",
+   "name": "Instagram",
+   "category": "SOCIAL",
+   "countries": [
+    "EU",
+    "FR",
+    "NL"
+   ]
+  },
+  {
+   "package": "org.telegram.messenger",
+   "name": "Telegram",
+   "category": "MESSAGING",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.myklarnamobile",
+   "name": "Klarna",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.ubercab",
+   "name": "Uber",
+   "category": "TRANSPORT",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.microsoft.teams",
+   "name": "Microsoft Teams",
+   "category": "PRODUCTIVITY_CLOUD",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.canva.editor",
+   "name": "Canva",
+   "category": "PHOTO_VIDEO",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.pinterest",
+   "name": "Pinterest",
+   "category": "SOCIAL",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.snapchat.android",
+   "name": "Snapchat",
+   "category": "SOCIAL",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.android.chrome",
+   "name": "Google Chrome",
+   "category": "BROWSER",
+   "countries": [
+    "FR",
+    "DE",
+    "ES"
+   ]
+  },
+  {
+   "package": "com.google.android.googlequicksearchbox",
+   "name": "Google",
+   "category": "BROWSER",
+   "countries": [
+    "FR",
+    "DE"
+   ]
+  },
+  {
+   "package": "fr.gouv.franceidentite",
+   "name": "France Identité",
+   "category": "SECURITY_AUTH",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "com.google.android.apps.maps",
+   "name": "Google Maps",
+   "category": "NAVIGATION",
+   "countries": [
+    "FR",
+    "DE",
+    "NL"
+   ]
+  },
+  {
+   "package": "com.google.android.youtube",
+   "name": "YouTube",
+   "category": "MEDIA_PLAYER",
+   "countries": [
+    "NL",
+    "PL"
+   ]
+  },
+  {
+   "package": "com.facebook.katana",
+   "name": "Facebook",
+   "category": "SOCIAL",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "nl.marktplaats.android",
+   "name": "Marktplaats",
+   "category": "ECOMMERCE",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "com.icemobile.albertheijn",
+   "name": "Albert Heijn",
+   "category": "ECOMMERCE",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "com.spotify.music",
+   "name": "Spotify",
+   "category": "MEDIA_PLAYER",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "com.bol.shop",
+   "name": "bol",
+   "category": "ECOMMERCE",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "nl.tpp.mobile.android",
+   "name": "PostNL",
+   "category": "UTILITY",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "com.facebook.orca",
+   "name": "Messenger",
+   "category": "MESSAGING",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "nl.ns.android.activity",
+   "name": "NS",
+   "category": "TRANSPORT",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "com.netflix.mediaclient",
+   "name": "Netflix",
+   "category": "MEDIA_PLAYER",
+   "countries": [
+    "NL",
+    "PL"
+   ]
+  },
+  {
+   "package": "com.supportware.Buienradar",
+   "name": "Buienradar",
+   "category": "WEATHER",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "com.abnamro.nl.tikkie",
+   "name": "Tikkie",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "com.linkedin.android",
+   "name": "LinkedIn",
+   "category": "SOCIAL",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "nl.rabomobiel",
+   "name": "Rabobank",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "NL"
+   ]
+  },
+  {
+   "package": "com.disney.disneyplus",
+   "name": "Disney+",
+   "category": "MEDIA_PLAYER",
+   "countries": [
+    "PL"
+   ]
+  },
+  {
+   "package": "pl.nask.mobywatel",
+   "name": "mObywatel",
+   "category": "SECURITY_AUTH",
+   "countries": [
+    "PL"
+   ]
+  },
+  {
+   "package": "pl.jmpolska.clos0.mojabiedronka",
+   "name": "Biedronka",
+   "category": "ECOMMERCE",
+   "countries": [
+    "PL"
+   ]
+  },
+  {
+   "package": "pl.zabka.apb2c",
+   "name": "żappka",
+   "category": "ECOMMERCE",
+   "countries": [
+    "PL"
+   ]
+  },
+  {
+   "package": "com.google.android.apps.walletnfcrel",
+   "name": "Google Wallet",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "ES"
+   ]
+  },
+  {
+   "package": "com.sec.android.easyMover",
+   "name": "Samsung Smart Switch",
+   "category": "UTILITY",
+   "countries": [
+    "ES"
+   ]
+  },
+  {
+   "package": "com.dgt.midgt",
+   "name": "miDGT",
+   "category": "VEHICLE",
+   "countries": [
+    "ES"
+   ]
+  },
+  {
+   "package": "fr.leboncoin",
+   "name": "leboncoin",
+   "category": "ECOMMERCE",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "fr.doctolib.www",
+   "name": "Doctolib",
+   "category": "HEALTH_ADMIN",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "com.vsct.vsc.mobile.horaireetresa.android",
+   "name": "SNCF Connect",
+   "category": "TRANSPORT",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "fr.cnamts.it.activity",
+   "name": "ameli",
+   "category": "HEALTH_ADMIN",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "deezer.android.app",
+   "name": "Deezer",
+   "category": "MEDIA_PLAYER",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "io.yuka.android",
+   "name": "Yuka",
+   "category": "ECOMMERCE",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "com.waze",
+   "name": "Waze",
+   "category": "NAVIGATION",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "com.comuto",
+   "name": "BlaBlaCar",
+   "category": "TRANSPORT",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "com.lydia",
+   "name": "Sumeria (Lydia)",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "FR"
+   ]
+  },
+  {
+   "package": "de.hafas.android.db",
+   "name": "DB Navigator",
+   "category": "TRANSPORT",
+   "countries": [
+    "DE"
+   ]
+  },
+  {
+   "package": "com.ebay.kleinanzeigen",
+   "name": "Kleinanzeigen",
+   "category": "ECOMMERCE",
+   "countries": [
+    "DE"
+   ]
+  },
+  {
+   "package": "de.payback.client.android",
+   "name": "PAYBACK",
+   "category": "ECOMMERCE",
+   "countries": [
+    "DE"
+   ]
+  },
+  {
+   "package": "com.starfinanz.smob.android.sfinanzstatus",
+   "name": "Sparkasse",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "DE"
+   ]
+  },
+  {
+   "package": "de.zalando.mobile",
+   "name": "Zalando",
+   "category": "ECOMMERCE",
+   "countries": [
+    "DE"
+   ]
+  },
+  {
+   "package": "de.check24.check24",
+   "name": "CHECK24",
+   "category": "ECOMMERCE",
+   "countries": [
+    "DE"
+   ]
+  },
+  {
+   "package": "com.wallapop",
+   "name": "Wallapop",
+   "category": "ECOMMERCE",
+   "countries": [
+    "ES"
+   ]
+  },
+  {
+   "package": "com.glovo",
+   "name": "Glovo",
+   "category": "ECOMMERCE",
+   "countries": [
+    "ES"
+   ]
+  },
+  {
+   "package": "com.idealista.android",
+   "name": "idealista",
+   "category": "TRAVEL_LEISURE",
+   "countries": [
+    "ES"
+   ]
+  },
+  {
+   "package": "it.subito",
+   "name": "Subito",
+   "category": "ECOMMERCE",
+   "countries": [
+    "IT"
+   ]
+  },
+  {
+   "package": "it.pagopa.io.app",
+   "name": "IO",
+   "category": "SECURITY_AUTH",
+   "countries": [
+    "IT"
+   ]
+  },
+  {
+   "package": "com.lynxspa.prontotreno",
+   "name": "Trenitalia",
+   "category": "TRANSPORT",
+   "countries": [
+    "IT"
+   ]
+  },
+  {
+   "package": "com.satispay.customer",
+   "name": "Satispay",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "IT"
+   ]
+  },
+  {
+   "package": "pl.allegro",
+   "name": "Allegro",
+   "category": "ECOMMERCE",
+   "countries": [
+    "PL"
+   ]
+  },
+  {
+   "package": "pl.tablica",
+   "name": "OLX",
+   "category": "ECOMMERCE",
+   "countries": [
+    "PL"
+   ]
+  },
+  {
+   "package": "pl.inpost.inmobile",
+   "name": "InPost",
+   "category": "UTILITY",
+   "countries": [
+    "PL"
+   ]
+  },
+  {
+   "package": "com.google.android.gm",
+   "name": "Gmail",
+   "category": "EMAIL",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.google.android.apps.photos",
+   "name": "Google Photos",
+   "category": "PHOTO_VIDEO",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.google.android.apps.docs",
+   "name": "Google Drive",
+   "category": "PRODUCTIVITY_CLOUD",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.google.android.apps.translate",
+   "name": "Google Traduction",
+   "category": "UTILITY",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.google.ar.lens",
+   "name": "Google Lens",
+   "category": "AI_ASSISTANT",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.microsoft.office.outlook",
+   "name": "Outlook",
+   "category": "EMAIL",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.azure.authenticator",
+   "name": "Microsoft Authenticator",
+   "category": "SECURITY_AUTH",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.microsoft.emmx",
+   "name": "Microsoft Edge",
+   "category": "BROWSER",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "us.zoom.videomeetings",
+   "name": "Zoom",
+   "category": "PRODUCTIVITY_CLOUD",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.discord",
+   "name": "Discord",
+   "category": "MESSAGING",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.twitter.android",
+   "name": "X",
+   "category": "SOCIAL",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.reddit.frontpage",
+   "name": "Reddit",
+   "category": "SOCIAL",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "org.thoughtcrime.securesms",
+   "name": "Signal",
+   "category": "MESSAGING",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.viber.voip",
+   "name": "Viber",
+   "category": "MESSAGING",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.amazon.mShop.android.shopping",
+   "name": "Amazon Shopping",
+   "category": "ECOMMERCE",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.alibaba.aliexpresshd",
+   "name": "AliExpress",
+   "category": "ECOMMERCE",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.booking",
+   "name": "Booking.com",
+   "category": "TRAVEL_LEISURE",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.airbnb.android",
+   "name": "Airbnb",
+   "category": "TRAVEL_LEISURE",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "ee.mtakso.client",
+   "name": "Bolt",
+   "category": "TRANSPORT",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.ubercab.eats",
+   "name": "Uber Eats",
+   "category": "ECOMMERCE",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.deliveroo.orderapp",
+   "name": "Deliveroo",
+   "category": "ECOMMERCE",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.amazon.avod.thirdpartyclient",
+   "name": "Prime Video",
+   "category": "MEDIA_PLAYER",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.shazam.android",
+   "name": "Shazam",
+   "category": "MEDIA_PLAYER",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.tinder",
+   "name": "Tinder",
+   "category": "DATING",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.strava",
+   "name": "Strava",
+   "category": "FITNESS",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.paypal.android.p2pmobile",
+   "name": "PayPal",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "com.transferwise.android",
+   "name": "Wise",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "de.number26.android",
+   "name": "N26",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "de.traderepublic.app",
+   "name": "Trade Republic",
+   "category": "FINANCE_ACCOUNTS",
+   "countries": [
+    "EU"
+   ]
+  },
+  {
+   "package": "org.mozilla.firefox",
+   "name": "Firefox",
+   "category": "BROWSER",
+   "countries": [
+    "EU"
+   ]
+  }
+ ]
+}

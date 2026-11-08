@@ -22,7 +22,7 @@ class PrivacyScorerTest {
     ) = AppScan(packageName, targetSdk, category, declaredPermissions = granted, grantedPermissions = granted, trackers = trackers)
 
     // "Amazon Advertisement" n'a pas de catégorie dans Exodus : c'est le mapping validé
-    // (tools/exodus_category_overrides.json) qui le classe en Advertisement (12) ; sans lui, 40 au lieu de 37.
+    // (app/src/main/assets/exodus_category_overrides.json) qui le classe en Advertisement (12) ; sans lui, 40 au lieu de 37.
     @Test
     fun `leboncoin vaut 37 (D)`() {
         val result = scorer.score(

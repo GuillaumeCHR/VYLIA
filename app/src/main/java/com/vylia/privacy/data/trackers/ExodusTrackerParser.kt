@@ -25,7 +25,11 @@ class ExodusTrackerParser {
         @SerialName("code_signature") val codeSignature: String = "",
         val website: String? = null,
         val categories: List<String> = emptyList(),
+        @SerialName("network_signature") val networkSignature: String = "",
     )
+
+    /** Traqueur Exodus et ses domaines (`network_signature`), pour le bouclier. */
+    data class NetworkTracker(val name: String, val categories: List<String>, val networkSignature: String)
 
     private val json = Json { ignoreUnknownKeys = true }
 
@@ -34,7 +38,7 @@ class ExodusTrackerParser {
      * séparés par « | » sont gardées (c'est le cas de toute la base Exodus) : une expression régulière piégée
      * (quantificateurs imbriqués) pourrait sinon bloquer l'analyse de chaque app. Textes et listes sont bornés.
      */
-    fun parse(content: String): List<TrackerSignature> =
+    fun parse(content: String, overrides: Map<String, List<String>> = emptyMap()): List<TrackerSignature> =
         json.decodeFromString<ExodusFile>(content.removePrefix("\uFEFF")).trackers.values
             .asSequence()
             .take(MAX_TRACKERS)
@@ -47,13 +51,30 @@ class ExodusTrackerParser {
                         tracker.id,
                         Untrusted.text(tracker.name, 100),
                         website,
-                        tracker.categories.take(10).map { Untrusted.text(it, 50) },
+                        categoriesOf(tracker, overrides),
                     ),
                     codeSignature = regex,
                 )
             }
             .toList()
             .sortedBy { it.tracker.id }
+
+    /**
+     * Les traqueurs et leurs domaines, pour le bouclier ; les catégories manquantes sont complétées comme pour le score.
+     * Les signatures sont des textes bornés, réduites à des domaines par le bouclier (le reste est écarté).
+     */
+    fun parseNetwork(content: String, overrides: Map<String, List<String>> = emptyMap()): List<NetworkTracker> =
+        json.decodeFromString<ExodusFile>(content.removePrefix("\uFEFF")).trackers.values
+            .asSequence()
+            .take(MAX_TRACKERS)
+            .filter { it.networkSignature.isNotEmpty() && it.networkSignature.length <= MAX_SIGNATURE }
+            .sortedBy { it.id }
+            .map { NetworkTracker(Untrusted.text(it.name, 100), categoriesOf(it, overrides), it.networkSignature) }
+            .toList()
+
+    /** Catégories d'Exodus, sinon celles ajoutées dans le dépôt VYLIA (exodus_category_overrides.json). */
+    private fun categoriesOf(tracker: ExodusTracker, overrides: Map<String, List<String>>): List<String> =
+        tracker.categories.ifEmpty { overrides[tracker.name].orEmpty() }.take(10).map { Untrusted.text(it, 50) }
 
     companion object {
         /** Noms de paquets (ou débuts de noms) séparés par « | ». */

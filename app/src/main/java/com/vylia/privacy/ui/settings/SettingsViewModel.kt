@@ -23,29 +23,19 @@ import com.vylia.privacy.data.automation.InstallWatcher
 import com.vylia.privacy.data.preferences.BackgroundScan
 import com.vylia.privacy.data.preferences.CardStyle
 import com.vylia.privacy.data.preferences.SettingsRepository
-import com.vylia.privacy.data.security.MvtRepository
-import com.vylia.privacy.data.security.StalkerwareRepository
-import com.vylia.privacy.data.shield.ShieldController
-import com.vylia.privacy.data.rules.RuleMatrixRepository
-import com.vylia.privacy.data.trackers.AssetTrackerSignatureRepository
+import com.vylia.privacy.data.databases.DatabaseCenter
 import com.vylia.privacy.data.trackers.TrackerUpdater
+import com.vylia.privacy.domain.databases.DatabaseRow
+import com.vylia.privacy.domain.databases.DatabaseRows
+import com.vylia.privacy.domain.databases.DatabaseUpdater
+import com.vylia.privacy.domain.databases.UpdateSummary
+import com.vylia.privacy.data.rules.RuleMatrixRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-
-/** Résultat d'une mise à jour de la base Echap, traduit par l'écran. */
-sealed interface MvtMessage {
-    data class Updated(val campaigns: Int, val domains: Int) : MvtMessage
-    data class Failed(val detail: String?) : MvtMessage
-}
-
-sealed interface StalkerwareMessage {
-    data class Updated(val count: Int) : StalkerwareMessage
-    data class Failed(val detail: String?) : StalkerwareMessage
-}
 
 /** Résultat d'une action sur les règles de score, traduit par l'écran. */
 sealed interface RulesMessage {
@@ -58,12 +48,9 @@ sealed interface RulesMessage {
 }
 
 data class SettingsUiState(
-    /** Date de la base Exodus utilisée (téléchargée, ou première installation). */
+    /** Date de la base Exodus utilisée (téléchargée, ou première installation), affichée par l'Analyse. */
     val lastUpdateTimestamp: Long = 0L,
     val isObsolete: Boolean = false,
-    val isUpdating: Boolean = false,
-    val updateError: String? = null,
-    val updateSuccess: Boolean = false,
     val advancedMode: Boolean = false,
     val rulesImported: Boolean = false,
     val ruleCategoryCount: Int = 0,
@@ -86,16 +73,21 @@ data class AutomationUiState(
     val backgroundScan: BackgroundScan = BackgroundScan.OFF,
     val lastBackgroundScan: Long? = null,
     val stalkerwareAlerts: Boolean = false,
+    val updateBeforeScan: Boolean = true,
+    val updateWifiOnly: Boolean = true,
+)
+
+/** Carte « Bases de données » : une ligne par base, progression d'une mise à jour en cours, dernier bilan. */
+data class DatabasesUiState(
+    val rows: List<DatabaseRow> = emptyList(),
+    val progress: DatabaseUpdater.Progress? = null,
+    val summary: UpdateSummary? = null,
 )
 
 class SettingsViewModel(
     private val settingsRepository: SettingsRepository,
-    private val trackerUpdater: TrackerUpdater,
-    private val trackerSignatureRepository: AssetTrackerSignatureRepository,
+    private val databaseCenter: DatabaseCenter,
     private val ruleMatrixRepository: RuleMatrixRepository,
-    private val stalkerwareRepository: StalkerwareRepository,
-    private val mvtRepository: MvtRepository,
-    private val shieldController: ShieldController,
     private val installWatcher: InstallWatcher,
     private val automationScheduler: AutomationScheduler,
     private val thresholdAlertRepository: ThresholdAlertRepository,
@@ -104,56 +96,42 @@ class SettingsViewModel(
     private val contentResolver: ContentResolver,
 ) : ViewModel() {
 
-    /** Base des stalkerwares connus (Echap) : en vigueur, mise à jour en cours, résultat de la dernière. */
-    val stalkerware: StateFlow<StalkerwareRepository.State> = stalkerwareRepository.current
+    /** Bases de données : relu à chaque changement d'état ou de progression, sans appel réseau. */
+    private val enabledTick = MutableStateFlow(0)
 
-    private val _stalkerwareUpdating = MutableStateFlow(false)
-    val stalkerwareUpdating: StateFlow<Boolean> = _stalkerwareUpdating
+    val databases: StateFlow<DatabasesUiState> = combine(
+        databaseCenter.updater.meta,
+        databaseCenter.updater.progress,
+        databaseCenter.lastSummary,
+        enabledTick,
+    ) { meta, progress, summary, _ ->
+        DatabasesUiState(DatabaseRows.rows(databaseCenter.sources(), meta, progress?.running.orEmpty()), progress, summary)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), DatabasesUiState())
 
-    private val _stalkerwareMessage = MutableStateFlow<StalkerwareMessage?>(null)
-    val stalkerwareMessage: StateFlow<StalkerwareMessage?> = _stalkerwareMessage
+    /** Une mise à jour à la fois : le bouton est désactivé pendant la progression. */
+    fun updateAllDatabases() {
+        if (databaseCenter.updater.progress.value != null) return
+        viewModelScope.launch { databaseCenter.updateAll() }
+    }
 
-    fun updateStalkerware() {
-        if (_stalkerwareUpdating.value) return
+    fun updateDatabase(id: String) {
+        if (databaseCenter.updater.progress.value != null) return
+        viewModelScope.launch { databaseCenter.updateOne(id) }
+    }
+
+    /** Ajoute (et télécharge) ou retire une base proposée. */
+    fun setProposedDatabase(id: String, enabled: Boolean) {
         viewModelScope.launch {
-            _stalkerwareUpdating.value = true
-            _stalkerwareMessage.value = stalkerwareRepository.update().fold(
-                onSuccess = { count ->
-                    // Les scores se recalculent avec la nouvelle base (ScanViewModel observe les règles).
-                    ruleMatrixRepository.refreshStalkerware()
-                    StalkerwareMessage.Updated(count)
-                },
-                onFailure = { error -> StalkerwareMessage.Failed(error.localizedMessage) },
-            )
-            _stalkerwareUpdating.value = false
+            databaseCenter.setProposedEnabled(id, enabled)
+            enabledTick.value++
         }
     }
 
-    /** Indicateurs MVT des logiciels espions : en vigueur, mise à jour en cours, résultat de la dernière. */
-    val mvt: StateFlow<MvtRepository.State> = mvtRepository.current
+    fun dismissDatabaseSummary() = databaseCenter.clearSummary()
 
-    private val _mvtUpdating = MutableStateFlow(false)
-    val mvtUpdating: StateFlow<Boolean> = _mvtUpdating
+    fun setUpdateBeforeScan(enabled: Boolean) = settingsRepository.setUpdateBeforeScan(enabled)
 
-    private val _mvtMessage = MutableStateFlow<MvtMessage?>(null)
-    val mvtMessage: StateFlow<MvtMessage?> = _mvtMessage
-
-    fun updateMvt() {
-        if (_mvtUpdating.value) return
-        viewModelScope.launch {
-            _mvtUpdating.value = true
-            _mvtMessage.value = mvtRepository.update().fold(
-                onSuccess = { database ->
-                    // Les scores se recalculent, et le bouclier bloque tout de suite les nouveaux domaines.
-                    ruleMatrixRepository.refreshStalkerware()
-                    shieldController.setSpywareDomains(database.domains)
-                    MvtMessage.Updated(database.total, database.domains.size)
-                },
-                onFailure = { error -> MvtMessage.Failed(error.localizedMessage) },
-            )
-            _mvtUpdating.value = false
-        }
-    }
+    fun setUpdateWifiOnly(enabled: Boolean) = settingsRepository.setUpdateWifiOnly(enabled)
 
     private val _dataMessage = MutableStateFlow<DataMessage?>(null)
     val dataMessage: StateFlow<DataMessage?> = _dataMessage
@@ -202,12 +180,16 @@ class SettingsViewModel(
     }
 
     val automation: StateFlow<AutomationUiState> = combine(
-        settingsRepository.installAlerts,
-        settingsRepository.backgroundScan,
-        settingsRepository.lastBackgroundScan,
-        settingsRepository.stalkerwareAlerts,
-        ::AutomationUiState,
-    ).stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AutomationUiState())
+        combine(
+            settingsRepository.installAlerts,
+            settingsRepository.backgroundScan,
+            settingsRepository.lastBackgroundScan,
+            settingsRepository.stalkerwareAlerts,
+            ::AutomationUiState,
+        ),
+        settingsRepository.updateBeforeScan,
+        settingsRepository.updateWifiOnly,
+    ) { state, before, wifi -> state.copy(updateBeforeScan = before, updateWifiOnly = wifi) }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AutomationUiState())
 
     /** Le contrôle des installations repart de maintenant s'il ne tournait pas déjà pour l'autre alerte. */
     private fun startWatchingInstalls() {
@@ -246,62 +228,23 @@ class SettingsViewModel(
         automationScheduler.sync()
     }
 
-    private val _isUpdating = MutableStateFlow(false)
-    private val _updateError = MutableStateFlow<String?>(null)
-    private val _updateSuccess = MutableStateFlow(false)
     private val _rulesMessage = MutableStateFlow<RulesMessage?>(null)
 
-    private val updateState = combine(
-        settingsRepository.lastUpdateTimestamp,
-        _isUpdating,
-        _updateError,
-        _updateSuccess
-    ) { timestamp, isUpdating, updateError, updateSuccess ->
-        SettingsUiState(
-            lastUpdateTimestamp = timestamp,
-            isObsolete = trackerUpdater.isDatabaseObsolete(timestamp),
-            isUpdating = isUpdating,
-            updateError = updateError,
-            updateSuccess = updateSuccess
-        )
-    }
-
     val uiState: StateFlow<SettingsUiState> = combine(
-        updateState,
+        settingsRepository.lastUpdateTimestamp,
         settingsRepository.advancedMode,
         ruleMatrixRepository.current,
         _rulesMessage
-    ) { state, advancedMode, rules, rulesMessage ->
-        state.copy(
+    ) { timestamp, advancedMode, rules, rulesMessage ->
+        SettingsUiState(
+            lastUpdateTimestamp = timestamp,
+            isObsolete = System.currentTimeMillis() - timestamp > TrackerUpdater.OBSOLESCENCE_THRESHOLD_MS,
             advancedMode = advancedMode,
             rulesImported = rules.source == RuleMatrixRepository.Source.IMPORTED,
             ruleCategoryCount = rules.rules.categories.size,
             rulesMessage = rulesMessage
         )
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), SettingsUiState())
-
-    fun updateDatabase() {
-        viewModelScope.launch {
-            _isUpdating.value = true
-            _updateError.value = null
-            _updateSuccess.value = false
-
-            trackerUpdater.downloadUpdate().fold(
-                onSuccess = {
-                    trackerSignatureRepository.invalidateCache()
-                    _updateSuccess.value = true
-                },
-                onFailure = { error ->
-                    _updateError.value = error.localizedMessage ?: error.javaClass.simpleName
-                }
-            )
-            _isUpdating.value = false
-        }
-    }
-
-    fun resetSuccessState() {
-        _updateSuccess.value = false
-    }
 
     val cardStyle: StateFlow<CardStyle> = settingsRepository.cardStyle
 
@@ -342,12 +285,8 @@ class SettingsViewModel(
                 val container = app.container
                 SettingsViewModel(
                     container.settingsRepository,
-                    container.trackerUpdater,
-                    container.trackerSignatureRepository,
+                    container.databaseCenter,
                     container.ruleMatrixRepository,
-                    container.stalkerwareRepository,
-                    container.mvtRepository,
-                    container.shieldController,
                     container.installWatcher,
                     container.automationScheduler,
                     container.thresholdAlertRepository,

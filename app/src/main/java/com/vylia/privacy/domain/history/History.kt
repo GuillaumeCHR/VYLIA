@@ -21,7 +21,12 @@ data class AppPoint(
     val granted: Set<String> = emptySet(),
     val trackers: Set<String>? = null,
     val security: Set<String>? = null,
-)
+    /** versionCode de l'app : une app au même versionCode et aux mêmes permissions n'a pas changé. `null` : inconnu. */
+    val version: Long? = null,
+) {
+    /** Même version et mêmes permissions accordées : ce qui change dans son analyse vient des bases, pas d'elle. */
+    fun sameAppAs(before: AppPoint): Boolean = version != null && version == before.version && granted == before.granted
+}
 
 /** Un point de la courbe : moyenne et écart-type des scores, et l'état de chaque app (pour les événements). */
 @Serializable
@@ -32,12 +37,19 @@ data class ScoreSnapshot(
     val apps: Map<String, AppPoint>,
     /** Empreinte des règles de score (et de la base des stalkerwares) en vigueur ; vide dans les anciens points. */
     val rules: String = "",
+    /** Version de chaque base du score (Exodus, catégories, Echap, MVT, règles) ; vide dans les anciens points. */
+    val databases: Map<String, String> = emptyMap(),
 ) {
     /** Score de l'appareil à ce point, arrondi comme partout ailleurs. */
     val score: Int get() = PrivacyScore.ofAverage(average).value
 }
 
-enum class EventType { INSTALLED, REMOVED, PERMISSION_GRANTED, PERMISSION_REVOKED }
+/**
+ * [TRACKERS_ADDED], [SECURITY_ADDED] : traqueurs ou motifs de sécurité nouvellement trouvés dans une app. Si l'app n'a
+ * pas changé (même versionCode, mêmes permissions) et qu'une base du score a été mise à jour entre les deux scans,
+ * l'événement porte [HistoryEvent.fromDatabases] : c'est la base qui les connaît désormais, pas l'app qui a changé.
+ */
+enum class EventType { INSTALLED, REMOVED, PERMISSION_GRANTED, PERMISSION_REVOKED, TRACKERS_ADDED, SECURITY_ADDED }
 
 /** Événement constaté d'un scan complet à l'autre. [score] : score de l'app à ce moment. */
 @Serializable
@@ -48,6 +60,10 @@ data class HistoryEvent(
     val label: String,
     val permission: String? = null,
     val score: Int? = null,
+    /** Traqueurs (séparés par des virgules) ou identifiants de motifs de sécurité. */
+    val detail: String? = null,
+    /** Apparu avec une mise à jour des bases, sur une app inchangée. */
+    val fromDatabases: Boolean = false,
 )
 
 @Serializable
@@ -96,15 +112,16 @@ class HistoryRecorder(
     val history: StateFlow<History> = _history.asStateFlow()
 
     @Synchronized
-    fun record(apps: Map<String, AppPoint>, rules: String = "") {
+    fun record(apps: Map<String, AppPoint>, rules: String = "", databases: Map<String, String> = emptyMap()) {
         if (apps.isEmpty()) return
         val now = clock()
         val current = _history.value
         val previous = current.snapshots.lastOrNull()
-        val events = previous?.let { diff(it.apps, apps, now) }.orEmpty()
+        val databasesChanged = previous != null && databasesChanged(previous, rules, databases)
+        val events = previous?.let { diff(it.apps, apps, now, databasesChanged) }.orEmpty()
         val scores = apps.values.map { it.score.toDouble() }
         val mean = scores.average()
-        val snapshot = ScoreSnapshot(now, mean, sqrt(scores.sumOf { (it - mean) * (it - mean) } / scores.size), apps, rules)
+        val snapshot = ScoreSnapshot(now, mean, sqrt(scores.sumOf { (it - mean) * (it - mean) } / scores.size), apps, rules, databases)
         val snapshots = if (previous != null && sameDay(previous.at, now)) current.snapshots.dropLast(1) + snapshot else current.snapshots + snapshot
         update(History(snapshots.takeLast(MAX_SNAPSHOTS), (events.sortedByDescending { it.at } + current.events).take(MAX_EVENTS)))
     }
@@ -120,7 +137,7 @@ class HistoryRecorder(
         return result
     }
 
-    private fun diff(before: Map<String, AppPoint>, after: Map<String, AppPoint>, now: Long): List<HistoryEvent> = buildList {
+    private fun diff(before: Map<String, AppPoint>, after: Map<String, AppPoint>, now: Long, databasesChanged: Boolean): List<HistoryEvent> = buildList {
         (after.keys - before.keys).forEach { pkg -> val a = after.getValue(pkg); add(HistoryEvent(now, EventType.INSTALLED, pkg, a.label, score = a.score)) }
         (before.keys - after.keys).forEach { pkg -> val b = before.getValue(pkg); add(HistoryEvent(now, EventType.REMOVED, pkg, b.label, score = b.score)) }
         (after.keys intersect before.keys).forEach { pkg ->
@@ -128,6 +145,17 @@ class HistoryRecorder(
             val a = after.getValue(pkg)
             (a.granted - b.granted).forEach { add(HistoryEvent(now, EventType.PERMISSION_GRANTED, pkg, a.label, it, a.score)) }
             (b.granted - a.granted).forEach { add(HistoryEvent(now, EventType.PERMISSION_REVOKED, pkg, a.label, it, a.score)) }
+            val fromDatabases = databasesChanged && a.sameAppAs(b)
+            if (a.trackers != null && b.trackers != null) {
+                (a.trackers - b.trackers).takeIf { it.isNotEmpty() }?.let { added ->
+                    add(HistoryEvent(now, EventType.TRACKERS_ADDED, pkg, a.label, score = a.score, detail = added.sorted().joinToString(", "), fromDatabases = fromDatabases))
+                }
+            }
+            if (a.security != null && b.security != null) {
+                (a.security - b.security).takeIf { it.isNotEmpty() }?.let { added ->
+                    add(HistoryEvent(now, EventType.SECURITY_ADDED, pkg, a.label, score = a.score, detail = added.sorted().joinToString(","), fromDatabases = fromDatabases))
+                }
+            }
         }
     }
 
@@ -145,6 +173,16 @@ class HistoryRecorder(
         /** Deux ans à raison d'un point par jour. */
         const val MAX_SNAPSHOTS = 730
         const val MAX_EVENTS = 500
+
+        /**
+         * Une base du score a-t-elle changé depuis [previous] ? Les points enregistrés avant la mémorisation des versions
+         * n'en disent rien : seule l'empreinte des règles est alors comparée.
+         */
+        fun databasesChanged(previous: ScoreSnapshot, rules: String, databases: Map<String, String>): Boolean {
+            val rulesChanged = previous.rules.isNotEmpty() && rules.isNotEmpty() && previous.rules != rules
+            val versionsChanged = previous.databases.isNotEmpty() && databases.isNotEmpty() && previous.databases != databases
+            return rulesChanged || versionsChanged
+        }
 
         /**
          * Apps qui pèsent le plus sur la moyenne du dernier point : (score − moyenne) / nombre d'apps, c'est-à-dire

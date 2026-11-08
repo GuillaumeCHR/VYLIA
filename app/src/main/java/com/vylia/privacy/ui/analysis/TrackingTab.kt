@@ -45,6 +45,7 @@ import com.vylia.privacy.data.alert.ThresholdAlertRepository
 import com.vylia.privacy.domain.alert.AlertState
 import com.vylia.privacy.domain.alert.ThresholdCrossing
 import com.vylia.privacy.ui.components.dropCauseText
+import com.vylia.privacy.ui.components.securityLabel
 import com.vylia.privacy.domain.history.EventType
 import com.vylia.privacy.domain.history.History
 import com.vylia.privacy.domain.history.HistoryEvent
@@ -330,12 +331,23 @@ private fun EventRow(event: HistoryEvent) {
         EventType.REMOVED -> "－" to stringResource(R.string.tracking_event_removed, event.label)
         EventType.PERMISSION_GRANTED -> "🔓" to stringResource(R.string.tracking_event_granted, permission.orEmpty(), event.label)
         EventType.PERMISSION_REVOKED -> "🔒" to stringResource(R.string.tracking_event_revoked, permission.orEmpty(), event.label)
+        EventType.TRACKERS_ADDED -> "👁" to stringResource(R.string.tracking_event_trackers, event.detail.orEmpty(), event.label)
+        EventType.SECURITY_ADDED -> "⚠" to stringResource(
+            R.string.tracking_event_security,
+            event.detail.orEmpty().split(',').filter { it.isNotEmpty() }.joinToString(", ") { resources.securityLabel(it) },
+            event.label,
+        )
     }
     val date = DateFormat.getDateInstance(DateFormat.SHORT, currentLocale()).format(Date(event.at))
     Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
         Text(icon)
         Column(modifier = Modifier.weight(1f)) {
             Text(text, style = MaterialTheme.typography.bodyMedium)
+            if (event.fromDatabases) Text(
+                stringResource(R.string.tracking_event_from_databases),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Text(
                 date + (event.score?.let { " · " + stringResource(R.string.tracking_event_score, it) } ?: ""),
                 style = MaterialTheme.typography.labelSmall,

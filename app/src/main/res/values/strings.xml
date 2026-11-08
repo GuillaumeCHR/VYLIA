@@ -120,6 +120,7 @@
     <string name="cause_security">%1$s: %2$s (score %3$d)</string>
     <string name="cause_rules">Scoring rules update</string>
     <string name="cause_spread">Drop spread over several apps</string>
+    <string name="cause_databases">Database update: trackers or security patterns newly known in %1$s apps that did not change</string>
     <string name="tracking_threshold_active">Alert on · threshold %1$d · current score %2$d</string>
     <string name="tracking_threshold_below">Below your threshold since %1$s</string>
     <string name="tracking_threshold_reduce">See Manage</string>
@@ -150,6 +151,9 @@
     <string name="tracking_event_granted">Granted: %1$s · %2$s</string>
     <string name="tracking_event_revoked">Revoked: %1$s · %2$s</string>
     <string name="tracking_event_score">score %1$d</string>
+    <string name="tracking_event_trackers">Trackers: %1$s · %2$s</string>
+    <string name="tracking_event_security">Security: %1$s · %2$s</string>
+    <string name="tracking_event_from_databases">Database update: the app did not change</string>
     <string name="analysis_scanning">Scan in progress…</string>
     <string name="analysis_trackers_running">Tracker analysis in progress: results are filling in.</string>
     <string name="analysis_footer">100%% on-device analysis based on the Exodus Privacy database of %1$s.</string>
@@ -366,7 +370,14 @@
     <string name="shield_pause_offers">• A promo code, cashback or referral is not credited: these offers rely on tracking to know where you came from.</string>
     <string name="shield_pause_diagnose">• An app shows an error, a blank page or keeps loading: if the pause fixes it, the Shield was the cause, and the latest blocks show which server.</string>
     <string name="shield_pause_note">Nothing is counted during the pause: the trackers contacted then are not blocked.</string>
-    <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0), EasyPrivacy, EasyList and AdGuard Mobile Ads (GPL v3), %1$s tracking domains.</string>
+    <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0), AdGuard DNS filter, EasyPrivacy, EasyList, AdGuard Mobile Ads and AdGuard French (GPL v3), %1$s tracking domains. Updated in Settings › Databases.</string>
+    <string name="shield_company">%1$s · %2$s</string>
+    <string name="company_targeting">targeting</string>
+    <string name="company_audience">audience measurement</string>
+    <string name="company_social">social network</string>
+    <string name="company_telemetry">telemetry</string>
+    <string name="company_consent">consent</string>
+    <string name="company_third_party">third-party service</string>
     <string name="manage_title">Manage</string>
     <string name="protect_title">Filter</string>
     <string name="celebrate_title">Celebrate and share</string>
@@ -666,8 +677,6 @@
     <string name="settings_rules_bundled">Built-in rules · %1$d categories</string>
     <string name="settings_rules_imported">Imported rules · %1$d categories</string>
     <string name="settings_database">Databases</string>
-    <string name="settings_database_hint">Exodus Privacy trackers · updated %1$s · Echap stalkerware · MVT spyware</string>
-    <string name="settings_database_obsolete_short">Out of date: an update is recommended</string>
     <string name="settings_automation">Automations</string>
     <string name="settings_automation_off">Install alerts and background scans, off</string>
     <string name="settings_automation_install">Install alerts on</string>
@@ -731,26 +740,6 @@
     <string name="rules_rejected_message">Import rejected: %1$s. The current rules are kept.</string>
     <string name="rules_invalid_file">invalid file</string>
     <string name="rules_reset_message">Built-in rules restored.</string>
-    <string name="database_status">Exodus Privacy database</string>
-    <string name="database_last_update">Last update: %1$s</string>
-    <string name="database_obsolete">Warning: the database is more than 90 days old. An update is recommended.</string>
-    <string name="database_update_hint">The public list of trackers is downloaded from Exodus Privacy, only when you ask. Nothing about your apps is sent.</string>
-    <string name="database_update">Update the signature database</string>
-    <string name="database_updating">Updating…</string>
-    <string name="database_update_error">Error: %1$s</string>
-    <string name="database_update_success">Update successful! Restart the analysis (Scan) to refresh the scores.</string>
-    <string name="stalkerware_status">Echap known stalkerware database</string>
-    <string name="stalkerware_embedded">%1$d stalkerware apps · built-in version %2$s</string>
-    <string name="stalkerware_downloaded">%1$d stalkerware apps · updated %2$s</string>
-    <string name="stalkerware_update_hint">The public ioc.yaml file is downloaded from Echap\'s GitHub repository, only when you ask, and checked before replacing the current database. Nothing about your apps is sent.</string>
-    <string name="stalkerware_update">Update the stalkerware database</string>
-    <string name="stalkerware_update_success">Update successful: %1$d stalkerware apps. Scores have been recalculated.</string>
-    <string name="mvt_status">MVT spyware indicators</string>
-    <string name="mvt_embedded">%1$d campaigns · built-in version %2$s</string>
-    <string name="mvt_downloaded">%1$d campaigns · updated %2$s</string>
-    <string name="mvt_update_hint">MVT\'s public files (the list of campaigns, then each campaign\'s indicators) are downloaded from GitHub, only when you ask, and checked before replacing the current database. Nothing about your apps is sent. The shield blocks the new domains straight away.</string>
-    <string name="mvt_update">Update the spyware indicators</string>
-    <string name="mvt_update_success">Update successful: %1$d campaigns, %2$d domains for the shield. Scores have been recalculated.</string>
     <string name="exodus_title">Tracker signatures: Exodus Privacy</string>
     <string name="exodus_logo_description">Exodus Privacy logo</string>
     <string name="exodus_intro">Exodus Privacy is a French non-profit association that analyses Android apps and publishes the trackers they contain.</string>
@@ -830,7 +819,7 @@
     <string name="about_license">VYLIA is free software, licensed under the GNU GPL v3 (or any later version): you may study, modify and redistribute it under its terms. It comes with no warranty.</string>
     <string name="about_license_trademarks">The VYLIA and Yogi Studio names, their logos and the app icon are not covered by the licence. The Exodus Privacy logo belongs to the Exodus Privacy association.</string>
     <string name="about_font">The VYLIA name is set in Unbounded, by The Unbounded Project Authors, under the SIL Open Font License 1.1.</string>
-    <string name="about_shield_lists">The VYLIA Shield filters DNS requests with public lists, embedded in the app: Exodus Privacy (ODbL 1.0), EasyList and EasyPrivacy by the EasyList authors (GPL v3), and the AdGuard Mobile Ads filter by AdGuard (GPL v3). VYLIA is neither affiliated with nor endorsed by them.</string>
+    <string name="about_shield_lists">The VYLIA Shield filters DNS requests with public lists, built into the app and updated in Settings › Databases: Exodus Privacy (ODbL 1.0), EasyList and EasyPrivacy by the EasyList authors (GPL v3), and AdGuard\'s DNS filter, Mobile Ads filter and French filter (GPL v3) and, if you add it, its CNAME trackers list (MIT). Blocked domains are named with AdGuard companiesdb (CC BY-SA 4.0). VYLIA is neither affiliated with nor endorsed by these projects.</string>
     <string name="about_source">Source code: %1$s</string>
     <string name="about_source_button">View the source code</string>
     <string name="about_privacy_policy_button">Privacy policy</string>
@@ -875,7 +864,7 @@
     <string name="credits_casting_name">The AlternativeTo community</string>
     <string name="credits_casting_note">Thousands of recommendations between users. VYLIA picks two or three per category, and lets you choose.</string>
     <string name="credits_shield">Shield DNS filtering</string>
-    <string name="credits_shield_name">EasyList, EasyPrivacy and AdGuard Mobile Ads</string>
+    <string name="credits_shield_name">EasyList, EasyPrivacy and the AdGuard filters</string>
     <string name="credits_shield_note">Lists of tracking servers, kept up to date by their communities and shared under GPL v3. The shield reads them on your phone, to say no on your behalf.</string>
     <string name="credits_cast">Opening titles cast</string>
     <string name="credits_cast_name">The little spies</string>
@@ -910,6 +899,48 @@
     <string name="settings_cards_compact_hint">Name, score and what lowers it</string>
     <string name="settings_cards_detailed">Detailed</string>
     <string name="settings_cards_detailed_hint">Package name, trackers and badges</string>
+    <string name="accordion_collapsed">collapsed</string>
+    <string name="accordion_expanded">expanded</string>
+    <string name="db_update_all">Update all</string>
+    <string name="db_progress">%1$d of %2$d</string>
+    <string name="db_hint">Each database is downloaded from its official source, over HTTPS only, and checked before it replaces the current one. Nothing about you or your apps is sent.</string>
+    <string name="db_summary_updated">%1$s · up to date as of %2$s</string>
+    <string name="db_summary_embedded">%1$s · versions built into the app</string>
+    <string name="db_summary_updating">%1$s · updating, %2$s</string>
+    <string name="db_summary_repeated">repeated failures</string>
+    <string name="db_warning">Warning</string>
+    <string name="db_group_score">Score</string>
+    <string name="db_group_shield">Shield</string>
+    <string name="db_group_alternatives">Alternatives</string>
+    <string name="db_group_enrichment">Enrichment</string>
+    <string name="db_name_rules">VYLIA scoring rules</string>
+    <string name="db_name_exodus_categories">Exodus categories (VYLIA)</string>
+    <string name="db_name_alternatives">VYLIA alternatives</string>
+    <string name="db_name_web_services">VYLIA web services</string>
+    <string name="db_name_private_dns">VYLIA private DNS list</string>
+    <string name="db_row_updated">Updated %1$s</string>
+    <string name="db_row_embedded">Version built into the app</string>
+    <string name="db_status_up_to_date">Up to date</string>
+    <string name="db_status_updating">Updating…</string>
+    <string name="db_status_failed">Failed: %1$s. The previous version stays in use.</string>
+    <string name="db_status_available">Update available</string>
+    <string name="db_status_embedded">Never updated</string>
+    <string name="db_update_one">Update</string>
+    <string name="db_update_named">Update %1$s</string>
+    <string name="db_proposed_cname_hint">Suggested list: trackers disguised as a subdomain of the site you visit (CNAME), about 10,000 more domains.</string>
+    <string name="db_proposed_size">About %1$s to download, %2$s once unpacked (kept compressed on the phone).</string>
+    <string name="db_add">Add</string>
+    <string name="db_add_named">Add %1$s</string>
+    <string name="db_remove">Remove</string>
+    <string name="db_remove_named">Remove %1$s</string>
+    <string name="db_result_failure">%1$s: %2$s</string>
+    <string name="db_result_rescored">Scores are being recalculated with the new databases.</string>
+    <string name="db_dismiss">OK</string>
+    <string name="automation_update_switch">Update databases before the scan</string>
+    <string name="automation_update_hint">At most once a week. The scan runs even if an update fails, with the databases in place. No notification.</string>
+    <string name="automation_update_wifi">Only on Wi-Fi</string>
+    <string name="automation_update_wifi_hint">On mobile data, VYLIA only checks whether updates exist, without downloading them.</string>
+    <string name="automation_update_off_hint">Turn on scheduled scans to update the databases automatically.</string>
     <plurals name="data_restore_snapshots">
         <item quantity="one">%1$d Tracking point</item>
         <item quantity="other">%1$d Tracking points</item>
@@ -929,6 +960,38 @@
     <plurals name="data_restore_invalid">
         <item quantity="one">%1$d inconsistent item set aside.</item>
         <item quantity="other">%1$d inconsistent items set aside.</item>
+    </plurals>
+    <plurals name="db_count">
+        <item quantity="one">%1$d database</item>
+        <item quantity="other">%1$d databases</item>
+    </plurals>
+    <plurals name="db_row_entries">
+        <item quantity="one">%1$d entry</item>
+        <item quantity="other">%1$d entries</item>
+    </plurals>
+    <plurals name="db_summary_available">
+        <item quantity="one">%1$d update available</item>
+        <item quantity="other">%1$d updates available</item>
+    </plurals>
+    <plurals name="db_summary_failed">
+        <item quantity="one">%1$d failure during the last update</item>
+        <item quantity="other">%1$d failures during the last update</item>
+    </plurals>
+    <plurals name="db_status_repeated">
+        <item quantity="one">(%1$d time in a row)</item>
+        <item quantity="other">(%1$d times in a row)</item>
+    </plurals>
+    <plurals name="db_result_updated">
+        <item quantity="one">%1$d database updated</item>
+        <item quantity="other">%1$d databases updated</item>
+    </plurals>
+    <plurals name="db_result_unchanged">
+        <item quantity="one">%1$d already up to date</item>
+        <item quantity="other">%1$d already up to date</item>
+    </plurals>
+    <plurals name="db_result_failed">
+        <item quantity="one">%1$d failure</item>
+        <item quantity="other">%1$d failures</item>
     </plurals>
 
     <!-- Badges et sécurité -->

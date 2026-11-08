@@ -4,12 +4,9 @@ import android.content.Context
 import com.vylia.privacy.data.preferences.SettingsRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import com.vylia.privacy.domain.databases.Fetch
+import com.vylia.privacy.domain.databases.Outcome
 import java.io.File
-import java.io.InputStream
-import java.io.OutputStream
-import java.net.HttpURLConnection
-import javax.net.ssl.HttpsURLConnection
-import java.net.URL
 
 class TrackerUpdater(
     private val context: Context,
@@ -28,47 +25,22 @@ class TrackerUpdater(
     /**
      * Télécharge la base publique d'Exodus Privacy. Elle n'est installée qu'après contrôle : HTTPS imposé, taille
      * bornée, contenu lisible et plausible (assez de traqueurs valides). Sinon la base actuelle reste en place.
+     * Renvoie le nombre de traqueurs.
      */
-    suspend fun downloadUpdate(): Result<Unit> = withContext(Dispatchers.IO) {
+    suspend fun update(fetch: Fetch): Outcome = withContext(Dispatchers.IO) {
+        val file = fetch.get(UPDATE_URL, MAX_BYTES) ?: return@withContext Outcome.Unchanged
+        val signatures = ExodusTrackerParser().parse(file.readText())
+        require(signatures.size >= MIN_TRACKERS) { "base incomplète (${signatures.size} traqueurs)" }
+        val target = File(context.filesDir, DOWNLOADED_FILE_NAME)
         val tmp = File(context.filesDir, "$DOWNLOADED_FILE_NAME.tmp")
         try {
-            val connection = URL(UPDATE_URL).openConnection() as HttpsURLConnection
-            connection.requestMethod = "GET"
-            connection.connectTimeout = 15000
-            connection.readTimeout = 15000
-            // Pas de redirection : la base ne peut venir que de l'adresse officielle.
-            connection.instanceFollowRedirects = false
-            try {
-                if (connection.responseCode != HttpURLConnection.HTTP_OK) {
-                    return@withContext Result.failure(Exception("HTTP error: ${connection.responseCode}"))
-                }
-                val declared = connection.contentLengthLong
-                require(declared <= MAX_BYTES) { "base trop volumineuse" }
-                connection.inputStream.use { input -> tmp.outputStream().use { output -> copyBounded(input, output) } }
-            } finally {
-                connection.disconnect()
-            }
-            val signatures = ExodusTrackerParser().parse(tmp.readText())
-            require(signatures.size >= MIN_TRACKERS) { "base incomplète (${signatures.size} traqueurs)" }
-            check(tmp.renameTo(File(context.filesDir, DOWNLOADED_FILE_NAME))) { "installation de la base impossible" }
-            settingsRepository.updateTimestamp(System.currentTimeMillis())
-            Result.success(Unit)
-        } catch (e: Exception) {
+            file.copyTo(tmp, overwrite = true)
+            check(tmp.renameTo(target)) { "installation de la base impossible" }
+        } finally {
             tmp.delete()
-            Result.failure(e)
         }
-    }
-
-    private fun copyBounded(input: InputStream, output: OutputStream) {
-        val buffer = ByteArray(8 * 1024)
-        var total = 0L
-        while (true) {
-            val n = input.read(buffer)
-            if (n < 0) break
-            total += n
-            require(total <= MAX_BYTES) { "base trop volumineuse" }
-            output.write(buffer, 0, n)
-        }
+        settingsRepository.updateTimestamp(System.currentTimeMillis())
+        Outcome.Installed(signatures.size)
     }
 
     fun isDatabaseObsolete(currentTimestamp: Long): Boolean {

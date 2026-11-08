@@ -58,4 +58,14 @@ class TrackerMatcherTest {
             real.find("com.google.android.gms.ads.AdView", "io.sentry.Sentry", "com.google.firebase.analytics.FirebaseAnalytics"),
         )
     }
+
+    @Test
+    fun `une correction de categories garde le cache d analyse et donne les nouvelles categories`() {
+        val before = TrackerMatcher(listOf(TrackerSignature(Tracker(7, "AdLib", null, emptyList()), Regex("com.adlib."))))
+        val after = TrackerMatcher(listOf(TrackerSignature(Tracker(7, "AdLib", null, listOf("Advertisement")), Regex("com.adlib."))))
+        assertEquals(before.version, after.version)
+        assertEquals(listOf("Advertisement"), after.trackersById(listOf(7)).single().categories)
+        val changed = TrackerMatcher(listOf(TrackerSignature(Tracker(7, "AdLib", null, emptyList()), Regex("com.adlib.sdk."))))
+        assertTrue(before.version != changed.version)
+    }
 }

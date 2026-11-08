@@ -34,7 +34,12 @@ class ActViewModel(
     private val alternatives: AlternativesRepository,
     private val privateDns: PrivateDnsRepository,
     private val shieldController: ShieldController,
+    private val databases: com.vylia.privacy.data.databases.DatabaseCenter,
+    private val companies: com.vylia.privacy.data.databases.CompaniesRepository,
 ) : ViewModel() {
+
+    /** Entreprise derrière un domaine bloqué (AdGuard companiesdb), si la base a été téléchargée. */
+    fun company(domain: String): com.vylia.privacy.domain.databases.Company? = companies.lookup(domain)
 
     val shield: StateFlow<ShieldState> = shieldController.state
 
@@ -47,7 +52,7 @@ class ActViewModel(
 
     init {
         // Lecture anticipée : le bouclier démarre ensuite sans attendre la liste.
-        viewModelScope.launch { _blocklistSize.value = withContext(Dispatchers.IO) { runCatching { shieldController.blocklist().size }.getOrNull() } }
+        viewModelScope.launch { _blocklistSize.value = withContext(Dispatchers.IO) { runCatching { shieldController.domainCount() }.getOrNull() } }
     }
 
     /** Intention d'accord VPN à lancer avant [startShield], ou `null` si l'accord est déjà donné. */
@@ -86,10 +91,12 @@ class ActViewModel(
         if (_dnsListUpdate.value == DnsListUpdate.RUNNING) return
         viewModelScope.launch {
             _dnsListUpdate.value = DnsListUpdate.RUNNING
-            _dnsListUpdate.value = privateDns.update().fold(
-                onSuccess = { changed -> if (changed) DnsListUpdate.UPDATED else DnsListUpdate.UNCHANGED },
-                onFailure = { DnsListUpdate.FAILED },
-            )
+            val summary = databases.updateOne("private_dns")
+            _dnsListUpdate.value = when {
+                summary.failed.isNotEmpty() -> DnsListUpdate.FAILED
+                summary.updated.isNotEmpty() -> DnsListUpdate.UPDATED
+                else -> DnsListUpdate.UNCHANGED
+            }
         }
     }
 
@@ -117,6 +124,8 @@ class ActViewModel(
                     container.alternativesRepository,
                     container.privateDnsRepository,
                     container.shieldController,
+                    container.databaseCenter,
+                    container.companiesRepository,
                 )
             }
         }

@@ -25,6 +25,8 @@ class ScanCompletion(
     private val notifier: ThresholdNotifier,
     private val stalkerware: StalkerwareAlerts,
     private val rules: () -> RuleMatrixRepository.LoadedRules,
+    /** Version de chaque base du score, enregistrée avec le point du Suivi. */
+    private val databases: () -> Map<String, String> = { emptyMap() },
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
     /** [background] : scan de fond ; sinon l'écran Scan est ouvert et montre déjà une alerte stalkerware. */
@@ -35,11 +37,12 @@ class ScanCompletion(
         stalkerware.check(userApps, full = true, notify = background)
         val loaded = rules()
         val previous = history.history.value.snapshots.lastOrNull()
-        history.record(userApps.associate { it.app.packageName to it.historyPoint() }, loaded.fingerprint)
+        val versions = databases()
+        history.record(userApps.associate { it.app.packageName to it.historyPoint() }, loaded.fingerprint, versions)
         val score = userApps.deviceScore()?.value ?: return
         val now = clock()
         alerts.onScan(score, now) {
-            val cause = DropCauseAnalyzer.analyze(previous, userApps, loaded.fingerprint, loaded.scorer)
+            val cause = DropCauseAnalyzer.analyze(previous, userApps, loaded.fingerprint, loaded.scorer, versions)
             ThresholdCrossing(now, score, alerts.current.value.setting.threshold, cause)
         }?.let(notifier::notify)
     }

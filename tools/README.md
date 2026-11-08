@@ -13,8 +13,9 @@ Paramètres › Base de traqueurs et À propos.
 
 ### Révision du mapping des catégories (tous les 6 mois)
 
-Environ un quart des traqueurs Exodus n'ont pas de catégorie ; `exodus_category_overrides.json`
-les complète, car le score v2 pondère chaque traqueur par sa catégorie (Advertisement 12,
+Environ un quart des traqueurs Exodus n'ont pas de catégorie ; `app/src/main/assets/exodus_category_overrides.json`
+les complète (dans l'app aussi : la base Exodus téléchargée et le bouclier s'en servent, et l'app le met à jour
+depuis ce dépôt avec les autres bases), car le score v2 pondère chaque traqueur par sa catégorie (Advertisement 12,
 Profiling/Location 10, …, sans catégorie 5). À chaque exécution, le script signale :
 
 - une révision échue (`last_reviewed` + `review_interval_days`, 180 jours) ;

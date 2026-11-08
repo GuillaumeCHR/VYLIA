@@ -45,6 +45,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
+import com.vylia.privacy.domain.databases.Company
+import com.vylia.privacy.domain.databases.CompanyCategory
 import com.vylia.privacy.data.dns.PrivateDnsStatus
 import com.vylia.privacy.domain.shield.ShieldFilter
 import com.vylia.privacy.domain.shield.ShieldState
@@ -60,7 +62,7 @@ private val Green = Color(0xFF10B981)
 private val Amber = Color(0xFFF59E0B)
 
 /**
- * Réduire › Traçage pub : l'interrupteur du Bouclier VYLIA, le compteur de requêtes bloquées en direct, les derniers
+ * Filtrer › Bouclier VYLIA : l'interrupteur du bouclier, le compteur de requêtes bloquées en direct, les derniers
  * blocages (en mémoire seulement), la pause réglable (5 min à 2 h) et quand s'en servir, le choix des filtrages
  * (web, mobile), et ce qui peut l'empêcher de fonctionner (DNS privé réglé sur un service, autre VPN).
  */
@@ -77,6 +79,8 @@ internal fun ShieldCard(
     onResume: () -> Unit,
     onPauseMinutes: (Int) -> Unit,
     onFilter: (ShieldFilter, Boolean) -> Unit,
+    /** Entreprise derrière un domaine (AdGuard companiesdb), pour nommer les blocages sans traqueur connu. */
+    company: (String) -> Company? = { null },
 ) {
     val context = LocalContext.current
     val format = NumberFormat.getIntegerInstance(currentLocale())
@@ -173,7 +177,9 @@ internal fun ShieldCard(
                     Column {
                         Text(blocked.domain, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
                         Text(
-                            blocked.trackerName ?: stringResource(R.string.shield_recent_easyprivacy),
+                            blocked.trackerName
+                                ?: company(blocked.domain)?.let { stringResource(R.string.shield_company, it.name, stringResource(it.category.label())) }
+                                ?: stringResource(R.string.shield_recent_easyprivacy),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -261,4 +267,14 @@ private fun openVpnSettings(context: Context) {
     } catch (_: ActivityNotFoundException) {
         // Écran absent sur certains appareils : l'explication reste affichée.
     }
+}
+
+/** Rôle d'une entreprise, sans parler de publicité ni porter de jugement sur le contenu. */
+private fun CompanyCategory.label(): Int = when (this) {
+    CompanyCategory.TARGETING -> R.string.company_targeting
+    CompanyCategory.AUDIENCE -> R.string.company_audience
+    CompanyCategory.SOCIAL -> R.string.company_social
+    CompanyCategory.TELEMETRY -> R.string.company_telemetry
+    CompanyCategory.CONSENT -> R.string.company_consent
+    CompanyCategory.THIRD_PARTY -> R.string.company_third_party
 }

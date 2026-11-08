@@ -13,7 +13,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import java.util.concurrent.ConcurrentHashMap
 
-/** Exécute les tâches de [AutomationScheduler] : contrôle des installations et scan de fond. */
+/** Exécute les tâches de [AutomationScheduler] : contrôle des installations, et scan de fond précédé de la mise à jour des bases. */
 class AutomationJobService : JobService() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
     private val running = ConcurrentHashMap<Int, Job>()
@@ -24,7 +24,10 @@ class AutomationJobService : JobService() {
             try {
                 when (params.jobId) {
                     AutomationScheduler.INSTALL_JOB -> container.installWatcher.check()
-                    AutomationScheduler.SCAN_JOB -> container.backgroundScanner.run()
+                    AutomationScheduler.SCAN_JOB -> UpdateThenScan.run(
+                        update = { container.databaseCenter.updateBeforeScan(UpdateThenScan.network(this@AutomationJobService)) },
+                        scan = { container.backgroundScanner.run() },
+                    )
                 }
             } catch (e: CancellationException) {
                 throw e

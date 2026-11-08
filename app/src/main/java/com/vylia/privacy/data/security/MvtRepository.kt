@@ -9,11 +9,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
+import com.vylia.privacy.domain.databases.Fetch
+import com.vylia.privacy.domain.databases.Outcome
+import com.vylia.privacy.domain.databases.text
 import java.io.File
-import java.net.HttpURLConnection
-import java.net.URL
-import javax.net.ssl.HttpsURLConnection
 
 /**
  * Indicateurs MVT des logiciels espions de surveillance ciblée : les derniers téléchargés depuis les Paramètres s'ils
@@ -26,66 +25,46 @@ class MvtRepository(private val context: Context) {
     data class State(val database: MvtDatabase.Loaded, val downloadedAt: Long?)
 
     private val downloaded = File(context.filesDir, DOWNLOADED_FILE_NAME)
+    /** Copie de l'index de la dernière base installée : relue quand la source répond qu'il n'a pas changé. */
+    private val index = File(context.filesDir, "downloaded_mvt_index.yaml")
     private val _current = MutableStateFlow(load())
     val current: StateFlow<State> = _current.asStateFlow()
 
     /**
      * Télécharge `indicators.yaml` puis le fichier STIX2 de chaque campagne. La base n'est installée qu'après
-     * contrôle : HTTPS vers raw.githubusercontent.com sans redirection, tailles bornées, assez de campagnes et de
-     * domaines valides. Sinon la base actuelle reste en place. Renvoie la nouvelle base.
+     * contrôle : tailles bornées, assez de campagnes et de domaines valides. Sinon la base actuelle reste en place.
+     *
+     * Requêtes conditionnelles : la base est « inchangée » si l'index et tous les fichiers de campagne répondent 304.
+     * Si l'un d'eux a changé, la base est refaite en entier (les fichiers inchangés sont alors retéléchargés).
      */
-    suspend fun update(): Result<MvtDatabase.Loaded> = withContext(Dispatchers.IO) {
+    suspend fun update(fetch: Fetch): Outcome = withContext(Dispatchers.IO) {
+        var budget = MAX_TOTAL_BYTES
+        suspend fun get(url: String, max: Long, conditional: Boolean): String? =
+            fetch.text(url, minOf(max, budget), conditional)?.also { budget -= it.length }
+
+        val fresh = get(MvtIndicators.INDEX_URL, MAX_INDEX_BYTES, conditional = index.exists())
+        val indexText = fresh ?: index.readText()
+        val sources = MvtIndicators.parseIndex(indexText)
+        require(sources.size >= MIN_CAMPAIGNS) { "index incomplet (${sources.size} campagnes)" }
+        val unchangedIndex = fresh == null && downloaded.exists()
+        val texts = sources.map { get(it.url, MAX_STIX_BYTES, conditional = unchangedIndex) }
+        if (unchangedIndex && texts.all { it == null }) return@withContext Outcome.Unchanged
+        val campaigns = sources.zip(texts).map { (source, text) ->
+            MvtIndicators.parseStix(source.name, text ?: checkNotNull(get(source.url, MAX_STIX_BYTES, conditional = false)))
+        }
         val tmp = File(context.filesDir, "$DOWNLOADED_FILE_NAME.tmp")
         try {
-            var budget = MAX_TOTAL_BYTES
-            fun get(url: String, max: Long): String {
-                val bytes = fetch(url, minOf(max, budget))
-                budget -= bytes.size
-                return bytes.toString(Charsets.UTF_8)
-            }
-            val sources = MvtIndicators.parseIndex(get(MvtIndicators.INDEX_URL, MAX_INDEX_BYTES))
-            require(sources.size >= MIN_CAMPAIGNS) { "index incomplet (${sources.size} campagnes)" }
-            val campaigns = sources.map { MvtIndicators.parseStix(it.name, get(it.url, MAX_STIX_BYTES)) }
             tmp.writeText(MvtIndicators.toJson(campaigns))
             val database = MvtDatabase.parse(tmp.readText())
             require(database.total >= MIN_CAMPAIGNS && database.domains.size >= MIN_DOMAINS) {
                 "base incomplète (${database.total} campagnes, ${database.domains.size} domaines)"
             }
             check(tmp.renameTo(downloaded)) { "installation de la base impossible" }
+            index.writeText(indexText)
             _current.value = State(database, downloaded.lastModified())
-            Result.success(database)
-        } catch (e: Exception) {
-            tmp.delete()
-            Result.failure(e)
-        }
-    }
-
-    private fun fetch(url: String, max: Long): ByteArray {
-        val connection = URL(url).openConnection() as HttpsURLConnection
-        require(connection.url.host == HOST) { "hôte inattendu" }
-        connection.requestMethod = "GET"
-        connection.connectTimeout = 15_000
-        connection.readTimeout = 30_000
-        // Pas de redirection : les fichiers ne peuvent venir que de l'adresse annoncée.
-        connection.instanceFollowRedirects = false
-        try {
-            require(connection.responseCode == HttpURLConnection.HTTP_OK) { "HTTP ${connection.responseCode}" }
-            require(connection.contentLengthLong <= max) { "fichier trop volumineux" }
-            val output = ByteArrayOutputStream()
-            connection.inputStream.use { input ->
-                val buffer = ByteArray(16 * 1024)
-                var total = 0L
-                while (true) {
-                    val n = input.read(buffer)
-                    if (n < 0) break
-                    total += n
-                    require(total <= max) { "fichier trop volumineux" }
-                    output.write(buffer, 0, n)
-                }
-            }
-            return output.toByteArray()
+            Outcome.Installed(database.total)
         } finally {
-            connection.disconnect()
+            tmp.delete()
         }
     }
 
@@ -108,7 +87,6 @@ class MvtRepository(private val context: Context) {
 
     companion object {
         private const val TAG = "MvtRepository"
-        private const val HOST = "raw.githubusercontent.com"
         private const val DOWNLOADED_FILE_NAME = "downloaded_mvt_iocs.json"
         private const val MAX_INDEX_BYTES = 1L * 1024 * 1024
         /** Le plus gros fichier repris (une campagne Android d'Amnesty) fait quelques mégaoctets. */

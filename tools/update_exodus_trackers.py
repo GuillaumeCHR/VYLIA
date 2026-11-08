@@ -9,7 +9,7 @@ Licence : base et résultats de l'API sous Open Database License (ODbL 1.0),
 Seuls id, name, code_signature, categories et website sont conservés : l'app n'a besoin que
 de ça et le fichier passe d'environ 570 Ko à environ 50 Ko.
 
-Les catégories manquantes côté Exodus sont complétées par tools/exodus_category_overrides.json,
+Les catégories manquantes côté Exodus sont complétées par app/src/main/assets/exodus_category_overrides.json,
 appliqué uniquement si "validated" vaut true. Ce mapping est à réviser régulièrement : le script
 signale une révision échue ("last_reviewed" + "review_interval_days"), les nouveaux traqueurs
 sans catégorie à classer, et les entrées devenues inutiles (Exodus les catégorise désormais).
@@ -25,7 +25,7 @@ import urllib.request
 API_URL = "https://reports.exodus-privacy.eu.org/api/trackers"
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / "app/src/main/assets/exodus_trackers.json"
-OVERRIDES = ROOT / "tools/exodus_category_overrides.json"
+OVERRIDES = ROOT / "app/src/main/assets/exodus_category_overrides.json"
 EXODUS_CATEGORIES = {"Advertisement", "Analytics", "Crash reporting", "Identification", "Location", "Profiling"}
 
 

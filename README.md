@@ -10,6 +10,11 @@ scanne vos applications pour savoir ce qu'elles font de vos données. Le but est
 compréhension simple des enjeux de vie privée : une note lisible, des explications sans jargon, des bonnes pratiques
 mises en avant autant que les dérives, et des gestes concrets pour reprendre la main.
 
+**Comprendre avant d'agir.** C'est ce qui distingue VYLIA : elle explique, avec des mots simples et accessibles à tous,
+comment fonctionnent les apps derrière l'écran : ce qu'une permission donne vraiment, ce qu'est un traqueur, comment
+vos données partent chez des entreprises que vous ne connaissez pas. Chaque score est justifié, chaque permission et
+chaque traqueur a sa fiche sans jargon : on apprend à juger une app par soi-même, sans avoir peur.
+
 > Version actuelle : **0.9.1** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
 > site : [guillaumechr.github.io/vylia-site](https://guillaumechr.github.io/vylia-site/).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
@@ -71,8 +76,9 @@ Et aussi :
   avec accès sensibles, lecture d'écran avec superposition. Elles plafonnent le score.
 - **Des badges qui qualifient, sans alarmer** : bonnes pratiques (« Poids plume », « Bio », « Sait se faire oublier »)
   autant que points d'attention (« Fouineuse », « Régie publicitaire », « Moteur, ça tourne ! »).
-- **Une aide unique**, la même depuis chaque écran : comment fonctionne VYLIA, le calcul du score, les badges, le
-  lexique des traqueurs et celui des permissions.
+- **Une aide pédagogique**, la même depuis chaque écran, avec des mots simples et accessibles à tous : comment
+  fonctionnent les apps et le pistage, comment VYLIA calcule le score, les badges, le lexique des traqueurs et celui
+  des permissions.
 - **Automatisations** (désactivées par défaut) : une notification à l'installation d'une app avec son score, et des
   scans de fond hebdomadaires ou mensuels qui alimentent le Suivi.
 - **Vos données, à vous** : exporter tout ce que VYLIA conserve dans un fichier lisible, l'importer sur un autre

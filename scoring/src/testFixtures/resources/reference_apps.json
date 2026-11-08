@@ -1,0 +1,154 @@
+{
+  "comment": "Apps de référence : la même note doit sortir du moteur dans l'app, dans :scoring et dans l'outil de l'annuaire. Permissions au format des rapports Exodus (noms complets), toutes considérées comme accordées. Les valeurs attendues sont figées : une différence signale une divergence entre l'app et l'annuaire, ou un changement de règles à documenter.",
+  "apps": [
+    {
+      "package": "com.whatsapp",
+      "target_sdk": 34,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.READ_CONTACTS",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "com.whatsapp.permission.BROADCAST"
+      ],
+      "trackers": [
+        {
+          "name": "Google Firebase Analytics",
+          "categories": [
+            "Analytics"
+          ]
+        }
+      ],
+      "expected": {
+        "score": 92,
+        "grade": "A",
+        "badges": [
+          "PERM_DORMANT"
+        ]
+      }
+    },
+    {
+      "package": "com.instagram.android",
+      "target_sdk": 34,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.READ_CONTACTS",
+        "android.permission.READ_MEDIA_IMAGES"
+      ],
+      "trackers": [
+        {
+          "name": "Facebook Login",
+          "categories": [
+            "Identification"
+          ]
+        },
+        {
+          "name": "Facebook Analytics",
+          "categories": [
+            "Analytics"
+          ]
+        },
+        {
+          "name": "AppsFlyer",
+          "categories": [
+            "Analytics"
+          ]
+        }
+      ],
+      "expected": {
+        "score": 77,
+        "grade": "B",
+        "badges": [
+          "PERM_DORMANT"
+        ]
+      }
+    },
+    {
+      "package": "org.thoughtcrime.securesms",
+      "target_sdk": 34,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.READ_CONTACTS",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "trackers": [],
+      "expected": {
+        "score": 100,
+        "grade": "A",
+        "badges": [
+          "PERM_ON_TARGET",
+          "TRK_ORGANIC",
+          "PERM_DORMANT",
+          "COMBO_TOP_OF_CLASS"
+        ]
+      }
+    },
+    {
+      "package": "fr.ign.geoportail",
+      "target_sdk": 34,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
+      ],
+      "trackers": [
+        {
+          "name": "Google CrashLytics",
+          "categories": [
+            "Crash reporting"
+          ]
+        }
+      ],
+      "expected": {
+        "score": 92,
+        "grade": "A",
+        "badges": [
+          "TRK_MECHANIC"
+        ]
+      }
+    },
+    {
+      "package": "fr.leboncoin",
+      "target_sdk": 32,
+      "permissions": [
+        "android.permission.INTERNET",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.CAMERA"
+      ],
+      "trackers": [
+        {
+          "name": "Google AdMob",
+          "categories": [
+            "Advertisement"
+          ]
+        },
+        {
+          "name": "Criteo",
+          "categories": [
+            "Advertisement"
+          ]
+        },
+        {
+          "name": "Adjust",
+          "categories": [
+            "Analytics"
+          ]
+        }
+      ],
+      "expected": {
+        "score": 68,
+        "grade": "C",
+        "badges": [
+          "TRK_SANDWICH",
+          "PERM_DORMANT"
+        ]
+      }
+    }
+  ]
+}

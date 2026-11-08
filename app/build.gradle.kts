@@ -64,6 +64,7 @@ android {
 
 dependencies {
     implementation(project(":shield"))
+    implementation(project(":scoring"))
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -80,5 +81,6 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(libs.junit4)
+    testImplementation(testFixtures(project(":scoring")))
     testImplementation(libs.kotlinx.coroutines.test)
 }

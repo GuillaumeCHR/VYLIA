@@ -7,6 +7,8 @@
 /build/
 /app/build/
 /shield/build/
+/scoring/build/
+/directory-cli/build/
 /captures/
 .externalNativeBuild/
 .cxx/
@@ -18,3 +20,8 @@ __pycache__/
 *.jks
 *.keystore
 *key.properties
+
+# Annuaire public : sorties et cache des rapports Exodus
+directory/out/
+directory/cache/
+directory/history/

@@ -307,7 +307,7 @@ class IocDatabase(
     )
 
     /** Contenu complet (paquets, empreintes), pour comparer deux bases dans les tests. */
-    internal fun entries(): Pair<Map<String, String>, Map<String, String>> = packages to certs
+    fun entries(): Pair<Map<String, String>, Map<String, String>> = packages to certs
 
     companion object {
         val EMPTY = IocDatabase(emptyMap(), emptyMap())

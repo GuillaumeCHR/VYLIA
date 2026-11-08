@@ -9,12 +9,12 @@ import com.vylia.privacy.data.security.StalkerwareRepository
 import com.vylia.privacy.data.security.MvtRepository
 import com.vylia.privacy.domain.scoring.RulesValidator
 import com.vylia.privacy.domain.scoring.Rules
+import com.vylia.privacy.domain.scoring.RulesLoader
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.json.Json
 import com.vylia.privacy.domain.databases.Fetch
 import com.vylia.privacy.domain.databases.Outcome
 import com.vylia.privacy.domain.databases.text
@@ -172,16 +172,10 @@ class RuleMatrixRepository(
         private const val IMPORTED_FILE_NAME = "imported_vylia_rules_v2.json"
         private const val DOWNLOADED_FILE_NAME = "downloaded_vylia_rules_v3.json"
         const val REMOTE_URL = "https://raw.githubusercontent.com/GuillaumeCHR/VYLIA/main/app/src/main/assets/vylia_rules_v3.json"
-        private val json = Json { ignoreUnknownKeys = true }
+        fun parse(content: String): Rules = RulesLoader.parse(content)
 
-        fun parse(content: String): Rules = json.decodeFromString(content.removePrefix("\uFEFF"))
-
-        /** Les deux contrôles de [RulesValidator], dans l'ordre : texte brut, puis règles décodées. */
-        fun checked(content: String, bundled: Rules): Rules {
-            val text = content.removePrefix("\uFEFF")
-            RulesValidator.checkDocument(text)
-            return parse(text).also { RulesValidator.validate(it, bundled) }
-        }
+        /** Les deux contrôles de [RulesValidator], dans l'ordre : texte brut, puis règles décodées (voir [RulesLoader]). */
+        fun checked(content: String, bundled: Rules): Rules = RulesLoader.checked(content, bundled)
 
         /** Lecture bornée : un fichier trop gros est refusé avant d'être chargé en entier. */
         fun readBounded(input: java.io.InputStream, maxBytes: Int): String {

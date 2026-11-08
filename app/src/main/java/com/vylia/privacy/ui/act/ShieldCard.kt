@@ -189,10 +189,7 @@ internal fun ShieldCard(
                 Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                     Text(stringResource(R.string.shield_pause_intro), style = MaterialTheme.typography.bodySmall)
                     listOf(
-                        R.string.shield_pause_reward,
-                        R.string.shield_pause_links,
                         R.string.shield_pause_offers,
-                        R.string.shield_pause_sponsored,
                         R.string.shield_pause_diagnose,
                     ).forEach { Text(stringResource(it), style = MaterialTheme.typography.bodySmall) }
                     Text(stringResource(R.string.shield_pause_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
@@ -239,7 +236,6 @@ private fun FiltersSection(filters: Set<ShieldFilter>, onFilter: (ShieldFilter, 
             )
         }
     }
-    Text(stringResource(R.string.shield_filter_gamer), style = MaterialTheme.typography.bodySmall)
 }
 
 @Composable

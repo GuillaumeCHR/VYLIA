@@ -135,6 +135,16 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 7. ~~**Bug Analyse en mode avancé :**~~ (corrigé en 0.6.4) deux scores de confidentialité s'affichent (apps utilisateur et apps système).
    N'en garder qu'un seul, qui fusionne les résultats des apps installées par l'utilisateur et des apps système.
 8. ~~§9~~ (fait en 0.7.0). §9 À propos › Crédits avec une touche d'humour, comme dans Molkky Board (voir §9).
+9. **Catégories des apps d'après Google Play** (à étudier après la publication sur Play, idée du 2026-11-08) : les
+   catégories et les tags Play (Banque mobile, Transports publics, Météo, Moniteur d'activité…) sont bien plus précis
+   que `ApplicationInfo.category` (8 valeurs), mais illisibles depuis le téléphone, et les demander à Google pendant
+   le scan enverrait la liste des apps installées. Piste : un script de poste de dev, sur le modèle de
+   `tools/alternatives/fetch_play_ratings.py`, qui lit la catégorie et les tags Play des apps populaires (meilleures
+   apps de chaque catégorie en France), les traduit vers les 28 catégories de VYLIA et enrichit la liste des apps
+   connues embarquée (`package_overrides`, 106 apps aujourd'hui). Précautions : les tags sont choisis par l'éditeur,
+   donc les `package_overrides` vérifiés à la main restent prioritaires et aucun tag ne donne seul une catégorie qui
+   justifie des accès très sensibles ; le grattage des pages Play casse si Google change leur HTML. Ne pas changer la
+   grille pendant le test fermé.
 
 ### Versions
 

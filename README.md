@@ -15,7 +15,7 @@ comment fonctionnent les apps derrière l'écran : ce qu'une permission donne vr
 vos données partent chez des entreprises que vous ne connaissez pas. Chaque score est justifié, chaque permission et
 chaque traqueur a sa fiche sans jargon : on apprend à juger une app par soi-même, sans avoir peur.
 
-> Version actuelle : **0.9.1** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
+> Version actuelle : **0.9.6** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
 > site : [guillaumechr.github.io/vylia-site](https://guillaumechr.github.io/vylia-site/).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.
@@ -65,13 +65,17 @@ Et aussi :
 - **Des traqueurs détectés localement** : VYLIA cherche dans le code de chaque app les signatures de la base publique
   [Exodus Privacy](https://exodus-privacy.eu.org/), sans rien envoyer.
 - **Un VPN anti-traqueurs** : le bouclier VYLIA est un VPN local, sur le téléphone, qui ne transporte que les requêtes
-  DNS. Il refuse celles des serveurs de traçage connus (plus de 87 000 domaines), pour toutes les apps à la fois,
-  sans serveur distant ni journal des sites visités. Facultatif, il s'active d'un interrupteur ou depuis les réglages
+  DNS. Il refuse celles des serveurs de traçage connus (plus de 200 000 domaines, d'après Exodus Privacy, EasyList,
+  EasyPrivacy et les filtres AdGuard), pour toutes les apps à la fois, sans serveur distant ni journal des sites
+  visités. Les domaines bloqués sont nommés quand c'est possible (« Criteo · ciblage »). Facultatif, il s'active d'un interrupteur ou depuis les réglages
   rapides, et se met en pause quand une app en a besoin.
 - **Des logiciels espions repérés** : la base publique de l'association [Echap](https://echap.eu.org/) (stalkerwares,
   pour espionner un proche) et les indicateurs de [MVT](https://github.com/mvt-project/mvt-indicators) (logiciels
   espions de surveillance ciblée comme Pegasus, Predator ou NoviSpy) sont intégrés ; une app reconnue tombe à 0 et
-  déclenche une alerte, avec des conseils adaptés. Le bouclier bloque aussi les domaines de ces campagnes.
+  déclenche une alerte discrète, qui ne nomme jamais l'app. L'écran **Que faire ?** met la sécurité de la personne en
+  premier : ne pas désinstaller dans la précipitation, garder des traces, chercher de l'aide depuis un autre appareil,
+  puis le bon interlocuteur selon qui pourrait être à l'origine de la surveillance. Le bouclier bloque aussi les
+  domaines de ces campagnes.
 - **Des capacités d'espionnage repérées** : clavier ou service d'accessibilité capable de lire la saisie, icône cachée
   avec accès sensibles, lecture d'écran avec superposition. Elles plafonnent le score.
 - **Des badges qui qualifient, sans alarmer** : bonnes pratiques (« Poids plume », « Bio », « Sait se faire oublier »)
@@ -79,8 +83,13 @@ Et aussi :
 - **Une aide pédagogique**, la même depuis chaque écran, avec des mots simples et accessibles à tous : comment
   fonctionnent les apps et le pistage, comment VYLIA calcule le score, les badges, le lexique des traqueurs et celui
   des permissions.
+- **Des bases toujours à jour** : Paramètres › Bases de données réunit les signatures Exodus, les bases Echap et MVT,
+  les listes du bouclier et les données de VYLIA, avec leur état et un bouton **Tout mettre à jour**. Une base
+  inchangée n'est pas retéléchargée, une base en échec garde sa version en service, et un traqueur apparu avec une
+  mise à jour des bases n'est pas imputé à une app qui n'a pas changé.
 - **Automatisations** (désactivées par défaut) : une notification à l'installation d'une app avec son score, et des
-  scans de fond hebdomadaires ou mensuels qui alimentent le Suivi.
+  scans de fond hebdomadaires ou mensuels qui alimentent le Suivi, précédés d'une mise à jour des bases (une fois par
+  semaine au plus, en Wi-Fi par défaut).
 - **Vos données, à vous** : exporter tout ce que VYLIA conserve dans un fichier lisible, l'importer sur un autre
   téléphone sans rien écraser, ou tout supprimer.
 
@@ -109,9 +118,10 @@ Politique complète : [confidentialité](https://guillaumechr.github.io/vylia-si
 [conditions d'utilisation](https://guillaumechr.github.io/vylia-site/fr/conditions.html).
 
 - Aucun traqueur, aucun outil de mesure d'audience, aucune donnée revendue.
-- Internet ne sert qu'à vos demandes de mise à jour : la base de traqueurs d'Exodus Privacy, celle des stalkerwares
-  d'Echap et la liste des DNS privés. Ce sont des fichiers publics téléchargés tels quels : rien n'est envoyé sur vos
-  applications.
+- Internet ne sert qu'à mettre à jour les bases, à votre demande ou avant le scan de fond si vous l'avez activé : Exodus
+  Privacy, Echap, MVT, les listes du bouclier (EasyList, EasyPrivacy, AdGuard), AdGuard companiesdb et les fichiers
+  publiés dans ce dépôt (règles, alternatives, DNS privés, ressources d'aide). Ce sont des fichiers publics, téléchargés
+  en HTTPS depuis leur source officielle : rien n'est envoyé sur vous ni sur vos applications.
 - Le bouclier filtre sur le téléphone. Les requêtes qu'il laisse passer vont directement au DNS de votre réseau, comme
   sans lui : aucun serveur de VYLIA, aucun journal des sites visités.
 - Les résultats, badges et points restent sur le téléphone et sont exclus des sauvegardes Android. L'export, l'import
@@ -186,6 +196,10 @@ Outils du dépôt : voir [`tools/README.md`](tools/README.md). Feuille de route 
 - **Logiciels espions de surveillance ciblée** : [MVT, mvt-indicators](https://github.com/mvt-project/mvt-indicators)
   (licence MIT), avec les indicateurs publiés par Amnesty International, Citizen Lab, Google, Lookout et d'autres
   chercheurs (extrait : noms de paquet, certificats et domaines, voir [`tools/update_mvt_iocs.py`](tools/update_mvt_iocs.py)).
+- **Listes du bouclier** : [EasyList et EasyPrivacy](https://easylist.to/) (GPL v3), filtres DNS, Mobile Ads et French
+  d'[AdGuard](https://github.com/AdguardTeam/AdguardFilters) (GPL v3), liste des traqueurs CNAME d'AdGuard (MIT, à
+  ajouter dans l'app) ; noms des domaines bloqués d'après [AdGuard companiesdb](https://github.com/AdguardTeam/companiesdb)
+  (CC BY-SA 4.0, téléchargée seulement). VYLIA n'est affiliée à aucun de ces projets.
 - **Alternatives** : classement d'après les recommandations de la communauté [AlternativeTo](https://alternativeto.net/),
   notes relevées sur Google Play.
 - **Signatures de traqueurs** : [Exodus Privacy](https://exodus-privacy.eu.org/), base sous

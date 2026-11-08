@@ -833,6 +833,8 @@
     <string name="about_shield_lists">The VYLIA Shield filters DNS requests with public lists, embedded in the app: Exodus Privacy (ODbL 1.0), EasyList and EasyPrivacy by the EasyList authors (GPL v3), and the AdGuard Mobile Ads filter by AdGuard (GPL v3). VYLIA is neither affiliated with nor endorsed by them.</string>
     <string name="about_source">Source code: %1$s</string>
     <string name="about_source_button">View the source code</string>
+    <string name="about_privacy_policy_button">Privacy policy</string>
+    <string name="about_privacy_policy_url">https://guillaumechr.github.io/vylia-site/privacy.html</string>
     <string name="about_license_button">Read the GNU GPL v3</string>
     <string name="about_contact_title">Contact</string>
     <string name="about_contact">A bug, an idea, a question? Write to Yogi Studio: %1$s</string>

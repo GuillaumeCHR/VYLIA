@@ -1,0 +1,53 @@
+# Google Play listing — English (en-US, default language)
+
+## Title (30 max)
+VYLIA: privacy score & manager
+
+## Short description (80 max)
+Understand what your apps know about you, in simple words, and take control
+
+## Full description (4,000 max)
+Every app you install can reach part of your life: location, contacts, microphone, photos. Many also embed trackers that send what you do to other companies. VYLIA shows you, in plain words, what your apps know about you, and helps you take back control. Everything happens on your phone.
+
+Understand, in simple words
+• VYLIA explains how apps work behind the screen: what a permission really gives access to, what a tracker is, how your data travels to companies you have never heard of.
+• A lexicon of the permissions and the trackers, written without jargon, for everyone, whatever your age or your knowledge of technology.
+• Every score comes with its reasons, so you learn to judge an app by yourself.
+• Good practices are highlighted as much as abuses: the aim is to understand, not to frighten.
+
+A privacy score for each app
+• Each installed app gets a score from 0 to 100 and a grade from A to E, based on the permissions it asks for and the trackers it embeds.
+• Permissions are judged by what the app is for: GPS costs nothing to a navigation app, but a lot to a game. 28 categories (navigation, messaging, banking, games, health…) say what each one justifies, tolerates or forbids.
+• Trackers are found in each app's code, on the phone, using the public Exodus Privacy database.
+• Badges qualify good practices as much as points to watch.
+
+Stalkerware and spyware detection
+• Known stalkerware, the apps installed in secret to spy on someone, is recognised with the public database of the non-profit Echap, even under another name.
+• Targeted surveillance spyware such as Pegasus or Predator is recognised with the public indicators of MVT, the tool of Amnesty International's Security Lab.
+• Spying capabilities are flagged too: a keyboard or accessibility service able to read what you type, a hidden icon with sensitive access, screen reading with overlays.
+
+Reduce your exposure
+• Permissions to revoke, app by app, the lowest scores first.
+• Intrusive apps, and the apps you no longer open (with the optional usage access).
+• More respectful alternatives, by category.
+• Web versions: replace an app with the website of the same service, installed by your browser.
+
+VYLIA Shield: a local anti-tracker VPN
+• The optional VYLIA Shield uses Android's VpnService to create a VPN on the phone itself. Only DNS requests go through it: requests for known tracking and spyware domains are refused, all others go on unchanged to your network's usual DNS.
+• No remote server, no data sent to VYLIA, no log of the sites you visit: only a counter of blocked requests is kept.
+• You turn it on yourself, through Android's VPN consent dialog, from the app or from a quick settings tile, and you can pause or stop it at any time.
+• Private DNS is also covered, with a step-by-step guide.
+
+Track your progress
+• Your score over time, the history of installs, removals and permission changes, and an alert if your exposure rises.
+• Points and trophies for every intrusive app removed, and an image to share that never shows an app's name.
+• Optional automations: a notification with the score of each new app, and scheduled background scans.
+
+Privacy first
+• No account, no trackers, no audience measurement, no data collected.
+• Your apps are analysed on your phone and the results stay there. You can export, import or delete them at any time.
+• The Internet is only used when you ask for an update of the public databases. Nothing about your apps is sent.
+• Permissions used: the list of installed apps (needed to analyse them), usage access (optional), VPN (optional, for the Shield), notifications and start at boot (optional, for automations).
+• Free software, under the GNU GPL v3.
+
+VYLIA is an independent app published by Yogi Studio. It is neither affiliated with nor endorsed by Exodus Privacy, Echap, MVT or Amnesty International.

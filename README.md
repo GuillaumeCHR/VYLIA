@@ -24,13 +24,13 @@ chaque traqueur a sa fiche sans jargon : on apprend à juger une app par soi-mê
 
 | | | | |
 |:---:|:---:|:---:|:---:|
-| <img src="docs/screenshots/aide-fonctionnement.png" width="200" alt="Aide, onglet Fonctionnement : votre surface d'exposition et les étapes Identifier, Réduire, Filtrer"> | <img src="docs/screenshots/filtrer.png" width="200" alt="Filtrer, onglet Filtrage DNS : bouclier VYLIA et DNS privé, deux façons de réduire le traçage publicitaire"> | <img src="docs/screenshots/alternatives.png" width="200" alt="Gérer, onglet Alternatives : apps plus respectueuses par catégorie, avec leur note Google Play"> | <img src="docs/screenshots/celebrer.png" width="200" alt="Célébrer et partager : score des apps, points de confidentialité et badges"> |
+| <img src="docs/screenshots/aide-fonctionnement.png" width="200" alt="Aide, onglet Fonctionnement : votre surface d'exposition et les étapes Identifier, Réduire, Filtrer"> | <img src="docs/screenshots/filtrer.png" width="200" alt="Filtrer, onglet Filtrage DNS : bouclier VYLIA et DNS privé, deux façons de réduire le traçage"> | <img src="docs/screenshots/alternatives.png" width="200" alt="Gérer, onglet Alternatives : apps plus respectueuses par catégorie, avec leur note Google Play"> | <img src="docs/screenshots/celebrer.png" width="200" alt="Célébrer et partager : score des apps, points de confidentialité et badges"> |
 | Comment fonctionne VYLIA | Filtrer | Alternatives | Célébrer et partager |
 
 ## Comment ça marche
 
 Chaque app installée peut accéder à une partie de votre vie : position, contacts, micro, photos, et beaucoup
-embarquent des traqueurs publicitaires. L'ensemble forme votre **surface d'exposition**. VYLIA la traite en cinq écrans,
+embarquent des traqueurs. L'ensemble forme votre **surface d'exposition**. VYLIA la traite en cinq écrans,
 dans l'ordre de la barre du bas :
 
 1. **Scanner** : un score par app, de 0 à 100, et une note de A à E. On part de 100, on retire les permissions
@@ -75,7 +75,7 @@ Et aussi :
 - **Des capacités d'espionnage repérées** : clavier ou service d'accessibilité capable de lire la saisie, icône cachée
   avec accès sensibles, lecture d'écran avec superposition. Elles plafonnent le score.
 - **Des badges qui qualifient, sans alarmer** : bonnes pratiques (« Poids plume », « Bio », « Sait se faire oublier »)
-  autant que points d'attention (« Fouineuse », « Régie publicitaire », « Moteur, ça tourne ! »).
+  autant que points d'attention (« Fouineuse », « Réseau de pistage », « Moteur, ça tourne ! »).
 - **Une aide pédagogique**, la même depuis chaque écran, avec des mots simples et accessibles à tous : comment
   fonctionnent les apps et le pistage, comment VYLIA calcule le score, les badges, le lexique des traqueurs et celui
   des permissions.
@@ -92,7 +92,7 @@ comptées) est consultable dans l'app, **Aide › Score › La grille, catégori
 
 - une capacité d'arrière-plan (micro, caméra, position) ne compte entièrement que si l'accès dont elle dépend est
   accordé ; la capture d'écran, soumise à votre accord à chaque fois, compte comme seulement déclarée ;
-- les permissions de ciblage publicitaire ne sont pas comptées : la publicité est déjà sanctionnée par les traqueurs ;
+- les permissions de ciblage ne sont pas comptées : le ciblage est déjà sanctionné par les traqueurs ;
 - des permissions proches ne comptent qu'une fois (position précise et approximative, paliers de santé…).
 
 **VYLIA se note elle-même**, avec la même grille et sans exception. Elle a besoin de la liste de vos apps
@@ -108,7 +108,7 @@ et ne peut exclure aucune app de l'audit. Leur évolution est documentée dans [
 Politique complète : [confidentialité](https://guillaumechr.github.io/vylia-site/fr/confidentialite.html) ·
 [conditions d'utilisation](https://guillaumechr.github.io/vylia-site/fr/conditions.html).
 
-- Aucune publicité, aucun traqueur, aucun outil de mesure d'audience, aucune donnée revendue.
+- Aucun traqueur, aucun outil de mesure d'audience, aucune donnée revendue.
 - Internet ne sert qu'à vos demandes de mise à jour : la base de traqueurs d'Exodus Privacy, celle des stalkerwares
   d'Echap et la liste des DNS privés. Ce sont des fichiers publics téléchargés tels quels : rien n'est envoyé sur vos
   applications.

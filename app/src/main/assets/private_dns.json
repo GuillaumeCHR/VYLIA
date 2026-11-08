@@ -1,7 +1,7 @@
 {
   "format": "vylia-private-dns",
-  "version": 2,
-  "updated": "2026-11-01",
+  "version": 3,
+  "updated": "2026-11-08",
   "resolvers": [
     {
       "id": "nextdns",
@@ -21,13 +21,13 @@
       },
       "points": {
         "en": [
-          "Can block ad trackers: in your configuration, turn on a block list for trackers and ads.",
-          "You choose what to filter (trackers, ads, malicious domains…).",
+          "Can block trackers: in your configuration, turn on a tracker block list.",
+          "You choose what to filter (trackers, malicious domains…).",
           "Statistics on the requests of your devices, in your account."
         ],
         "fr": [
-          "Peut bloquer les traqueurs publicitaires : dans votre configuration, activez une liste de blocage des traqueurs et des publicités.",
-          "Vous choisissez ce qui est filtré (traqueurs, publicités, domaines malveillants…).",
+          "Peut bloquer les traqueurs : dans votre configuration, activez une liste de blocage des traqueurs.",
+          "Vous choisissez ce qui est filtré (traqueurs, domaines malveillants…).",
           "Des statistiques sur les requêtes de vos appareils, dans votre compte."
         ]
       }
@@ -50,12 +50,12 @@
         "en": [
           "Encrypts your DNS requests (DNS-over-TLS and DNS-over-HTTPS).",
           "Blocks known malicious domains (malware, phishing).",
-          "Does not block ad trackers: it hides your requests from your Internet provider, but lets ad networks through."
+          "Does not block trackers: it hides your requests from your Internet provider, but lets trackers through."
         ],
         "fr": [
           "Chiffre vos requêtes DNS (DNS-over-TLS et DNS-over-HTTPS).",
           "Bloque les domaines malveillants connus (virus, hameçonnage).",
-          "Ne bloque pas les traqueurs publicitaires : il cache vos requêtes à votre fournisseur d'accès, mais laisse passer les régies."
+          "Ne bloque pas les traqueurs : il cache vos requêtes à votre fournisseur d'accès, mais laisse passer les traqueurs."
         ]
       }
     }

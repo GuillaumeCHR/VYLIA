@@ -12,7 +12,7 @@
         {"name": "Mozilla Firefox", "package": "org.mozilla.firefox", "play": "org.mozilla.firefox", "open_source": true, "cost": "Free", "rating": 4.7,
          "pitch": {"en": "Independent browser that blocks many trackers by default and accepts add-ons.", "fr": "Navigateur indépendant qui bloque de nombreux traqueurs par défaut et accepte les extensions."}},
         {"name": "Thunderbird", "package": "net.thunderbird.android", "fdroid": "net.thunderbird.android", "play": "net.thunderbird.android", "open_source": true, "cost": "Free", "rating": 4.0,
-         "pitch": {"en": "Email app from Mozilla, for all your accounts, without ads.", "fr": "Messagerie e-mail de Mozilla, pour tous vos comptes, sans publicité."}},
+         "pitch": {"en": "Email app from Mozilla, for all your accounts, open source.", "fr": "Messagerie e-mail de Mozilla, pour tous vos comptes, libre."}},
         {"name": "Signal", "package": "org.thoughtcrime.securesms", "play": "org.thoughtcrime.securesms", "open_source": true, "cost": "Free", "rating": 4.6,
          "pitch": {"en": "End-to-end encrypted messages and calls, run by a non-profit.", "fr": "Messages et appels chiffrés de bout en bout, par une fondation à but non lucratif."}}
       ]
@@ -24,11 +24,11 @@
       "categories": ["SOCIAL"],
       "alternatives": [
         {"name": "Mastodon", "package": "org.joinmastodon.android", "fdroid": "org.joinmastodon.android", "play": "org.joinmastodon.android", "open_source": true, "cost": "Free", "rating": 3.8,
-         "pitch": {"en": "Official app of the decentralised social network, chronological feed, no ads.", "fr": "App officielle du réseau social décentralisé, fil chronologique, sans publicité."}},
+         "pitch": {"en": "Official app of the decentralised social network, chronological feed.", "fr": "App officielle du réseau social décentralisé, fil chronologique."}},
         {"name": "Bluesky", "package": "xyz.blueskyweb.app", "play": "xyz.blueskyweb.app", "open_source": true, "cost": "Free", "rating": 3.6,
-         "pitch": {"en": "Open social network (AT Protocol), chronological or custom feeds, no ads.", "fr": "Réseau social ouvert (protocole AT), fil chronologique ou personnalisé, sans publicité."}},
+         "pitch": {"en": "Open social network (AT Protocol), chronological or custom feeds.", "fr": "Réseau social ouvert (protocole AT), fil chronologique ou personnalisé."}},
         {"name": "RedReader", "package": "org.quantumbadger.redreader", "fdroid": "org.quantumbadger.redreader", "play": "org.quantumbadger.redreader", "open_source": true, "cost": "Free", "rating": 4.4,
-         "pitch": {"en": "Reddit reader without ads or tracking.", "fr": "Lecteur Reddit sans publicité ni pistage."}}
+         "pitch": {"en": "Reddit reader without tracking.", "fr": "Lecteur Reddit sans pistage."}}
       ]
     },
     {
@@ -40,7 +40,7 @@
         {"name": "AntennaPod", "package": "de.danoeh.antennapod", "fdroid": "de.danoeh.antennapod", "play": "de.danoeh.antennapod", "open_source": true, "cost": "Free", "rating": 4.9,
          "pitch": {"en": "Podcast player: subscriptions, downloads, no account.", "fr": "Lecteur de podcasts : abonnements, téléchargements, sans compte."}},
         {"name": "Spotube", "package": "oss.krtirtho.spotube", "fdroid": "oss.krtirtho.spotube", "open_source": true, "cost": "Free",
-         "pitch": {"en": "Music streaming client without a paid account or ads.", "fr": "Client de musique en streaming, sans compte payant ni publicité."}},
+         "pitch": {"en": "Music streaming client without a paid account.", "fr": "Client de musique en streaming, sans compte payant."}},
         {"name": "Audile", "package": "com.mrsep.musicrecognizer", "fdroid": "com.mrsep.musicrecognizer", "open_source": true, "cost": "Free",
          "pitch": {"en": "Recognises the song playing around you.", "fr": "Reconnaît la chanson qui passe autour de vous."}}
       ]
@@ -51,9 +51,9 @@
       "replaces": ["com.google.android.youtube"],
       "alternatives": [
         {"name": "VLC Media Player", "package": "org.videolan.vlc", "fdroid": "org.videolan.vlc", "play": "org.videolan.vlc", "open_source": true, "cost": "Free", "rating": 4.0,
-         "pitch": {"en": "Plays almost any video or audio file, no ads.", "fr": "Lit presque tous les fichiers vidéo et audio, sans publicité."}},
+         "pitch": {"en": "Plays almost any video or audio file, open source.", "fr": "Lit presque tous les fichiers vidéo et audio, libre."}},
         {"name": "NewPipe", "package": "org.schabi.newpipe", "fdroid": "org.schabi.newpipe", "open_source": true, "cost": "Free",
-         "pitch": {"en": "Watch YouTube without a Google account or ads, with downloads.", "fr": "YouTube sans compte Google ni publicité, avec téléchargement."}},
+         "pitch": {"en": "Watch YouTube without a Google account, with downloads.", "fr": "YouTube sans compte Google, avec téléchargement."}},
         {"name": "PeerTube", "package": "org.framasoft.peertube", "fdroid": "org.framasoft.peertube", "play": "org.framasoft.peertube", "open_source": true, "cost": "Free", "rating": 4.0,
          "pitch": {"en": "Decentralised video platform, run by independent hosts.", "fr": "Plateforme vidéo décentralisée, portée par des hébergeurs indépendants."}}
       ]
@@ -65,7 +65,7 @@
       "categories": ["PHOTO_VIDEO"],
       "alternatives": [
         {"name": "Open Camera", "package": "net.sourceforge.opencamera", "fdroid": "net.sourceforge.opencamera", "play": "net.sourceforge.opencamera", "open_source": true, "cost": "Free", "rating": 4.0,
-         "pitch": {"en": "Full-featured camera, no ads, no data collection.", "fr": "Appareil photo complet, sans publicité ni collecte de données."}},
+         "pitch": {"en": "Full-featured camera, no data collection.", "fr": "Appareil photo complet, sans collecte de données."}},
         {"name": "Fossify Gallery", "package": "org.fossify.gallery", "fdroid": "org.fossify.gallery", "play": "org.fossify.gallery", "open_source": true, "cost": "Free", "rating": 4.5,
          "pitch": {"en": "Photo gallery that stays offline.", "fr": "Galerie photo qui reste hors ligne."}},
         {"name": "Image Toolbox", "package": "ru.tech.imageresizershrinker", "fdroid": "ru.tech.imageresizershrinker", "play": "ru.tech.imageresizershrinker", "open_source": true, "cost": "Free", "rating": 4.7,
@@ -97,7 +97,7 @@
         {"name": "HeliBoard", "package": "helium314.keyboard", "fdroid": "helium314.keyboard", "open_source": true, "cost": "Free",
          "pitch": {"en": "Keyboard with no Internet access, so nothing you type leaves the phone.", "fr": "Clavier sans accès à Internet : rien de ce que vous tapez ne quitte le téléphone."}},
         {"name": "Amaze File Manager", "package": "com.amaze.filemanager", "fdroid": "com.amaze.filemanager", "play": "com.amaze.filemanager", "open_source": true, "cost": "Free", "rating": 4.0,
-         "pitch": {"en": "Simple file manager, no ads.", "fr": "Gestionnaire de fichiers simple, sans publicité."}}
+         "pitch": {"en": "Simple, open source file manager.", "fr": "Gestionnaire de fichiers simple et libre."}}
       ]
     },
     {
@@ -135,9 +135,9 @@
       "categories": ["WEATHER"],
       "alternatives": [
         {"name": "Breezy Weather", "package": "org.breezyweather", "fdroid": "org.breezyweather", "open_source": true, "cost": "Free",
-         "pitch": {"en": "Detailed forecasts from several sources, no ads.", "fr": "Prévisions détaillées de plusieurs sources, sans publicité."}},
+         "pitch": {"en": "Detailed forecasts from several sources, open source.", "fr": "Prévisions détaillées de plusieurs sources, libre."}},
         {"name": "Bura", "package": "com.davidtakac.bura", "fdroid": "com.davidtakac.bura", "open_source": true, "cost": "Free",
-         "pitch": {"en": "Minimal, ad-free weather app.", "fr": "Météo épurée, sans publicité."}}
+         "pitch": {"en": "Minimal weather app.", "fr": "Météo épurée."}}
       ]
     },
     {

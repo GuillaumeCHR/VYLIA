@@ -452,7 +452,7 @@
     <string name="learn_trackers_glossary_hint">The main families of trackers, what they do with your data and the most common ones. A tracker can belong to several families: the most serious one counts in the score.</string>
     <string name="learn_permissions_glossary_hint">Tap a permission to see what it allows, why it is sensitive and how it is granted.</string>
     <string name="learn_search_hint">Search (e.g. SMS, READ_PHONE_STATE, location)</string>
-    <string name="learn_search_badges_hint">Search (e.g. background, microphone, advertising)</string>
+    <string name="learn_search_badges_hint">Search (e.g. background, microphone, targeting)</string>
     <string name="learn_search_trackers_hint">Search (e.g. Facebook, analytics, location)</string>
     <string name="learn_search_empty_badges">No badge matches “%1$s”.</string>
     <string name="learn_search_empty_trackers">No tracker matches “%1$s”.</string>
@@ -483,7 +483,7 @@
     <string name="learn_example_text">Precise location weighs %1$d. Granted to a navigation app, where it is justified: %1$d × %2$s = 0 points lost. Granted to a game, where it is forbidden: %1$d × %3$s = %4$s points lost.</string>
     <string name="learn_conditional_title">Capabilities that depend on an access</string>
     <string name="learn_conditional_text">Some permissions are useless on their own. Running the microphone, camera or location in the background requires that access to be granted first; until then they count ×%1$s. Screen capture needs your consent every time, so it always counts ×%1$s.</string>
-    <string name="learn_ads_neutral">Ad targeting permissions (advertising ID, Android\'s ad services) are not counted here: advertising is already penalised through the trackers. Nor are notifications: they give access to none of your data.</string>
+    <string name="learn_ads_neutral">Targeting permissions (targeting ID, Android\'s targeting services) are not counted here: targeting is already penalised through the trackers. Nor are notifications: they give access to none of your data.</string>
     <string name="learn_no_double_count">No double counting</string>
     <string name="learn_no_double_location">Precise and approximate location count only once (the heavier one).</string>
     <string name="learn_no_double_media">Photos, videos, audio and legacy file access count only once.</string>
@@ -492,9 +492,9 @@
     <string name="learn_no_double_health">For Health Connect data, only the most sensitive tier counts.</string>
     <string name="learn_no_double_storage">Legacy file access only counts for apps built for Android 12 or earlier: beyond that, Android ignores it.</string>
     <string name="learn_trackers_title">2. Trackers</string>
-    <string name="learn_trackers_what">A tracker is a piece of code supplied by another company (often an ad network) and built into the app. It collects information about you and sends it to its own servers, in addition to the app\'s publisher.</string>
+    <string name="learn_trackers_what">A tracker is a piece of code supplied by another company (often a targeting or profiling company) and built into the app. It collects information about you and sends it to its own servers, in addition to the app\'s publisher.</string>
     <string name="learn_trackers_how">VYLIA spots them by looking for their signatures in each app\'s code, using the public Exodus Privacy database. Each tracker costs points according to what it does; a tracker with several uses counts as the most serious one.</string>
-    <string name="learn_trackers_ads">This is where advertising is counted: ad and profiling trackers are the heaviest. Ad targeting permissions are therefore not counted a second time.</string>
+    <string name="learn_trackers_ads">This is where targeting is counted: targeting and profiling trackers are the heaviest. Targeting permissions are therefore not counted a second time.</string>
     <string name="learn_trackers_see_glossary">What each category does, with examples, in the Trackers tab.</string>
     <string name="learn_trackers_cap">Trackers cannot cost more than %1$d points in total.</string>
     <string name="learn_trackers_unanalyzed_title">If the analysis could not be done</string>
@@ -527,8 +527,8 @@
     <string name="learn_grade_line">%1$s · %2$d to %3$d</string>
     <string name="learn_grade_a">Few or no sensitive permissions, and they serve the app\'s purpose; no trackers, or almost none.</string>
     <string name="learn_grade_b">A few tolerated permissions or a small number of trackers, often analytics or crash reporting.</string>
-    <string name="learn_grade_c">Permissions unrelated to the app\'s purpose, or several trackers including advertising ones. Keep an eye on it.</string>
-    <string name="learn_grade_d">Typically many advertising or profiling trackers, often with intrusive permissions. Look for an alternative.</string>
+    <string name="learn_grade_c">Permissions unrelated to the app\'s purpose, or several trackers including targeting ones. Keep an eye on it.</string>
+    <string name="learn_grade_d">Typically many targeting or profiling trackers, often with intrusive permissions. Look for an alternative.</string>
     <string name="learn_grade_e">Massive data collection. Replace it if you can.</string>
     <string name="learn_grade_both">Below %1$d, an app necessarily combines intrusive permissions (more than %2$d points) and significant trackers (more than %3$d points).</string>
     <string name="learn_grade_trackers_more">Permissions alone (capped at %1$d) cannot bring an app below %2$d: trackers necessarily weigh in, more than %3$d points.</string>
@@ -591,7 +591,7 @@
     <string name="help_badges_family">%1$s (%2$d)</string>
     <string name="howto_title">How VYLIA works</string>
     <string name="howto_exposure_title">Your exposure surface</string>
-    <string name="howto_exposure_text">Every installed app can reach part of your life: location, contacts, microphone, photos. Many also embed advertising trackers. All these accesses together form your exposure surface.</string>
+    <string name="howto_exposure_text">Every installed app can reach part of your life: location, contacts, microphone, photos. Many also embed trackers. All these accesses together form your exposure surface.</string>
     <string name="howto_step">%1$d. %2$s</string>
     <string name="howto_identify_title">Identify · Scan, Analyze</string>
     <string name="howto_identify_text">VYLIA scores each app on its permissions and trackers, and shows which data are exposed, and to how many apps.</string>
@@ -821,7 +821,7 @@
     <string name="about_publisher">A Yogi Studio app</string>
     <string name="about_privacy_title">Privacy</string>
     <string name="about_privacy_headline">No data collected. Your apps are analysed on your phone only.</string>
-    <string name="about_privacy_no_ads">VYLIA contains no ads, no trackers, no audience measurement tools, and sells no data.</string>
+    <string name="about_privacy_no_ads">VYLIA contains no trackers and no audience measurement tools, and sells no data.</string>
     <string name="about_privacy_network">The Internet is only used when you ask for it: to update the tracker database (the public Exodus Privacy list), the known stalkerware database (the public Echap list), the spyware indicators (MVT\'s public files) or the list of private DNS services (published with VYLIA\'s source code). Nothing about your apps is sent.</string>
     <string name="about_privacy_automation">Install alerts and background scans are off by default. Once turned on, they run on the phone only, scheduled by Android.</string>
     <string name="about_privacy_self">To analyse your apps, VYLIA needs the list of installed apps (QUERY_ALL_PACKAGES): without it, there is nothing to audit. It owns this: VYLIA scores itself with the same rules as every other app, and this permission costs it points. Its page is in Scan, like the others.</string>
@@ -956,10 +956,10 @@
     <string name="badgedef_trk_organic_description">Analysed: no trackers.</string>
     <string name="badgedef_trk_mechanic">Mechanic</string>
     <string name="badgedef_trk_mechanic_description">Only technical trackers (crash reports, consent).</string>
-    <string name="badgedef_trk_sandwich">Sandwich board</string>
-    <string name="badgedef_trk_sandwich_description">Embeds one or two advertising or profiling trackers.</string>
-    <string name="badgedef_trk_ad_network">Ad network</string>
-    <string name="badgedef_trk_ad_network_description">Embeds at least three advertising or profiling trackers.</string>
+    <string name="badgedef_trk_sandwich">Eavesdropper</string>
+    <string name="badgedef_trk_sandwich_description">Embeds one or two targeting or profiling trackers.</string>
+    <string name="badgedef_trk_ad_network">Tracking network</string>
+    <string name="badgedef_trk_ad_network_description">Embeds at least three targeting or profiling trackers.</string>
     <string name="badgedef_trk_gps_snitch">GPS snitch</string>
     <string name="badgedef_trk_gps_snitch_description">Embeds a tracker specialised in location.</string>
     <string name="badgedef_trk_full_house">Full house</string>

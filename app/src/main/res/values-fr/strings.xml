@@ -469,7 +469,7 @@
     <string name="learn_trackers_glossary_hint">Les grandes familles de traqueurs, ce qu\'elles font de vos données et les plus répandues. Un traqueur peut appartenir à plusieurs familles : c\'est la plus grave qui compte dans le score.</string>
     <string name="learn_permissions_glossary_hint">Touchez une permission pour savoir ce qu\'elle permet, pourquoi c\'est sensible et comment elle est accordée.</string>
     <string name="learn_search_hint">Rechercher (ex. SMS, READ_PHONE_STATE, position)</string>
-    <string name="learn_search_badges_hint">Rechercher (ex. arrière-plan, micro, publicité)</string>
+    <string name="learn_search_badges_hint">Rechercher (ex. arrière-plan, micro, ciblage)</string>
     <string name="learn_search_trackers_hint">Rechercher (ex. Facebook, audience, localisation)</string>
     <string name="learn_search_empty_badges">Aucun badge ne correspond à « %1$s ».</string>
     <string name="learn_search_empty_trackers">Aucun traqueur ne correspond à « %1$s ».</string>
@@ -500,7 +500,7 @@
     <string name="learn_example_text">La position précise pèse %1$d. Accordée à une app de navigation, où elle est justifiée : %1$d × %2$s = 0 point perdu. Accordée à un jeu, où elle est interdite : %1$d × %3$s = %4$s points perdus.</string>
     <string name="learn_conditional_title">Les capacités qui dépendent d\'un accès</string>
     <string name="learn_conditional_text">Certaines permissions ne servent à rien seules. Utiliser le micro, la caméra ou la position en arrière-plan suppose que cet accès soit d\'abord accordé ; d\'ici là, elles comptent pour ×%1$s. La capture d\'écran demande votre accord à chaque fois : elle compte toujours pour ×%1$s.</string>
-    <string name="learn_ads_neutral">Les permissions de ciblage publicitaire (identifiant publicitaire, services publicitaires d\'Android) ne sont pas comptées ici : la publicité est déjà pénalisée par les traqueurs. Les notifications non plus : elles ne donnent accès à aucune de vos données.</string>
+    <string name="learn_ads_neutral">Les permissions de ciblage (identifiant de ciblage, services de ciblage d\'Android) ne sont pas comptées ici : le ciblage est déjà pénalisé par les traqueurs. Les notifications non plus : elles ne donnent accès à aucune de vos données.</string>
     <string name="learn_no_double_count">Pour ne pas compter deux fois</string>
     <string name="learn_no_double_location">Position précise et approximative ne comptent qu\'une fois (la plus lourde).</string>
     <string name="learn_no_double_media">Photos, vidéos, audio et ancien accès aux fichiers ne comptent qu\'une fois.</string>
@@ -509,9 +509,9 @@
     <string name="learn_no_double_health">Pour les données Health Connect, seul le palier le plus sensible compte.</string>
     <string name="learn_no_double_storage">L\'ancien accès aux fichiers n\'est compté que pour les apps conçues pour Android 12 ou antérieur : au-delà, Android l\'ignore.</string>
     <string name="learn_trackers_title">2. Les traqueurs</string>
-    <string name="learn_trackers_what">Un traqueur est un morceau de code fourni par une autre entreprise (souvent une régie publicitaire) et intégré à l\'app. Il collecte des informations sur vous et les envoie à ses propres serveurs, en plus de l\'éditeur de l\'app.</string>
+    <string name="learn_trackers_what">Un traqueur est un morceau de code fourni par une autre entreprise (souvent spécialisée dans le ciblage ou le profilage) et intégré à l\'app. Il collecte des informations sur vous et les envoie à ses propres serveurs, en plus de l\'éditeur de l\'app.</string>
     <string name="learn_trackers_how">VYLIA les repère en cherchant leurs signatures dans le code de chaque app, à partir de la base publique Exodus Privacy. Chaque traqueur coûte des points selon ce qu\'il fait ; un traqueur qui a plusieurs usages compte pour le plus grave.</string>
-    <string name="learn_trackers_ads">C\'est ici que la publicité est comptée : les traqueurs publicitaires et de profilage sont les plus lourds. Les permissions de ciblage publicitaire ne sont donc pas comptées une seconde fois.</string>
+    <string name="learn_trackers_ads">C\'est ici que le ciblage est compté : les traqueurs de ciblage et de profilage sont les plus lourds. Les permissions de ciblage ne sont donc pas comptées une seconde fois.</string>
     <string name="learn_trackers_see_glossary">Ce que fait chaque catégorie, et des exemples, dans l\'onglet Traqueurs.</string>
     <string name="learn_trackers_cap">Les traqueurs ne peuvent pas faire perdre plus de %1$d points au total.</string>
     <string name="learn_trackers_unanalyzed_title">Si l\'analyse n\'a pas pu se faire</string>
@@ -544,8 +544,8 @@
     <string name="learn_grade_line">%1$s · %2$d à %3$d</string>
     <string name="learn_grade_a">Peu ou pas de permissions sensibles, et elles servent la fonction de l\'app ; aucun traqueur ou presque.</string>
     <string name="learn_grade_b">Quelques permissions tolérées ou un petit nombre de traqueurs, souvent de mesure d\'audience ou de rapports de plantage.</string>
-    <string name="learn_grade_c">Des permissions sans rapport avec la fonction de l\'app, ou plusieurs traqueurs dont des publicitaires. À surveiller.</string>
-    <string name="learn_grade_d">Typiquement de nombreux traqueurs publicitaires ou de profilage, souvent avec des permissions intrusives. Cherchez une alternative.</string>
+    <string name="learn_grade_c">Des permissions sans rapport avec la fonction de l\'app, ou plusieurs traqueurs dont des traqueurs de ciblage. À surveiller.</string>
+    <string name="learn_grade_d">Typiquement de nombreux traqueurs de ciblage ou de profilage, souvent avec des permissions intrusives. Cherchez une alternative.</string>
     <string name="learn_grade_e">Collecte massive de données. À remplacer si possible.</string>
     <string name="learn_grade_both">Sous %1$d, une app cumule forcément des permissions intrusives (plus de %2$d points) et des traqueurs importants (plus de %3$d points).</string>
     <string name="learn_grade_trackers_more">Les permissions seules (plafonnées à %1$d) ne peuvent pas faire descendre une app sous %2$d : les traqueurs pèsent forcément, plus de %3$d points.</string>
@@ -608,7 +608,7 @@
     <string name="help_badges_family">%1$s (%2$d)</string>
     <string name="howto_title">Comment fonctionne VYLIA</string>
     <string name="howto_exposure_title">Votre surface d\'exposition</string>
-    <string name="howto_exposure_text">Chaque app installée peut accéder à une partie de votre vie : position, contacts, micro, photos. Beaucoup embarquent aussi des traqueurs publicitaires. L\'ensemble de ces accès forme votre surface d\'exposition.</string>
+    <string name="howto_exposure_text">Chaque app installée peut accéder à une partie de votre vie : position, contacts, micro, photos. Beaucoup embarquent aussi des traqueurs. L\'ensemble de ces accès forme votre surface d\'exposition.</string>
     <string name="howto_step">%1$d. %2$s</string>
     <string name="howto_identify_title">Identifier · Scanner, Analyser</string>
     <string name="howto_identify_text">VYLIA note chaque app selon ses permissions et ses traqueurs, et montre quelles données sont exposées, et à combien d\'apps.</string>
@@ -846,7 +846,7 @@
     <string name="about_publisher">Une application Yogi Studio</string>
     <string name="about_privacy_title">Vie privée</string>
     <string name="about_privacy_headline">Aucune donnée collectée. Vos applications sont analysées sur votre téléphone, et nulle part ailleurs.</string>
-    <string name="about_privacy_no_ads">VYLIA ne contient ni publicité, ni traqueur, ni outil de mesure d\'audience, et ne vend aucune donnée.</string>
+    <string name="about_privacy_no_ads">VYLIA ne contient ni traqueur ni outil de mesure d\'audience, et ne vend aucune donnée.</string>
     <string name="about_privacy_network">Internet ne sert que lorsque vous le demandez : pour mettre à jour la base de traqueurs (la liste publique d\'Exodus Privacy), la base des stalkerwares connus (la liste publique d\'Echap), les indicateurs de logiciels espions (les fichiers publics de MVT) ou la liste des services de DNS privé (publiée avec le code source de VYLIA). Rien n\'est envoyé sur vos applications.</string>
     <string name="about_privacy_automation">Les alertes d\'installation et les scans de fond sont désactivés par défaut. Une fois activés, ils s\'exécutent sur le téléphone uniquement, planifiés par Android.</string>
     <string name="about_privacy_self">Pour analyser vos apps, VYLIA a besoin de la liste des apps installées (QUERY_ALL_PACKAGES) : sans elle, il n\'y a rien à auditer. Elle l\'assume : VYLIA se note avec les mêmes règles que toutes les autres apps, et cette permission lui coûte des points. Sa fiche est dans Scan, comme les autres.</string>
@@ -986,10 +986,10 @@
     <string name="badgedef_trk_organic_description">Analysée : aucun traqueur.</string>
     <string name="badgedef_trk_mechanic">Mécano</string>
     <string name="badgedef_trk_mechanic_description">Uniquement des traqueurs techniques (rapports de plantage, consentement).</string>
-    <string name="badgedef_trk_sandwich">Homme-sandwich</string>
-    <string name="badgedef_trk_sandwich_description">Embarque un ou deux traqueurs publicitaires ou de profilage.</string>
-    <string name="badgedef_trk_ad_network">Régie publicitaire</string>
-    <string name="badgedef_trk_ad_network_description">Embarque au moins trois traqueurs publicitaires ou de profilage.</string>
+    <string name="badgedef_trk_sandwich">Oreille indiscrète</string>
+    <string name="badgedef_trk_sandwich_description">Embarque un ou deux traqueurs de ciblage ou de profilage.</string>
+    <string name="badgedef_trk_ad_network">Réseau de pistage</string>
+    <string name="badgedef_trk_ad_network_description">Embarque au moins trois traqueurs de ciblage ou de profilage.</string>
     <string name="badgedef_trk_gps_snitch">Mouchard GPS</string>
     <string name="badgedef_trk_gps_snitch_description">Embarque un traqueur spécialisé dans la localisation.</string>
     <string name="badgedef_trk_full_house">Carton plein</string>

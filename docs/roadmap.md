@@ -145,6 +145,16 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
    donc les `package_overrides` vérifiés à la main restent prioritaires et aucun tag ne donne seul une catégorie qui
    justifie des accès très sensibles ; le grattage des pages Play casse si Google change leur HTML. Ne pas changer la
    grille pendant le test fermé.
+10. **Conseil « version allégée » et rapports anciens** (idée du 2026-11-09, issue du classement des apps les plus
+   téléchargées, `directory/top-google-play.md` et page Classement du site) : une même app existe souvent sous
+   plusieurs paquets (« Lite », « Go », « Business », version régionale), avec des notes très différentes : TikTok
+   D (30, 7 traqueurs) contre TikTok Lite B (78, 1 traqueur), Facebook E (0, 8 traqueurs) contre Facebook Lite
+   C (50, 0 traqueur). Dans Agir › Réduire ou Alternatives, quand une app installée a une variante connue mieux notée,
+   proposer la variante (fiche Play, gain de score estimé, ce qu'on perd en fonctions). Liste des variantes embarquée
+   et mise à jour avec les bases (comme `alternatives.json`), vérifiée à la main ; notes des variantes calculées sur
+   le téléphone si elles sont installées, sinon d'après le rapport Exodus. Signaler aussi, sur la fiche d'une app,
+   quand son dernier rapport Exodus a plus d'un an (cas de TikTok, rapport de 2024) : sa note de traqueurs porte
+   alors sur une version dépassée.
 
 ### Versions
 

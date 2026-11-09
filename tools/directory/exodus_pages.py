@@ -9,7 +9,11 @@
 
 Données Exodus sous ODbL 1.0 : le tableau publié cite Exodus Privacy.
 
-Usage : exodus_pages.py <apps.json> <dossier cache>
+Le numéro dans l'adresse de l'icône n'est PAS celui du rapport : `--resolve` lit la page de recherche de chaque app
+(`/en/reports/search/<paquet>/`) pour retrouver le vrai numéro de rapport et, si le dernier rapport vient de F-Droid,
+lit à la place le dernier rapport Google Play (les versions F-Droid sont souvent allégées des services Google).
+
+Usage : exodus_pages.py <apps.json> <dossier cache> [--resolve]
 """
 import html
 import json
@@ -29,9 +33,21 @@ HANDLE = re.compile(r"^[A-Za-z0-9_]+(\.[A-Za-z0-9_]+)+$")
 TRACKERS_ASSET = Path(__file__).resolve().parents[2] / "app/src/main/assets/exodus_trackers.json"
 
 
-def fetch(package):
-    """Page du dernier rapport, ou None si Exodus ne connaît pas l'app (404)."""
-    request = urllib.request.Request(f"{BASE}/en/reports/{package}/latest/", headers={"User-Agent": USER_AGENT})
+_last = [0.0]
+_stamp = [None]  # fichier qui garde l'heure de la dernière requête d'une exécution à l'autre
+
+
+def get(path):
+    """Une page du site d'Exodus, 30 s au moins après la précédente ; None si 404."""
+    if _stamp[0] is not None and _stamp[0].exists():
+        _last[0] = max(_last[0], float(_stamp[0].read_text() or 0))
+    wait = _last[0] + DELAY_S - time.time()
+    if wait > 0:
+        time.sleep(wait)
+    _last[0] = time.time()
+    if _stamp[0] is not None:
+        _stamp[0].write_text(str(_last[0]))
+    request = urllib.request.Request(BASE + path, headers={"User-Agent": USER_AGENT})
     try:
         with urllib.request.urlopen(request, timeout=60) as response:
             return response.read(5_000_000).decode("utf-8")
@@ -39,6 +55,50 @@ def fetch(package):
         if e.code == 404:
             return None
         raise
+
+
+def fetch(package):
+    """Page du dernier rapport, ou None si Exodus ne connaît pas l'app (404)."""
+    return get(f"/en/reports/{package}/latest/")
+
+
+SEARCH_ENTRY = re.compile(r'/reports/(\d+)/icon.*?href="/[a-z]{2}/reports/(\d+)/".*?Version\s+(.*?)\s+-\s+([a-z-]+)\s*</b>', re.S)
+
+
+def search(package):
+    """Rapports d'une app : liste de (numéro d'icône, numéro de rapport, version, source)."""
+    page = get(f"/en/reports/search/{package}/")
+    if page is None:
+        return []
+    return [(int(i), int(r), html.unescape(v), src) for i, r, v, src in SEARCH_ENTRY.findall(page)]
+
+
+def resolve(package, target):
+    """Vrai numéro de rapport ; dernier rapport Google Play si le rapport lu vient d'ailleurs."""
+    report = json.loads(target.read_text())[0]
+    if report.get("resolved"):
+        return None
+    entries = search(package)
+    if report.get("source") == "google":
+        match = [r for i, r, _, _ in entries if i == report["report"]]
+        if not match:
+            raise ValueError(f"{package} : rapport introuvable dans la recherche")
+        report["report"] = match[0]
+        note = f"rapport {match[0]}"
+    else:
+        google = sorted((e for e in entries if e[3] == "google"), key=lambda e: -e[1])
+        if not google:
+            report["resolved"] = True
+            target.write_text(json.dumps([report], indent=1))
+            return f"{package} : aucun rapport Google Play (dernier : {report.get('source')})"
+        rid = google[0][1]
+        page = get(f"/en/reports/{rid}/")
+        report = parse(page)
+        report["report"] = rid
+        note = f"rapport Google Play {rid} du {report['updated']} à la place de F-Droid, {len(report['trackers'])} traqueurs"
+    report["resolved"] = True
+    target.write_text(json.dumps([report], indent=1))
+    return f"{package} : {note}"
 
 
 def parse(page):
@@ -71,23 +131,26 @@ def parse(page):
     }
 
 
-def main(apps_file, cache_dir):
+def main(apps_file, cache_dir, resolve_ids=False):
     cache = Path(cache_dir)
     cache.mkdir(parents=True, exist_ok=True)
+    _stamp[0] = cache / ".last_request"
     shutil.copyfile(TRACKERS_ASSET, cache / "_trackers.json")
     apps = json.loads(Path(apps_file).read_text())["apps"]
     missing = []
-    first = True
     for app in apps:
         package = app["package"]
         if not HANDLE.match(package):
             raise SystemExit(f"paquet invalide : {package}")
         target = cache / f"{package}.json"
+        if resolve_ids:
+            if target.exists():
+                message = resolve(package, target)
+                if message:
+                    print(message, flush=True)
+            continue
         if target.exists() or (cache / f"{package}.missing").exists():
             continue
-        if not first:
-            time.sleep(DELAY_S)
-        first = False
         page = fetch(package)
         if page is None:
             (cache / f"{package}.missing").write_text("")
@@ -103,6 +166,6 @@ def main(apps_file, cache_dir):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 3:
+    if len(sys.argv) not in (3, 4) or (len(sys.argv) == 4 and sys.argv[3] != "--resolve"):
         raise SystemExit(__doc__)
-    main(sys.argv[1], sys.argv[2])
+    main(sys.argv[1], sys.argv[2], resolve_ids=len(sys.argv) == 4)

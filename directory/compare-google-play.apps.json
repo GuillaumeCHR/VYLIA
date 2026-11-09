@@ -1,0 +1,203 @@
+{
+ "comment": "Point de repère : les alternatives proposées dans l'app VYLIA (app/src/main/assets/alternatives.json) disponibles sur Google Play, notées avec la même méthode.",
+ "apps": [
+  {
+   "package": "org.mozilla.firefox",
+   "name": "Mozilla Firefox",
+   "category": "BROWSER",
+   "group": "Communication"
+  },
+  {
+   "package": "net.thunderbird.android",
+   "name": "Thunderbird",
+   "category": "EMAIL",
+   "group": "Communication"
+  },
+  {
+   "package": "org.thoughtcrime.securesms",
+   "name": "Signal",
+   "category": "MESSAGING",
+   "group": "Communication"
+  },
+  {
+   "package": "org.joinmastodon.android",
+   "name": "Mastodon",
+   "category": "SOCIAL",
+   "group": "Réseaux sociaux"
+  },
+  {
+   "package": "xyz.blueskyweb.app",
+   "name": "Bluesky",
+   "category": "SOCIAL",
+   "group": "Réseaux sociaux"
+  },
+  {
+   "package": "org.quantumbadger.redreader",
+   "name": "RedReader",
+   "category": "SOCIAL",
+   "group": "Réseaux sociaux"
+  },
+  {
+   "package": "de.danoeh.antennapod",
+   "name": "AntennaPod",
+   "category": "MEDIA_PLAYER",
+   "group": "Musique et audio"
+  },
+  {
+   "package": "org.videolan.vlc",
+   "name": "VLC Media Player",
+   "category": "MEDIA_PLAYER",
+   "group": "Lecteurs et éditeurs vidéo"
+  },
+  {
+   "package": "org.framasoft.peertube",
+   "name": "PeerTube",
+   "category": "MEDIA_PLAYER",
+   "group": "Lecteurs et éditeurs vidéo"
+  },
+  {
+   "package": "net.sourceforge.opencamera",
+   "name": "Open Camera",
+   "category": "PHOTO_VIDEO",
+   "group": "Photographie"
+  },
+  {
+   "package": "org.fossify.gallery",
+   "name": "Fossify Gallery",
+   "category": "PHOTO_VIDEO",
+   "group": "Photographie"
+  },
+  {
+   "package": "ru.tech.imageresizershrinker",
+   "name": "Image Toolbox",
+   "category": "PHOTO_VIDEO",
+   "group": "Photographie"
+  },
+  {
+   "package": "org.localsend.localsend_app",
+   "name": "LocalSend",
+   "category": "PRODUCTIVITY_CLOUD",
+   "group": "Productivité"
+  },
+  {
+   "package": "com.superproductivity.superproductivity",
+   "name": "Super Productivity",
+   "category": "PRODUCTIVITY_CLOUD",
+   "group": "Productivité"
+  },
+  {
+   "package": "com.amaze.filemanager",
+   "name": "Amaze File Manager",
+   "category": "UTILITY",
+   "group": "Outils"
+  },
+  {
+   "package": "com.beemdevelopment.aegis",
+   "name": "Aegis Authenticator",
+   "category": "SECURITY_AUTH",
+   "group": "Vie privée et sécurité"
+  },
+  {
+   "package": "net.i2p.android",
+   "name": "I2P",
+   "category": "SECURITY_AUTH",
+   "group": "Vie privée et sécurité"
+  },
+  {
+   "package": "com.kunzisoft.keepass.free",
+   "name": "KeePassDX",
+   "category": "SECURITY_AUTH",
+   "group": "Vie privée et sécurité"
+  },
+  {
+   "package": "app.organicmaps",
+   "name": "Organic Maps",
+   "category": "NAVIGATION",
+   "group": "Cartes et navigation"
+  },
+  {
+   "package": "de.westnordost.streetcomplete",
+   "name": "StreetComplete",
+   "category": "NAVIGATION",
+   "group": "Cartes et navigation"
+  },
+  {
+   "package": "org.kde.itinerary",
+   "name": "KDE Itinerary",
+   "category": "TRAVEL_LEISURE",
+   "group": "Cartes et navigation"
+  },
+  {
+   "package": "io.horizontalsystems.bankwallet",
+   "name": "Unstoppable Wallet",
+   "category": "FINANCE_ACCOUNTS",
+   "group": "Finances"
+  },
+  {
+   "package": "de.dbauer.expensetracker",
+   "name": "Recurring Expense Tracker",
+   "category": "FINANCE_ACCOUNTS",
+   "group": "Finances"
+  },
+  {
+   "package": "org.isoron.uhabits",
+   "name": "Loop Habit Tracker",
+   "category": "FITNESS",
+   "group": "Santé et remise en forme"
+  },
+  {
+   "package": "org.openfoodfacts.scanner",
+   "name": "Open Food Facts",
+   "category": "ECOMMERCE",
+   "group": "Santé et remise en forme"
+  },
+  {
+   "package": "org.wikipedia",
+   "name": "Wikipedia",
+   "category": "NEWS_READING",
+   "group": "Livres et références"
+  },
+  {
+   "package": "com.artifex.mupdf.viewer.app",
+   "name": "MuPDF",
+   "category": "PRODUCTIVITY_CLOUD",
+   "group": "Livres et références"
+  },
+  {
+   "package": "com.ichi2.anki",
+   "name": "AnkiDroid",
+   "category": "EDUCATION_FAMILY",
+   "group": "Livres et références"
+  },
+  {
+   "package": "com.nononsenseapps.feeder.play",
+   "name": "Feeder",
+   "category": "NEWS_READING",
+   "group": "Actualités et magazines"
+  },
+  {
+   "package": "com.prof18.feedflow",
+   "name": "FeedFlow",
+   "category": "NEWS_READING",
+   "group": "Actualités et magazines"
+  },
+  {
+   "package": "app.lawnchair.play",
+   "name": "Lawnchair",
+   "category": "UTILITY",
+   "group": "Personnalisation"
+  },
+  {
+   "package": "org.futo.voiceinput",
+   "name": "FUTO Voice Input",
+   "category": "KEYBOARD",
+   "group": "Intelligence artificielle"
+  },
+  {
+   "package": "com.danemadsen.maid",
+   "name": "Maid (AI)",
+   "category": "AI_ASSISTANT",
+   "group": "Intelligence artificielle"
+  }
+ ]
+}

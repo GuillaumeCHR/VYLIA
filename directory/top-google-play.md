@@ -124,6 +124,49 @@ Classement par score décroissant ; la colonne « Téléchargements » donne le 
 | 17 | SHAREit | 1 Md+ | Utilitaire | **E** | 0 | 20 : AppLovin (MAX and SparkLabs), AppMonet, ChartBoost (+17) | 15 | [6.27.58_ww, 2026-10-18](https://reports.exodus-privacy.eu.org/fr/reports/com.lenovo.anyshare.gps/latest/) |
 | 18 | Viber | 1 Md+ | Messagerie | **E** | 0 | 22 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+19) | 10 | [29.3.1.0, 2026-11-01](https://reports.exodus-privacy.eu.org/fr/reports/com.viber.voip/latest/) |
 
+## Pour comparer
+
+Les alternatives que l'app VYLIA propose (écran Gérer, « Alternatives »), quand elles sont sur Google Play, notées avec
+la même méthode : un point de repère pour lire les notes ci-dessus. La plupart sont des logiciels libres.
+
+33 apps notées sur 33. Notes : A : 25, B : 7, C : 1, D : 0, E : 0. Traqueurs par app : médiane 0, maximum 3 ; 23 apps sans traqueur connu.
+
+| # | App | Classement | Catégorie | Note | Score /100 | Traqueurs | Permissions pénalisées | Rapport Exodus |
+|---:|---|---|---|:---:|---:|---|---:|---|
+| 1 | Aegis Authenticator | hors classement | Sécurité | **A** | 100 | 0 | 0 | [3.4.3, 2026-09-06](https://reports.exodus-privacy.eu.org/fr/reports/777105/) |
+| 2 | AntennaPod | hors classement | Vidéo, musique | **A** | 100 | 0 | 0 | [3.12.3, 2026-10-13](https://reports.exodus-privacy.eu.org/fr/reports/789428/) |
+| 3 | Loop Habit Tracker | hors classement | FITNESS | **A** | 100 | 0 | 0 | [2.0.3, 2021-10-31](https://reports.exodus-privacy.eu.org/fr/reports/213447/) (ancien) |
+| 4 | Mastodon | hors classement | Réseau social | **A** | 100 | 0 | 0 | [2.13.5, 2026-10-31](https://reports.exodus-privacy.eu.org/fr/reports/796078/) |
+| 5 | MuPDF | hors classement | Bureautique, stockage | **A** | 100 | 0 | 0 | [1.28.5a, 2026-09-25](https://reports.exodus-privacy.eu.org/fr/reports/783185/) |
+| 6 | Recurring Expense Tracker | hors classement | Paiement | **A** | 100 | 0 | 0 | [0.21.3, 2026-07-03](https://reports.exodus-privacy.eu.org/fr/reports/755968/) |
+| 7 | RedReader | hors classement | Réseau social | **A** | 100 | 0 | 0 | [1.27, 2026-10-09](https://reports.exodus-privacy.eu.org/fr/reports/787915/) |
+| 8 | StreetComplete | hors classement | Navigation | **A** | 100 | 0 | 0 | [64.0, 2026-10-21](https://reports.exodus-privacy.eu.org/fr/reports/792104/) |
+| 9 | Super Productivity | hors classement | Bureautique, stockage | **A** | 100 | 0 | 1 | [19.3.1, 2026-10-26](https://reports.exodus-privacy.eu.org/fr/reports/794193/) |
+| 10 | Unstoppable Wallet | hors classement | Paiement | **A** | 100 | 0 | 0 | [0.52.0, 2026-10-13](https://reports.exodus-privacy.eu.org/fr/reports/789285/) |
+| 11 | KeePassDX | hors classement | Sécurité | **A** | 99 | 0 | 1 | [4.5.8, 2026-11-01](https://reports.exodus-privacy.eu.org/fr/reports/796437/) |
+| 12 | Thunderbird | hors classement | E-mail | **A** | 99 | 0 | 1 | [24.0, 2026-10-08](https://reports.exodus-privacy.eu.org/fr/reports/787687/) |
+| 13 | FeedFlow | hors classement | Actualités | **A** | 98 | 1 : Google CrashLytics | 0 | [1.19.0, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796857/) |
+| 14 | I2P | hors classement | Sécurité | **A** | 98 | 0 | 1 | [2.5.2, 2024-05-17](https://reports.exodus-privacy.eu.org/fr/reports/448992/) (ancien) |
+| 15 | Open Food Facts | hors classement | Achats | **A** | 98 | 1 : Sentry | 0 | [4.24.0, 2026-09-06](https://reports.exodus-privacy.eu.org/fr/reports/777125/) |
+| 16 | PeerTube | hors classement | Vidéo, musique | **A** | 98 | 1 : Sentry | 0 | [2.3.0, 2026-09-30](https://reports.exodus-privacy.eu.org/fr/reports/784905/) |
+| 17 | Feeder | hors classement | Actualités | **A** | 95 | 0 | 1 | [2.25.0, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792775/) |
+| 18 | Maid (AI) | hors classement | Assistant IA | **A** | 95 | 0 | 1 | [3.0.0, 2026-06-18](https://reports.exodus-privacy.eu.org/fr/reports/751460/) |
+| 19 | Organic Maps | hors classement | Navigation | **A** | 95 | 0 | 1 | [2026.09.29-32-Google, 2026-10-03](https://reports.exodus-privacy.eu.org/fr/reports/786199/) |
+| 20 | FUTO Voice Input | hors classement | Clavier | **A** | 94 | 1 : ACRA | 1 | [1.3.7-1, 2025-10-24](https://reports.exodus-privacy.eu.org/fr/reports/665394/) (ancien) |
+| 21 | Fossify Gallery | hors classement | Photo, montage | **A** | 93 | 0 | 2 | [1.14.1, 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795166/) |
+| 22 | KDE Itinerary | hors classement | Voyage | **A** | 93 | 1 : Sentry | 3 | [26.08.1, 2026-09-28](https://reports.exodus-privacy.eu.org/fr/reports/784501/) |
+| 23 | Open Camera | hors classement | Photo, montage | **A** | 93 | 0 | 2 | [1.56.2, 2026-05-30](https://reports.exodus-privacy.eu.org/fr/reports/745523/) |
+| 24 | Signal | hors classement | Messagerie | **A** | 89 | 0 | 7 | [8.34.2, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797444/) |
+| 25 | LocalSend | hors classement | Bureautique, stockage | **A** | 85 | 0 | 3 | [1.18.2, 2026-08-23](https://reports.exodus-privacy.eu.org/fr/reports/772062/) |
+| 26 | AnkiDroid | hors classement | Éducation | **B** | 82 | 1 : ACRA | 1 | [2.25.3, 2026-10-22](https://reports.exodus-privacy.eu.org/fr/reports/792406/) |
+| 27 | Bluesky | hors classement | Réseau social | **B** | 78 | 1 : Sentry | 5 | [1.137.0, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795915/) |
+| 28 | Image Toolbox | hors classement | Photo, montage | **B** | 75 | 2 : Google Firebase Analytics, Google CrashLytics | 3 | [4.2.0, 2026-09-17](https://reports.exodus-privacy.eu.org/fr/reports/780430/) |
+| 29 | VLC Media Player | hors classement | Vidéo, musique | **B** | 75 | 0 | 5 | [3.7.2, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792748/) |
+| 30 | Mozilla Firefox | hors classement | Navigateur | **B** | 72 | 3 : Adjust, Mozilla Telemetry, Sentry | 5 | [159.0.1, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797454/) |
+| 31 | Amaze File Manager | hors classement | Utilitaire | **B** | 71 | 1 : ACRA | 4 | [3.11.4, 2026-10-24](https://reports.exodus-privacy.eu.org/fr/reports/793547/) |
+| 32 | Wikipedia | hors classement | Actualités | **B** | 70 | 0 | 4 | [50616-r-2026-11-03, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797888/) |
+| 33 | Lawnchair | hors classement | Utilitaire | **C** | 61 | 0 | 5 | [15.Beta 3, 2026-05-19](https://reports.exodus-privacy.eu.org/fr/reports/741480/) |
+
 ## Comment lire ce tableau
 
 - **Note de A à E et score sur 100** : calculés avec la grille VYLIA, comme dans l'app. Les permissions sont jugées
@@ -137,7 +180,7 @@ Classement par score décroissant ; la colonne « Téléchargements » donne le 
 - **Ce que la note ne mesure pas** : ce que l'éditeur fait des données sur ses serveurs, et les motifs de sécurité,
   qui demandent l'APK.
 - **(ancien)** : le dernier rapport Exodus a plus d'un an ; l'app a pu changer depuis.
-- Rapports Exodus du 2024-09-17 au 2026-11-07 (dernier rapport de chaque app au moment de la lecture).
+- Rapports Exodus du 2021-10-31 au 2026-11-07 (dernier rapport de chaque app au moment de la lecture).
 
 ## Données et licence
 

@@ -1,0 +1,2319 @@
+{
+    "format": 1,
+    "license": "ODbL-1.0",
+    "attribution": "Contient des informations d'Exodus Privacy (https://exodus-privacy.eu.org), disponibles sous Open Database License (ODbL 1.0).",
+    "generated": "2026-11-09",
+    "rules_version": "3.0 · d1404230",
+    "apps": [
+        {
+            "package": "app.lawnchair.play",
+            "name": "Lawnchair",
+            "category": "UTILITY",
+            "countries": [],
+            "status": "SCORED",
+            "score": 61,
+            "grade": "C",
+            "penalties": {
+                "permissions": 39.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "READ_CONTACTS",
+                    "context": "FORBIDDEN",
+                    "penalty": 16.0,
+                    "counted": 16.0
+                },
+                {
+                    "name": "PACKAGE_USAGE_STATS",
+                    "context": "UNEXPECTED",
+                    "penalty": 8.0,
+                    "counted": 8.0
+                },
+                {
+                    "name": "CALL_PHONE",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "QUERY_ALL_PACKAGES",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "READ_MEDIA_AUDIO",
+                    "context": "UNEXPECTED",
+                    "penalty": 2.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_IMAGES",
+                    "context": "UNEXPECTED",
+                    "penalty": 3.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VIDEO",
+                    "context": "UNEXPECTED",
+                    "penalty": 3.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VISUAL_USER_SELECTED",
+                    "context": "UNEXPECTED",
+                    "penalty": 1.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "PERM_OUTLAW",
+                    "label": "Sortie de route",
+                    "icon": "ic_badge_detour",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 741480,
+                "version_name": "15.Beta 3",
+                "version_code": "",
+                "updated": "2026-05-19",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/741480/"
+            }
+        },
+        {
+            "package": "app.organicmaps",
+            "name": "Organic Maps",
+            "category": "NAVIGATION",
+            "countries": [],
+            "status": "SCORED",
+            "score": 95,
+            "grade": "A",
+            "penalties": {
+                "permissions": 5.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "ACCESS_COARSE_LOCATION",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "ACCESS_FINE_LOCATION",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "FOREGROUND_SERVICE_LOCATION",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 786199,
+                "version_name": "2026.09.29-32-Google",
+                "version_code": "",
+                "updated": "2026-10-03",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/786199/"
+            }
+        },
+        {
+            "package": "com.amaze.filemanager",
+            "name": "Amaze File Manager",
+            "category": "UTILITY",
+            "countries": [],
+            "status": "SCORED",
+            "score": 71,
+            "grade": "B",
+            "penalties": {
+                "permissions": 27.0,
+                "trackers": 2
+            },
+            "permissions": [
+                {
+                    "name": "MANAGE_EXTERNAL_STORAGE",
+                    "context": "UNEXPECTED",
+                    "penalty": 12.0,
+                    "counted": 12.0
+                },
+                {
+                    "name": "QUERY_ALL_PACKAGES",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "REQUEST_INSTALL_PACKAGES",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                }
+            ],
+            "trackers": [
+                {
+                    "id": 444,
+                    "name": "ACRA",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_MECHANIC",
+                    "label": "Mécano",
+                    "icon": "ic_badge_wrench",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 793547,
+                "version_name": "3.11.4",
+                "version_code": "",
+                "updated": "2026-10-24",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/793547/"
+            }
+        },
+        {
+            "package": "com.artifex.mupdf.viewer.app",
+            "name": "MuPDF",
+            "category": "PRODUCTIVITY_CLOUD",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_ON_TARGET",
+                    "label": "Dans le mille",
+                    "icon": "ic_badge_target",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 783185,
+                "version_name": "1.28.5a",
+                "version_code": "",
+                "updated": "2026-09-25",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/783185/"
+            }
+        },
+        {
+            "package": "com.beemdevelopment.aegis",
+            "name": "Aegis Authenticator",
+            "category": "SECURITY_AUTH",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_ON_TARGET",
+                    "label": "Dans le mille",
+                    "icon": "ic_badge_target",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 777105,
+                "version_name": "3.4.3",
+                "version_code": "",
+                "updated": "2026-09-06",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/777105/"
+            }
+        },
+        {
+            "package": "com.danemadsen.maid",
+            "name": "Maid (AI)",
+            "category": "AI_ASSISTANT",
+            "countries": [],
+            "status": "SCORED",
+            "score": 95,
+            "grade": "A",
+            "penalties": {
+                "permissions": 5.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "SYSTEM_ALERT_WINDOW",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "RECORD_AUDIO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 751460,
+                "version_name": "3.0.0",
+                "version_code": "",
+                "updated": "2026-06-18",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/751460/"
+            }
+        },
+        {
+            "package": "com.ichi2.anki",
+            "name": "AnkiDroid",
+            "category": "EDUCATION_FAMILY",
+            "countries": [],
+            "status": "SCORED",
+            "score": 82,
+            "grade": "B",
+            "penalties": {
+                "permissions": 16.0,
+                "trackers": 2
+            },
+            "permissions": [
+                {
+                    "name": "RECORD_AUDIO",
+                    "context": "FORBIDDEN",
+                    "penalty": 16.0,
+                    "counted": 16.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [
+                {
+                    "id": 444,
+                    "name": "ACRA",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "PERM_OUTLAW",
+                    "label": "Sortie de route",
+                    "icon": "ic_badge_detour",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_MECHANIC",
+                    "label": "Mécano",
+                    "icon": "ic_badge_wrench",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 792406,
+                "version_name": "2.25.3",
+                "version_code": "",
+                "updated": "2026-10-22",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/792406/"
+            }
+        },
+        {
+            "package": "com.kunzisoft.keepass.free",
+            "name": "KeePassDX",
+            "category": "SECURITY_AUTH",
+            "countries": [],
+            "status": "SCORED",
+            "score": 99,
+            "grade": "A",
+            "penalties": {
+                "permissions": 1.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "SCHEDULE_EXACT_ALARM",
+                    "context": "UNEXPECTED",
+                    "penalty": 1.0,
+                    "counted": 1.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 796437,
+                "version_name": "4.5.8",
+                "version_code": "",
+                "updated": "2026-11-01",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/796437/"
+            }
+        },
+        {
+            "package": "com.nononsenseapps.feeder.play",
+            "name": "Feeder",
+            "category": "NEWS_READING",
+            "countries": [],
+            "status": "SCORED",
+            "score": 95,
+            "grade": "A",
+            "penalties": {
+                "permissions": 5.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 792775,
+                "version_name": "2.25.0",
+                "version_code": "",
+                "updated": "2026-10-23",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/792775/"
+            }
+        },
+        {
+            "package": "com.prof18.feedflow",
+            "name": "FeedFlow",
+            "category": "NEWS_READING",
+            "countries": [],
+            "status": "SCORED",
+            "score": 98,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 2
+            },
+            "permissions": [],
+            "trackers": [
+                {
+                    "id": 27,
+                    "name": "Google CrashLytics",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "PERM_FEATHER",
+                    "label": "Poids plume",
+                    "icon": "ic_badge_feather",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_MECHANIC",
+                    "label": "Mécano",
+                    "icon": "ic_badge_wrench",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 796857,
+                "version_name": "1.19.0",
+                "version_code": "",
+                "updated": "2026-11-02",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/796857/"
+            }
+        },
+        {
+            "package": "com.superproductivity.superproductivity",
+            "name": "Super Productivity",
+            "category": "PRODUCTIVITY_CLOUD",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.4,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "SCHEDULE_EXACT_ALARM",
+                    "context": "TOLERATED",
+                    "penalty": 0.4,
+                    "counted": 0.4
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 794193,
+                "version_name": "19.3.1",
+                "version_code": "",
+                "updated": "2026-10-26",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/794193/"
+            }
+        },
+        {
+            "package": "de.danoeh.antennapod",
+            "name": "AntennaPod",
+            "category": "MEDIA_PLAYER",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_FEATHER",
+                    "label": "Poids plume",
+                    "icon": "ic_badge_feather",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 789428,
+                "version_name": "3.12.3",
+                "version_code": "",
+                "updated": "2026-10-13",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/789428/"
+            }
+        },
+        {
+            "package": "de.dbauer.expensetracker",
+            "name": "Recurring Expense Tracker",
+            "category": "FINANCE_ACCOUNTS",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_FEATHER",
+                    "label": "Poids plume",
+                    "icon": "ic_badge_feather",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 755968,
+                "version_name": "0.21.3",
+                "version_code": "",
+                "updated": "2026-07-03",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/755968/"
+            }
+        },
+        {
+            "package": "de.westnordost.streetcomplete",
+            "name": "StreetComplete",
+            "category": "NAVIGATION",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "ACCESS_COARSE_LOCATION",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "ACCESS_FINE_LOCATION",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_ON_TARGET",
+                    "label": "Dans le mille",
+                    "icon": "ic_badge_target",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 792104,
+                "version_name": "64.0",
+                "version_code": "",
+                "updated": "2026-10-21",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/792104/"
+            }
+        },
+        {
+            "package": "io.horizontalsystems.bankwallet",
+            "name": "Unstoppable Wallet",
+            "category": "FINANCE_ACCOUNTS",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_ON_TARGET",
+                    "label": "Dans le mille",
+                    "icon": "ic_badge_target",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 789285,
+                "version_name": "0.52.0",
+                "version_code": "",
+                "updated": "2026-10-13",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/789285/"
+            }
+        },
+        {
+            "package": "net.i2p.android",
+            "name": "I2P",
+            "category": "SECURITY_AUTH",
+            "countries": [],
+            "status": "SCORED",
+            "score": 98,
+            "grade": "A",
+            "penalties": {
+                "permissions": 2.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+                    "context": "UNEXPECTED",
+                    "penalty": 2.0,
+                    "counted": 2.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 448992,
+                "version_name": "2.5.2",
+                "version_code": "",
+                "updated": "2024-05-17",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/448992/"
+            }
+        },
+        {
+            "package": "net.sourceforge.opencamera",
+            "name": "Open Camera",
+            "category": "PHOTO_VIDEO",
+            "countries": [],
+            "status": "SCORED",
+            "score": 93,
+            "grade": "A",
+            "penalties": {
+                "permissions": 7.2,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "RECORD_AUDIO",
+                    "context": "TOLERATED",
+                    "penalty": 4.0,
+                    "counted": 4.0
+                },
+                {
+                    "name": "ACCESS_FINE_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 3.2,
+                    "counted": 3.2
+                },
+                {
+                    "name": "ACCESS_COARSE_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 1.2,
+                    "counted": 0.0
+                },
+                {
+                    "name": "BLUETOOTH_CONNECT",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "BLUETOOTH_SCAN",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 745523,
+                "version_name": "1.56.2",
+                "version_code": "",
+                "updated": "2026-05-30",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/745523/"
+            }
+        },
+        {
+            "package": "net.thunderbird.android",
+            "name": "Thunderbird",
+            "category": "EMAIL",
+            "countries": [],
+            "status": "SCORED",
+            "score": 99,
+            "grade": "A",
+            "penalties": {
+                "permissions": 1.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "SCHEDULE_EXACT_ALARM",
+                    "context": "UNEXPECTED",
+                    "penalty": 1.0,
+                    "counted": 1.0
+                },
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_CONTACTS",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 787687,
+                "version_name": "24.0",
+                "version_code": "",
+                "updated": "2026-10-08",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/787687/"
+            }
+        },
+        {
+            "package": "org.fossify.gallery",
+            "name": "Fossify Gallery",
+            "category": "PHOTO_VIDEO",
+            "countries": [],
+            "status": "SCORED",
+            "score": 93,
+            "grade": "A",
+            "penalties": {
+                "permissions": 6.8,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "MANAGE_EXTERNAL_STORAGE",
+                    "context": "TOLERATED",
+                    "penalty": 4.8,
+                    "counted": 4.8
+                },
+                {
+                    "name": "ACCESS_MEDIA_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 2.0,
+                    "counted": 2.0
+                },
+                {
+                    "name": "READ_MEDIA_IMAGES",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VIDEO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VISUAL_USER_SELECTED",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 795166,
+                "version_name": "1.14.1",
+                "version_code": "",
+                "updated": "2026-10-28",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/795166/"
+            }
+        },
+        {
+            "package": "org.framasoft.peertube",
+            "name": "PeerTube",
+            "category": "MEDIA_PLAYER",
+            "countries": [],
+            "status": "SCORED",
+            "score": 98,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 2
+            },
+            "permissions": [],
+            "trackers": [
+                {
+                    "id": 447,
+                    "name": "Sentry",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "PERM_FEATHER",
+                    "label": "Poids plume",
+                    "icon": "ic_badge_feather",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_MECHANIC",
+                    "label": "Mécano",
+                    "icon": "ic_badge_wrench",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 784905,
+                "version_name": "2.3.0",
+                "version_code": "",
+                "updated": "2026-09-30",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/784905/"
+            }
+        },
+        {
+            "package": "org.futo.voiceinput",
+            "name": "FUTO Voice Input",
+            "category": "KEYBOARD",
+            "countries": [],
+            "status": "SCORED",
+            "score": 94,
+            "grade": "A",
+            "penalties": {
+                "permissions": 4.0,
+                "trackers": 2
+            },
+            "permissions": [
+                {
+                    "name": "RECORD_AUDIO",
+                    "context": "TOLERATED",
+                    "penalty": 4.0,
+                    "counted": 4.0
+                }
+            ],
+            "trackers": [
+                {
+                    "id": 444,
+                    "name": "ACRA",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "TRK_MECHANIC",
+                    "label": "Mécano",
+                    "icon": "ic_badge_wrench",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 665394,
+                "version_name": "1.3.7-1",
+                "version_code": "",
+                "updated": "2025-10-24",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/665394/"
+            }
+        },
+        {
+            "package": "org.isoron.uhabits",
+            "name": "Loop Habit Tracker",
+            "category": "FITNESS",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_FEATHER",
+                    "label": "Poids plume",
+                    "icon": "ic_badge_feather",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 213447,
+                "version_name": "2.0.3",
+                "version_code": "",
+                "updated": "2021-10-31",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/213447/"
+            }
+        },
+        {
+            "package": "org.joinmastodon.android",
+            "name": "Mastodon",
+            "category": "SOCIAL",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_FEATHER",
+                    "label": "Poids plume",
+                    "icon": "ic_badge_feather",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 796078,
+                "version_name": "2.13.5",
+                "version_code": "",
+                "updated": "2026-10-31",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/796078/"
+            }
+        },
+        {
+            "package": "org.kde.itinerary",
+            "name": "KDE Itinerary",
+            "category": "TRAVEL_LEISURE",
+            "countries": [],
+            "status": "SCORED",
+            "score": 93,
+            "grade": "A",
+            "penalties": {
+                "permissions": 5.2,
+                "trackers": 2
+            },
+            "permissions": [
+                {
+                    "name": "READ_CALENDAR",
+                    "context": "TOLERATED",
+                    "penalty": 2.4,
+                    "counted": 2.4
+                },
+                {
+                    "name": "CAMERA",
+                    "context": "TOLERATED",
+                    "penalty": 1.6,
+                    "counted": 1.6
+                },
+                {
+                    "name": "WRITE_CALENDAR",
+                    "context": "TOLERATED",
+                    "penalty": 1.2,
+                    "counted": 1.2
+                },
+                {
+                    "name": "ACCESS_FINE_LOCATION",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [
+                {
+                    "id": 447,
+                    "name": "Sentry",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "TRK_MECHANIC",
+                    "label": "Mécano",
+                    "icon": "ic_badge_wrench",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 784501,
+                "version_name": "26.08.1",
+                "version_code": "",
+                "updated": "2026-09-28",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/784501/"
+            }
+        },
+        {
+            "package": "org.localsend.localsend_app",
+            "name": "LocalSend",
+            "category": "PRODUCTIVITY_CLOUD",
+            "countries": [],
+            "status": "SCORED",
+            "score": 85,
+            "grade": "A",
+            "penalties": {
+                "permissions": 15.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "ACCESS_MEDIA_LOCATION",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "QUERY_ALL_PACKAGES",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "REQUEST_INSTALL_PACKAGES",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_AUDIO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_IMAGES",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VIDEO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 772062,
+                "version_name": "1.18.2",
+                "version_code": "",
+                "updated": "2026-08-23",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/772062/"
+            }
+        },
+        {
+            "package": "org.mozilla.firefox",
+            "name": "Mozilla Firefox",
+            "category": "BROWSER",
+            "countries": [],
+            "status": "SCORED",
+            "score": 72,
+            "grade": "B",
+            "penalties": {
+                "permissions": 15.8,
+                "trackers": 12
+            },
+            "permissions": [
+                {
+                    "name": "QUERY_ALL_PACKAGES",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "RECORD_AUDIO",
+                    "context": "TOLERATED",
+                    "penalty": 4.0,
+                    "counted": 4.0
+                },
+                {
+                    "name": "ACCESS_FINE_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 3.2,
+                    "counted": 3.2
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "TOLERATED",
+                    "penalty": 2.0,
+                    "counted": 2.0
+                },
+                {
+                    "name": "CAMERA",
+                    "context": "TOLERATED",
+                    "penalty": 1.6,
+                    "counted": 1.6
+                },
+                {
+                    "name": "ACCESS_COARSE_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 1.2,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_AUDIO",
+                    "context": "UNEXPECTED",
+                    "penalty": 2.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VISUAL_USER_SELECTED",
+                    "context": "TOLERATED",
+                    "penalty": 0.4,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [
+                {
+                    "id": 52,
+                    "name": "Adjust",
+                    "categories": [
+                        "Analytics"
+                    ],
+                    "penalty": 5
+                },
+                {
+                    "id": 221,
+                    "name": "Mozilla Telemetry",
+                    "categories": [
+                        "Analytics"
+                    ],
+                    "penalty": 5
+                },
+                {
+                    "id": 447,
+                    "name": "Sentry",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 797454,
+                "version_name": "159.0.1",
+                "version_code": "",
+                "updated": "2026-11-04",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/797454/"
+            }
+        },
+        {
+            "package": "org.openfoodfacts.scanner",
+            "name": "Open Food Facts",
+            "category": "ECOMMERCE",
+            "countries": [],
+            "status": "SCORED",
+            "score": 98,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 2
+            },
+            "permissions": [
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [
+                {
+                    "id": 447,
+                    "name": "Sentry",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "PERM_ON_TARGET",
+                    "label": "Dans le mille",
+                    "icon": "ic_badge_target",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_MECHANIC",
+                    "label": "Mécano",
+                    "icon": "ic_badge_wrench",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 777125,
+                "version_name": "4.24.0",
+                "version_code": "",
+                "updated": "2026-09-06",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/777125/"
+            }
+        },
+        {
+            "package": "org.quantumbadger.redreader",
+            "name": "RedReader",
+            "category": "SOCIAL",
+            "countries": [],
+            "status": "SCORED",
+            "score": 100,
+            "grade": "A",
+            "penalties": {
+                "permissions": 0.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_ON_TARGET",
+                    "label": "Dans le mille",
+                    "icon": "ic_badge_target",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "COMBO_TOP_OF_CLASS",
+                    "label": "Premier de la classe",
+                    "icon": "ic_badge_trophy",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 787915,
+                "version_name": "1.27",
+                "version_code": "",
+                "updated": "2026-10-09",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/787915/"
+            }
+        },
+        {
+            "package": "org.thoughtcrime.securesms",
+            "name": "Signal",
+            "category": "MESSAGING",
+            "countries": [],
+            "status": "SCORED",
+            "score": 89,
+            "grade": "A",
+            "penalties": {
+                "permissions": 11.0,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "ACCESS_FINE_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 3.2,
+                    "counted": 3.2
+                },
+                {
+                    "name": "NEARBY_WIFI_DEVICES",
+                    "context": "UNEXPECTED",
+                    "penalty": 3.0,
+                    "counted": 3.0
+                },
+                {
+                    "name": "READ_PHONE_STATE",
+                    "context": "TOLERATED",
+                    "penalty": 2.4,
+                    "counted": 2.4
+                },
+                {
+                    "name": "BLUETOOTH_CONNECT",
+                    "context": "TOLERATED",
+                    "penalty": 0.8,
+                    "counted": 0.8
+                },
+                {
+                    "name": "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+                    "context": "TOLERATED",
+                    "penalty": 0.8,
+                    "counted": 0.8
+                },
+                {
+                    "name": "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+                    "context": "TOLERATED",
+                    "penalty": 0.4,
+                    "counted": 0.4
+                },
+                {
+                    "name": "SCHEDULE_EXACT_ALARM",
+                    "context": "TOLERATED",
+                    "penalty": 0.4,
+                    "counted": 0.4
+                },
+                {
+                    "name": "ACCESS_COARSE_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 1.2,
+                    "counted": 0.0
+                },
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "FOREGROUND_SERVICE_CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "FOREGROUND_SERVICE_MICROPHONE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "GET_ACCOUNTS",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_CONTACTS",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_IMAGES",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VIDEO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VISUAL_USER_SELECTED",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_PHONE_NUMBERS",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "RECORD_AUDIO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "USE_FULL_SCREEN_INTENT",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "WRITE_CONTACTS",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 797444,
+                "version_name": "8.34.2",
+                "version_code": "",
+                "updated": "2026-11-04",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/797444/"
+            }
+        },
+        {
+            "package": "org.videolan.vlc",
+            "name": "VLC Media Player",
+            "category": "MEDIA_PLAYER",
+            "countries": [],
+            "status": "SCORED",
+            "score": 75,
+            "grade": "B",
+            "penalties": {
+                "permissions": 25.2,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "MANAGE_EXTERNAL_STORAGE",
+                    "context": "UNEXPECTED",
+                    "penalty": 12.0,
+                    "counted": 12.0
+                },
+                {
+                    "name": "SYSTEM_ALERT_WINDOW",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "RECORD_AUDIO",
+                    "context": "TOLERATED",
+                    "penalty": 4.0,
+                    "counted": 4.0
+                },
+                {
+                    "name": "WRITE_SETTINGS",
+                    "context": "UNEXPECTED",
+                    "penalty": 3.0,
+                    "counted": 3.0
+                },
+                {
+                    "name": "READ_MEDIA_IMAGES",
+                    "context": "TOLERATED",
+                    "penalty": 1.2,
+                    "counted": 1.2
+                },
+                {
+                    "name": "BLUETOOTH_CONNECT",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_AUDIO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VIDEO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 792748,
+                "version_name": "3.7.2",
+                "version_code": "",
+                "updated": "2026-10-23",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/792748/"
+            }
+        },
+        {
+            "package": "org.wikipedia",
+            "name": "Wikipedia",
+            "category": "NEWS_READING",
+            "countries": [],
+            "status": "SCORED",
+            "score": 70,
+            "grade": "B",
+            "penalties": {
+                "permissions": 30.2,
+                "trackers": 0
+            },
+            "permissions": [
+                {
+                    "name": "ACCESS_FINE_LOCATION",
+                    "context": "FORBIDDEN",
+                    "penalty": 12.8,
+                    "counted": 12.8
+                },
+                {
+                    "name": "GET_ACCOUNTS",
+                    "context": "FORBIDDEN",
+                    "penalty": 6.4,
+                    "counted": 6.4
+                },
+                {
+                    "name": "READ_PHONE_STATE",
+                    "context": "UNEXPECTED",
+                    "penalty": 6.0,
+                    "counted": 6.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "ACCESS_COARSE_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 1.2,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "PERM_OUTLAW",
+                    "label": "Sortie de route",
+                    "icon": "ic_badge_detour",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_ORGANIC",
+                    "label": "Bio",
+                    "icon": "ic_badge_leaf",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 797888,
+                "version_name": "50616-r-2026-11-03",
+                "version_code": "",
+                "updated": "2026-11-05",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/797888/"
+            }
+        },
+        {
+            "package": "ru.tech.imageresizershrinker",
+            "name": "Image Toolbox",
+            "category": "PHOTO_VIDEO",
+            "countries": [],
+            "status": "SCORED",
+            "score": 75,
+            "grade": "B",
+            "penalties": {
+                "permissions": 18.4,
+                "trackers": 7
+            },
+            "permissions": [
+                {
+                    "name": "READ_CONTACTS",
+                    "context": "FORBIDDEN",
+                    "penalty": 16.0,
+                    "counted": 16.0
+                },
+                {
+                    "name": "ACCESS_MEDIA_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 2.0,
+                    "counted": 2.0
+                },
+                {
+                    "name": "FOREGROUND_SERVICE_MEDIA_PROJECTION",
+                    "context": "TOLERATED",
+                    "penalty": 0.4,
+                    "counted": 0.4
+                },
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_IMAGES",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [
+                {
+                    "id": 49,
+                    "name": "Google Firebase Analytics",
+                    "categories": [
+                        "Analytics"
+                    ],
+                    "penalty": 5
+                },
+                {
+                    "id": 27,
+                    "name": "Google CrashLytics",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "PERM_OUTLAW",
+                    "label": "Sortie de route",
+                    "icon": "ic_badge_detour",
+                    "polarity": "negative"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 780430,
+                "version_name": "4.2.0",
+                "version_code": "",
+                "updated": "2026-09-17",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/780430/"
+            }
+        },
+        {
+            "package": "xyz.blueskyweb.app",
+            "name": "Bluesky",
+            "category": "SOCIAL",
+            "countries": [],
+            "status": "SCORED",
+            "score": 78,
+            "grade": "B",
+            "penalties": {
+                "permissions": 20.2,
+                "trackers": 2
+            },
+            "permissions": [
+                {
+                    "name": "READ_PHONE_STATE",
+                    "context": "UNEXPECTED",
+                    "penalty": 6.0,
+                    "counted": 6.0
+                },
+                {
+                    "name": "SYSTEM_ALERT_WINDOW",
+                    "context": "UNEXPECTED",
+                    "penalty": 5.0,
+                    "counted": 5.0
+                },
+                {
+                    "name": "READ_CONTACTS",
+                    "context": "TOLERATED",
+                    "penalty": 4.0,
+                    "counted": 4.0
+                },
+                {
+                    "name": "WRITE_CONTACTS",
+                    "context": "UNEXPECTED",
+                    "penalty": 4.0,
+                    "counted": 4.0
+                },
+                {
+                    "name": "ACCESS_COARSE_LOCATION",
+                    "context": "TOLERATED",
+                    "penalty": 1.2,
+                    "counted": 1.2
+                },
+                {
+                    "name": "CAMERA",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_EXTERNAL_STORAGE",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_AUDIO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_IMAGES",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VIDEO",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                },
+                {
+                    "name": "READ_MEDIA_VISUAL_USER_SELECTED",
+                    "context": "ALLOWED",
+                    "penalty": 0.0,
+                    "counted": 0.0
+                }
+            ],
+            "trackers": [
+                {
+                    "id": 447,
+                    "name": "Sentry",
+                    "categories": [
+                        "Crash reporting"
+                    ],
+                    "penalty": 2
+                }
+            ],
+            "badges": [
+                {
+                    "id": "PERM_NOSY",
+                    "label": "Fouineuse",
+                    "icon": "ic_badge_nosy",
+                    "polarity": "negative"
+                },
+                {
+                    "id": "TRK_MECHANIC",
+                    "label": "Mécano",
+                    "icon": "ic_badge_wrench",
+                    "polarity": "positive"
+                },
+                {
+                    "id": "PERM_DORMANT",
+                    "label": "Sait se faire oublier",
+                    "icon": "ic_badge_moon",
+                    "polarity": "positive"
+                }
+            ],
+            "target_sdk_known": false,
+            "exodus": {
+                "report": 795915,
+                "version_name": "1.137.0",
+                "version_code": "",
+                "updated": "2026-10-30",
+                "url": "https://reports.exodus-privacy.eu.org/fr/reports/795915/"
+            }
+        }
+    ]
+}

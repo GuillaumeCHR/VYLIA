@@ -125,7 +125,8 @@ def load(apps_file, directory_file, section, old_before):
     out = []
     for m in metas["apps"]:
         s = "pre" if m.get("preinstalled_some") else section
-        out.append(App(m, entries[m["package"]], s, old_before))
+        if m["package"] in entries:  # absente : pas encore lue sur Exodus
+            out.append(App(m, entries[m["package"]], s, old_before))
     return out, metas
 
 
@@ -482,7 +483,8 @@ def render(lang, apps, meta, directory, flags):
                        "(apps gratuites de 500 millions à 10 milliards de téléchargements)")
         if flags["trending"]:
             sources.append('<a href="https://appinsider.io/android/charts/fr/all/free">AppInsider</a> pour « En ce moment » '
-                           "(top du jour des apps gratuites, France et États-Unis, 9 novembre 2026)")
+                           "(200 premières places du top du jour des apps gratuites, France et États-Unis, 9 novembre 2026 ; "
+                           "quand la grille de l'app ne connaît pas une app, sa catégorie est déduite de sa catégorie Google Play, pour ce classement seulement)")
         if flags["oem"]:
             sources.append("pour « Google et constructeurs », les apps de Google et des constructeurs présentes dans ces deux sources")
         if flags["compare"]:
@@ -492,7 +494,8 @@ def render(lang, apps, meta, directory, flags):
                        "(free apps from 500 million to 10 billion downloads)")
         if flags["trending"]:
             sources.append('<a href="https://appinsider.io/android/charts/us/all/free">AppInsider</a> for "Right now" '
-                           "(daily charts of free apps, France and the United States, 9 November 2026)")
+                           "(top 200 of the daily charts of free apps, France and the United States, 9 November 2026; "
+                           "when the app's grid does not know an app, its category comes from its Google Play category, for this ranking only)")
         if flags["oem"]:
             sources.append('for "Google and phone makers", the apps of Google and phone makers found in those two sources')
         if flags["compare"]:

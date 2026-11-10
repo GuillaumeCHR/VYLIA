@@ -3,7 +3,9 @@
 `directory-cli generate` (même moteur de score que l'app) et de directory/top-google-play.apps.json.
 
 Usage : top_table.py <apps.json> <directory.json> <sortie.md> [--compare <apps.json> <directory.json>]
-        [--trending <apps.json> <directory.json>]
+        [--trending <apps.json> <directory.json>] [--oem <apps.json> <directory.json>]
+
+Une app de la liste absente du directory.json n'a pas encore été lue sur Exodus : elle est comptée comme « à lire ».
 """
 import json
 import statistics
@@ -28,6 +30,8 @@ def row(rank, app, entry):
     name = app["name"]
     tier = TIERS[app["tier"]] if "tier" in app else " · ".join(
         f"{c.upper()} {app['rank_' + c]}" for c in ("fr", "us") if "rank_" + c in app) or "hors classement"
+    if "maker" in app:
+        tier = app["maker"]
     category = CATEGORIES.get(app["category"], app["category"])
     if entry["status"] != "SCORED":
         return f"| {rank} | {name} | {tier} | {category} | – | – | – | – | pas de rapport Exodus |"
@@ -77,21 +81,69 @@ la même méthode : un point de repère pour lire les notes ci-dessus. La plupar
 """
 
 
+def pending_note(apps, by_package):
+    pending = sum(1 for a in apps if a["package"] not in by_package)
+    return f"\n\nLecture en cours : {pending} apps de la liste restent à lire sur Exodus." if pending else ""
+
+
+def known(apps, by_package):
+    return [a for a in apps if a["package"] in by_package]
+
+
 def trending_section(trending, by_package):
     if not trending:
         return ""
+    ready = known(trending, by_package)
     return f"""
 ## En ce moment sur Google Play
 
-Les 50 premières apps gratuites du classement du jour de Google Play, en France et aux États-Unis, d'après
-[AppInsider](https://appinsider.io/android/charts/fr/all/free) (classement du 9 novembre 2026). Ce classement suit les
-téléchargements récents, pas le total : on y trouve les apps du moment. Sont écartées les apps de Google, Samsung et
-Apple, celles des opérateurs et celles déjà notées plus haut. La colonne « Classement » donne la place en France (FR)
-et aux États-Unis (US).
+Les 200 premières apps gratuites du classement du jour de Google Play, en France et aux États-Unis, d'après
+AppInsider ([France](https://appinsider.io/android/charts/fr/all/free),
+[États-Unis](https://appinsider.io/android/charts/us/all/free), classement du 9 novembre 2026). Ce classement suit
+les téléchargements récents, pas le total : on y trouve les apps du moment. Sont écartées les apps de Google, des
+fabricants et des opérateurs (notées dans la section suivante) et celles déjà notées plus haut. Paquet trouvé par la
+recherche Google Play, éditeur vérifié sur la fiche. Quand la grille de l'app ne connaît pas l'app, sa catégorie est
+déduite de sa catégorie Google Play, pour ce tableau seulement. La colonne « Classement » donne la place en France
+(FR) et aux États-Unis (US).
 
-{summary(trending, by_package)}
+{summary(ready, by_package)}{pending_note(trending, by_package)}
 
-{table(trending, by_package, "Classement")}
+{table(ready, by_package, "Classement")}
+"""
+
+
+MAKERS_ORDER = ("Google", "Samsung", "Xiaomi", "Huawei", "Motorola", "vivo", "Oppo", "Transsion", "Apple")
+
+
+def maker_summary(oem, by_package):
+    rows = ["| Constructeur | Apps | Notées | Score médian | A | B | C | D | E |", "|---|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    makers = sorted({a["maker"] for a in oem}, key=lambda m: MAKERS_ORDER.index(m) if m in MAKERS_ORDER else 99)
+    for m in makers:
+        apps = [a for a in oem if a["maker"] == m]
+        scored = [by_package[a["package"]] for a in apps if by_package[a["package"]]["status"] == "SCORED"]
+        grades = Counter(e["grade"] for e in scored)
+        med = f"{statistics.median(e['score'] for e in scored):g}" if scored else "–"
+        rows.append(f"| {m} | {len(apps)} | {len(scored)} | {med} | " + " | ".join(str(grades.get(g, 0)) for g in "ABCDE") + " |")
+    return "\n".join(rows)
+
+
+def oem_section(oem, by_package):
+    if not oem:
+        return ""
+    ready = known(oem, by_package)
+    return f"""
+## Google et les constructeurs
+
+Les apps de Google et des fabricants de téléphones (Samsung, Xiaomi, Huawei, Motorola, vivo, Oppo, Transsion) et
+celles d'Apple sur Android, écartées des sections précédentes. Beaucoup sont préinstallées et impossibles à
+désinstaller ; leur rapport Exodus porte sur la version publiée sur Google Play, quand elle existe. Les applications
+système qui ne sont pas sur Google Play n'ont pas de rapport.
+
+{maker_summary(ready, by_package)}
+
+{summary(ready, by_package)}{pending_note(oem, by_package)}
+
+{table(ready, by_package, "Constructeur")}
 """
 
 
@@ -101,12 +153,13 @@ def load(pair):
     return json.loads(Path(pair[0]).read_text())["apps"], json.loads(Path(pair[1]).read_text())["apps"]
 
 
-def main(apps_file, directory_file, out_file, compare=None, trending=None):
+def main(apps_file, directory_file, out_file, compare=None, trending=None, oem=None):
     meta = json.loads(Path(apps_file).read_text())
     directory = json.loads(Path(directory_file).read_text())
     compare, compare_entries = load(compare)
     trending, trending_entries = load(trending)
-    by_package = {a["package"]: a for a in directory["apps"] + compare_entries + trending_entries}
+    oem, oem_entries = load(oem)
+    by_package = {a["package"]: a for a in directory["apps"] + compare_entries + trending_entries + oem_entries}
     global OLD_BEFORE
     year, rest = directory["generated"].split("-", 1)
     OLD_BEFORE = f"{int(year) - 1}-{rest}"
@@ -126,7 +179,8 @@ paliers de 10 milliards à 500 millions de téléchargements, apps gratuites. So
 
 - les apps que Wikipedia marque comme préinstallées : leur compteur additionne les téléphones vendus, pas des choix ;
 - toutes les apps de Google et des fabricants (Samsung, Xiaomi, Huawei, Motorola, vivo, Oppo, Transsion), des
-  opérateurs, les services système et les apps arrêtées.
+  opérateurs, les services système et les apps arrêtées ; celles de Google et des fabricants sont notées à part, plus
+  bas.
 
 Les apps de développeurs indépendants préinstallées seulement sur certains téléphones (Facebook, Instagram, TikTok,
 Netflix, Microsoft Office…) sont notées à part, plus bas.
@@ -144,7 +198,7 @@ Classement par score décroissant ; la colonne « Téléchargements » donne le 
 {summary(pre_apps, by_package)}
 
 {table(pre_apps, by_package)}
-{compare_section(compare, by_package)}{trending_section(trending, by_package)}
+{compare_section(compare, by_package)}{trending_section(trending, by_package)}{oem_section(oem, by_package)}
 ## Comment lire ce tableau
 
 - **Note de A à E et score sur 100** : calculés avec la grille VYLIA, comme dans l'app. Les permissions sont jugées
@@ -165,13 +219,22 @@ Classement par score décroissant ; la colonne « Téléchargements » donne le 
 Contient des informations d'[Exodus Privacy](https://exodus-privacy.eu.org), disponibles sous
 [Open Database License (ODbL 1.0)](https://opendatacommons.org/licenses/odbl/1-0/), lues sur les pages publiques des
 rapports. Les données complètes de ce tableau (permissions, traqueurs, badges) sont dans
-[`top-google-play.json`](top-google-play.json), publié sous ODbL 1.0. VYLIA est une application indépendante, ni
-affiliée ni approuvée par Exodus Privacy.
+[`top-google-play.json`](top-google-play.json), [`compare-google-play.json`](compare-google-play.json),
+[`trending-google-play.json`](trending-google-play.json) et [`oem-google-play.json`](oem-google-play.json), publiés
+sous ODbL 1.0. VYLIA est une application indépendante, ni affiliée ni approuvée par Exodus Privacy.
 
-Reproduire : `python3 tools/directory/exodus_pages.py directory/top-google-play.apps.json directory/cache/top-google-play`,
-puis `directory-cli generate --date 2026-11-09 --offline --apps directory/top-google-play.apps.json --cache
-directory/cache/top-google-play --out directory/top-google-play.json` et
-`python3 tools/directory/top_table.py directory/top-google-play.apps.json directory/top-google-play.json directory/top-google-play.md`.
+Reproduire, pour chaque liste `directory/<liste>-google-play.apps.json` (`top`, `compare`, `trending`, `oem`) :
+
+1. `python3 tools/directory/exodus_pages.py directory/<liste>-google-play.apps.json directory/cache/top-google-play`,
+   puis la même commande suivie de `--resolve` (vrais numéros de rapport) ;
+2. `python3 tools/directory/rules_for.py app/src/main/assets/vylia_rules_v3.json directory/cache/rules-classement.json
+   directory/compare-google-play.apps.json directory/trending-google-play.apps.json directory/oem-google-play.apps.json`
+   (copie de la grille avec les catégories propres au classement ; la grille de l'app n'est pas modifiée) ;
+3. `directory-cli generate --date 2026-11-09 --offline --apps directory/<liste>-google-play.apps.json --cache
+   directory/cache/top-google-play --rules directory/cache/rules-classement.json --out directory/<liste>-google-play.json` ;
+4. `python3 tools/directory/top_table.py directory/top-google-play.apps.json directory/top-google-play.json
+   directory/top-google-play.md --compare … --trending … --oem …` (chaque option suivie de la liste et de son
+   directory.json).
 """
     Path(out_file).write_text(text)
     print(f"{out_file} écrit")
@@ -180,7 +243,7 @@ directory/cache/top-google-play --out directory/top-google-play.json` et
 if __name__ == "__main__":
     args = sys.argv[1:]
     extra = {}
-    while len(args) > 3 and args[-3] in ("--compare", "--trending"):
+    while len(args) > 3 and args[-3] in ("--compare", "--trending", "--oem"):
         extra[args[-3][2:]] = args[-2:]
         args = args[:-3]
     if len(args) != 3:

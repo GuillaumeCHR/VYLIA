@@ -119,3 +119,11 @@ table.small { font-size: 14px; }
 .v-name code { font-size: 12px; color: var(--muted); }
 .v-score { font-weight: 800; font-size: 20px; }
 .v-meta { grid-column: 2 / 4; font-size: 13px; }
+.c-badges { min-width: 96px; }
+.bdg { display: inline-grid; place-items: center; width: 26px; height: 26px; margin: 1px; border-radius: 8px; font-size: 15px; line-height: 1; cursor: help;
+  background: color-mix(in srgb, var(--b) 20%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--b) 45%, transparent); }
+.bdg-success { --b: #10B981; } .bdg-pro { --b: #38BDF8; } .bdg-warning { --b: #F59E0B; } .bdg-danger { --b: #EF4444; } .bdg-neutral { --b: #94A3B8; }
+.det-badges-h { margin: 10px 0 0; font-size: 14px; }
+.det-badges { margin: 4px 0 0; padding-left: 0; list-style: none; font-size: 14px; display: grid; gap: 4px; }
+.controls .badge-filter select { max-width: 100%; }
+@media (max-width: 640px) { .c-badges { min-width: 60px; } .bdg { width: 22px; height: 22px; font-size: 13px; } }

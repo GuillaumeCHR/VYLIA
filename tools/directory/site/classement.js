@@ -7,6 +7,7 @@
   var rows = Array.prototype.slice.call(tbody.rows);
   var q = document.getElementById("q");
   var cat = document.getElementById("cat");
+  var badge = document.getElementById("badge");
   var count = document.getElementById("count");
   var chips = Array.prototype.slice.call(document.querySelectorAll(".chip"));
   var collator = new Intl.Collator(document.documentElement.lang || "fr", { sensitivity: "base" });
@@ -25,6 +26,7 @@
       var ok = sections.indexOf(r.dataset.section) >= 0 &&
         (r.dataset.grade === "-" || grades.indexOf(r.dataset.grade) >= 0) &&
         (!cat.value || r.dataset.cat === cat.value) &&
+        (!badge || !badge.value || (" " + r.dataset.badges + " ").indexOf(" " + badge.value + " ") >= 0) &&
         (!text || r.dataset.name.indexOf(text) >= 0);
       r.hidden = !ok;
       if (ok) shown++;
@@ -64,5 +66,6 @@
   });
   q.addEventListener("input", apply);
   cat.addEventListener("change", apply);
+  if (badge) badge.addEventListener("change", apply);
   apply();
 })();

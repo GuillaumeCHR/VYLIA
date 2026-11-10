@@ -405,6 +405,119 @@ Lecture en cours : 57 apps de la liste restent à lire sur Exodus.
 | 218 | WakeBox | US 24 | Utilitaire | – | – | – | – | pas de rapport Exodus |
 | 219 | WeldUp Pocket | FR 120 | Utilitaire | – | – | – | – | pas de rapport Exodus |
 
+## Google et les constructeurs
+
+Les apps de Google et des fabricants de téléphones (Samsung, Xiaomi, Huawei, Motorola, vivo, Oppo, Transsion) et
+celles d'Apple sur Android, écartées des sections précédentes. Beaucoup sont préinstallées et impossibles à
+désinstaller ; leur rapport Exodus porte sur la version publiée sur Google Play, quand elle existe. Les applications
+système qui ne sont pas sur Google Play n'ont pas de rapport.
+
+| Constructeur | Apps | Notées | Score médian | A | B | C | D | E |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Google | 44 | 44 | 76.5 | 20 | 5 | 12 | 6 | 1 |
+| Samsung | 18 | 8 | 50 | 0 | 0 | 6 | 2 | 0 |
+| Xiaomi | 10 | 9 | 28 | 2 | 1 | 0 | 0 | 6 |
+| Huawei | 2 | 2 | 38 | 0 | 0 | 0 | 2 | 0 |
+| Motorola | 6 | 0 | – | 0 | 0 | 0 | 0 | 0 |
+| vivo | 2 | 1 | 45 | 0 | 0 | 0 | 1 | 0 |
+| Oppo | 1 | 1 | 16 | 0 | 0 | 0 | 0 | 1 |
+| Transsion | 3 | 3 | 19 | 0 | 0 | 0 | 1 | 2 |
+| Apple | 3 | 3 | 76 | 1 | 1 | 1 | 0 | 0 |
+
+71 apps notées sur 89. Notes : A : 23, B : 7, C : 19, D : 12, E : 10. Traqueurs par app : médiane 1, maximum 27 ; 32 apps sans traqueur connu.
+
+| # | App | Constructeur | Catégorie | Note | Score /100 | Traqueurs | Permissions pénalisées | Rapport Exodus |
+|---:|---|---|---|:---:|---:|---|---:|---|
+| 1 | Android System WebView | Google | Utilitaire | **A** | 100 | 0 | 0 | [156.0.8078.47, 2026-10-27](https://reports.exodus-privacy.eu.org/fr/reports/794687/) |
+| 2 | Assistant Google | Google | Assistant IA | **A** | 100 | 0 | 0 | [0.1.884448652, 2026-04-05](https://reports.exodus-privacy.eu.org/fr/reports/725245/) |
+| 3 | Calculatrice (Google) | Google | Utilitaire | **A** | 100 | 0 | 0 | [9.3 (967717812), 2026-09-09](https://reports.exodus-privacy.eu.org/fr/reports/777892/) |
+| 4 | Gemini | Google | Assistant IA | **A** | 100 | 0 | 0 | [1.0.995038376, 2026-10-19](https://reports.exodus-privacy.eu.org/fr/reports/791452/) |
+| 5 | Google Authenticator | Google | Sécurité | **A** | 100 | 0 | 0 | [7.2, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797268/) |
+| 6 | Apple TV | Apple | Vidéo, musique | **A** | 97 | 1 : Google CrashLytics | 1 | [3.0.0, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792988/) |
+| 7 | Google Drive | Google | Bureautique, stockage | **A** | 96 | 0 | 1 | [2.26.437.0.all.alldpi, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796917/) |
+| 8 | YouTube Kids | Google | Vidéo, musique | **A** | 96 | 0 | 1 | [11.42.540, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/796025/) |
+| 9 | Calculatrice (Xiaomi) | Xiaomi | Utilitaire | **A** | 95 | 0 | 1 | [12.3.81, 2024-06-10](https://reports.exodus-privacy.eu.org/fr/reports/457743/) (ancien) |
+| 10 | Google Lens | Google | Assistant IA | **A** | 95 | 1 : Google Firebase Analytics | 0 | [1.18.250731009, 2025-08-09](https://reports.exodus-privacy.eu.org/fr/reports/635619/) (ancien) |
+| 11 | Services vocaux Google | Google | ACCESSIBILITY | **A** | 95 | 0 | 1 | [26.568.436572860.3-release, 2022-04-09](https://reports.exodus-privacy.eu.org/fr/reports/247894/) (ancien) |
+| 12 | Google Docs | Google | Bureautique, stockage | **A** | 92 | 0 | 2 | [1.26.441.05.90, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797791/) |
+| 13 | Google Keep | Google | Bureautique, stockage | **A** | 92 | 0 | 2 | [5.26.441.00.90, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/798000/) |
+| 14 | Gboard | Google | Clavier | **A** | 90 | 0 | 2 | [18.5.6.993608717-release-arm64-v8a, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796834/) |
+| 15 | Google One | Google | Bureautique, stockage | **A** | 90 | 1 : Google Firebase Analytics | 1 | [1.332.1006040493, 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795424/) |
+| 16 | Google Play Livres | Google | Actualités | **A** | 90 | 0 | 3 | [2026.10.16.0 (395681), 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797403/) |
+| 17 | Google Slides | Google | Bureautique, stockage | **A** | 90 | 0 | 3 | [1.26.421.01.90, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/793135/) |
+| 18 | Services Google Play pour la RA | Google | Utilitaire | **A** | 90 | 1 : Google Firebase Analytics | 1 | [1.57.262640093, 2026-10-16](https://reports.exodus-privacy.eu.org/fr/reports/790275/) |
+| 19 | Google Actualités | Google | Actualités | **A** | 89 | 2 : Google Analytics, Google Firebase Analytics | 1 | [5.170.0.999208975, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/798003/) |
+| 20 | Google Meet | Google | Messagerie | **A** | 88 | 0 | 5 | [383.0.1007082291.duo.android_20261026.02_p0, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796916/) |
+| 21 | Google Agenda | Google | Bureautique, stockage | **A** | 87 | 0 | 5 | [2026.42.1-1011997444-release, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797121/) |
+| 22 | Google Sheets | Google | Bureautique, stockage | **A** | 87 | 1 : OpenTelemetry (OpenCensus, OpenTracing) | 2 | [1.26.441.02.90, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797788/) |
+| 23 | Météo (Xiaomi) | Xiaomi | WEATHER | **A** | 87 | 0 | 4 | [G-13.0.2.1, 2023-02-24](https://reports.exodus-privacy.eu.org/fr/reports/334807/) (ancien) |
+| 24 | Horloge (Google) | Google | Utilitaire | **B** | 82 | 0 | 4 | [9.1 (965977594), 2026-08-25](https://reports.exodus-privacy.eu.org/fr/reports/772916/) |
+| 25 | Mi Calendar | Xiaomi | Bureautique, stockage | **B** | 82 | 1 : Google Firebase Analytics | 5 | [12.6.7, 2023-04-24](https://reports.exodus-privacy.eu.org/fr/reports/350578/) (ancien) |
+| 26 | Google Play Jeux | Google | Jeu | **B** | 77 | 2 : Google AdMob, Google Firebase Analytics | 1 | [2026.10.70836 (1002888414.1002888414-190400), 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792591/) |
+| 27 | Apple Music | Apple | Vidéo, musique | **B** | 76 | 2 : Google Firebase Analytics, Google CrashLytics | 2 | [7.0.0, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795988/) |
+| 28 | Suite d'accessibilité Android | Google | ACCESSIBILITY | **B** | 76 | 0 | 6 | [17.1.0.1003738110, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792823/) |
+| 29 | Chrome | Google | Navigateur | **B** | 74 | 0 | 9 | [156.0.8078.80, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797370/) |
+| 30 | YouTube Music | Google | Vidéo, musique | **B** | 71 | 1 : Google Firebase Analytics | 4 | [9.44.52, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797118/) |
+| 31 | Google Traduction | Google | Utilitaire | **C** | 69 | 0 | 3 | [10.41.74.1002908522.1-release, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795924/) |
+| 32 | Google TV | Google | Vidéo, musique | **C** | 69 | 1 : Google Firebase Analytics | 5 | [4.39.5193.999139630.2-release, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792590/) |
+| 33 | Samsung Push Service | Samsung | Utilitaire | **C** | 64 | 1 : Google AdMob | 4 | [3.4.27.0, 2026-10-12](https://reports.exodus-privacy.eu.org/fr/reports/788816/) |
+| 34 | Samsung Internet | Samsung | Navigateur | **C** | 61 | 1 : OpenTelemetry (OpenCensus, OpenTracing) | 10 | [30.0.5.27, 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795361/) |
+| 35 | Samsung Music | Samsung | Vidéo, musique | **C** | 59 | 2 : Google AdMob, Google Firebase Analytics | 6 | [16.2.27.4, 2022-03-19](https://reports.exodus-privacy.eu.org/fr/reports/243055/) (ancien) |
+| 36 | Google Maps | Google | Navigation | **C** | 58 | 1 : Google Firebase Analytics | 9 | [26.44.05.1006895251, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797448/) |
+| 37 | Files by Google | Google | Utilitaire | **C** | 54 | 1 : Google Firebase Analytics | 7 | [1.13003.1002253400.1-release, 2026-10-29](https://reports.exodus-privacy.eu.org/fr/reports/795678/) |
+| 38 | Google Messages | Google | Messagerie | **C** | 54 | 0 | 8 | [messages.android_20261022_03_RC00.phone_dynamic, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/797997/) |
+| 39 | Google Wallet | Google | Paiement | **C** | 51 | 2 : Google Analytics, Google Firebase Analytics | 6 | [26.43.1009867093, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797460/) |
+| 40 | Android System Intelligence | Google | Utilitaire | **C** | 50 | 0 | 14 | [V.41.playstore.pixel9.843410720, 2026-01-29](https://reports.exodus-privacy.eu.org/fr/reports/701813/) |
+| 41 | Bien-être numérique | Google | Utilitaire | **C** | 50 | 0 | 7 | [1.49.1016940727 (886727), 2026-11-09](https://reports.exodus-privacy.eu.org/fr/reports/798173/) |
+| 42 | Carrier Services | Google | Messagerie | **C** | 50 | 0 | 5 | [carrierservices.android_20250826_00_RC00.phone, 2025-09-29](https://reports.exodus-privacy.eu.org/fr/reports/655730/) (ancien) |
+| 43 | Contacts (Google) | Google | Messagerie | **C** | 50 | 0 | 5 | [4.90.16.998876676, 2026-10-20](https://reports.exodus-privacy.eu.org/fr/reports/791649/) |
+| 44 | Galaxy Wearable | Samsung | WEARABLE_COMPANION | **C** | 50 | 0 | 20 | [2.2.72.26092361, 2026-10-26](https://reports.exodus-privacy.eu.org/fr/reports/794518/) |
+| 45 | Gmail | Google | E-mail | **C** | 50 | 0 | 12 | [2026.10.26.1012468012.Release, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797475/) |
+| 46 | Migrer vers iOS | Apple | Utilitaire | **C** | 50 | 0 | 11 | [4.0.5, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792986/) |
+| 47 | Smart Switch | Samsung | Utilitaire | **C** | 50 | 0 | 21 | [3.7.74.7, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/796968/) |
+| 48 | SmartThings | Samsung | Utilitaire | **C** | 50 | 0 | 20 | [1.8.52.23, 2026-10-18](https://reports.exodus-privacy.eu.org/fr/reports/790981/) |
+| 49 | Téléphone de Google | Google | Messagerie | **C** | 50 | 0 | 12 | [244.0.1001930441-pixel, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795965/) |
+| 50 | Carlcare | Transsion | Utilitaire | **D** | 46 | 2 : Google Firebase Analytics, Google CrashLytics | 6 | [V6.5.6, 2026-06-22](https://reports.exodus-privacy.eu.org/fr/reports/752793/) |
+| 51 | Android Auto | Google | VEHICLE | **D** | 45 | 1 : Google Analytics | 14 | [17.9.664044-release, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/793146/) |
+| 52 | EasyShare | vivo | Utilitaire | **D** | 45 | 1 : Google Firebase Analytics | 20 | [7.1.1.7_ex_gp, 2026-05-26](https://reports.exodus-privacy.eu.org/fr/reports/744029/) |
+| 53 | Google | Google | Navigateur | **D** | 45 | 1 : Google Firebase Analytics | 25 | [17.72.17.sa.arm64, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797580/) |
+| 54 | Google Photos | Google | Photo, montage | **D** | 45 | 1 : Google Firebase Analytics | 10 | [8.0.0.1011730683, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797512/) |
+| 55 | Localiser (Find Hub) | Google | Sécurité | **D** | 45 | 1 : Google Analytics | 6 | [3.1.787-06, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795912/) |
+| 56 | Samsung Health | Samsung | FITNESS | **D** | 45 | 1 : OpenTelemetry (OpenCensus, OpenTracing) | 13 | [7.1.0.053, 2026-10-26](https://reports.exodus-privacy.eu.org/fr/reports/794520/) |
+| 57 | YouTube | Google | Vidéo, musique | **D** | 45 | 1 : Google Firebase Analytics | 11 | [21.44.534, 2026-11-08](https://reports.exodus-privacy.eu.org/fr/reports/798068/) |
+| 58 | Huawei Backup | Huawei | Utilitaire | **D** | 38 | 1 : Huawei Mobile Services (HMS) Core | 13 | [10.1.1.570, 2021-09-20](https://reports.exodus-privacy.eu.org/fr/reports/201395/) (ancien) |
+| 59 | Phone Clone | Huawei | Utilitaire | **D** | 38 | 1 : Huawei Mobile Services (HMS) Core | 17 | [11.0.0.300, 2021-09-20](https://reports.exodus-privacy.eu.org/fr/reports/201394/) (ancien) |
+| 60 | Google Go | Google | Navigateur | **D** | 33 | 2 : Google AdMob, Google Firebase Analytics | 14 | [3.142.952204578.release, 2026-08-14](https://reports.exodus-privacy.eu.org/fr/reports/768985/) |
+| 61 | Samsung Members | Samsung | Utilitaire | **D** | 30 | 3 : Adobe Experience Cloud, Google Analytics, Google Tag Manager | 11 | [2.4.91.13, 2022-04-04](https://reports.exodus-privacy.eu.org/fr/reports/246367/) (ancien) |
+| 62 | Mi Video | Xiaomi | Vidéo, musique | **E** | 29 | 23 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+20) | 5 | [2026101200(MiVideo-GP), 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795429/) |
+| 63 | Gestionnaire de fichiers (Xiaomi) | Xiaomi | Utilitaire | **E** | 28 | 5 : Facebook Ads, Google AdMob, IAB Open Measurement (+2) | 6 | [V1-210601, 2024-06-21](https://reports.exodus-privacy.eu.org/fr/reports/461946/) (ancien) |
+| 64 | Services Google Play | Google | Utilitaire | **E** | 23 | 4 : Google AdMob, Google Analytics, Google Firebase Analytics (+1) | 31 | [26.43.30 (260400-1006944126), 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797379/) |
+| 65 | Mi Music | Xiaomi | Vidéo, musique | **E** | 19 | 27 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+24) | 6 | [9.42.01.100920i, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793857/) |
+| 66 | Phone Master | Transsion | Utilitaire | **E** | 19 | 4 : Facebook Ads, Google AdMob, Google Firebase Analytics (+1) | 13 | [5.8.1.00001, 2023-12-25](https://reports.exodus-privacy.eu.org/fr/reports/397782/) (ancien) |
+| 67 | HeyTap Pictorial | Oppo | Utilitaire | **E** | 16 | 8 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+5) | 5 | [13.3.1_expp, 2026-01-07](https://reports.exodus-privacy.eu.org/fr/reports/693758/) |
+| 68 | App Vault | Xiaomi | Utilitaire | **E** | 0 | 7 : Google AdMob, IAB Open Measurement, Pangle (+4) | 12 | [13.67.2, 2026-05-06](https://reports.exodus-privacy.eu.org/fr/reports/736859/) |
+| 69 | Mi Browser | Xiaomi | Navigateur | **E** | 0 | 21 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+18) | 13 | [14.65.0-gn, 2026-10-24](https://reports.exodus-privacy.eu.org/fr/reports/793447/) |
+| 70 | Phoenix Browser | Transsion | Navigateur | **E** | 0 | 8 : Facebook Ads, Google AdMob, Facebook Login (+5) | 14 | [22.5.1.6785, 2026-10-22](https://reports.exodus-privacy.eu.org/fr/reports/792367/) |
+| 71 | ShareMe | Xiaomi | Utilitaire | **E** | 0 | 20 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+17) | 12 | [3.48.05, 2026-09-08](https://reports.exodus-privacy.eu.org/fr/reports/777777/) |
+| 72 | Calculatrice (Samsung) | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 73 | Calendrier (Samsung) | Samsung | Bureautique, stockage | – | – | – | – | pas de rapport Exodus |
+| 74 | Cleaner (Xiaomi) | Xiaomi | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 75 | Device Help | Motorola | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 76 | Dictaphone (Samsung) | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 77 | Dossier sécurisé | Samsung | Sécurité | – | – | – | – | pas de rapport Exodus |
+| 78 | FM Radio | Motorola | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 79 | Horloge (Samsung) | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 80 | Maintenance de l'appareil | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 81 | Mes fichiers (Samsung) | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 82 | Moto Actions | Motorola | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 83 | Moto Display | Motorola | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 84 | Moto Widget | Motorola | WEATHER | – | – | – | – | pas de rapport Exodus |
+| 85 | Motorola Notifications | Motorola | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 86 | One UI Home | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 87 | Samsung Email | Samsung | E-mail | – | – | – | – | pas de rapport Exodus |
+| 88 | Samsung Notes | Samsung | Bureautique, stockage | – | – | – | – | pas de rapport Exodus |
+| 89 | Thèmes (vivo) | vivo | Utilitaire | – | – | – | – | pas de rapport Exodus |
+
 ## Comment lire ce tableau
 
 - **Note de A à E et score sur 100** : calculés avec la grille VYLIA, comme dans l'app. Les permissions sont jugées

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
-"""Copie des règles de score avec les catégories d'une liste d'apps absentes de package_overrides, pour noter le
-classement sans changer les règles de l'app (pas de changement de grille pendant le test fermé).
+"""Règles de score complétées des catégories d'une liste d'apps absentes de package_overrides (catégorie DEFAULT
+ignorée). La sortie peut être une copie (classement seul) ou la grille de l'app elle-même : le fichier garde sa forme
+(JSON indenté de 2 espaces), seules les nouvelles lignes de package_overrides changent.
 
 Usage : rules_for.py <règles.json> <sortie.json> <apps.json>...
 """

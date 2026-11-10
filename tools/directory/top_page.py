@@ -521,7 +521,7 @@ def render(lang, apps, meta, directory, flags):
         if flags["trending"]:
             sources.append('<a href="https://appinsider.io/android/charts/fr/all/free">AppInsider</a> pour « En ce moment » '
                            "(200 premières places du top du jour des apps gratuites, France et États-Unis, 9 novembre 2026 ; "
-                           "quand la grille de l'app ne connaît pas une app, sa catégorie est déduite de sa catégorie Google Play, pour ce classement seulement)")
+                           "quand la grille de l'app ne connaît pas une app, sa catégorie est déduite de sa catégorie Google Play et ajoutée à la grille de l'app, pour une note identique sur le téléphone)")
         if flags["oem"]:
             sources.append("pour « Google et constructeurs », les apps de Google et des constructeurs présentes dans ces deux sources")
         if flags["compare"]:
@@ -532,7 +532,7 @@ def render(lang, apps, meta, directory, flags):
         if flags["trending"]:
             sources.append('<a href="https://appinsider.io/android/charts/us/all/free">AppInsider</a> for "Right now" '
                            "(top 200 of the daily charts of free apps, France and the United States, 9 November 2026; "
-                           "when the app's grid does not know an app, its category comes from its Google Play category, for this ranking only)")
+                           "when the app's grid does not know an app, its category comes from its Google Play category and was added to the app's grid, so the phone gives the same grade)")
         if flags["oem"]:
             sources.append('for "Google and phone makers", the apps of Google and phone makers found in those two sources')
         if flags["compare"]:

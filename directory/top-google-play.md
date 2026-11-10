@@ -1,6 +1,6 @@
 # Les apps les plus téléchargées sur Google Play, notées par VYLIA
 
-Tableau ponctuel du 2026-11-09. Grille VYLIA 3.0 · 505ed919, le même moteur de score que
+Tableau ponctuel du 2026-11-09. Grille VYLIA 3.0 · d1404230, le même moteur de score que
 l'application.
 
 ## Quelles apps
@@ -175,9 +175,9 @@ AppInsider ([France](https://appinsider.io/android/charts/fr/all/free),
 [États-Unis](https://appinsider.io/android/charts/us/all/free), classement du 9 novembre 2026). Ce classement suit
 les téléchargements récents, pas le total : on y trouve les apps du moment. Sont écartées les apps de Google, des
 fabricants et des opérateurs (notées dans la section suivante) et celles déjà notées plus haut. Paquet trouvé par la
-recherche Google Play, éditeur vérifié sur la fiche. Quand la grille de l'app ne connaît pas l'app, sa catégorie est
-déduite de sa catégorie Google Play, pour ce tableau seulement. La colonne « Classement » donne la place en France
-(FR) et aux États-Unis (US).
+recherche Google Play, éditeur vérifié sur la fiche. Quand la grille de l'app ne connaissait pas l'app, sa catégorie a
+été déduite de sa catégorie Google Play et ajoutée à la grille de l'app : le téléphone la note avec la même catégorie.
+La colonne « Classement » donne la place en France (FR) et aux États-Unis (US).
 
 226 apps notées sur 276. Notes : A : 15, B : 27, C : 44, D : 61, E : 79. Traqueurs par app : médiane 7, maximum 33 ; 11 apps sans traqueur connu.
 
@@ -603,7 +603,8 @@ Reproduire, pour chaque liste `directory/<liste>-google-play.apps.json` (`top`, 
    puis la même commande suivie de `--resolve` (vrais numéros de rapport) ;
 2. `python3 tools/directory/rules_for.py app/src/main/assets/vylia_rules_v3.json directory/cache/rules-classement.json
    directory/compare-google-play.apps.json directory/trending-google-play.apps.json directory/oem-google-play.apps.json`
-   (copie de la grille avec les catégories propres au classement ; la grille de l'app n'est pas modifiée) ;
+   (copie de la grille avec les catégories des apps qu'elle ne connaît pas encore ; elles ont été ajoutées à la
+   grille de l'app le 10 novembre 2026, pour que le téléphone et le classement utilisent la même catégorie) ;
 3. `directory-cli generate --date 2026-11-09 --offline --apps directory/<liste>-google-play.apps.json --cache
    directory/cache/top-google-play --rules directory/cache/rules-classement.json --out directory/<liste>-google-play.json` ;
 4. `python3 tools/directory/top_table.py directory/top-google-play.apps.json directory/top-google-play.json

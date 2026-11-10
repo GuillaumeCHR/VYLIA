@@ -3,7 +3,7 @@
     "license": "ODbL-1.0",
     "attribution": "Contient des informations d'Exodus Privacy (https://exodus-privacy.eu.org), disponibles sous Open Database License (ODbL 1.0).",
     "generated": "2026-11-09",
-    "rules_version": "3.0 · 505ed919",
+    "rules_version": "3.0 · d1404230",
     "apps": [
         {
             "package": "air.com.hypah.io.slither",

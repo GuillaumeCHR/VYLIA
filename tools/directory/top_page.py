@@ -21,6 +21,24 @@ HERE = Path(__file__).resolve().parent
 GRADES = "ABCDE"
 SECTION_KEYS = ("top", "pre", "trending", "oem", "compare")
 TIER_SORT = {"10B": 10000, "5B": 5000, "1B": 1000, "500M": 500}
+
+# Badges du moteur de score : libellés et descriptions de l'app (tools/strings/ui_badges.py), gravité et pictogramme
+# des règles (même correspondance d'icônes que AppBadges.kt), dans l'ordre des règles.
+sys.path.insert(0, str(HERE.parents[1] / "tools/strings"))
+from ui_badges import B as _BADGE_TEXTS  # noqa: E402
+
+EMOJI = {"ic_badge_feather": "🪶", "ic_badge_target": "🎯", "ic_badge_nosy": "👀", "ic_badge_fishhook": "🎣",
+         "ic_badge_mask": "🥷", "ic_badge_detour": "🚧", "ic_badge_glutton": "🍔", "ic_badge_spy": "🕵️",
+         "ic_badge_ear": "👂", "ic_badge_keyboard": "⌨️", "ic_badge_flask": "🧪", "ic_badge_leaf": "🌿",
+         "ic_badge_wrench": "🔧", "ic_badge_megaphone": "📢", "ic_badge_tower": "📡", "ic_badge_pin": "📍",
+         "ic_badge_confetti": "🎊", "ic_badge_bug": "🐝", "ic_badge_box": "📦", "ic_badge_trophy": "🏆",
+         "ic_badge_skull": "💀", "ic_badge_clapper": "🎬", "ic_badge_owl": "🦉", "ic_badge_moon": "🌙"}
+SEVERITY_WEIGHT = {"pro": 2, "success": 1, "neutral": 0, "warning": -1, "danger": -2}
+_TEXTS = {i: {"en": (l[0], d[0]), "fr": (l[1], d[1])} for i, l, d in _BADGE_TEXTS}
+BADGES = {
+    b["id"]: {"severity": b["severity"], "emoji": EMOJI.get(b["icon"], "🏷️"), "order": n, **_TEXTS.get(b["id"], {})}
+    for n, b in enumerate(json.loads((HERE.parents[1] / "app/src/main/assets/vylia_rules_v3.json").read_text())["badges"]["definitions"])
+}
 e = html.escape
 
 T = {
@@ -42,7 +60,7 @@ T = {
         "rank": "n° {r} {c}",
         "no_tracker": "aucun traqueur connu", "none": "aucune",
         "report": "rapport Exodus {v}, {d}", "old": "ancien", "no_report": "pas de rapport Exodus",
-        "trackers_n": "Traqueurs ({n})", "perms_n": "Permissions pénalisées ({n})",
+        "trackers_n": "Traqueurs ({n})", "perms_n": "Permissions pénalisées ({n})", "badges": "Badges",
         "median": "score médian", "apps": "apps",
     },
     "en": {
@@ -63,7 +81,7 @@ T = {
         "rank": "#{r} {c}",
         "no_tracker": "no known tracker", "none": "none",
         "report": "Exodus report {v}, {d}", "old": "old", "no_report": "no Exodus report",
-        "trackers_n": "Trackers ({n})", "perms_n": "Penalized permissions ({n})",
+        "trackers_n": "Trackers ({n})", "perms_n": "Penalized permissions ({n})", "badges": "Badges",
         "median": "median score", "apps": "apps",
     },
 }
@@ -100,6 +118,8 @@ class App:
         ex = entry.get("exodus") or {}
         self.report_url, self.updated, self.version = ex.get("url"), ex.get("updated", ""), ex.get("version_name", "")
         self.old = bool(self.updated) and self.updated < old_before
+        self.badges = sorted((b["id"] for b in entry.get("badges", []) if b["id"] in BADGES), key=lambda i: BADGES[i]["order"])
+        self.badge_balance = sum(SEVERITY_WEIGHT[BADGES[i]["severity"]] for i in self.badges)
 
     def category(self, lang):
         return T[lang]["categories"].get(self.cat_id, self.cat_id)
@@ -125,7 +145,8 @@ def load(apps_file, directory_file, section, old_before):
     out = []
     for m in metas["apps"]:
         s = "pre" if m.get("preinstalled_some") else section
-        out.append(App(m, entries[m["package"]], s, old_before))
+        if m["package"] in entries:  # absente : pas encore lue sur Exodus
+            out.append(App(m, entries[m["package"]], s, old_before))
     return out, metas
 
 
@@ -152,8 +173,18 @@ def pill(app):
     return f'<span class="pill g-{app.grade.lower()}">{app.grade}</span>'
 
 
+def badge_icon(badge_id, lang):
+    b = BADGES[badge_id]
+    label, desc = b[lang]
+    return (f'<span class="bdg bdg-{b["severity"]}" role="img" aria-label="{e(label)}" '
+            f'title="{e(label)} : {e(desc)}" lang="{lang}">{b["emoji"]}</span>')
+
+
 def row(app, lang):
     t = T[lang]
+    badge_list = "".join(f'<li>{BADGES[i]["emoji"]} <strong>{e(BADGES[i][lang][0])}</strong> : {e(BADGES[i][lang][1])}</li>'
+                         for i in app.badges)
+    badge_block = f'<p class="det-badges-h"><strong>{t["badges"]}</strong></p><ul class="det-badges">{badge_list}</ul>' if app.badges else ""
     trackers = "".join(f"<li>{e(x['name'])}</li>" for x in app.trackers) or f"<li>{t['no_tracker']}</li>"
     perms = "".join(f"<li><code>{e(p['name'])}</code></li>" for p in app.permissions) or f"<li>{t['none']}</li>"
     if app.report_url:
@@ -165,7 +196,7 @@ def row(app, lang):
                f'<p class="muted"><code>{e(app.package)}</code> · {report}</p>'
                f'<div class="det-cols"><div><strong>{t["trackers_n"].format(n=len(app.trackers))}</strong><ul>{trackers}</ul></div>'
                f'<div><strong>{t["perms_n"].format(n=len(app.permissions))}</strong><ul>{perms}</ul></div></div>'
-               f'</div></details>')
+               f'{badge_block}</div></details>')
     score = app.score if app.scored else -1
     score_html = (f'<span class="score"><span class="score-n">{app.score}</span>'
                   f'<span class="score-bar"><span class="g-{app.grade.lower()} w{app.score}"></span></span></span>'
@@ -173,9 +204,12 @@ def row(app, lang):
     reach, reach_sort = app.reach(lang)
     return (f'<tr data-section="{app.section}" data-grade="{app.grade or "-"}" data-score="{score}" '
             f'data-trackers="{len(app.trackers) if app.scored else -1}" data-perms="{len(app.permissions) if app.scored else -1}" '
-            f'data-reach="{reach_sort}" data-name="{e(app.name.lower())}" data-cat="{e(app.category(lang))}">'
+            f'data-reach="{reach_sort}" data-name="{e(app.name.lower())}" data-cat="{e(app.category(lang))}" '
+            f'data-badges="{" ".join(app.badges)}" data-bbal="{app.badge_balance if app.scored else -99}">'
             f'<td class="c-app">{details}<span class="sec muted">{e(app.label(lang))}</span></td>'
-            f'<td class="c-grade">{pill(app)}</td><td class="c-score">{score_html}</td>'
+            f'<td class="c-grade">{pill(app)}</td>'
+            f'<td class="c-badges">{"".join(badge_icon(i, lang) for i in app.badges) or "–"}</td>'
+            f'<td class="c-score">{score_html}</td>'
             f'<td class="c-num">{len(app.trackers) if app.scored else "–"}</td>'
             f'<td class="c-num c-perms">{len(app.permissions) if app.scored else "–"}</td>'
             f'<td class="c-cat">{e(app.category(lang))}</td><td class="c-reach">{e(reach)}</td></tr>')
@@ -463,6 +497,10 @@ def render(lang, apps, meta, directory, flags):
     grade_chips = "".join(
         f'<button type="button" class="chip chip-g g-{g.lower()}" data-filter="grade" data-value="{g}" aria-pressed="true">{g}</button>'
         for g in GRADES)
+    badge_counts = Counter(i for a in apps for i in a.badges)
+    badge_options = "".join(
+        f'<option value="{i}">{BADGES[i]["emoji"]} {e(BADGES[i][lang][0])} ({badge_counts[i]})</option>'
+        for i in sorted(badge_counts, key=lambda i: BADGES[i]["order"]))
     cat_options = "".join(f'<option value="{e(c)}">{e(c)}</option>' for c in sorted({a.category(lang) for a in apps}))
     rows = "".join(row(a, lang) for a in sorted(apps, key=lambda a: (-(a.score if a.scored else -1), a.name.lower())))
     reports = sorted(a.updated for a in apps if a.updated)
@@ -482,7 +520,8 @@ def render(lang, apps, meta, directory, flags):
                        "(apps gratuites de 500 millions à 10 milliards de téléchargements)")
         if flags["trending"]:
             sources.append('<a href="https://appinsider.io/android/charts/fr/all/free">AppInsider</a> pour « En ce moment » '
-                           "(top du jour des apps gratuites, France et États-Unis, 9 novembre 2026)")
+                           "(200 premières places du top du jour des apps gratuites, France et États-Unis, 9 novembre 2026 ; "
+                           "quand la grille de l'app ne connaît pas une app, sa catégorie est déduite de sa catégorie Google Play et ajoutée à la grille de l'app, pour une note identique sur le téléphone)")
         if flags["oem"]:
             sources.append("pour « Google et constructeurs », les apps de Google et des constructeurs présentes dans ces deux sources")
         if flags["compare"]:
@@ -492,7 +531,8 @@ def render(lang, apps, meta, directory, flags):
                        "(free apps from 500 million to 10 billion downloads)")
         if flags["trending"]:
             sources.append('<a href="https://appinsider.io/android/charts/us/all/free">AppInsider</a> for "Right now" '
-                           "(daily charts of free apps, France and the United States, 9 November 2026)")
+                           "(top 200 of the daily charts of free apps, France and the United States, 9 November 2026; "
+                           "when the app's grid does not know an app, its category comes from its Google Play category and was added to the app's grid, so the phone gives the same grade)")
         if flags["oem"]:
             sources.append('for "Google and phone makers", the apps of Google and phone makers found in those two sources')
         if flags["compare"]:
@@ -530,8 +570,9 @@ def render(lang, apps, meta, directory, flags):
             h_table="Le classement complet", search="Rechercher une app…", search_label="Rechercher une app",
             cat_label="Catégorie", all_cats="Toutes les catégories", lists="Listes", grades="Notes",
             count_tpl="{n} apps affichées sur {total}",
-            th=["App", "Note", "Score", "Traqueurs", "Permissions pénalisées", "Catégorie", "Téléchargements"],
-            hint="Touchez le nom d'une app pour voir ses traqueurs et ses permissions pénalisées." + (" Les alternatives sont masquées par défaut : touchez « Alternatives » pour les afficher." if alt else ""),
+            th=["App", "Note", "Score", "Traqueurs", "Permissions pénalisées", "Catégorie", "Téléchargements", "Badges"],
+            badge_label="Badge", all_badges="Tous les badges",
+            hint="Touchez le nom d'une app pour voir ses traqueurs, ses permissions pénalisées et le sens de ses badges. Les badges sont ceux du moteur de score de VYLIA : le tri « Badges » range d'abord les apps aux badges les plus favorables." + (" Les alternatives sont masquées par défaut : touchez « Alternatives » pour les afficher." if alt else ""),
             h_method="Méthode",
             method=[
                 f"<strong>Quelles apps.</strong> Sources : {'; '.join(sources)}. Les apps de Google, d'Apple et des fabricants (Samsung, Xiaomi, Huawei, Motorola, vivo, Oppo, Transsion) sont classées à part ; les apps des opérateurs, les services système sans fiche Google Play et les apps arrêtées sont écartées. Les apps d'éditeurs indépendants préinstallées seulement sur certains téléphones (Facebook, Instagram, TikTok, Netflix, Office…) sont classées à part, car leur compteur de téléchargements est gonflé.",
@@ -574,8 +615,9 @@ def render(lang, apps, meta, directory, flags):
             h_table="The full ranking", search="Search an app…", search_label="Search an app",
             cat_label="Category", all_cats="All categories", lists="Lists", grades="Grades",
             count_tpl="{n} of {total} apps shown",
-            th=["App", "Grade", "Score", "Trackers", "Penalized permissions", "Category", "Downloads"],
-            hint="Tap an app's name to see its trackers and penalized permissions." + (' Alternatives are hidden by default: tap "Alternatives" to show them.' if alt else ""),
+            th=["App", "Grade", "Score", "Trackers", "Penalized permissions", "Category", "Downloads", "Badges"],
+            badge_label="Badge", all_badges="All badges",
+            hint="Tap an app's name to see its trackers, penalized permissions and what its badges mean. Badges come from VYLIA's scoring engine: sorting by \"Badges\" puts the apps with the most favourable badges first." + (' Alternatives are hidden by default: tap "Alternatives" to show them.' if alt else ""),
             h_method="Method",
             method=[
                 f"<strong>Which apps.</strong> Sources: {'; '.join(sources)}. Apps from Google, Apple and phone makers (Samsung, Xiaomi, Huawei, Motorola, vivo, Oppo, Transsion) are ranked apart; carrier apps, system services without a Google Play listing and discontinued apps are left out. Apps from independent publishers pre-installed only on some phones (Facebook, Instagram, TikTok, Netflix, Office…) are ranked apart, as their download count is inflated.",
@@ -652,6 +694,8 @@ def render(lang, apps, meta, directory, flags):
     <select id="cat"><option value="">{L["all_cats"]}</option>{cat_options}</select></label>
   <div class="chips" role="group" aria-label="{L["lists"]}">{section_chips}</div>
   <div class="chips" role="group" aria-label="{L["grades"]}">{grade_chips}</div>
+  <label class="badge-filter"><span class="visually-hidden">{L["badge_label"]}</span>
+    <select id="badge"><option value="">{L["all_badges"]}</option>{badge_options}</select></label>
   <p class="muted" id="count" aria-live="polite" data-tpl="{e(L["count_tpl"])}"></p>
 </div>
 <div class="table-wrap">
@@ -659,6 +703,7 @@ def render(lang, apps, meta, directory, flags):
 <thead><tr>
   <th scope="col" data-sort="name" data-type="text">{th[0]}</th>
   <th scope="col" data-sort="score" aria-sort="descending">{th[1]}</th>
+  <th scope="col" data-sort="bbal" class="c-badges">{th[7]}</th>
   <th scope="col" data-sort="score">{th[2]}</th>
   <th scope="col" data-sort="trackers" class="c-num">{th[3]}</th>
   <th scope="col" data-sort="perms" class="c-num c-perms">{th[4]}</th>

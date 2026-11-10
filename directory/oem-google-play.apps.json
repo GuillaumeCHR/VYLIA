@@ -1,0 +1,539 @@
+{
+ "comment": "Apps des constructeurs et de Google, souvent préinstallées : celles de la liste Wikipedia (paliers de 500 millions à 10 milliards) et des tops du jour AppInsider (France, États-Unis), notées à part pour comparer les constructeurs.",
+ "apps": [
+  {
+   "package": "com.google.android.gms",
+   "name": "Services Google Play",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.youtube",
+   "name": "YouTube",
+   "category": "MEDIA_PLAYER",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.maps",
+   "name": "Google Maps",
+   "category": "NAVIGATION",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.tts",
+   "name": "Services vocaux Google",
+   "category": "ACCESSIBILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.googlequicksearchbox",
+   "name": "Google",
+   "category": "BROWSER",
+   "maker": "Google"
+  },
+  {
+   "package": "com.android.chrome",
+   "name": "Chrome",
+   "category": "BROWSER",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.gm",
+   "name": "Gmail",
+   "category": "EMAIL",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.marvin.talkback",
+   "name": "Suite d'accessibilité Android",
+   "category": "ACCESSIBILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.photos",
+   "name": "Google Photos",
+   "category": "PHOTO_VIDEO",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.webview",
+   "name": "Android System WebView",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.docs",
+   "name": "Google Drive",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.inputmethod.latin",
+   "name": "Gboard",
+   "category": "KEYBOARD",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.videos",
+   "name": "Google TV",
+   "category": "MEDIA_PLAYER",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.tachyon",
+   "name": "Google Meet",
+   "category": "MESSAGING",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.youtube.music",
+   "name": "YouTube Music",
+   "category": "MEDIA_PLAYER",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.play.games",
+   "name": "Google Play Jeux",
+   "category": "GAME",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.projection.gearhead",
+   "name": "Android Auto",
+   "category": "VEHICLE",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.calendar",
+   "name": "Google Agenda",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.messaging",
+   "name": "Google Messages",
+   "category": "MESSAGING",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.wellbeing",
+   "name": "Bien-être numérique",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.ims",
+   "name": "Carrier Services",
+   "category": "MESSAGING",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.ar.core",
+   "name": "Services Google Play pour la RA",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.nbu.files",
+   "name": "Files by Google",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.books",
+   "name": "Google Play Livres",
+   "category": "NEWS_READING",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.magazines",
+   "name": "Google Actualités",
+   "category": "NEWS_READING",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.docs.editors.docs",
+   "name": "Google Docs",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.dialer",
+   "name": "Téléphone de Google",
+   "category": "MESSAGING",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.keep",
+   "name": "Google Keep",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.translate",
+   "name": "Google Traduction",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.deskclock",
+   "name": "Horloge (Google)",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.calculator",
+   "name": "Calculatrice (Google)",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.docs.editors.sheets",
+   "name": "Google Sheets",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.contacts",
+   "name": "Contacts (Google)",
+   "category": "MESSAGING",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.ar.lens",
+   "name": "Google Lens",
+   "category": "AI_ASSISTANT",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.googleassistant",
+   "name": "Assistant Google",
+   "category": "AI_ASSISTANT",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.docs.editors.slides",
+   "name": "Google Slides",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.searchlite",
+   "name": "Google Go",
+   "category": "BROWSER",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.subscriptions.red",
+   "name": "Google One",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.walletnfcrel",
+   "name": "Google Wallet",
+   "category": "FINANCE_ACCOUNTS",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.as",
+   "name": "Android System Intelligence",
+   "category": "UTILITY",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.bard",
+   "name": "Gemini",
+   "category": "AI_ASSISTANT",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.authenticator2",
+   "name": "Google Authenticator",
+   "category": "SECURITY_AUTH",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.adm",
+   "name": "Localiser (Find Hub)",
+   "category": "SECURITY_AUTH",
+   "maker": "Google"
+  },
+  {
+   "package": "com.google.android.apps.youtube.kids",
+   "name": "YouTube Kids",
+   "category": "MEDIA_PLAYER",
+   "maker": "Google"
+  },
+  {
+   "package": "com.sec.spp.push",
+   "name": "Samsung Push Service",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.app.sbrowser",
+   "name": "Samsung Internet",
+   "category": "BROWSER",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.app.myfiles",
+   "name": "Mes fichiers (Samsung)",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.app.launcher",
+   "name": "One UI Home",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.samsung.android.email.provider",
+   "name": "Samsung Email",
+   "category": "EMAIL",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.app.voicenote",
+   "name": "Dictaphone (Samsung)",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.samsung.android.lool",
+   "name": "Maintenance de l'appareil",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.samsung.android.voc",
+   "name": "Samsung Members",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.app.shealth",
+   "name": "Samsung Health",
+   "category": "FITNESS",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.app.popupcalculator",
+   "name": "Calculatrice (Samsung)",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.samsung.knox.securefolder",
+   "name": "Dossier sécurisé",
+   "category": "SECURITY_AUTH",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.samsung.android.app.notes",
+   "name": "Samsung Notes",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.app.music",
+   "name": "Samsung Music",
+   "category": "MEDIA_PLAYER",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.samsung.android.calendar",
+   "name": "Calendrier (Samsung)",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.app.clockpackage",
+   "name": "Horloge (Samsung)",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.samsung.android.oneconnect",
+   "name": "SmartThings",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.samsung.android.app.watchmanager",
+   "name": "Galaxy Wearable",
+   "category": "WEARABLE_COMPANION",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.sec.android.easyMover",
+   "name": "Smart Switch",
+   "category": "UTILITY",
+   "maker": "Samsung"
+  },
+  {
+   "package": "com.xiaomi.midrop",
+   "name": "ShareMe",
+   "category": "UTILITY",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.mi.android.globalFileexplorer",
+   "name": "Gestionnaire de fichiers (Xiaomi)",
+   "category": "UTILITY",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.miui.player",
+   "name": "Mi Music",
+   "category": "MEDIA_PLAYER",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.miui.calculator",
+   "name": "Calculatrice (Xiaomi)",
+   "category": "UTILITY",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.miui.videoplayer",
+   "name": "Mi Video",
+   "category": "MEDIA_PLAYER",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.miui.weather2",
+   "name": "Météo (Xiaomi)",
+   "category": "WEATHER",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.mi.globalminusscreen",
+   "name": "App Vault",
+   "category": "UTILITY",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.xiaomi.calendar",
+   "name": "Mi Calendar",
+   "category": "PRODUCTIVITY_CLOUD",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.miui.cleaner",
+   "name": "Cleaner (Xiaomi)",
+   "category": "UTILITY",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.mi.globalbrowser",
+   "name": "Mi Browser",
+   "category": "BROWSER",
+   "maker": "Xiaomi"
+  },
+  {
+   "package": "com.hicloud.android.clone",
+   "name": "Phone Clone",
+   "category": "UTILITY",
+   "maker": "Huawei"
+  },
+  {
+   "package": "com.huawei.KoBackup",
+   "name": "Huawei Backup",
+   "category": "UTILITY",
+   "maker": "Huawei"
+  },
+  {
+   "package": "com.motorola.actions",
+   "name": "Moto Actions",
+   "category": "UTILITY",
+   "maker": "Motorola"
+  },
+  {
+   "package": "com.motorola.motodisplay",
+   "name": "Moto Display",
+   "category": "UTILITY",
+   "maker": "Motorola"
+  },
+  {
+   "package": "com.motorola.genie",
+   "name": "Device Help",
+   "category": "UTILITY",
+   "maker": "Motorola"
+  },
+  {
+   "package": "com.motorola.fmplayer",
+   "name": "FM Radio",
+   "category": "MEDIA_PLAYER",
+   "maker": "Motorola"
+  },
+  {
+   "package": "com.motorola.ccc.notification",
+   "name": "Motorola Notifications",
+   "category": "UTILITY",
+   "maker": "Motorola"
+  },
+  {
+   "package": "com.motorola.timeweatherwidget",
+   "name": "Moto Widget",
+   "category": "WEATHER",
+   "maker": "Motorola"
+  },
+  {
+   "package": "com.vivo.easyshare",
+   "name": "EasyShare",
+   "category": "UTILITY",
+   "maker": "vivo"
+  },
+  {
+   "package": "com.bbk.theme",
+   "name": "Thèmes (vivo)",
+   "category": "UTILITY",
+   "maker": "vivo"
+  },
+  {
+   "package": "com.heytap.pictorial",
+   "name": "HeyTap Pictorial",
+   "category": "UTILITY",
+   "maker": "Oppo"
+  },
+  {
+   "package": "com.transsion.phonemaster",
+   "name": "Phone Master",
+   "category": "UTILITY",
+   "maker": "Transsion"
+  },
+  {
+   "package": "com.transsion.carlcare",
+   "name": "Carlcare",
+   "category": "UTILITY",
+   "maker": "Transsion"
+  },
+  {
+   "package": "com.transsion.phoenix",
+   "name": "Phoenix Browser",
+   "category": "BROWSER",
+   "maker": "Transsion"
+  },
+  {
+   "package": "com.apple.movetoios",
+   "name": "Migrer vers iOS",
+   "category": "UTILITY",
+   "maker": "Apple"
+  },
+  {
+   "package": "com.apple.android.music",
+   "name": "Apple Music",
+   "category": "MEDIA_PLAYER",
+   "maker": "Apple"
+  },
+  {
+   "package": "com.apple.atve.androidtv.appletv",
+   "name": "Apple TV",
+   "category": "MEDIA_PLAYER",
+   "maker": "Apple"
+  }
+ ]
+}

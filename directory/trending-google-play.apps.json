@@ -1,0 +1,1892 @@
+{
+ "comment": "Tops du jour des apps gratuites sur Google Play (AppInsider, France et États-Unis, 200 premières places, mis à jour le 9 novembre 2026). Écartées : apps de Google, Samsung, Apple et des opérateurs (classées dans oem-google-play.apps.json pour Google, Samsung et Apple), apps déjà dans les autres listes. Paquets trouvés par la recherche Google Play, éditeur vérifié sur la fiche ; catégorie VYLIA déduite de la catégorie Google Play quand package_overrides n'en donne pas.",
+ "source": [
+  "https://appinsider.io/android/charts/fr/all/free",
+  "https://appinsider.io/android/charts/us/all/free"
+ ],
+ "apps": [
+  {
+   "package": "com.anthropic.claude",
+   "name": "Claude by Anthropic",
+   "category": "AI_ASSISTANT",
+   "rank_fr": 4,
+   "rank_us": 37
+  },
+  {
+   "package": "com.cbouvat.android.saracroche",
+   "name": "Saracroche bloqueur d'appels",
+   "category": "UTILITY",
+   "rank_fr": 7
+  },
+  {
+   "package": "tools.pocket.pdf.editor.expert",
+   "name": "PDFMaster",
+   "category": "PRODUCTIVITY_CLOUD",
+   "rank_fr": 8
+  },
+  {
+   "package": "fr.assurancemaladie.monespacesante",
+   "name": "Mon espace santé",
+   "category": "HEALTH_ADMIN",
+   "rank_fr": 9
+  },
+  {
+   "package": "fr.vinted",
+   "name": "Vinted",
+   "category": "ECOMMERCE",
+   "rank_fr": 12,
+   "rank_us": 10
+  },
+  {
+   "package": "com.shopify.arrive",
+   "name": "Shop",
+   "category": "ECOMMERCE",
+   "rank_fr": 13,
+   "rank_us": 40
+  },
+  {
+   "package": "pdf.pdfreader.viewer.editor.free",
+   "name": "PDF Reader",
+   "category": "PRODUCTIVITY_CLOUD",
+   "rank_fr": 15,
+   "rank_us": 148
+  },
+  {
+   "package": "com.adobe.premiere",
+   "name": "Adobe Premiere",
+   "category": "PHOTO_VIDEO",
+   "rank_fr": 16
+  },
+  {
+   "package": "com.mondialrelay.mobile",
+   "name": "Mondial Relay suivi de colis",
+   "category": "ECOMMERCE",
+   "rank_fr": 17
+  },
+  {
+   "package": "com.trusted.pdfeditor.pdfreader",
+   "name": "PDF ProX",
+   "category": "PRODUCTIVITY_CLOUD",
+   "rank_fr": 18
+  },
+  {
+   "package": "fr.sesamvitale.cartevitale.app",
+   "name": "Carte Vitale",
+   "category": "HEALTH_ADMIN",
+   "rank_fr": 19
+  },
+  {
+   "package": "fr.hellowatt.cdn.twa",
+   "name": "Hello Watt",
+   "category": "UTILITY",
+   "rank_fr": 20
+  },
+  {
+   "package": "com.whatnot_mobile",
+   "name": "Whatnot",
+   "category": "ECOMMERCE",
+   "rank_fr": 21,
+   "rank_us": 32
+  },
+  {
+   "package": "com.action.consumerapp",
+   "name": "Action",
+   "category": "ECOMMERCE",
+   "rank_fr": 22
+  },
+  {
+   "package": "com.regionsjob.android",
+   "name": "Hellowork",
+   "category": "DEFAULT",
+   "rank_fr": 24
+  },
+  {
+   "package": "fr.doctolib.www",
+   "name": "Doctolib",
+   "category": "HEALTH_ADMIN",
+   "rank_fr": 25
+  },
+  {
+   "package": "com.dramawave.app",
+   "name": "DramaWave",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 26,
+   "rank_us": 92
+  },
+  {
+   "package": "com.epicgames.ega",
+   "name": "Epic Games",
+   "category": "GAME",
+   "rank_fr": 29
+  },
+  {
+   "package": "com.pdfviewer.readerapp",
+   "name": "PDF Reader App",
+   "category": "PRODUCTIVITY_CLOUD",
+   "rank_fr": 30
+  },
+  {
+   "package": "com.facebook.stella",
+   "name": "Meta AI",
+   "category": "AI_ASSISTANT",
+   "rank_fr": 31,
+   "rank_us": 168
+  },
+  {
+   "package": "fr.leboncoin",
+   "name": "leboncoin",
+   "category": "ECOMMERCE",
+   "rank_fr": 33
+  },
+  {
+   "package": "eu.epicompany.wero.wallet",
+   "name": "Wero",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_fr": 35
+  },
+  {
+   "package": "com.dramamini.shortdrama",
+   "name": "NovaDrama",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 36
+  },
+  {
+   "package": "com.revolut.revolut",
+   "name": "Revolut",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_fr": 37
+  },
+  {
+   "package": "com.infomil.bill",
+   "name": "Mon E.Leclerc",
+   "category": "ECOMMERCE",
+   "rank_fr": 38
+  },
+  {
+   "package": "tv.twitch.android.app",
+   "name": "Twitch",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 39,
+   "rank_us": 142
+  },
+  {
+   "package": "com.indeed.android.jobsearch",
+   "name": "Indeed Job Search",
+   "category": "DEFAULT",
+   "rank_fr": 40,
+   "rank_us": 55
+  },
+  {
+   "package": "com.luvasadistro.phoneclean.storage",
+   "name": "Phone Clean Fix",
+   "category": "UTILITY",
+   "rank_fr": 42,
+   "rank_us": 66
+  },
+  {
+   "package": "com.newleaf.app.android.victor",
+   "name": "ReelShort",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 44,
+   "rank_us": 31
+  },
+  {
+   "package": "fr.cnamts.it.activity",
+   "name": "Compte ameli",
+   "category": "HEALTH_ADMIN",
+   "rank_fr": 45
+  },
+  {
+   "package": "com.lidl.eci.lidlplus",
+   "name": "Lidl Plus",
+   "category": "ECOMMERCE",
+   "rank_fr": 46
+  },
+  {
+   "package": "de.idealo.android",
+   "name": "idealo",
+   "category": "ECOMMERCE",
+   "rank_fr": 47
+  },
+  {
+   "package": "com.cometshorts.ccapp",
+   "name": "Comet Shorts",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 48
+  },
+  {
+   "package": "com.microsoft.teams",
+   "name": "Microsoft Teams",
+   "category": "PRODUCTIVITY_CLOUD",
+   "rank_fr": 50,
+   "rank_us": 91
+  },
+  {
+   "package": "fr.laposte.idn",
+   "name": "L'Identité Numérique La Poste",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 52
+  },
+  {
+   "package": "com.azure.authenticator",
+   "name": "Microsoft Authenticator",
+   "category": "SECURITY_AUTH",
+   "rank_fr": 55,
+   "rank_us": 79
+  },
+  {
+   "package": "com.clean.smart.cleanpro",
+   "name": "Smart Clean Pro",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 56
+  },
+  {
+   "package": "fr.fdj.apps.fdj",
+   "name": "FDJ®",
+   "category": "DEFAULT",
+   "rank_fr": 57
+  },
+  {
+   "package": "com.couponbirds.dealsandcoupons",
+   "name": "CouponBirds",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 59
+  },
+  {
+   "package": "fr.tf1.mytf1",
+   "name": "TF1+",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 60
+  },
+  {
+   "package": "com.total.totalservices",
+   "name": "Services",
+   "category": "TRAVEL_LEISURE",
+   "play_category": "TRAVEL_AND_LOCAL",
+   "rank_fr": 61
+  },
+  {
+   "package": "com.zw.freeshortplay",
+   "name": "ReelyGo",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 63
+  },
+  {
+   "package": "fr.stime.mcommerce",
+   "name": "Intermarché",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 64
+  },
+  {
+   "package": "com.paypal.android.p2pmobile",
+   "name": "PayPal",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_fr": 65,
+   "rank_us": 42
+  },
+  {
+   "package": "fr.creditagricole.androidapp",
+   "name": "Ma Banque",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_fr": 66
+  },
+  {
+   "package": "com.applidium.vianavigo",
+   "name": "Île-de-France Mobilités",
+   "category": "TRANSPORT",
+   "rank_fr": 67
+  },
+  {
+   "package": "com.suno.android",
+   "name": "Suno",
+   "category": "MEDIA_PLAYER",
+   "play_category": "MUSIC_AND_AUDIO",
+   "rank_fr": 68,
+   "rank_us": 99
+  },
+  {
+   "package": "com.xstudios.cleanx",
+   "name": "Clean Up Phone Storage",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 69
+  },
+  {
+   "package": "com.einnovation.temu",
+   "name": "Temu",
+   "category": "ECOMMERCE",
+   "rank_fr": 70,
+   "rank_us": 11
+  },
+  {
+   "package": "com.vsct.vsc.mobile.horaireetresa.android",
+   "name": "SNCF Connect",
+   "category": "TRANSPORT",
+   "rank_fr": 72
+  },
+  {
+   "package": "com.carrefour.fid.android",
+   "name": "Carrefour & sa carte Club",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 73
+  },
+  {
+   "package": "com.blizzard.messenger",
+   "name": "Battle.net",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 74,
+   "rank_us": 77
+  },
+  {
+   "package": "fr.magasinsu.app",
+   "name": "Mon Magasin U Carte U Cagnotte",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 75
+  },
+  {
+   "package": "com.grandfrais.app",
+   "name": "Grand Frais",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_fr": 77
+  },
+  {
+   "package": "com.app.tgtg",
+   "name": "Too Good To Go",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_fr": 78
+  },
+  {
+   "package": "com.quick.clean.clean.umm",
+   "name": "Quick Clean Space",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 79
+  },
+  {
+   "package": "com.easy.cleaner.cacheclear",
+   "name": "EasyClean",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "PRODUCTIVITY",
+   "rank_fr": 80
+  },
+  {
+   "package": "com.storymatrix.drama",
+   "name": "DramaBox",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 81,
+   "rank_us": 18
+  },
+  {
+   "package": "fr.boulanger.application",
+   "name": "Boulanger",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 82
+  },
+  {
+   "package": "ch.protonvpn.android",
+   "name": "Proton VPN",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 83,
+   "rank_us": 102
+  },
+  {
+   "package": "com.boursorama.android.clients",
+   "name": "BoursoBank",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_fr": 84
+  },
+  {
+   "package": "com.netshort.abroad",
+   "name": "NetShort",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 86,
+   "rank_us": 19
+  },
+  {
+   "package": "com.teacapps.barcodescanner",
+   "name": "QR & Barcode Scanner",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "PRODUCTIVITY",
+   "rank_fr": 87
+  },
+  {
+   "package": "com.discord",
+   "name": "Discord",
+   "category": "MESSAGING",
+   "rank_fr": 88,
+   "rank_us": 43
+  },
+  {
+   "package": "com.canva.editor",
+   "name": "Canva",
+   "category": "PHOTO_VIDEO",
+   "rank_fr": 89,
+   "rank_us": 133
+  },
+  {
+   "package": "com.anti.cleaner.phoener",
+   "name": "AntiVirus Clean Master-Cleaner",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 90,
+   "rank_us": 97
+  },
+  {
+   "package": "com.kaching.merchant",
+   "name": "SumUp Business",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_fr": 92
+  },
+  {
+   "package": "com.polarsteps",
+   "name": "Polarsteps",
+   "category": "TRAVEL_LEISURE",
+   "play_category": "TRAVEL_AND_LOCAL",
+   "rank_fr": 94
+  },
+  {
+   "package": "com.freereels.app",
+   "name": "FreeReels",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 95,
+   "rank_us": 9
+  },
+  {
+   "package": "com.avast.android.vpn",
+   "name": "Avast VPN",
+   "category": "MESSAGING",
+   "play_category": "COMMUNICATION",
+   "rank_fr": 96
+  },
+  {
+   "package": "com.aitranslate.voicetranslator.translatenow.aitranslator",
+   "name": "AI Translate",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 97
+  },
+  {
+   "package": "com.edf.edfetmoi",
+   "name": "EDF & MOI",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 99
+  },
+  {
+   "package": "com.radio.pocketfm",
+   "name": "Pocket FM",
+   "category": "MEDIA_PLAYER",
+   "play_category": "MUSIC_AND_AUDIO",
+   "rank_fr": 100,
+   "rank_us": 113
+  },
+  {
+   "package": "com.canal.android.canal",
+   "name": "CANAL+, Live and catch-up TV",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 101
+  },
+  {
+   "package": "com.ubercab.eats",
+   "name": "Uber Eats",
+   "category": "ECOMMERCE",
+   "rank_fr": 102,
+   "rank_us": 95
+  },
+  {
+   "package": "ee.mtakso.client",
+   "name": "Bolt",
+   "category": "TRANSPORT",
+   "rank_fr": 104
+  },
+  {
+   "package": "com.bitchat.droid",
+   "name": "bitchat",
+   "category": "MESSAGING",
+   "play_category": "COMMUNICATION",
+   "rank_fr": 105
+  },
+  {
+   "package": "com.ai.art.magic.image.generator",
+   "name": "AI Photo Editor",
+   "category": "PHOTO_VIDEO",
+   "play_category": "PHOTOGRAPHY",
+   "rank_fr": 108
+  },
+  {
+   "package": "com.pdfflow.read",
+   "name": "PDF Flow",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 111
+  },
+  {
+   "package": "com.esaba.downloader",
+   "name": "Downloader by AFTVnews",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 113
+  },
+  {
+   "package": "fr.bonial.android",
+   "name": "Bonial",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 114
+  },
+  {
+   "package": "com.nestle.nespresso.nespresso",
+   "name": "Nespresso Store",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 115
+  },
+  {
+   "package": "deezer.android.app",
+   "name": "Deezer",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 116
+  },
+  {
+   "package": "com.wbd.stream",
+   "name": "HBO Max",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 117,
+   "rank_us": 88
+  },
+  {
+   "package": "com.brave.browser",
+   "name": "Brave Private Web Browser, VPN",
+   "category": "MESSAGING",
+   "play_category": "COMMUNICATION",
+   "rank_fr": 118,
+   "rank_us": 166
+  },
+  {
+   "package": "com.disney.disneyplus",
+   "name": "Disney+",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 119,
+   "rank_us": 62
+  },
+  {
+   "package": "com.weldup.weldup",
+   "name": "WeldUp Pocket",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 120
+  },
+  {
+   "package": "com.wejoy.weplay.us",
+   "name": "WePlay",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 121
+  },
+  {
+   "package": "com.sli.photo.findrec",
+   "name": "Photo Recover Finder",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 122
+  },
+  {
+   "package": "com.tipsyturbo.app",
+   "name": "Tipsy",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 123
+  },
+  {
+   "package": "com.teststar",
+   "name": "Teststar",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_fr": 124
+  },
+  {
+   "package": "fr.francetv.pluzz",
+   "name": "france•tv",
+   "category": "MEDIA_PLAYER",
+   "rank_fr": 125
+  },
+  {
+   "package": "com.airbnb.android",
+   "name": "Airbnb",
+   "category": "TRAVEL_LEISURE",
+   "rank_fr": 126
+  },
+  {
+   "package": "com.gamma.scan",
+   "name": "QR & Barcode Scanner",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 127,
+   "rank_us": 140
+  },
+  {
+   "package": "com.edenred.eq.smarter",
+   "name": "Edenred+",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_fr": 128
+  },
+  {
+   "package": "com.security.fileguard",
+   "name": "File Cleaner-Storage Cleaner",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 129
+  },
+  {
+   "package": "hr.lunc.client",
+   "name": "Swile",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_fr": 130
+  },
+  {
+   "package": "com.alldocuments.pdfreader.tools",
+   "name": "All Documents & PDF Reader",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 132
+  },
+  {
+   "package": "com.planitypublic",
+   "name": "Planity",
+   "category": "DEFAULT",
+   "play_category": "BEAUTY",
+   "rank_fr": 133
+  },
+  {
+   "package": "com.fuelsaver.gasprices.stationfinder",
+   "name": "Gas Prices & Fuel Finder",
+   "category": "NAVIGATION",
+   "play_category": "MAPS_AND_NAVIGATION",
+   "rank_fr": 134
+  },
+  {
+   "package": "io.wylr.joko",
+   "name": "Joko | Cash back & coupons",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 136
+  },
+  {
+   "package": "com.saramart.android",
+   "name": "Hacoo",
+   "category": "DEFAULT",
+   "play_category": "LIFESTYLE",
+   "rank_fr": 137
+  },
+  {
+   "package": "com.joybuy.jdi",
+   "name": "Joybuy-Don't Just Buy!",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 139
+  },
+  {
+   "package": "com.nintendo.znca",
+   "name": "Nintendo Switch App",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 140,
+   "rank_us": 160
+  },
+  {
+   "package": "io.playout",
+   "name": "Playout",
+   "category": "GAME",
+   "rank_fr": 141,
+   "rank_us": 22
+  },
+  {
+   "package": "com.credit.cofidis",
+   "name": "Cofidis, app crédit et budget",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_fr": 142
+  },
+  {
+   "package": "io.yuka.android",
+   "name": "Yuka",
+   "category": "ECOMMERCE",
+   "rank_fr": 143
+  },
+  {
+   "package": "com.ua.intersport.app",
+   "name": "INTERSPORT France",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 144
+  },
+  {
+   "package": "com.freecash.app2",
+   "name": "Freecash",
+   "category": "GAME",
+   "rank_fr": 145,
+   "rank_us": 35
+  },
+  {
+   "package": "com.volumecontrol.volumebassbooster.android2023",
+   "name": "AI Hit Music Maker",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 146
+  },
+  {
+   "package": "com.adeo.android.app",
+   "name": "LEROY MERLIN",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 148
+  },
+  {
+   "package": "com.hp.printercontrol",
+   "name": "HP",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "PRODUCTIVITY",
+   "rank_fr": 149
+  },
+  {
+   "package": "com.zzkko",
+   "name": "SHEIN-Shopping Online",
+   "category": "ECOMMERCE",
+   "rank_fr": 150,
+   "rank_us": 56
+  },
+  {
+   "package": "com.xooloo.android.messenger",
+   "name": "Kids Messenger",
+   "category": "MESSAGING",
+   "play_category": "COMMUNICATION",
+   "rank_fr": 151
+  },
+  {
+   "package": "com.qrcodereader",
+   "name": "QR Code Scanner",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 154
+  },
+  {
+   "package": "com.scannerreader.qrcode.creatorfree",
+   "name": "QR Scanner",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 155
+  },
+  {
+   "package": "call.blacklist.blocker",
+   "name": "Call Blocker",
+   "category": "MESSAGING",
+   "play_category": "COMMUNICATION",
+   "rank_fr": 156
+  },
+  {
+   "package": "de.zalando.mobile",
+   "name": "Zalando",
+   "category": "ECOMMERCE",
+   "rank_fr": 157
+  },
+  {
+   "package": "com.fitnesspark.app.dromcom",
+   "name": "Fitness Park",
+   "category": "DEFAULT",
+   "play_category": "SPORTS",
+   "rank_fr": 159
+  },
+  {
+   "package": "com.decathlon.app",
+   "name": "Decathlon Sports Shop",
+   "category": "ECOMMERCE",
+   "rank_fr": 160
+  },
+  {
+   "package": "com.macadamapp",
+   "name": "Macadam, The Step Counter.",
+   "category": "FITNESS",
+   "play_category": "HEALTH_AND_FITNESS",
+   "rank_fr": 161
+  },
+  {
+   "package": "com.fabernovel.ratp",
+   "name": "Bonjour RATP",
+   "category": "NAVIGATION",
+   "play_category": "MAPS_AND_NAVIGATION",
+   "rank_fr": 162
+  },
+  {
+   "package": "com.pdfreader.annotate.docs.tools",
+   "name": "PDF Reader",
+   "category": "UTILITY",
+   "play_category": "PERSONALIZATION",
+   "rank_fr": 163
+  },
+  {
+   "package": "com.infomil.leclercdrive",
+   "name": "Leclerc DRIVE Courses en ligne",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 164
+  },
+  {
+   "package": "com.nomadeducation.nomadeducation",
+   "name": "Nomad Education Brevet Bac Sup",
+   "category": "EDUCATION_FAMILY",
+   "play_category": "EDUCATION",
+   "rank_fr": 165
+  },
+  {
+   "package": "jbl.stc.com",
+   "name": "JBL Headphones",
+   "category": "MEDIA_PLAYER",
+   "play_category": "MUSIC_AND_AUDIO",
+   "rank_fr": 167
+  },
+  {
+   "package": "air.com.unit9.bkFrApp",
+   "name": "BURGER KING France",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_fr": 168
+  },
+  {
+   "package": "com.md.mcdonalds.gomcdo",
+   "name": "McDo+",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_fr": 169
+  },
+  {
+   "package": "fr.cnaf.mobile.moncompte",
+   "name": "Caf",
+   "category": "DEFAULT",
+   "play_category": "LIFESTYLE",
+   "rank_fr": 170
+  },
+  {
+   "package": "com.ringtonestudio.wallpaper",
+   "name": "Phone Ringtones & HD Wallpaper",
+   "category": "MEDIA_PLAYER",
+   "play_category": "MUSIC_AND_AUDIO",
+   "rank_fr": 172
+  },
+  {
+   "package": "com.poleemploi.poleemploietmoi",
+   "name": "Mon Espace France Travail",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "BUSINESS",
+   "rank_fr": 173
+  },
+  {
+   "package": "com.baobab.app",
+   "name": "Baobab",
+   "category": "EDUCATION_FAMILY",
+   "play_category": "EDUCATION",
+   "rank_fr": 174
+  },
+  {
+   "package": "com.crunchyroll.crunchyroid",
+   "name": "Crunchyroll",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 175,
+   "rank_us": 143
+  },
+  {
+   "package": "com.strava",
+   "name": "Strava",
+   "category": "FITNESS",
+   "rank_fr": 176
+  },
+  {
+   "package": "co.hinge.app",
+   "name": "Hinge Dating App",
+   "category": "DATING",
+   "play_category": "DATING",
+   "rank_fr": 177
+  },
+  {
+   "package": "fr.agircarrco.smartretraite",
+   "name": "Mon compte retraite",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_fr": 179
+  },
+  {
+   "package": "com.avast.android.mobilesecurity",
+   "name": "Avast One",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 181
+  },
+  {
+   "package": "com.smartclean.tools.edo",
+   "name": "Smart Clean Tools",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 182
+  },
+  {
+   "package": "org.kiwix.kiwixmobile",
+   "name": "Kiwix",
+   "category": "EDUCATION_FAMILY",
+   "play_category": "EDUCATION",
+   "rank_fr": 183
+  },
+  {
+   "package": "com.wenose",
+   "name": "Toasty",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 184
+  },
+  {
+   "package": "ai.x.grok",
+   "name": "Grok",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "PRODUCTIVITY",
+   "rank_fr": 185,
+   "rank_us": 87
+  },
+  {
+   "package": "com.zyhwplatform.shortplay",
+   "name": "FlickReels",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 186,
+   "rank_us": 90
+  },
+  {
+   "package": "com.clean.mix.junk",
+   "name": "Mix Cleaner",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 187
+  },
+  {
+   "package": "com.roole.roolemap",
+   "name": "Roole Map",
+   "category": "NAVIGATION",
+   "play_category": "MAPS_AND_NAVIGATION",
+   "rank_fr": 188
+  },
+  {
+   "package": "net.oqee.androidmobile",
+   "name": "Free TV",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_fr": 189
+  },
+  {
+   "package": "com.aiphotoedior.photogenerator.photoretouch",
+   "name": "AI Photo Beauty Editor Studio",
+   "category": "PHOTO_VIDEO",
+   "play_category": "PHOTOGRAPHY",
+   "rank_fr": 190,
+   "rank_us": 153
+  },
+  {
+   "package": "com.cegedim.maiia.patient",
+   "name": "Maiia",
+   "category": "HEALTH_ADMIN",
+   "play_category": "MEDICAL",
+   "rank_fr": 191
+  },
+  {
+   "package": "com.lscsmartconnection.smart",
+   "name": "LSC Smart Connect",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 192
+  },
+  {
+   "package": "com.auchan.android",
+   "name": "Auchan.fr",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 193
+  },
+  {
+   "package": "com.themewidgets.icons.themes",
+   "name": "Theme Widgets",
+   "category": "UTILITY",
+   "play_category": "PERSONALIZATION",
+   "rank_fr": 194
+  },
+  {
+   "package": "com.all.outfit.skin.rblx.clothes",
+   "name": "StyleWorld Outfit & Skin",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "PRODUCTIVITY",
+   "rank_fr": 195
+  },
+  {
+   "package": "com.basicfit.trainingApp",
+   "name": "Basic-Fit",
+   "category": "FITNESS",
+   "play_category": "HEALTH_AND_FITNESS",
+   "rank_fr": 197
+  },
+  {
+   "package": "com.myklarnamobile",
+   "name": "Klarna",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_fr": 198
+  },
+  {
+   "package": "com.cogelec.notificationpush",
+   "name": "My Intratone",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_fr": 199
+  },
+  {
+   "package": "com.alibaba.intl.android.apps.poseidon",
+   "name": "Alibaba.com",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_fr": 200,
+   "rank_us": 151
+  },
+  {
+   "package": "com.facebook.aura",
+   "name": "Muse from Meta",
+   "category": "AI_ASSISTANT",
+   "rank_us": 1
+  },
+  {
+   "package": "com.dealseekorg.dealseek",
+   "name": "DealSeek",
+   "category": "ECOMMERCE",
+   "rank_us": 4
+  },
+  {
+   "package": "com.eet.settings.launcher",
+   "name": "Settings Home",
+   "category": "UTILITY",
+   "rank_us": 5
+  },
+  {
+   "package": "com.ss.android.ugc.tiktok.pro",
+   "name": "TikTok Pro",
+   "category": "SOCIAL",
+   "rank_us": 7
+  },
+  {
+   "package": "com.ss.android.ttmd.video",
+   "name": "PineDrama",
+   "category": "MEDIA_PLAYER",
+   "rank_us": 8
+  },
+  {
+   "package": "com.tiktok.lite.go",
+   "name": "TikTok Lite",
+   "category": "SOCIAL",
+   "rank_us": 14
+  },
+  {
+   "package": "com.gowish.app",
+   "name": "GoWish",
+   "category": "ECOMMERCE",
+   "rank_us": 16
+  },
+  {
+   "package": "com.squareup.cash",
+   "name": "Cash App",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_us": 17
+  },
+  {
+   "package": "com.drama.free",
+   "name": "FreeDrama",
+   "category": "MEDIA_PLAYER",
+   "rank_us": 21
+  },
+  {
+   "package": "com.wake.box.ryan",
+   "name": "WakeBox",
+   "category": "UTILITY",
+   "rank_us": 24
+  },
+  {
+   "package": "com.tubitv",
+   "name": "Tubi",
+   "category": "MEDIA_PLAYER",
+   "rank_us": 26
+  },
+  {
+   "package": "com.walmart.android",
+   "name": "Walmart",
+   "category": "ECOMMERCE",
+   "rank_us": 28
+  },
+  {
+   "package": "com.peacocktv.peacockandroid",
+   "name": "Peacock TV",
+   "category": "MEDIA_PLAYER",
+   "rank_us": 29
+  },
+  {
+   "package": "com.enflick.android.TextNow",
+   "name": "TextNow",
+   "category": "MESSAGING",
+   "rank_us": 30
+  },
+  {
+   "package": "com.kalshi.mobile",
+   "name": "Kalshi",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_us": 33
+  },
+  {
+   "package": "com.konylabs.capitalone",
+   "name": "Capital One Mobile",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_us": 34
+  },
+  {
+   "package": "com.dd.doordash",
+   "name": "DoorDash",
+   "category": "ECOMMERCE",
+   "rank_us": 36
+  },
+  {
+   "package": "com.og.app.android",
+   "name": "OG.com",
+   "category": "ECOMMERCE",
+   "rank_us": 39
+  },
+  {
+   "package": "com.life360.android.safetymapd",
+   "name": "Life360",
+   "category": "NAVIGATION",
+   "rank_us": 41
+  },
+  {
+   "package": "com.mcdonalds.app",
+   "name": "McDonald's",
+   "category": "ECOMMERCE",
+   "rank_us": 44
+  },
+  {
+   "package": "com.phone.junkclear.phoerg",
+   "name": "Phone Junk Files Clear",
+   "category": "UTILITY",
+   "rank_us": 45
+  },
+  {
+   "package": "com.scatterlab.messenger",
+   "name": "zeta",
+   "category": "AI_ASSISTANT",
+   "rank_us": 46
+  },
+  {
+   "package": "com.onefinance.one",
+   "name": "OnePay Mobile Banking",
+   "category": "FINANCE_ACCOUNTS",
+   "rank_us": 50
+  },
+  {
+   "package": "com.depop",
+   "name": "Depop",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 52
+  },
+  {
+   "package": "com.venmo",
+   "name": "Venmo",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 53
+  },
+  {
+   "package": "com.reddit.frontpage",
+   "name": "Reddit",
+   "category": "SOCIAL",
+   "rank_us": 57
+  },
+  {
+   "package": "com.blink.drama.player",
+   "name": "BlinkDrama",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 58
+  },
+  {
+   "package": "fenmysaho.pdf.reader.viewer",
+   "name": "PDF Reader",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 60
+  },
+  {
+   "package": "com.storage.androidcleaner",
+   "name": "Cleanup",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 61
+  },
+  {
+   "package": "com.justplay.app",
+   "name": "JustPlay",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 63
+  },
+  {
+   "package": "com.instagram.barcelona",
+   "name": "Threads",
+   "category": "SOCIAL",
+   "rank_us": 67
+  },
+  {
+   "package": "com.doordash.driverapp",
+   "name": "DoorDash",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "BUSINESS",
+   "rank_us": 68
+  },
+  {
+   "package": "com.triumpharcade.tcg",
+   "name": "Rips by Triumph",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 69
+  },
+  {
+   "package": "com.govauctions",
+   "name": "GovAuctions.com",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 70
+  },
+  {
+   "package": "com.cbs.app",
+   "name": "Paramount+",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 72
+  },
+  {
+   "package": "com.onedebit.chime",
+   "name": "Chime",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 73
+  },
+  {
+   "package": "easy.launcher",
+   "name": "Easy Homescreen",
+   "category": "UTILITY",
+   "play_category": "PERSONALIZATION",
+   "rank_us": 74
+  },
+  {
+   "package": "co.vybs.app",
+   "name": "VYBS",
+   "category": "DEFAULT",
+   "play_category": "LIFESTYLE",
+   "rank_us": 75
+  },
+  {
+   "package": "com.newsbreak.crimeradar",
+   "name": "CrimeRadar",
+   "category": "NEWS_READING",
+   "play_category": "NEWS_AND_MAGAZINES",
+   "rank_us": 76
+  },
+  {
+   "package": "com.offline.bible",
+   "name": "Bible Offline-KJV Holy Bible",
+   "category": "NEWS_READING",
+   "play_category": "BOOKS_AND_REFERENCE",
+   "rank_us": 78
+  },
+  {
+   "package": "me.lyft.android",
+   "name": "Lyft",
+   "category": "NAVIGATION",
+   "play_category": "MAPS_AND_NAVIGATION",
+   "rank_us": 80
+  },
+  {
+   "package": "com.roku.remote",
+   "name": "Roku Remote (Official)",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 81
+  },
+  {
+   "package": "tv.pluto.android",
+   "name": "Pluto TV",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 83
+  },
+  {
+   "package": "com.hark.android",
+   "name": "Hark Pro",
+   "category": "DEFAULT",
+   "play_category": "LIFESTYLE",
+   "rank_us": 84
+  },
+  {
+   "package": "org.collegeboard.pivot",
+   "name": "BigFuture® School",
+   "category": "EDUCATION_FAMILY",
+   "play_category": "EDUCATION",
+   "rank_us": 86
+  },
+  {
+   "package": "ai.x.grok.bot",
+   "name": "Grok Bot",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "PRODUCTIVITY",
+   "rank_us": 89
+  },
+  {
+   "package": "com.cvs.launchers.cvs",
+   "name": "CVS Health",
+   "category": "HEALTH_ADMIN",
+   "play_category": "MEDICAL",
+   "rank_us": 93
+  },
+  {
+   "package": "com.tracerofficial",
+   "name": "AHEALTH",
+   "category": "FITNESS",
+   "play_category": "HEALTH_AND_FITNESS",
+   "rank_us": 96
+  },
+  {
+   "package": "com.location.gps.tracker",
+   "name": "GPS Tracker & Location Tracker",
+   "category": "NAVIGATION",
+   "play_category": "MAPS_AND_NAVIGATION",
+   "rank_us": 98
+  },
+  {
+   "package": "com.happywishlist.app",
+   "name": "Wishlist Maker",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 100
+  },
+  {
+   "package": "com.vizio.vue.launcher",
+   "name": "VIZIO",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 101
+  },
+  {
+   "package": "com.fetchrewards.fetchrewards.hop",
+   "name": "Fetch",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 103
+  },
+  {
+   "package": "com.costco.app.android",
+   "name": "Costco Wholesale",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 104
+  },
+  {
+   "package": "epic.mychart.android",
+   "name": "MyChart",
+   "category": "HEALTH_ADMIN",
+   "play_category": "MEDICAL",
+   "rank_us": 105
+  },
+  {
+   "package": "pdf.reader.editor.office.fancy",
+   "name": "PDF Reader",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 106
+  },
+  {
+   "package": "com.duckduckgo.mobile.android",
+   "name": "DuckDuckGo, optional Duck.ai",
+   "category": "BROWSER",
+   "rank_us": 108
+  },
+  {
+   "package": "com.particlenews.newsbreak",
+   "name": "NewsBreak",
+   "category": "NEWS_READING",
+   "play_category": "NEWS_AND_MAGAZINES",
+   "rank_us": 109
+  },
+  {
+   "package": "com.newreading.goodreels",
+   "name": "GoodShort",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 110
+  },
+  {
+   "package": "com.ebay.mobile",
+   "name": "eBay online shopping & selling",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 111
+  },
+  {
+   "package": "com.rfi.sams.android",
+   "name": "Sam's Club",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 114
+  },
+  {
+   "package": "com.pandora.android",
+   "name": "Pandora",
+   "category": "MEDIA_PLAYER",
+   "play_category": "MUSIC_AND_AUDIO",
+   "rank_us": 115
+  },
+  {
+   "package": "com.bp.app.bpme.global.ros",
+   "name": "earnify",
+   "category": "TRAVEL_LEISURE",
+   "play_category": "TRAVEL_AND_LOCAL",
+   "rank_us": 117
+  },
+  {
+   "package": "com.pdfreader.master.utgerful",
+   "name": "PDF Reader",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 118
+  },
+  {
+   "package": "com.bestbuy.android",
+   "name": "Best Buy",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 119
+  },
+  {
+   "package": "com.storymatrix.lite",
+   "name": "DramaBox Lite",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 120
+  },
+  {
+   "package": "com.web.tools.ge.browser",
+   "name": "Ge Browser",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 121
+  },
+  {
+   "package": "onxmaps.hunt",
+   "name": "onX Hunt",
+   "category": "DEFAULT",
+   "play_category": "SPORTS",
+   "rank_us": 123
+  },
+  {
+   "package": "com.facebook.ember",
+   "name": "Forum, a Facebook app",
+   "category": "SOCIAL",
+   "play_category": "SOCIAL",
+   "rank_us": 127
+  },
+  {
+   "package": "com.crowncards.app",
+   "name": "CrownCards",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 129
+  },
+  {
+   "package": "com.target.ui",
+   "name": "Target",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 130
+  },
+  {
+   "package": "com.lowes.android",
+   "name": "Lowe's",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 131
+  },
+  {
+   "package": "com.xphotokit.picfusionlab",
+   "name": "PicFusion Lab",
+   "category": "PHOTO_VIDEO",
+   "play_category": "PHOTOGRAPHY",
+   "rank_us": 132
+  },
+  {
+   "package": "com.exto.arrow",
+   "name": "Atlas",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 134
+  },
+  {
+   "package": "com.vibeshort.visualnovel.android",
+   "name": "VibeShort",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 135
+  },
+  {
+   "package": "com.fis.ebt.nch",
+   "name": "ebtEDGE NEW!",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 136
+  },
+  {
+   "package": "com.microsoft.emmx",
+   "name": "Microsoft Edge",
+   "category": "BROWSER",
+   "rank_us": 138
+  },
+  {
+   "package": "com.identify.track.coinscope",
+   "name": "CoinScope",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 139
+  },
+  {
+   "package": "com.fox.foxone",
+   "name": "FOX One",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 141
+  },
+  {
+   "package": "com.nytimes.android",
+   "name": "NYTimes",
+   "category": "NEWS_READING",
+   "play_category": "NEWS_AND_MAGAZINES",
+   "rank_us": 144
+  },
+  {
+   "package": "com.tacobell.ordering",
+   "name": "Taco Bell Fast Food & Delivery",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_us": 145
+  },
+  {
+   "package": "com.adpmobile.android",
+   "name": "ADP Mobile Solutions",
+   "category": "PRODUCTIVITY_CLOUD",
+   "play_category": "BUSINESS",
+   "rank_us": 146
+  },
+  {
+   "package": "de.empfohlen",
+   "name": "Testerup",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 150
+  },
+  {
+   "package": "com.trace.art.draw.drawing.paint",
+   "name": "Artmate",
+   "category": "PHOTO_VIDEO",
+   "play_category": "ART_AND_DESIGN",
+   "rank_us": 152
+  },
+  {
+   "package": "com.propel.ebenefits",
+   "name": "Propel EBT & SNAP Benefits",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 156
+  },
+  {
+   "package": "com.thehomedepot",
+   "name": "The Home Depot",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 157
+  },
+  {
+   "package": "com.bible.holy.bible.for.women",
+   "name": "Bible For Women-Holy Bible KJV",
+   "category": "NEWS_READING",
+   "play_category": "BOOKS_AND_REFERENCE",
+   "rank_us": 158
+  },
+  {
+   "package": "com.starbucks.mobilecard",
+   "name": "Starbucks",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_us": 159
+  },
+  {
+   "package": "com.dominospizza",
+   "name": "Domino's Pizza USA",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_us": 161
+  },
+  {
+   "package": "com.cardaccount.ram.junkcleanner",
+   "name": "Junk Cleaner",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 162
+  },
+  {
+   "package": "com.bigsoft.sketchsound.drawmusic",
+   "name": "Draw Music Maker",
+   "category": "MEDIA_PLAYER",
+   "play_category": "MUSIC_AND_AUDIO",
+   "rank_us": 163
+  },
+  {
+   "package": "com.sevenbrew.loyalty.app",
+   "name": "7 Brew Coffee",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_us": 164
+  },
+  {
+   "package": "com.banix.drawsound.drawmusic",
+   "name": "Draw Music",
+   "category": "MEDIA_PLAYER",
+   "play_category": "MUSIC_AND_AUDIO",
+   "rank_us": 165
+  },
+  {
+   "package": "com.chase.sig.android",
+   "name": "Chase Mobile",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 167
+  },
+  {
+   "package": "com.etsy.android",
+   "name": "Etsy",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 169
+  },
+  {
+   "package": "com.radio.pocketfm.fantasy",
+   "name": "Fabled",
+   "category": "MEDIA_PLAYER",
+   "play_category": "MUSIC_AND_AUDIO",
+   "rank_us": 170
+  },
+  {
+   "package": "com.affirm.central",
+   "name": "Affirm",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 171
+  },
+  {
+   "package": "com.tools.secutiyclean.daily",
+   "name": "Daily Cleaner",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 172
+  },
+  {
+   "package": "com.draftkings.sportsbook",
+   "name": "DraftKings",
+   "category": "DEFAULT",
+   "play_category": "SPORTS",
+   "rank_us": 173
+  },
+  {
+   "package": "com.phonevalley.progressive",
+   "name": "Progressive",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 174
+  },
+  {
+   "package": "com.applabstudios.ai.mail.homescreen.inbox",
+   "name": "Easy Mail",
+   "category": "UTILITY",
+   "play_category": "PERSONALIZATION",
+   "rank_us": 175
+  },
+  {
+   "package": "com.hulu.plus",
+   "name": "Hulu",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 176
+  },
+  {
+   "package": "com.plexapp.android",
+   "name": "Plex",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 178
+  },
+  {
+   "package": "de.apptiv.business.android.aldi_us",
+   "name": "ALDI Grocery Pickup & Delivery",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 179
+  },
+  {
+   "package": "com.sharekaro.app",
+   "name": "ShareKaro",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 181
+  },
+  {
+   "package": "com.macys.android",
+   "name": "Macy's",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 182
+  },
+  {
+   "package": "com.dollargeneral.android",
+   "name": "Dollar General-Digital Coupons",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 183
+  },
+  {
+   "package": "com.roku.web.trc",
+   "name": "The Roku Channel",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 185
+  },
+  {
+   "package": "com.espn.score_center",
+   "name": "ESPN",
+   "category": "DEFAULT",
+   "play_category": "SPORTS",
+   "rank_us": 186
+  },
+  {
+   "package": "com.kikoff.theseus",
+   "name": "Grant Cash Advance",
+   "category": "FINANCE_ACCOUNTS",
+   "play_category": "FINANCE",
+   "rank_us": 187
+  },
+  {
+   "package": "com.wikibuy.prod.main",
+   "name": "Capital One Shopping",
+   "category": "ECOMMERCE",
+   "play_category": "SHOPPING",
+   "rank_us": 188
+  },
+  {
+   "package": "com.localaiapp.scoops",
+   "name": "Scoopz",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 189
+  },
+  {
+   "package": "com.wendys.nutritiontool",
+   "name": "Wendy’s",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_us": 191
+  },
+  {
+   "package": "com.americasbestpics",
+   "name": "ABPV－America’s best pics, vids",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 192
+  },
+  {
+   "package": "com.naver.linewebtoon",
+   "name": "WEBTOON",
+   "category": "NEWS_READING",
+   "play_category": "COMICS",
+   "rank_us": 193
+  },
+  {
+   "package": "io.guard.luna",
+   "name": "Guardio",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 194
+  },
+  {
+   "package": "com.health.care.sleep.sound.pulse.heartbeat",
+   "name": "Health Care",
+   "category": "FITNESS",
+   "play_category": "HEALTH_AND_FITNESS",
+   "rank_us": 195
+  },
+  {
+   "package": "com.ringapp",
+   "name": "Ring",
+   "category": "DEFAULT",
+   "play_category": "LIFESTYLE",
+   "rank_us": 196
+  },
+  {
+   "package": "com.seedleap.loopitapp",
+   "name": "Loopit",
+   "category": "MEDIA_PLAYER",
+   "play_category": "ENTERTAINMENT",
+   "rank_us": 197
+  },
+  {
+   "package": "com.free.vpn.super.hotspot.open",
+   "name": "VPN",
+   "category": "UTILITY",
+   "play_category": "TOOLS",
+   "rank_us": 198
+  },
+  {
+   "package": "com.emn8.mobilem8.nativeapp.bk",
+   "name": "BURGER KING® App",
+   "category": "ECOMMERCE",
+   "play_category": "FOOD_AND_DRINK",
+   "rank_us": 199
+  },
+  {
+   "package": "com.pinger.textfree",
+   "name": "Text Free",
+   "category": "MESSAGING",
+   "play_category": "COMMUNICATION",
+   "rank_us": 200
+  }
+ ]
+}

@@ -1,6 +1,6 @@
 # Les apps les plus téléchargées sur Google Play, notées par VYLIA
 
-Tableau ponctuel du 2026-11-09. Grille VYLIA 3.0 · 505ed919, le même moteur de score que
+Tableau ponctuel du 2026-11-09. Grille VYLIA 3.0 · d1404230, le même moteur de score que
 l'application.
 
 ## Quelles apps
@@ -11,7 +11,8 @@ paliers de 10 milliards à 500 millions de téléchargements, apps gratuites. So
 
 - les apps que Wikipedia marque comme préinstallées : leur compteur additionne les téléphones vendus, pas des choix ;
 - toutes les apps de Google et des fabricants (Samsung, Xiaomi, Huawei, Motorola, vivo, Oppo, Transsion), des
-  opérateurs, les services système et les apps arrêtées.
+  opérateurs, les services système et les apps arrêtées ; celles de Google et des fabricants sont notées à part, plus
+  bas.
 
 Les apps de développeurs indépendants préinstallées seulement sur certains téléphones (Facebook, Instagram, TikTok,
 Netflix, Microsoft Office…) sont notées à part, plus bas.
@@ -167,6 +168,411 @@ la même méthode : un point de repère pour lire les notes ci-dessus. La plupar
 | 32 | Wikipedia | hors classement | Actualités | **B** | 70 | 0 | 4 | [50616-r-2026-11-03, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797888/) |
 | 33 | Lawnchair | hors classement | Utilitaire | **C** | 61 | 0 | 5 | [15.Beta 3, 2026-05-19](https://reports.exodus-privacy.eu.org/fr/reports/741480/) |
 
+## En ce moment sur Google Play
+
+Les 200 premières apps gratuites du classement du jour de Google Play, en France et aux États-Unis, d'après
+AppInsider ([France](https://appinsider.io/android/charts/fr/all/free),
+[États-Unis](https://appinsider.io/android/charts/us/all/free), classement du 9 novembre 2026). Ce classement suit
+les téléchargements récents, pas le total : on y trouve les apps du moment. Sont écartées les apps de Google, des
+fabricants et des opérateurs (notées dans la section suivante) et celles déjà notées plus haut. Paquet trouvé par la
+recherche Google Play, éditeur vérifié sur la fiche. Quand la grille de l'app ne connaissait pas l'app, sa catégorie a
+été déduite de sa catégorie Google Play et ajoutée à la grille de l'app : le téléphone la note avec la même catégorie.
+La colonne « Classement » donne la place en France (FR) et aux États-Unis (US).
+
+226 apps notées sur 276. Notes : A : 15, B : 27, C : 44, D : 61, E : 79. Traqueurs par app : médiane 7, maximum 33 ; 11 apps sans traqueur connu.
+
+| # | App | Classement | Catégorie | Note | Score /100 | Traqueurs | Permissions pénalisées | Rapport Exodus |
+|---:|---|---|---|:---:|---:|---|---:|---|
+| 1 | Capital One Shopping | US 188 | Achats | **A** | 100 | 0 | 0 | [2.76.0, 2025-01-25](https://reports.exodus-privacy.eu.org/fr/reports/553676/) (ancien) |
+| 2 | Saracroche bloqueur d'appels | FR 7 | Utilitaire | **A** | 98 | 0 | 1 | [5.5.4, 2026-10-29](https://reports.exodus-privacy.eu.org/fr/reports/795521/) |
+| 3 | Kids Messenger | FR 151 | Messagerie | **A** | 97 | 1 : Google CrashLytics | 1 | [4.14.1, 2026-07-24](https://reports.exodus-privacy.eu.org/fr/reports/762194/) |
+| 4 | ALDI Grocery Pickup & Delivery | US 179 | Achats | **A** | 95 | 1 : Microsoft Visual Studio App Center Crashes | 1 | [3.16.0, 2022-04-14](https://reports.exodus-privacy.eu.org/fr/reports/251261/) (ancien) |
+| 5 | Carte Vitale | FR 19 | Santé, démarches | **A** | 94 | 1 : Google CrashLytics | 1 | [9.2.1, 2026-10-14](https://reports.exodus-privacy.eu.org/fr/reports/789825/) |
+| 6 | Plex | US 178 | Vidéo, musique | **A** | 93 | 1 : Sentry | 2 | [2026.20.0, 2026-10-17](https://reports.exodus-privacy.eu.org/fr/reports/790808/) |
+| 7 | Brave Private Web Browser, VPN | FR 118 · US 166 | Messagerie | **A** | 92 | 0 | 2 | [1.97.59, 2026-10-18](https://reports.exodus-privacy.eu.org/fr/reports/791123/) |
+| 8 | Mon compte retraite | FR 179 | Paiement | **A** | 92 | 2 : Google Firebase Analytics, Google CrashLytics | 1 | [8.0.1, 2026-10-17](https://reports.exodus-privacy.eu.org/fr/reports/790848/) |
+| 9 | Cofidis, app crédit et budget | FR 142 | Paiement | **A** | 91 | 2 : Google Firebase Analytics, ACRA | 1 | [V12.71.0, 2026-03-17](https://reports.exodus-privacy.eu.org/fr/reports/718535/) |
+| 10 | Edenred+ | FR 128 | Paiement | **A** | 91 | 2 : MixPanel, Didomi | 1 | [20.2.0, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793693/) |
+| 11 | Proton VPN | FR 83 · US 102 | Utilitaire | **A** | 91 | 1 : Sentry | 2 | [5.21.9.0, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797119/) |
+| 12 | Kiwix | FR 183 | Éducation | **A** | 89 | 0 | 2 | [3.14.1, 2026-05-25](https://reports.exodus-privacy.eu.org/fr/reports/743634/) |
+| 13 | Compte ameli | FR 45 | Santé, démarches | **A** | 88 | 0 | 4 | [25.0.2, 2026-10-17](https://reports.exodus-privacy.eu.org/fr/reports/790789/) |
+| 14 | Epic Games | FR 29 | Jeu | **A** | 86 | 0 | 2 | [1.7.2, 2026-10-27](https://reports.exodus-privacy.eu.org/fr/reports/794859/) |
+| 15 | Fitness Park | FR 159 | Autre | **A** | 86 | 3 : Google Firebase Analytics, Google CrashLytics, Didomi | 2 | [13.2.1, 2026-07-15](https://reports.exodus-privacy.eu.org/fr/reports/759573/) |
+| 16 | Caf | FR 170 | Autre | **B** | 84 | 0 | 3 | [2.8.0, 2025-08-23](https://reports.exodus-privacy.eu.org/fr/reports/641102/) (ancien) |
+| 17 | Action | FR 22 | Achats | **B** | 83 | 3 : Emarsys Predict, Google Firebase Analytics, Google CrashLytics | 0 | [1.130.0, 2026-09-08](https://reports.exodus-privacy.eu.org/fr/reports/777737/) |
+| 18 | Discord | FR 88 · US 43 | Messagerie | **B** | 83 | 3 : AppsFlyer, Google Analytics, Sentry | 2 | [352.17 - Stable, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797461/) |
+| 19 | Hellowork | FR 24 | Autre | **B** | 83 | 4 : AppsFlyer, Google Firebase Analytics, Google CrashLytics (+1) | 1 | [9.8.0, 2025-04-10](https://reports.exodus-privacy.eu.org/fr/reports/590764/) (ancien) |
+| 20 | Adobe Premiere | FR 16 | Photo, montage | **B** | 82 | 2 : Adobe Experience Cloud, Sentry | 2 | [26.5.0, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797238/) |
+| 21 | CouponBirds | FR 59 | Achats | **B** | 82 | 4 : Facebook Login, Facebook Share, Google Firebase Analytics (+1) | 0 | [1.5.6, 2026-09-27](https://reports.exodus-privacy.eu.org/fr/reports/783936/) |
+| 22 | Propel EBT & SNAP Benefits | US 156 | Paiement | **B** | 81 | 3 : AppsFlyer, Google Firebase Analytics, Sentry | 2 | [6.13.0, 2024-04-30](https://reports.exodus-privacy.eu.org/fr/reports/442025/) (ancien) |
+| 23 | Temu | FR 70 · US 11 | Achats | **B** | 81 | 3 : Facebook Login, Adjust, Google Firebase Analytics | 1 | [4.95.0, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797890/) |
+| 24 | Auchan.fr | FR 193 | Achats | **B** | 80 | 3 : Google Firebase Analytics, Urbanairship, Google CrashLytics | 2 | [14.48.0, 2026-06-06](https://reports.exodus-privacy.eu.org/fr/reports/747552/) |
+| 25 | Mon espace santé | FR 9 | Santé, démarches | **B** | 80 | 4 : ATInternet, Google Firebase Analytics, TagCommander (Commanders Act.) (+1) | 1 | [1.44.0, 2026-09-25](https://reports.exodus-privacy.eu.org/fr/reports/783330/) |
+| 26 | Reddit | US 57 | Réseau social | **B** | 80 | 3 : AppsFlyer, Google Firebase Analytics, Google CrashLytics | 1 | [2026.44.0, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797884/) |
+| 27 | Nintendo Switch App | FR 140 · US 160 | Vidéo, musique | **B** | 79 | 2 : Google Firebase Analytics, Google CrashLytics | 4 | [3.6.0, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797024/) |
+| 28 | Yuka | FR 143 | Achats | **B** | 79 | 4 : Facebook Login, Google Firebase Analytics, Scandit (+1) | 1 | [5.7, 2026-10-16](https://reports.exodus-privacy.eu.org/fr/reports/790336/) |
+| 29 | Wero | FR 35 | Paiement | **B** | 78 | 2 : Adjust, Matomo (Piwik) | 3 | [1.0.43, 2026-10-19](https://reports.exodus-privacy.eu.org/fr/reports/791536/) |
+| 30 | Doctolib | FR 25 | Santé, démarches | **B** | 76 | 3 : Adjust, Sentry, Didomi | 6 | [5.16.2, 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795009/) |
+| 31 | Testerup | US 150 | Paiement | **B** | 76 | 4 : Facebook Login, AppsFlyer, Google Analytics (+1) | 2 | [1.9.92, 2023-07-31](https://reports.exodus-privacy.eu.org/fr/reports/373410/) (ancien) |
+| 32 | Free TV | FR 189 | Vidéo, musique | **B** | 75 | 5 : Google AdMob, Google Firebase Analytics, Nielsen (+2) | 0 | [3.15.0, 2026-09-09](https://reports.exodus-privacy.eu.org/fr/reports/778109/) |
+| 33 | Mon Espace France Travail | FR 173 | Bureautique, stockage | **B** | 75 | 3 : Dynatrace, Urbanairship, Google CrashLytics | 3 | [8.8.2, 2026-07-26](https://reports.exodus-privacy.eu.org/fr/reports/762778/) |
+| 34 | Atlas | US 134 | Paiement | **B** | 74 | 3 : Google Firebase Analytics, Pusher, Google CrashLytics | 4 | [0.9.11, 2023-02-28](https://reports.exodus-privacy.eu.org/fr/reports/336182/) (ancien) |
+| 35 | Shop | FR 13 · US 40 | Achats | **B** | 74 | 2 : Google Firebase Analytics, Bugsnag | 2 | [3.11.0, 2026-10-18](https://reports.exodus-privacy.eu.org/fr/reports/791159/) |
+| 36 | Disney+ | FR 119 · US 62 | Vidéo, musique | **B** | 73 | 2 : Conviva, Google Firebase Analytics | 2 | [26.19.0+rc3-2026.10.20, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792734/) |
+| 37 | DuckDuckGo, optional Duck.ai | US 108 | Navigateur | **B** | 73 | 0 | 7 | [5.301.1, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797667/) |
+| 38 | Grok | FR 185 · US 87 | Bureautique, stockage | **B** | 73 | 4 : AppsFlyer, Google Firebase Analytics, MixPanel (+1) | 4 | [1.2.53-release.00, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797205/) |
+| 39 | Hello Watt | FR 20 | Utilitaire | **B** | 72 | 6 : Facebook Login, Adjust, Facebook Analytics (+3) | 0 | [2.1.20, 2026-07-18](https://reports.exodus-privacy.eu.org/fr/reports/760261/) |
+| 40 | L'Identité Numérique La Poste | FR 52 | Utilitaire | **B** | 72 | 3 : Google Firebase Analytics, TagCommander (Commanders Act.), Google CrashLytics | 3 | [3.4.0, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/797958/) |
+| 41 | idealo | FR 47 | Achats | **B** | 71 | 5 : Facebook Login, Adjust, Google Firebase Analytics (+2) | 1 | [26.22.1, 2026-11-01](https://reports.exodus-privacy.eu.org/fr/reports/796356/) |
+| 42 | LEROY MERLIN | FR 148 | Achats | **B** | 70 | 6 : AppsFlyer, Google Firebase Analytics, Qualtrics (+3) | 1 | [9.25.0, 2026-10-12](https://reports.exodus-privacy.eu.org/fr/reports/788941/) |
+| 43 | Claude by Anthropic | FR 4 · US 37 | Assistant IA | **C** | 68 | 2 : Segment, Sentry | 4 | [1.261103.19, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797469/) |
+| 44 | Mon Magasin U Carte U Cagnotte | FR 75 | Achats | **C** | 68 | 5 : Adobe Experience Cloud, Batch, Google Firebase Analytics (+2) | 0 | [5.16.1, 2025-03-31](https://reports.exodus-privacy.eu.org/fr/reports/583565/) (ancien) |
+| 45 | Suno | FR 68 · US 99 | Vidéo, musique | **C** | 68 | 4 : Segment, Google Firebase Analytics, Singular (+1) | 2 | [1.95.0, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796912/) |
+| 46 | Battle.net | FR 74 · US 77 | Vidéo, musique | **C** | 66 | 4 : IAB Open Measurement, GIPHY Analytics, Google Firebase Analytics (+1) | 2 | [1.32.1.44, 2026-10-11](https://reports.exodus-privacy.eu.org/fr/reports/788456/) |
+| 47 | Downloader by AFTVnews | FR 113 | Utilitaire | **C** | 66 | 2 : Facebook Ads, Google AdMob | 2 | [2.0.4-ForGoogleAndroidDevices, 2026-08-29](https://reports.exodus-privacy.eu.org/fr/reports/774088/) |
+| 48 | Swile | FR 130 | Paiement | **C** | 66 | 3 : Branch, Google Firebase Analytics, Google CrashLytics | 3 | [2026.45.0, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797759/) |
+| 49 | Uber Eats | FR 102 · US 95 | Achats | **C** | 66 | 3 : Google Firebase Analytics, OpenTelemetry (OpenCensus, OpenTracing), Uber Analytics | 4 | [6.347.10001, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797795/) |
+| 50 | bitchat | FR 105 | Messagerie | **C** | 65 | 0 | 6 | [2.2.0, 2026-11-09](https://reports.exodus-privacy.eu.org/fr/reports/798180/) |
+| 51 | france•tv | FR 125 | Vidéo, musique | **C** | 65 | 7 : FreeWheel, Adjust, Google Firebase Analytics (+4) | 0 | [11.21.0, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797176/) |
+| 52 | Roku Remote (Official) | US 81 | Vidéo, musique | **C** | 65 | 3 : Google AdMob, Google Firebase Analytics, Google CrashLytics | 5 | [14.1.2.10730047, 2026-09-29](https://reports.exodus-privacy.eu.org/fr/reports/784823/) |
+| 53 | Roole Map | FR 188 | Navigation | **C** | 65 | 7 : Huawei Mobile Services (HMS) Core, ABTasty, Google Firebase Analytics (+4) | 0 | [5.7.0, 2026-08-12](https://reports.exodus-privacy.eu.org/fr/reports/768545/) |
+| 54 | Grok Bot | US 89 | Bureautique, stockage | **C** | 64 | 2 : AppsFlyer, Sentry | 7 | [1.17.0, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793892/) |
+| 55 | Intermarché | FR 64 | Achats | **C** | 64 | 6 : Batch, Adjust, Google Firebase Analytics (+3) | 2 | [10.24.0, 2026-08-08](https://reports.exodus-privacy.eu.org/fr/reports/766931/) |
+| 56 | QR Code Scanner | FR 154 | Utilitaire | **C** | 64 | 3 : Facebook Ads, Google AdMob, Google Firebase Analytics | 2 | [1.3.16, 2024-07-13](https://reports.exodus-privacy.eu.org/fr/reports/471437/) (ancien) |
+| 57 | CANAL+, Live and catch-up TV | FR 101 | Vidéo, musique | **C** | 63 | 3 : Google AdMob, Google Firebase Analytics, Google CrashLytics | 3 | [5.71.3-40366096, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793899/) |
+| 58 | Grand Frais | FR 77 | Achats | **C** | 63 | 3 : Google Firebase Analytics, Google CrashLytics, Didomi | 3 | [1.8.8, 2026-09-16](https://reports.exodus-privacy.eu.org/fr/reports/780158/) |
+| 59 | Walmart | US 28 | Achats | **C** | 63 | 3 : Facebook Flipper, Google Firebase Analytics, Google CrashLytics | 4 | [25.10.2, 2025-03-26](https://reports.exodus-privacy.eu.org/fr/reports/577857/) (ancien) |
+| 60 | Crunchyroll | FR 175 · US 143 | Vidéo, musique | **C** | 62 | 5 : Google AdMob, Segment, Google Firebase Analytics (+2) | 1 | [3.128.0, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/797935/) |
+| 61 | OG.com | US 39 | Achats | **C** | 62 | 3 : AppsFlyer, GIPHY Analytics, Google Firebase Analytics | 3 | [1.0.38, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797420/) |
+| 62 | Target | US 130 | Achats | **C** | 61 | 5 : Google AdMob, Google Firebase Analytics, OpenTelemetry (OpenCensus, OpenTracing) (+2) | 2 | [2024.46.0, 2024-11-25](https://reports.exodus-privacy.eu.org/fr/reports/529978/) (ancien) |
+| 63 | Zalando | FR 157 | Achats | **C** | 61 | 5 : Adjust, Google Firebase Analytics, OpenTelemetry (OpenCensus, OpenTracing) (+2) | 3 | [26.20.0, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793827/) |
+| 64 | AI Translate | FR 97 | Utilitaire | **C** | 60 | 1 : Facebook Ads | 4 | [2.1.2, 2026-02-26](https://reports.exodus-privacy.eu.org/fr/reports/712498/) |
+| 65 | Capital One Mobile | US 34 | Paiement | **C** | 60 | 4 : Google AdMob, Google Firebase Analytics, New Relic (+1) | 4 | [6.12.4, 2024-09-06](https://reports.exodus-privacy.eu.org/fr/reports/495867/) (ancien) |
+| 66 | OnePay Mobile Banking | US 50 | Paiement | **C** | 59 | 7 : Braze (formerly Appboy), Segment, Branch (+4) | 0 | [1.20.3, 2021-08-09](https://reports.exodus-privacy.eu.org/fr/reports/193390/) (ancien) |
+| 67 | QR & Barcode Scanner | FR 87 | Bureautique, stockage | **C** | 59 | 3 : Facebook Ads, Google AdMob, Google Firebase Analytics | 2 | [3.3.6-L, 2026-04-06](https://reports.exodus-privacy.eu.org/fr/reports/725459/) |
+| 68 | Twitch | FR 39 · US 142 | Vidéo, musique | **C** | 59 | 4 : ComScore, Branch, Google CrashLytics (+1) | 5 | [31.8.0, 2026-10-27](https://reports.exodus-privacy.eu.org/fr/reports/794948/) |
+| 69 | SHEIN-Shopping Online | FR 150 · US 56 | Achats | **C** | 57 | 5 : Facebook Login, AppsFlyer, Facebook Analytics (+2) | 4 | [15.3.8, 2026-09-22](https://reports.exodus-privacy.eu.org/fr/reports/782208/) |
+| 70 | Teststar | FR 124 | Paiement | **C** | 57 | 7 : Huawei Mobile Services (HMS) Core, Facebook Login, AppsFlyer (+4) | 0 | [1.4.0, 2026-02-14](https://reports.exodus-privacy.eu.org/fr/reports/707947/) |
+| 71 | Wishlist Maker | US 100 | Achats | **C** | 56 | 3 : Adjust, Google Firebase Analytics, Google CrashLytics | 2 | [1.15.0, 2026-06-18](https://reports.exodus-privacy.eu.org/fr/reports/751313/) |
+| 72 | Hinge Dating App | FR 177 | DATING | **C** | 55 | 5 : AppsFlyer, Google Firebase Analytics, OpenTelemetry (OpenCensus, OpenTracing) (+2) | 3 | [10.11.0, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797686/) |
+| 73 | Indeed Job Search | FR 40 · US 55 | Autre | **C** | 55 | 2 : Google Firebase Analytics, Google CrashLytics | 6 | [300.0.0, 2026-10-22](https://reports.exodus-privacy.eu.org/fr/reports/792505/) |
+| 74 | Maiia | FR 191 | Santé, démarches | **C** | 55 | 1 : Dynatrace | 8 | [2.38.1, 2025-11-02](https://reports.exodus-privacy.eu.org/fr/reports/668949/) (ancien) |
+| 75 | Nespresso Store | FR 115 | Achats | **C** | 55 | 6 : Adobe Experience Cloud, AltBeacon, Salesforce Marketing Cloud (+3) | 1 | [1.59.6, 2026-03-20](https://reports.exodus-privacy.eu.org/fr/reports/719578/) |
+| 76 | Canva | FR 89 · US 133 | Photo, montage | **C** | 54 | 8 : Segment, Facebook Login, AppsFlyer (+5) | 2 | [2.384.0, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797184/) |
+| 77 | Tipsy | FR 123 | Vidéo, musique | **C** | 54 | 5 : Facebook Login, AppsFlyer, Facebook Share (+2) | 6 | [1.4.14, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797396/) |
+| 78 | INTERSPORT France | FR 144 | Achats | **C** | 53 | 5 : Batch, Adjust, Google Firebase Analytics (+2) | 3 | [1.0.1, 2026-07-18](https://reports.exodus-privacy.eu.org/fr/reports/760237/) |
+| 79 | JBL Headphones | FR 167 | Vidéo, musique | **C** | 52 | 5 : Amazon Analytics (Amazon insights), Google Analytics, Google Firebase Analytics (+2) | 5 | [5.37.10, 2026-09-28](https://reports.exodus-privacy.eu.org/fr/reports/784342/) |
+| 80 | MyChart | US 105 | Santé, démarches | **C** | 52 | 0 | 8 | [11.8.1, 2026-05-25](https://reports.exodus-privacy.eu.org/fr/reports/743740/) |
+| 81 | PayPal | FR 65 · US 42 | Paiement | **C** | 52 | 3 : Adobe Experience Cloud, Adjust, Qualtrics | 5 | [10.19.0, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797254/) |
+| 82 | QR & Barcode Scanner | FR 127 · US 140 | Utilitaire | **C** | 52 | 4 : Facebook Ads, Google AdMob, IAB Open Measurement (+1) | 2 | [2.2.227, 2026-10-27](https://reports.exodus-privacy.eu.org/fr/reports/794682/) |
+| 83 | GoWish | US 16 | Achats | **C** | 51 | 4 : Amplitude, AppsFlyer, Google Firebase Analytics (+1) | 5 | [9.2.4, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/796023/) |
+| 84 | Avast VPN | FR 96 | Messagerie | **C** | 50 | 4 : Facebook Login, Google Firebase Analytics, Singular (+1) | 3 | [7.2.14686, 2026-05-13](https://reports.exodus-privacy.eu.org/fr/reports/739368/) |
+| 85 | Chase Mobile | US 167 | Paiement | **C** | 50 | 3 : Adobe Experience Cloud, Split, Bugsnag | 5 | [4.796, 2026-10-13](https://reports.exodus-privacy.eu.org/fr/reports/789470/) |
+| 86 | ShareKaro | US 181 | Utilitaire | **C** | 50 | 0 | 12 | [2.1.99, 2022-07-23](https://reports.exodus-privacy.eu.org/fr/reports/273097/) (ancien) |
+| 87 | NYTimes | US 144 | Actualités | **D** | 49 | 8 : ComScore, Google AdMob, AppsFlyer (+5) | 0 | [11.77.0, 2026-06-05](https://reports.exodus-privacy.eu.org/fr/reports/747314/) |
+| 88 | Planity | FR 133 | Autre | **D** | 49 | 5 : Facebook Login, Facebook Analytics, Facebook Share (+2) | 5 | [6.5.2, 2026-06-25](https://reports.exodus-privacy.eu.org/fr/reports/753413/) |
+| 89 | Threads | US 67 | Réseau social | **D** | 49 | 4 : Facebook Login, Facebook Flipper, Facebook Notifications (+1) | 8 | [454.0.0.54.79, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797589/) |
+| 90 | EDF & MOI | FR 99 | Utilitaire | **D** | 48 | 9 : Batch, ABTasty, AppsFlyer (+6) | 1 | [16.13, 2026-10-16](https://reports.exodus-privacy.eu.org/fr/reports/790283/) |
+| 91 | Microsoft Teams | FR 50 · US 91 | Bureautique, stockage | **D** | 48 | 2 : OpenTelemetry (OpenCensus, OpenTracing), Microsoft Visual Studio App Center Crashes | 14 | [1416/1.0.0.2026202302, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797427/) |
+| 92 | Affirm | US 171 | Achats | **D** | 47 | 6 : AltBeacon, Salesforce Marketing Cloud, Branch (+3) | 2 | [3.265.9, 2024-07-26](https://reports.exodus-privacy.eu.org/fr/reports/476543/) (ancien) |
+| 93 | Clean Up Phone Storage | FR 69 | Utilitaire | **D** | 47 | 6 : Facebook Login, AppsFlyer, Facebook Analytics (+3) | 3 | [1.0.7, 2026-09-29](https://reports.exodus-privacy.eu.org/fr/reports/784787/) |
+| 94 | eBay online shopping & selling | US 111 | Achats | **D** | 45 | 7 : Facebook Login, AppsFlyer, Facebook Analytics (+4) | 3 | [6.278.0.2, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793745/) |
+| 95 | FDJ® | FR 57 | Autre | **D** | 45 | 6 : Batch, Adjust, Eulerian (+3) | 4 | [26.8.4.28602, 2026-07-12](https://reports.exodus-privacy.eu.org/fr/reports/758551/) |
+| 96 | Meta AI | FR 31 · US 168 | Assistant IA | **D** | 45 | 1 : Facebook Flipper | 17 | [296.1.0.25.165, 2026-10-27](https://reports.exodus-privacy.eu.org/fr/reports/794955/) |
+| 97 | Starbucks | US 159 | Achats | **D** | 44 | 8 : Apptentive, Apptimize, Branch (+5) | 2 | [6.72.1, 2024-05-20](https://reports.exodus-privacy.eu.org/fr/reports/450120/) (ancien) |
+| 98 | Leclerc DRIVE Courses en ligne | FR 164 | Achats | **D** | 43 | 9 : Batch, Facebook Login, AppsFlyer (+6) | 3 | [29.4.0, 2026-09-26](https://reports.exodus-privacy.eu.org/fr/reports/783439/) |
+| 99 | Microsoft Edge | US 138 | Navigateur | **D** | 43 | 6 : Huawei Mobile Services (HMS) Core, Adjust, Microsoft Visual Studio App Center Analytics (+3) | 9 | [155.0.4283.61, 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795358/) |
+| 100 | My Intratone | FR 199 | Utilitaire | **D** | 43 | 2 : Google Firebase Analytics, Google CrashLytics | 12 | [4.6.4, 2026-07-17](https://reports.exodus-privacy.eu.org/fr/reports/760118/) |
+| 101 | Ring | US 196 | Autre | **D** | 43 | 2 : Google Firebase Analytics, Bugsnag | 11 | [3.115.0, 2026-10-20](https://reports.exodus-privacy.eu.org/fr/reports/791839/) |
+| 102 | Baobab | FR 174 | Éducation | **D** | 41 | 7 : Huawei Mobile Services (HMS) Core, Facebook Login, Branch (+4) | 2 | [1.0.759, 2025-09-14](https://reports.exodus-privacy.eu.org/fr/reports/650094/) (ancien) |
+| 103 | BURGER KING France | FR 168 | Achats | **D** | 41 | 7 : Facebook Login, AppsFlyer, Facebook Analytics (+4) | 5 | [15.7.0, 2026-10-01](https://reports.exodus-privacy.eu.org/fr/reports/785531/) |
+| 104 | VIZIO | US 101 | Vidéo, musique | **D** | 41 | 7 : Facebook Login, AppsFlyer, Facebook Analytics (+4) | 6 | [4.1.1.rc-1.20241007.22.release, 2024-11-05](https://reports.exodus-privacy.eu.org/fr/reports/521153/) (ancien) |
+| 105 | Gas Prices & Fuel Finder | FR 134 | Navigation | **D** | 40 | 9 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+6) | 0 | [2.1.50, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797418/) |
+| 106 | TF1+ | FR 60 | Vidéo, musique | **D** | 40 | 12 : FreeWheel, Google AdMob, Facebook Login (+9) | 0 | [23.6.1, 2026-07-19](https://reports.exodus-privacy.eu.org/fr/reports/760629/) |
+| 107 | Paramount+ | US 72 | Vidéo, musique | **D** | 39 | 9 : Braze (formerly Appboy), ComScore, Google AdMob (+6) | 1 | [15.0.23, 2024-05-20](https://reports.exodus-privacy.eu.org/fr/reports/450113/) (ancien) |
+| 108 | Pluto TV | US 83 | Vidéo, musique | **D** | 39 | 8 : ComScore, Google AdMob, Adobe Experience Cloud (+5) | 1 | [17.3.0, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796844/) |
+| 109 | Cash App | US 17 | Paiement | **D** | 38 | 3 : AppsFlyer, Google Firebase Analytics, Bugsnag | 7 | [5.16.1, 2025-09-15](https://reports.exodus-privacy.eu.org/fr/reports/650375/) (ancien) |
+| 110 | Deezer | FR 116 | Vidéo, musique | **D** | 38 | 11 : Google AdMob, Smart, Segment (+8) | 2 | [9.0.26.3, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797711/) |
+| 111 | Lidl Plus | FR 46 | Achats | **D** | 38 | 8 : Huawei Mobile Services (HMS) Core, AltBeacon, Salesforce Marketing Cloud (+5) | 2 | [17.12.5, 2026-10-21](https://reports.exodus-privacy.eu.org/fr/reports/792067/) |
+| 112 | Loopit | US 197 | Vidéo, musique | **D** | 38 | 6 : ThinkingData Analytics, AppsFlyer, Branch (+3) | 8 | [1.2.26, 2026-03-27](https://reports.exodus-privacy.eu.org/fr/reports/721985/) |
+| 113 | LSC Smart Connect | FR 192 | Utilitaire | **D** | 38 | 1 : Pangle | 11 | [2.0.7, 2026-10-26](https://reports.exodus-privacy.eu.org/fr/reports/794519/) |
+| 114 | Revolut | FR 37 | Paiement | **D** | 38 | 3 : AppsFlyer, Google Firebase Analytics, Google CrashLytics | 12 | [10.154.1, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797455/) |
+| 115 | Theme Widgets | FR 194 | Utilitaire | **D** | 38 | 10 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+7) | 1 | [1.1.4, 2026-10-26](https://reports.exodus-privacy.eu.org/fr/reports/794300/) |
+| 116 | Toasty | FR 184 | Achats | **D** | 38 | 3 : AppsFlyer, Google Firebase Analytics, Sentry | 8 | [14.0.2, 2026-09-10](https://reports.exodus-privacy.eu.org/fr/reports/778333/) |
+| 117 | Artmate | US 152 | Photo, montage | **D** | 37 | 30 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+27) | 1 | [1.1.16, 2026-03-28](https://reports.exodus-privacy.eu.org/fr/reports/722318/) |
+| 118 | Mon E.Leclerc | FR 38 | Achats | **D** | 37 | 11 : Batch, Facebook Places, Facebook Login (+8) | 1 | [10.9.2, 2026-08-21](https://reports.exodus-privacy.eu.org/fr/reports/771537/) |
+| 119 | Vinted | FR 12 · US 10 | Achats | **D** | 37 | 26 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+23) | 1 | [26.43.0, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797904/) |
+| 120 | Alibaba.com | FR 200 · US 151 | Achats | **D** | 36 | 5 : Facebook Login, Facebook Analytics, Facebook Share (+2) | 8 | [26.35.2, 2026-10-18](https://reports.exodus-privacy.eu.org/fr/reports/790932/) |
+| 121 | McDo+ | FR 169 | Achats | **D** | 36 | 5 : Adjust, Google Firebase Analytics, Google Tag Manager (+2) | 4 | [5.54.0, 2026-10-05](https://reports.exodus-privacy.eu.org/fr/reports/786715/) |
+| 122 | Mondial Relay suivi de colis | FR 17 | Achats | **D** | 36 | 8 : Synerise, Batch, Adjust (+5) | 2 | [1.30.0 (1300003), 2026-10-22](https://reports.exodus-privacy.eu.org/fr/reports/792523/) |
+| 123 | zeta | US 46 | Assistant IA | **D** | 36 | 23 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+20) | 2 | [3.47.1, 2026-09-06](https://reports.exodus-privacy.eu.org/fr/reports/777194/) |
+| 124 | BoursoBank | FR 84 | Paiement | **D** | 35 | 5 : Adjust, Google Firebase Analytics, Google CrashLytics (+2) | 11 | [7.79.1, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793690/) |
+| 125 | PDF ProX | FR 18 | Bureautique, stockage | **D** | 35 | 17 : Amazon Advertisement, AppLovin (MAX and SparkLabs), ChartBoost (+14) | 1 | [1.9.9-Office, 2026-09-27](https://reports.exodus-privacy.eu.org/fr/reports/784012/) |
+| 126 | PDF Reader | FR 15 · US 148 | Bureautique, stockage | **D** | 35 | 10 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+7) | 1 | [2.1.7, 2026-10-07](https://reports.exodus-privacy.eu.org/fr/reports/787303/) |
+| 127 | PDFMaster | FR 8 | Bureautique, stockage | **D** | 35 | 19 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+16) | 1 | [1.2.0, 2026-10-21](https://reports.exodus-privacy.eu.org/fr/reports/792093/) |
+| 128 | Too Good To Go | FR 78 | Achats | **D** | 35 | 8 : AltBeacon, Amplitude, Salesforce Marketing Cloud (+5) | 3 | [26.10.10, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797063/) |
+| 129 | VibeShort | US 135 | Vidéo, musique | **D** | 35 | 21 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+18) | 1 | [2.30.0, 2026-10-07](https://reports.exodus-privacy.eu.org/fr/reports/787429/) |
+| 130 | VPN | US 198 | Utilitaire | **D** | 35 | 17 : AppLovin (MAX and SparkLabs), Appodeal Stack, BidMachine (+14) | 1 | [2.33.1, 2026-10-12](https://reports.exodus-privacy.eu.org/fr/reports/788976/) |
+| 131 | WePlay | FR 121 | Vidéo, musique | **D** | 35 | 7 : Facebook Login, ThinkingData Analytics, AppsFlyer (+4) | 5 | [6.4.2, 2026-08-30](https://reports.exodus-privacy.eu.org/fr/reports/774656/) |
+| 132 | Bonial | FR 114 | Achats | **D** | 34 | 6 : Huawei Mobile Services (HMS) Core, Radar, Adjust (+3) | 2 | [26.36.0, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793843/) |
+| 133 | Microsoft Authenticator | FR 55 · US 79 | Sécurité | **D** | 34 | 5 : Google Analytics, Google Firebase Analytics, Microsoft Visual Studio App Center Analytics (+2) | 4 | [6.2611.7348, 2026-11-07](https://reports.exodus-privacy.eu.org/fr/reports/798016/) |
+| 134 | Text Free | US 200 | Messagerie | **D** | 34 | 17 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+14) | 2 | [13.18, 2026-06-09](https://reports.exodus-privacy.eu.org/fr/reports/748342/) |
+| 135 | Guardio | US 194 | Utilitaire | **D** | 33 | 4 : AppsFlyer, Google Firebase Analytics, MixPanel (+1) | 7 | [2026.104.0, 2026-10-14](https://reports.exodus-privacy.eu.org/fr/reports/789638/) |
+| 136 | Ma Banque | FR 66 | Paiement | **D** | 32 | 8 : ATInternet, AppsFlyer, Dynatrace (+5) | 5 | [55.0.0, 2026-09-29](https://reports.exodus-privacy.eu.org/fr/reports/784808/) |
+| 137 | Dollar General-Digital Coupons | US 183 | Achats | **D** | 31 | 11 : Google AdMob, Adobe Experience Cloud, AltBeacon (+8) | 4 | [15.3.18, 2024-08-25](https://reports.exodus-privacy.eu.org/fr/reports/490601/) (ancien) |
+| 138 | Hulu | US 176 | Vidéo, musique | **D** | 31 | 9 : IAB Open Measurement, Moat, AppsFlyer (+6) | 1 | [5.9.1+15066-google, 2024-11-12](https://reports.exodus-privacy.eu.org/fr/reports/524066/) (ancien) |
+| 139 | Klarna | FR 198 | Paiement | **D** | 31 | 5 : AppsFlyer, Google Firebase Analytics, fullstory (+2) | 7 | [26.43.379, 2026-10-31](https://reports.exodus-privacy.eu.org/fr/reports/796081/) |
+| 140 | onX Hunt | US 123 | Autre | **D** | 31 | 9 : Facebook Login, Branch, Facebook Analytics (+6) | 6 | [24.52.0, 2025-01-16](https://reports.exodus-privacy.eu.org/fr/reports/550594/) (ancien) |
+| 141 | Polarsteps | FR 94 | Voyage | **D** | 31 | 5 : AppsFlyer, Google Firebase Analytics, MixPanel (+2) | 5 | [10.18.1, 2026-10-31](https://reports.exodus-privacy.eu.org/fr/reports/796046/) |
+| 142 | SNCF Connect | FR 72 | Transport | **D** | 31 | 6 : Google AdMob, Batch, Adjust (+3) | 7 | [20261022.0.0, 2026-11-01](https://reports.exodus-privacy.eu.org/fr/reports/796547/) |
+| 143 | Strava | FR 176 | FITNESS | **D** | 31 | 7 : Facebook Login, Branch, Facebook Analytics (+4) | 7 | [486.11, 2026-10-27](https://reports.exodus-privacy.eu.org/fr/reports/794872/) |
+| 144 | Wendy’s | US 191 | Achats | **D** | 31 | 13 : AltBeacon, Pilgrim by Foursquare, Salesforce Marketing Cloud (+10) | 4 | [10.3.2, 2024-01-30](https://reports.exodus-privacy.eu.org/fr/reports/408169/) (ancien) |
+| 145 | Boulanger | FR 82 | Achats | **D** | 30 | 8 : Batch, Facebook Login, AppsFlyer (+5) | 4 | [26.6.5, 2026-05-11](https://reports.exodus-privacy.eu.org/fr/reports/738708/) |
+| 146 | Pandora | US 115 | Vidéo, musique | **D** | 30 | 9 : AdsWizz, ComScore, Google AdMob (+6) | 2 | [2604.1, 2026-05-13](https://reports.exodus-privacy.eu.org/fr/reports/739276/) |
+| 147 | Peacock TV | US 29 | Vidéo, musique | **D** | 30 | 10 : Braze (formerly Appboy), ComScore, IAB Open Measurement (+7) | 3 | [5.5.32, 2024-05-25](https://reports.exodus-privacy.eu.org/fr/reports/451903/) (ancien) |
+| 148 | AI Hit Music Maker | FR 146 | Vidéo, musique | **E** | 29 | 16 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+13) | 3 | [35.0, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796849/) |
+| 149 | HBO Max | FR 117 · US 88 | Vidéo, musique | **E** | 29 | 8 : ComScore, Google AdMob, IAB Open Measurement (+5) | 1 | [7.12.1.2, 2026-10-01](https://reports.exodus-privacy.eu.org/fr/reports/785538/) |
+| 150 | ADP Mobile Solutions | US 146 | Bureautique, stockage | **E** | 28 | 6 : Google Analytics, Google Firebase Analytics, Google Tag Manager (+3) | 7 | [26.22.2, 2026-06-25](https://reports.exodus-privacy.eu.org/fr/reports/753635/) |
+| 151 | Basic-Fit | FR 197 | FITNESS | **E** | 28 | 7 : Google AdMob, AltBeacon, Salesforce Marketing Cloud (+4) | 5 | [1.98.1, 2026-09-22](https://reports.exodus-privacy.eu.org/fr/reports/782313/) |
+| 152 | Decathlon Sports Shop | FR 160 | Achats | **E** | 28 | 9 : AltBeacon, Batch, Salesforce Marketing Cloud (+6) | 4 | [10.19.1, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792733/) |
+| 153 | Bolt | FR 104 | Transport | **E** | 27 | 9 : Facebook Login, Facebook Analytics, Facebook Flipper (+6) | 9 | [CA.232.0, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797673/) |
+| 154 | FlickReels | FR 186 · US 90 | Vidéo, musique | **E** | 27 | 23 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+20) | 2 | [2.3.9.0, 2026-09-20](https://reports.exodus-privacy.eu.org/fr/reports/781643/) |
+| 155 | Sam's Club | US 114 | Achats | **E** | 27 | 8 : Google AdMob, Adobe Experience Cloud, Bazaarvoice (+5) | 2 | [24.12.40, 2024-12-22](https://reports.exodus-privacy.eu.org/fr/reports/540630/) (ancien) |
+| 156 | Freecash | FR 145 · US 35 | Jeu | **E** | 26 | 19 : Amazon Advertisement, AppLovin (MAX and SparkLabs), ChartBoost (+16) | 3 | [1.268.0, 2026-10-13](https://reports.exodus-privacy.eu.org/fr/reports/789465/) |
+| 157 | HP | FR 149 | Bureautique, stockage | **E** | 26 | 7 : Branch, Google Analytics, Google Firebase Analytics (+4) | 5 | [26.4.2.6958, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797691/) |
+| 158 | Pocket FM | FR 100 · US 113 | Vidéo, musique | **E** | 26 | 31 : Adjoe, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+28) | 2 | [9.11.7, 2026-09-23](https://reports.exodus-privacy.eu.org/fr/reports/782563/) |
+| 159 | McDonald's | US 44 | Achats | **E** | 25 | 12 : Adobe Experience Cloud, Facebook Login, Amazon Mobile Analytics (Amplify) (+9) | 3 | [9.102.2, 2024-11-24](https://reports.exodus-privacy.eu.org/fr/reports/529325/) (ancien) |
+| 160 | FreeDrama | US 21 | Vidéo, musique | **E** | 24 | 17 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+14) | 3 | [6.1.8, 2026-11-01](https://reports.exodus-privacy.eu.org/fr/reports/796450/) |
+| 161 | Joybuy-Don't Just Buy! | FR 139 | Achats | **E** | 24 | 5 : Facebook Login, AppsFlyer, Facebook Analytics (+2) | 11 | [1.0.97, 2026-08-25](https://reports.exodus-privacy.eu.org/fr/reports/772959/) |
+| 162 | Costco Wholesale | US 104 | Achats | **E** | 23 | 5 : Adobe Experience Cloud, Google Analytics, Google Firebase Analytics (+2) | 5 | [25.2.2, 2025-03-07](https://reports.exodus-privacy.eu.org/fr/reports/569507/) (ancien) |
+| 163 | DramaWave | FR 26 · US 92 | Vidéo, musique | **E** | 23 | 15 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+12) | 4 | [2.0.51, 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795052/) |
+| 164 | FreeReels | FR 95 · US 9 | Vidéo, musique | **E** | 23 | 15 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+12) | 4 | [2.4.50, 2026-09-01](https://reports.exodus-privacy.eu.org/fr/reports/775770/) |
+| 165 | SumUp Business | FR 92 | Paiement | **E** | 23 | 6 : AppsFlyer, Google Firebase Analytics, MixPanel (+3) | 13 | [2.184.0, 2026-09-18](https://reports.exodus-privacy.eu.org/fr/reports/780918/) |
+| 166 | Venmo | US 53 | Paiement | **E** | 23 | 7 : Amplitude, Adjust, Branch (+4) | 8 | [10.57.0, 2025-01-29](https://reports.exodus-privacy.eu.org/fr/reports/555530/) (ancien) |
+| 167 | Île-de-France Mobilités | FR 67 | Transport | **E** | 23 | 5 : Batch, Google Firebase Analytics, Matomo (Piwik) (+2) | 8 | [10.0.10-4315, 2026-10-03](https://reports.exodus-privacy.eu.org/fr/reports/786007/) |
+| 168 | Bonjour RATP | FR 162 | Navigation | **E** | 20 | 9 : Facebook Ads, Google AdMob, AltBeacon (+6) | 5 | [9.17.0, 2026-10-03](https://reports.exodus-privacy.eu.org/fr/reports/786008/) |
+| 169 | Hacoo | FR 137 | Autre | **E** | 20 | 9 : Facebook Login, Snapchat Login Kit, AppsFlyer (+6) | 6 | [3.9.6, 2025-07-02](https://reports.exodus-privacy.eu.org/fr/reports/619305/) (ancien) |
+| 170 | GoodShort | US 110 | Vidéo, musique | **E** | 19 | 31 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+28) | 4 | [2.8.4.2084, 2026-03-17](https://reports.exodus-privacy.eu.org/fr/reports/718536/) |
+| 171 | Lyft | US 80 | Navigation | **E** | 19 | 5 : IAB Open Measurement, AltBeacon, Google Firebase Analytics (+2) | 11 | [2026.39.31.1791466624, 2026-10-20](https://reports.exodus-privacy.eu.org/fr/reports/791778/) |
+| 172 | PDF Reader | US 106 | Utilitaire | **E** | 19 | 18 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+15) | 4 | [1.9.7, 2026-10-15](https://reports.exodus-privacy.eu.org/fr/reports/789933/) |
+| 173 | AntiVirus Clean Master-Cleaner | FR 90 · US 97 | Utilitaire | **E** | 18 | 19 : AppLovin (MAX and SparkLabs), AppMonet, Facebook Ads (+16) | 3 | [1.1.0.0, 2026-03-26](https://reports.exodus-privacy.eu.org/fr/reports/721721/) |
+| 174 | PDF Flow | FR 111 | Utilitaire | **E** | 18 | 17 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+14) | 3 | [1.0.6, 2026-10-15](https://reports.exodus-privacy.eu.org/fr/reports/789932/) |
+| 175 | PDF Reader | US 118 | Utilitaire | **E** | 18 | 26 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+23) | 3 | [1.0.1, 2026-09-18](https://reports.exodus-privacy.eu.org/fr/reports/780821/) |
+| 176 | Depop | US 52 | Achats | **E** | 17 | 7 : Facebook Login, Branch, Facebook Share (+4) | 6 | [2.413, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793850/) |
+| 177 | DramaBox | FR 81 · US 18 | Vidéo, musique | **E** | 17 | 32 : Adjoe, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+29) | 4 | [7.0.0, 2026-10-26](https://reports.exodus-privacy.eu.org/fr/reports/794512/) |
+| 178 | QR Scanner | FR 155 | Utilitaire | **E** | 17 | 14 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+11) | 3 | [1.5.0, 2026-01-14](https://reports.exodus-privacy.eu.org/fr/reports/696472/) |
+| 179 | Tubi | US 26 | Vidéo, musique | **E** | 17 | 11 : Google AdMob, Analytics by NPAW (Youbora Suite), Adjust (+8) | 3 | [10.28.0, 2026-07-15](https://reports.exodus-privacy.eu.org/fr/reports/759550/) |
+| 180 | BURGER KING® App | US 199 | Achats | **E** | 15 | 9 : Amplitude, Facebook Login, Branch (+6) | 5 | [7.19.1, 2024-04-12](https://reports.exodus-privacy.eu.org/fr/reports/430075/) (ancien) |
+| 181 | Phone Clean Fix | FR 42 · US 66 | Utilitaire | **E** | 15 | 15 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+12) | 3 | [1.0.0, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796896/) |
+| 182 | Progressive | US 174 | Paiement | **E** | 15 | 4 : AltBeacon, Appdynamics, Salesforce Marketing Cloud (+1) | 9 | [3.98, 2024-05-11](https://reports.exodus-privacy.eu.org/fr/reports/446941/) (ancien) |
+| 183 | WEBTOON | US 193 | Actualités | **E** | 15 | 33 : Adjoe, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+30) | 4 | [26.101.0, 2026-10-27](https://reports.exodus-privacy.eu.org/fr/reports/794650/) |
+| 184 | leboncoin | FR 33 | Achats | **E** | 14 | 9 : Amazon Advertisement, Google AdMob, Prebid Mobile (+6) | 3 | [100.128.1, 2026-10-11](https://reports.exodus-privacy.eu.org/fr/reports/788662/) |
+| 185 | ReelShort | FR 44 · US 31 | Vidéo, musique | **E** | 13 | 20 : Adjoe, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+17) | 4 | [4.2.20, 2026-10-24](https://reports.exodus-privacy.eu.org/fr/reports/793621/) |
+| 186 | Services | FR 61 | Voyage | **E** | 12 | 9 : AltBeacon, Salesforce Marketing Cloud, ATInternet (+6) | 7 | [12.26.1, 2026-09-28](https://reports.exodus-privacy.eu.org/fr/reports/784415/) |
+| 187 | Smart Clean Pro | FR 56 | Utilitaire | **E** | 12 | 12 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+9) | 5 | [1.1.5, 2026-05-20](https://reports.exodus-privacy.eu.org/fr/reports/741698/) |
+| 188 | Whatnot | FR 21 · US 32 | Achats | **E** | 12 | 7 : Segment, Facebook Login, AppsFlyer (+4) | 8 | [26.27.0, 2026-07-01](https://reports.exodus-privacy.eu.org/fr/reports/755505/) |
+| 189 | Daily Cleaner | US 172 | Utilitaire | **E** | 11 | 15 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+12) | 5 | [1.0.1, 2026-07-29](https://reports.exodus-privacy.eu.org/fr/reports/763658/) |
+| 190 | ABPV－America’s best pics, vids | US 192 | Vidéo, musique | **E** | 10 | 24 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+21) | 3 | [10.2.12, 2024-08-12](https://reports.exodus-privacy.eu.org/fr/reports/484226/) (ancien) |
+| 191 | Airbnb | FR 126 | Voyage | **E** | 10 | 7 : Display, Facebook Login, Facebook Share (+4) | 10 | [26.44, 2026-11-07](https://reports.exodus-privacy.eu.org/fr/reports/798033/) |
+| 192 | Bible For Women-Holy Bible KJV | US 158 | Actualités | **E** | 10 | 10 : Facebook Ads, Google AdMob, Prebid Mobile (+7) | 7 | [0.6.7.2, 2026-01-25](https://reports.exodus-privacy.eu.org/fr/reports/700331/) |
+| 193 | Bible Offline-KJV Holy Bible | US 78 | Actualités | **E** | 10 | 14 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+11) | 7 | [6.5.0, 2026-08-02](https://reports.exodus-privacy.eu.org/fr/reports/764924/) |
+| 194 | Etsy | US 169 | Achats | **E** | 10 | 10 : Google AdMob, Facebook Login, AppsFlyer (+7) | 4 | [8.0.0, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793826/) |
+| 195 | File Cleaner-Storage Cleaner | FR 129 | Utilitaire | **E** | 10 | 15 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+12) | 4 | [1.0.4, 2025-10-27](https://reports.exodus-privacy.eu.org/fr/reports/666652/) (ancien) |
+| 196 | Mix Cleaner | FR 187 | Utilitaire | **E** | 10 | 30 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+27) | 4 | [1.1.5, 2026-07-29](https://reports.exodus-privacy.eu.org/fr/reports/763676/) |
+| 197 | JustPlay | US 63 | Vidéo, musique | **E** | 9 | 29 : Adjoe, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+26) | 4 | [1.0.95-ALL_COUNTRIES-NO_LOGS.RELEASE_e67dc4522, 2026-06-25](https://reports.exodus-privacy.eu.org/fr/reports/753525/) |
+| 198 | Life360 | US 41 | Navigation | **E** | 9 | 27 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+24) | 10 | [26.42.0, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/797973/) |
+| 199 | Domino's Pizza USA | US 161 | Achats | **E** | 8 | 7 : AltBeacon, Salesforce Marketing Cloud, Branch (+4) | 5 | [11.4.1, 2024-05-20](https://reports.exodus-privacy.eu.org/fr/reports/450096/) (ancien) |
+| 200 | Nomad Education Brevet Bac Sup | FR 165 | Éducation | **E** | 8 | 11 : Google AdMob, Amplitude, Batch (+8) | 2 | [9.8.1, 2026-01-27](https://reports.exodus-privacy.eu.org/fr/reports/701147/) |
+| 201 | Chime | US 73 | Paiement | **E** | 7 | 8 : Huawei Mobile Services (HMS) Core, Segment, AppsFlyer (+5) | 4 | [5.221.0, 2024-05-18](https://reports.exodus-privacy.eu.org/fr/reports/449370/) (ancien) |
+| 202 | Cleanup | US 61 | Utilitaire | **E** | 7 | 30 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Appodeal Stack (+27) | 4 | [1.4.6, 2026-10-10](https://reports.exodus-privacy.eu.org/fr/reports/788183/) |
+| 203 | Carrefour & sa carte Club | FR 73 | Achats | **E** | 6 | 8 : Google AdMob, AppsFlyer, Google Firebase Analytics (+5) | 8 | [23.8.0, 2026-09-28](https://reports.exodus-privacy.eu.org/fr/reports/784401/) |
+| 204 | Fetch | US 103 | Achats | **E** | 6 | 8 : Adjoe, IAB Open Measurement, Button (+5) | 5 | [3.78.0, 2025-01-10](https://reports.exodus-privacy.eu.org/fr/reports/547896/) (ancien) |
+| 205 | Settings Home | US 5 | Utilitaire | **E** | 6 | 12 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+9) | 6 | [1.6.2, 2026-10-15](https://reports.exodus-privacy.eu.org/fr/reports/790168/) |
+| 206 | ESPN | US 186 | Autre | **E** | 3 | 11 : ComScore, Google AdMob, IAB Open Measurement (+8) | 8 | [8.26.0, 2026-09-30](https://reports.exodus-privacy.eu.org/fr/reports/785062/) |
+| 207 | Lowe's | US 131 | Achats | **E** | 2 | 11 : Google AdMob, AltBeacon, Audience Studio (Krux) (+8) | 4 | [24.10.4, 2024-12-23](https://reports.exodus-privacy.eu.org/fr/reports/541394/) (ancien) |
+| 208 | Call Blocker | FR 156 | Messagerie | **E** | 1 | 12 : Amazon Advertisement, AppLovin (MAX and SparkLabs), CallDorado (+9) | 6 | [2.7.0.1652, 2026-01-26](https://reports.exodus-privacy.eu.org/fr/reports/700589/) |
+| 209 | Macy's | US 182 | Achats | **E** | 1 | 7 : Google AdMob, Adobe Experience Cloud, Amplitude (+4) | 6 | [12.21.0, 2024-12-16](https://reports.exodus-privacy.eu.org/fr/reports/538547/) (ancien) |
+| 210 | NetShort | FR 86 · US 19 | Vidéo, musique | **E** | 1 | 24 : Adjoe, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+21) | 8 | [2.3.4, 2026-10-20](https://reports.exodus-privacy.eu.org/fr/reports/791877/) |
+| 211 | AHEALTH | US 96 | FITNESS | **E** | 0 | 29 : AdFit (Daum), Adjoe, Amazon Advertisement (+26) | 10 | [2.5.0, 2026-10-12](https://reports.exodus-privacy.eu.org/fr/reports/788769/) |
+| 212 | Avast One | FR 181 | Utilitaire | **E** | 0 | 8 : Facebook Ads, Google AdMob, IAB Open Measurement (+5) | 18 | [26.18.0.260925870, 2026-10-07](https://reports.exodus-privacy.eu.org/fr/reports/787495/) |
+| 213 | Best Buy | US 119 | Achats | **E** | 0 | 8 : Google AdMob, AltBeacon, Salesforce Marketing Cloud (+5) | 9 | [24.11.10, 2024-12-01](https://reports.exodus-privacy.eu.org/fr/reports/532519/) (ancien) |
+| 214 | CVS Health | US 93 | Santé, démarches | **E** | 0 | 8 : Braze (formerly Appboy), Google AdMob, Adobe Experience Cloud (+5) | 7 | [25.3.10, 2025-03-20](https://reports.exodus-privacy.eu.org/fr/reports/574700/) (ancien) |
+| 215 | DoorDash | US 36 | Achats | **E** | 0 | 12 : Amplitude, Segment, Facebook Login (+9) | 10 | [15.298.4, 2026-10-24](https://reports.exodus-privacy.eu.org/fr/reports/793403/) |
+| 216 | DoorDash | US 68 | Bureautique, stockage | **E** | 0 | 12 : Amplitude, Segment, Facebook Login (+9) | 7 | [8.15.8, 2025-02-20](https://reports.exodus-privacy.eu.org/fr/reports/563481/) (ancien) |
+| 217 | Easy Homescreen | US 74 | Utilitaire | **E** | 0 | 12 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+9) | 13 | [1.10.24, 2026-09-18](https://reports.exodus-privacy.eu.org/fr/reports/780831/) |
+| 218 | Ge Browser | US 121 | Utilitaire | **E** | 0 | 12 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+9) | 8 | [1.3.0, 2026-09-12](https://reports.exodus-privacy.eu.org/fr/reports/779073/) |
+| 219 | Joko | Cash back & coupons | FR 136 | Achats | **E** | 0 | 9 : Huawei Mobile Services (HMS) Core, Segment, UXCam (+6) | 8 | [5.0.33, 2026-05-05](https://reports.exodus-privacy.eu.org/fr/reports/736500/) |
+| 220 | Macadam, The Step Counter. | FR 161 | FITNESS | **E** | 0 | 33 : Adjoe, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+30) | 11 | [7.8.0, 2026-05-13](https://reports.exodus-privacy.eu.org/fr/reports/739497/) |
+| 221 | NewsBreak | US 109 | Actualités | **E** | 0 | 11 : Amazon Advertisement, Facebook Ads, Google AdMob (+8) | 5 | [24.36.0, 2024-09-07](https://reports.exodus-privacy.eu.org/fr/reports/495944/) (ancien) |
+| 222 | Quick Clean Space | FR 79 | Utilitaire | **E** | 0 | 31 : Amazon Advertisement, AppLovin (MAX and SparkLabs), AppMonet (+28) | 6 | [1.1, 2026-10-11](https://reports.exodus-privacy.eu.org/fr/reports/788484/) |
+| 223 | Smart Clean Tools | FR 182 | Utilitaire | **E** | 0 | 31 : Amazon Advertisement, AppLovin (MAX and SparkLabs), AppMonet (+28) | 6 | [1.4, 2026-09-26](https://reports.exodus-privacy.eu.org/fr/reports/783443/) |
+| 224 | Taco Bell Fast Food & Delivery | US 145 | Achats | **E** | 0 | 10 : IBM Mobile Marketing (Acoustic), Amplitude, AppsFlyer (+7) | 4 | [8.59.0, 2025-01-15](https://reports.exodus-privacy.eu.org/fr/reports/550297/) (ancien) |
+| 225 | TextNow | US 30 | Messagerie | **E** | 0 | 19 : Amazon Advertisement, AppLovin (MAX and SparkLabs), Facebook Ads (+16) | 8 | [26.26.1.0, 2026-07-07](https://reports.exodus-privacy.eu.org/fr/reports/757365/) |
+| 226 | The Home Depot | US 157 | Achats | **E** | 0 | 9 : Adobe Experience Cloud, AltBeacon, Facebook Login (+6) | 9 | [7.58.1, 2026-03-05](https://reports.exodus-privacy.eu.org/fr/reports/715124/) |
+| 227 | 7 Brew Coffee | US 164 | Achats | – | – | – | – | pas de rapport Exodus |
+| 228 | AI Photo Beauty Editor Studio | FR 190 · US 153 | Photo, montage | – | – | – | – | pas de rapport Exodus |
+| 229 | AI Photo Editor | FR 108 | Photo, montage | – | – | – | – | pas de rapport Exodus |
+| 230 | All Documents & PDF Reader | FR 132 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 231 | BigFuture® School | US 86 | Éducation | – | – | – | – | pas de rapport Exodus |
+| 232 | BlinkDrama | US 58 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 233 | CoinScope | US 139 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 234 | Comet Shorts | FR 48 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 235 | CrimeRadar | US 76 | Actualités | – | – | – | – | pas de rapport Exodus |
+| 236 | CrownCards | US 129 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 237 | DealSeek | US 4 | Achats | – | – | – | – | pas de rapport Exodus |
+| 238 | DraftKings | US 173 | Autre | – | – | – | – | pas de rapport Exodus |
+| 239 | DramaBox Lite | US 120 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 240 | Draw Music | US 165 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 241 | Draw Music Maker | US 163 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 242 | earnify | US 117 | Voyage | – | – | – | – | pas de rapport Exodus |
+| 243 | Easy Mail | US 175 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 244 | EasyClean | FR 80 | Bureautique, stockage | – | – | – | – | pas de rapport Exodus |
+| 245 | ebtEDGE NEW! | US 136 | Paiement | – | – | – | – | pas de rapport Exodus |
+| 246 | Fabled | US 170 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 247 | Forum, a Facebook app | US 127 | Réseau social | – | – | – | – | pas de rapport Exodus |
+| 248 | FOX One | US 141 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 249 | GovAuctions.com | US 70 | Achats | – | – | – | – | pas de rapport Exodus |
+| 250 | GPS Tracker & Location Tracker | US 98 | Navigation | – | – | – | – | pas de rapport Exodus |
+| 251 | Grant Cash Advance | US 187 | Paiement | – | – | – | – | pas de rapport Exodus |
+| 252 | Hark Pro | US 84 | Autre | – | – | – | – | pas de rapport Exodus |
+| 253 | Health Care | US 195 | FITNESS | – | – | – | – | pas de rapport Exodus |
+| 254 | Junk Cleaner | US 162 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 255 | Kalshi | US 33 | Paiement | – | – | – | – | pas de rapport Exodus |
+| 256 | Muse from Meta | US 1 | Assistant IA | – | – | – | – | pas de rapport Exodus |
+| 257 | NovaDrama | FR 36 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 258 | PDF Reader | FR 163 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 259 | PDF Reader | US 60 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 260 | PDF Reader App | FR 30 | Bureautique, stockage | – | – | – | – | pas de rapport Exodus |
+| 261 | Phone Junk Files Clear | US 45 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 262 | Phone Ringtones & HD Wallpaper | FR 172 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 263 | Photo Recover Finder | FR 122 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 264 | PicFusion Lab | US 132 | Photo, montage | – | – | – | – | pas de rapport Exodus |
+| 265 | PineDrama | US 8 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 266 | Playout | FR 141 · US 22 | Jeu | – | – | – | – | pas de rapport Exodus |
+| 267 | ReelyGo | FR 63 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 268 | Rips by Triumph | US 69 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 269 | Scoopz | US 189 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 270 | StyleWorld Outfit & Skin | FR 195 | Bureautique, stockage | – | – | – | – | pas de rapport Exodus |
+| 271 | The Roku Channel | US 185 | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 272 | TikTok Lite | US 14 | Réseau social | – | – | – | – | pas de rapport Exodus |
+| 273 | TikTok Pro | US 7 | Réseau social | – | – | – | – | pas de rapport Exodus |
+| 274 | VYBS | US 75 | Autre | – | – | – | – | pas de rapport Exodus |
+| 275 | WakeBox | US 24 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 276 | WeldUp Pocket | FR 120 | Utilitaire | – | – | – | – | pas de rapport Exodus |
+
+## Google et les constructeurs
+
+Les apps de Google et des fabricants de téléphones (Samsung, Xiaomi, Huawei, Motorola, vivo, Oppo, Transsion) et
+celles d'Apple sur Android, écartées des sections précédentes. Beaucoup sont préinstallées et impossibles à
+désinstaller ; leur rapport Exodus porte sur la version publiée sur Google Play, quand elle existe. Les applications
+système qui ne sont pas sur Google Play n'ont pas de rapport.
+
+| Constructeur | Apps | Notées | Score médian | A | B | C | D | E |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| Google | 44 | 44 | 76.5 | 20 | 5 | 12 | 6 | 1 |
+| Samsung | 18 | 8 | 50 | 0 | 0 | 6 | 2 | 0 |
+| Xiaomi | 10 | 9 | 28 | 2 | 1 | 0 | 0 | 6 |
+| Huawei | 2 | 2 | 38 | 0 | 0 | 0 | 2 | 0 |
+| Motorola | 6 | 0 | – | 0 | 0 | 0 | 0 | 0 |
+| vivo | 2 | 1 | 45 | 0 | 0 | 0 | 1 | 0 |
+| Oppo | 1 | 1 | 16 | 0 | 0 | 0 | 0 | 1 |
+| Transsion | 3 | 3 | 19 | 0 | 0 | 0 | 1 | 2 |
+| Apple | 3 | 3 | 76 | 1 | 1 | 1 | 0 | 0 |
+
+71 apps notées sur 89. Notes : A : 23, B : 7, C : 19, D : 12, E : 10. Traqueurs par app : médiane 1, maximum 27 ; 32 apps sans traqueur connu.
+
+| # | App | Constructeur | Catégorie | Note | Score /100 | Traqueurs | Permissions pénalisées | Rapport Exodus |
+|---:|---|---|---|:---:|---:|---|---:|---|
+| 1 | Android System WebView | Google | Utilitaire | **A** | 100 | 0 | 0 | [156.0.8078.47, 2026-10-27](https://reports.exodus-privacy.eu.org/fr/reports/794687/) |
+| 2 | Assistant Google | Google | Assistant IA | **A** | 100 | 0 | 0 | [0.1.884448652, 2026-04-05](https://reports.exodus-privacy.eu.org/fr/reports/725245/) |
+| 3 | Calculatrice (Google) | Google | Utilitaire | **A** | 100 | 0 | 0 | [9.3 (967717812), 2026-09-09](https://reports.exodus-privacy.eu.org/fr/reports/777892/) |
+| 4 | Gemini | Google | Assistant IA | **A** | 100 | 0 | 0 | [1.0.995038376, 2026-10-19](https://reports.exodus-privacy.eu.org/fr/reports/791452/) |
+| 5 | Google Authenticator | Google | Sécurité | **A** | 100 | 0 | 0 | [7.2, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797268/) |
+| 6 | Apple TV | Apple | Vidéo, musique | **A** | 97 | 1 : Google CrashLytics | 1 | [3.0.0, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792988/) |
+| 7 | Google Drive | Google | Bureautique, stockage | **A** | 96 | 0 | 1 | [2.26.437.0.all.alldpi, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796917/) |
+| 8 | YouTube Kids | Google | Vidéo, musique | **A** | 96 | 0 | 1 | [11.42.540, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/796025/) |
+| 9 | Calculatrice (Xiaomi) | Xiaomi | Utilitaire | **A** | 95 | 0 | 1 | [12.3.81, 2024-06-10](https://reports.exodus-privacy.eu.org/fr/reports/457743/) (ancien) |
+| 10 | Google Lens | Google | Assistant IA | **A** | 95 | 1 : Google Firebase Analytics | 0 | [1.18.250731009, 2025-08-09](https://reports.exodus-privacy.eu.org/fr/reports/635619/) (ancien) |
+| 11 | Services vocaux Google | Google | ACCESSIBILITY | **A** | 95 | 0 | 1 | [26.568.436572860.3-release, 2022-04-09](https://reports.exodus-privacy.eu.org/fr/reports/247894/) (ancien) |
+| 12 | Google Docs | Google | Bureautique, stockage | **A** | 92 | 0 | 2 | [1.26.441.05.90, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797791/) |
+| 13 | Google Keep | Google | Bureautique, stockage | **A** | 92 | 0 | 2 | [5.26.441.00.90, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/798000/) |
+| 14 | Gboard | Google | Clavier | **A** | 90 | 0 | 2 | [18.5.6.993608717-release-arm64-v8a, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796834/) |
+| 15 | Google One | Google | Bureautique, stockage | **A** | 90 | 1 : Google Firebase Analytics | 1 | [1.332.1006040493, 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795424/) |
+| 16 | Google Play Livres | Google | Actualités | **A** | 90 | 0 | 3 | [2026.10.16.0 (395681), 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797403/) |
+| 17 | Google Slides | Google | Bureautique, stockage | **A** | 90 | 0 | 3 | [1.26.421.01.90, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/793135/) |
+| 18 | Services Google Play pour la RA | Google | Utilitaire | **A** | 90 | 1 : Google Firebase Analytics | 1 | [1.57.262640093, 2026-10-16](https://reports.exodus-privacy.eu.org/fr/reports/790275/) |
+| 19 | Google Actualités | Google | Actualités | **A** | 89 | 2 : Google Analytics, Google Firebase Analytics | 1 | [5.170.0.999208975, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/798003/) |
+| 20 | Google Meet | Google | Messagerie | **A** | 88 | 0 | 5 | [383.0.1007082291.duo.android_20261026.02_p0, 2026-11-02](https://reports.exodus-privacy.eu.org/fr/reports/796916/) |
+| 21 | Google Agenda | Google | Bureautique, stockage | **A** | 87 | 0 | 5 | [2026.42.1-1011997444-release, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797121/) |
+| 22 | Google Sheets | Google | Bureautique, stockage | **A** | 87 | 1 : OpenTelemetry (OpenCensus, OpenTracing) | 2 | [1.26.441.02.90, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797788/) |
+| 23 | Météo (Xiaomi) | Xiaomi | WEATHER | **A** | 87 | 0 | 4 | [G-13.0.2.1, 2023-02-24](https://reports.exodus-privacy.eu.org/fr/reports/334807/) (ancien) |
+| 24 | Horloge (Google) | Google | Utilitaire | **B** | 82 | 0 | 4 | [9.1 (965977594), 2026-08-25](https://reports.exodus-privacy.eu.org/fr/reports/772916/) |
+| 25 | Mi Calendar | Xiaomi | Bureautique, stockage | **B** | 82 | 1 : Google Firebase Analytics | 5 | [12.6.7, 2023-04-24](https://reports.exodus-privacy.eu.org/fr/reports/350578/) (ancien) |
+| 26 | Google Play Jeux | Google | Jeu | **B** | 77 | 2 : Google AdMob, Google Firebase Analytics | 1 | [2026.10.70836 (1002888414.1002888414-190400), 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792591/) |
+| 27 | Apple Music | Apple | Vidéo, musique | **B** | 76 | 2 : Google Firebase Analytics, Google CrashLytics | 2 | [7.0.0, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795988/) |
+| 28 | Suite d'accessibilité Android | Google | ACCESSIBILITY | **B** | 76 | 0 | 6 | [17.1.0.1003738110, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792823/) |
+| 29 | Chrome | Google | Navigateur | **B** | 74 | 0 | 9 | [156.0.8078.80, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797370/) |
+| 30 | YouTube Music | Google | Vidéo, musique | **B** | 71 | 1 : Google Firebase Analytics | 4 | [9.44.52, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/797118/) |
+| 31 | Google Traduction | Google | Utilitaire | **C** | 69 | 0 | 3 | [10.41.74.1002908522.1-release, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795924/) |
+| 32 | Google TV | Google | Vidéo, musique | **C** | 69 | 1 : Google Firebase Analytics | 5 | [4.39.5193.999139630.2-release, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792590/) |
+| 33 | Samsung Push Service | Samsung | Utilitaire | **C** | 64 | 1 : Google AdMob | 4 | [3.4.27.0, 2026-10-12](https://reports.exodus-privacy.eu.org/fr/reports/788816/) |
+| 34 | Samsung Internet | Samsung | Navigateur | **C** | 61 | 1 : OpenTelemetry (OpenCensus, OpenTracing) | 10 | [30.0.5.27, 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795361/) |
+| 35 | Samsung Music | Samsung | Vidéo, musique | **C** | 59 | 2 : Google AdMob, Google Firebase Analytics | 6 | [16.2.27.4, 2022-03-19](https://reports.exodus-privacy.eu.org/fr/reports/243055/) (ancien) |
+| 36 | Google Maps | Google | Navigation | **C** | 58 | 1 : Google Firebase Analytics | 9 | [26.44.05.1006895251, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797448/) |
+| 37 | Files by Google | Google | Utilitaire | **C** | 54 | 1 : Google Firebase Analytics | 7 | [1.13003.1002253400.1-release, 2026-10-29](https://reports.exodus-privacy.eu.org/fr/reports/795678/) |
+| 38 | Google Messages | Google | Messagerie | **C** | 54 | 0 | 8 | [messages.android_20261022_03_RC00.phone_dynamic, 2026-11-06](https://reports.exodus-privacy.eu.org/fr/reports/797997/) |
+| 39 | Google Wallet | Google | Paiement | **C** | 51 | 2 : Google Analytics, Google Firebase Analytics | 6 | [26.43.1009867093, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797460/) |
+| 40 | Android System Intelligence | Google | Utilitaire | **C** | 50 | 0 | 14 | [V.41.playstore.pixel9.843410720, 2026-01-29](https://reports.exodus-privacy.eu.org/fr/reports/701813/) |
+| 41 | Bien-être numérique | Google | Utilitaire | **C** | 50 | 0 | 7 | [1.49.1016940727 (886727), 2026-11-09](https://reports.exodus-privacy.eu.org/fr/reports/798173/) |
+| 42 | Carrier Services | Google | Messagerie | **C** | 50 | 0 | 5 | [carrierservices.android_20250826_00_RC00.phone, 2025-09-29](https://reports.exodus-privacy.eu.org/fr/reports/655730/) (ancien) |
+| 43 | Contacts (Google) | Google | Messagerie | **C** | 50 | 0 | 5 | [4.90.16.998876676, 2026-10-20](https://reports.exodus-privacy.eu.org/fr/reports/791649/) |
+| 44 | Galaxy Wearable | Samsung | WEARABLE_COMPANION | **C** | 50 | 0 | 20 | [2.2.72.26092361, 2026-10-26](https://reports.exodus-privacy.eu.org/fr/reports/794518/) |
+| 45 | Gmail | Google | E-mail | **C** | 50 | 0 | 12 | [2026.10.26.1012468012.Release, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797475/) |
+| 46 | Migrer vers iOS | Apple | Utilitaire | **C** | 50 | 0 | 11 | [4.0.5, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/792986/) |
+| 47 | Smart Switch | Samsung | Utilitaire | **C** | 50 | 0 | 21 | [3.7.74.7, 2026-11-03](https://reports.exodus-privacy.eu.org/fr/reports/796968/) |
+| 48 | SmartThings | Samsung | Utilitaire | **C** | 50 | 0 | 20 | [1.8.52.23, 2026-10-18](https://reports.exodus-privacy.eu.org/fr/reports/790981/) |
+| 49 | Téléphone de Google | Google | Messagerie | **C** | 50 | 0 | 12 | [244.0.1001930441-pixel, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795965/) |
+| 50 | Carlcare | Transsion | Utilitaire | **D** | 46 | 2 : Google Firebase Analytics, Google CrashLytics | 6 | [V6.5.6, 2026-06-22](https://reports.exodus-privacy.eu.org/fr/reports/752793/) |
+| 51 | Android Auto | Google | VEHICLE | **D** | 45 | 1 : Google Analytics | 14 | [17.9.664044-release, 2026-10-23](https://reports.exodus-privacy.eu.org/fr/reports/793146/) |
+| 52 | EasyShare | vivo | Utilitaire | **D** | 45 | 1 : Google Firebase Analytics | 20 | [7.1.1.7_ex_gp, 2026-05-26](https://reports.exodus-privacy.eu.org/fr/reports/744029/) |
+| 53 | Google | Google | Navigateur | **D** | 45 | 1 : Google Firebase Analytics | 25 | [17.72.17.sa.arm64, 2026-11-05](https://reports.exodus-privacy.eu.org/fr/reports/797580/) |
+| 54 | Google Photos | Google | Photo, montage | **D** | 45 | 1 : Google Firebase Analytics | 10 | [8.0.0.1011730683, 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797512/) |
+| 55 | Localiser (Find Hub) | Google | Sécurité | **D** | 45 | 1 : Google Analytics | 6 | [3.1.787-06, 2026-10-30](https://reports.exodus-privacy.eu.org/fr/reports/795912/) |
+| 56 | Samsung Health | Samsung | FITNESS | **D** | 45 | 1 : OpenTelemetry (OpenCensus, OpenTracing) | 13 | [7.1.0.053, 2026-10-26](https://reports.exodus-privacy.eu.org/fr/reports/794520/) |
+| 57 | YouTube | Google | Vidéo, musique | **D** | 45 | 1 : Google Firebase Analytics | 11 | [21.44.534, 2026-11-08](https://reports.exodus-privacy.eu.org/fr/reports/798068/) |
+| 58 | Huawei Backup | Huawei | Utilitaire | **D** | 38 | 1 : Huawei Mobile Services (HMS) Core | 13 | [10.1.1.570, 2021-09-20](https://reports.exodus-privacy.eu.org/fr/reports/201395/) (ancien) |
+| 59 | Phone Clone | Huawei | Utilitaire | **D** | 38 | 1 : Huawei Mobile Services (HMS) Core | 17 | [11.0.0.300, 2021-09-20](https://reports.exodus-privacy.eu.org/fr/reports/201394/) (ancien) |
+| 60 | Google Go | Google | Navigateur | **D** | 33 | 2 : Google AdMob, Google Firebase Analytics | 14 | [3.142.952204578.release, 2026-08-14](https://reports.exodus-privacy.eu.org/fr/reports/768985/) |
+| 61 | Samsung Members | Samsung | Utilitaire | **D** | 30 | 3 : Adobe Experience Cloud, Google Analytics, Google Tag Manager | 11 | [2.4.91.13, 2022-04-04](https://reports.exodus-privacy.eu.org/fr/reports/246367/) (ancien) |
+| 62 | Mi Video | Xiaomi | Vidéo, musique | **E** | 29 | 23 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+20) | 5 | [2026101200(MiVideo-GP), 2026-10-28](https://reports.exodus-privacy.eu.org/fr/reports/795429/) |
+| 63 | Gestionnaire de fichiers (Xiaomi) | Xiaomi | Utilitaire | **E** | 28 | 5 : Facebook Ads, Google AdMob, IAB Open Measurement (+2) | 6 | [V1-210601, 2024-06-21](https://reports.exodus-privacy.eu.org/fr/reports/461946/) (ancien) |
+| 64 | Services Google Play | Google | Utilitaire | **E** | 23 | 4 : Google AdMob, Google Analytics, Google Firebase Analytics (+1) | 31 | [26.43.30 (260400-1006944126), 2026-11-04](https://reports.exodus-privacy.eu.org/fr/reports/797379/) |
+| 65 | Mi Music | Xiaomi | Vidéo, musique | **E** | 19 | 27 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+24) | 6 | [9.42.01.100920i, 2026-10-25](https://reports.exodus-privacy.eu.org/fr/reports/793857/) |
+| 66 | Phone Master | Transsion | Utilitaire | **E** | 19 | 4 : Facebook Ads, Google AdMob, Google Firebase Analytics (+1) | 13 | [5.8.1.00001, 2023-12-25](https://reports.exodus-privacy.eu.org/fr/reports/397782/) (ancien) |
+| 67 | HeyTap Pictorial | Oppo | Utilitaire | **E** | 16 | 8 : AppLovin (MAX and SparkLabs), Facebook Ads, Google AdMob (+5) | 5 | [13.3.1_expp, 2026-01-07](https://reports.exodus-privacy.eu.org/fr/reports/693758/) |
+| 68 | App Vault | Xiaomi | Utilitaire | **E** | 0 | 7 : Google AdMob, IAB Open Measurement, Pangle (+4) | 12 | [13.67.2, 2026-05-06](https://reports.exodus-privacy.eu.org/fr/reports/736859/) |
+| 69 | Mi Browser | Xiaomi | Navigateur | **E** | 0 | 21 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+18) | 13 | [14.65.0-gn, 2026-10-24](https://reports.exodus-privacy.eu.org/fr/reports/793447/) |
+| 70 | Phoenix Browser | Transsion | Navigateur | **E** | 0 | 8 : Facebook Ads, Google AdMob, Facebook Login (+5) | 14 | [22.5.1.6785, 2026-10-22](https://reports.exodus-privacy.eu.org/fr/reports/792367/) |
+| 71 | ShareMe | Xiaomi | Utilitaire | **E** | 0 | 20 : AdColony, Amazon Advertisement, AppLovin (MAX and SparkLabs) (+17) | 12 | [3.48.05, 2026-09-08](https://reports.exodus-privacy.eu.org/fr/reports/777777/) |
+| 72 | Calculatrice (Samsung) | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 73 | Calendrier (Samsung) | Samsung | Bureautique, stockage | – | – | – | – | pas de rapport Exodus |
+| 74 | Cleaner (Xiaomi) | Xiaomi | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 75 | Device Help | Motorola | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 76 | Dictaphone (Samsung) | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 77 | Dossier sécurisé | Samsung | Sécurité | – | – | – | – | pas de rapport Exodus |
+| 78 | FM Radio | Motorola | Vidéo, musique | – | – | – | – | pas de rapport Exodus |
+| 79 | Horloge (Samsung) | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 80 | Maintenance de l'appareil | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 81 | Mes fichiers (Samsung) | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 82 | Moto Actions | Motorola | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 83 | Moto Display | Motorola | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 84 | Moto Widget | Motorola | WEATHER | – | – | – | – | pas de rapport Exodus |
+| 85 | Motorola Notifications | Motorola | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 86 | One UI Home | Samsung | Utilitaire | – | – | – | – | pas de rapport Exodus |
+| 87 | Samsung Email | Samsung | E-mail | – | – | – | – | pas de rapport Exodus |
+| 88 | Samsung Notes | Samsung | Bureautique, stockage | – | – | – | – | pas de rapport Exodus |
+| 89 | Thèmes (vivo) | vivo | Utilitaire | – | – | – | – | pas de rapport Exodus |
+
 ## Comment lire ce tableau
 
 - **Note de A à E et score sur 100** : calculés avec la grille VYLIA, comme dans l'app. Les permissions sont jugées
@@ -180,17 +586,27 @@ la même méthode : un point de repère pour lire les notes ci-dessus. La plupar
 - **Ce que la note ne mesure pas** : ce que l'éditeur fait des données sur ses serveurs, et les motifs de sécurité,
   qui demandent l'APK.
 - **(ancien)** : le dernier rapport Exodus a plus d'un an ; l'app a pu changer depuis.
-- Rapports Exodus du 2021-10-31 au 2026-11-07 (dernier rapport de chaque app au moment de la lecture).
+- Rapports Exodus du 2021-08-09 au 2026-11-09 (dernier rapport de chaque app au moment de la lecture).
 
 ## Données et licence
 
 Contient des informations d'[Exodus Privacy](https://exodus-privacy.eu.org), disponibles sous
 [Open Database License (ODbL 1.0)](https://opendatacommons.org/licenses/odbl/1-0/), lues sur les pages publiques des
 rapports. Les données complètes de ce tableau (permissions, traqueurs, badges) sont dans
-[`top-google-play.json`](top-google-play.json), publié sous ODbL 1.0. VYLIA est une application indépendante, ni
-affiliée ni approuvée par Exodus Privacy.
+[`top-google-play.json`](top-google-play.json), [`compare-google-play.json`](compare-google-play.json),
+[`trending-google-play.json`](trending-google-play.json) et [`oem-google-play.json`](oem-google-play.json), publiés
+sous ODbL 1.0. VYLIA est une application indépendante, ni affiliée ni approuvée par Exodus Privacy.
 
-Reproduire : `python3 tools/directory/exodus_pages.py directory/top-google-play.apps.json directory/cache/top-google-play`,
-puis `directory-cli generate --date 2026-11-09 --offline --apps directory/top-google-play.apps.json --cache
-directory/cache/top-google-play --out directory/top-google-play.json` et
-`python3 tools/directory/top_table.py directory/top-google-play.apps.json directory/top-google-play.json directory/top-google-play.md`.
+Reproduire, pour chaque liste `directory/<liste>-google-play.apps.json` (`top`, `compare`, `trending`, `oem`) :
+
+1. `python3 tools/directory/exodus_pages.py directory/<liste>-google-play.apps.json directory/cache/top-google-play`,
+   puis la même commande suivie de `--resolve` (vrais numéros de rapport) ;
+2. `python3 tools/directory/rules_for.py app/src/main/assets/vylia_rules_v3.json directory/cache/rules-classement.json
+   directory/compare-google-play.apps.json directory/trending-google-play.apps.json directory/oem-google-play.apps.json`
+   (copie de la grille avec les catégories des apps qu'elle ne connaît pas encore ; elles ont été ajoutées à la
+   grille de l'app le 10 novembre 2026, pour que le téléphone et le classement utilisent la même catégorie) ;
+3. `directory-cli generate --date 2026-11-09 --offline --apps directory/<liste>-google-play.apps.json --cache
+   directory/cache/top-google-play --rules directory/cache/rules-classement.json --out directory/<liste>-google-play.json` ;
+4. `python3 tools/directory/top_table.py directory/top-google-play.apps.json directory/top-google-play.json
+   directory/top-google-play.md --compare … --trending … --oem …` (chaque option suivie de la liste et de son
+   directory.json).

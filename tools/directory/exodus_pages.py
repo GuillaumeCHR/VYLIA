@@ -48,13 +48,22 @@ def get(path):
     if _stamp[0] is not None:
         _stamp[0].write_text(str(_last[0]))
     request = urllib.request.Request(BASE + path, headers={"User-Agent": USER_AGENT})
-    try:
-        with urllib.request.urlopen(request, timeout=60) as response:
-            return response.read(5_000_000).decode("utf-8")
-    except urllib.error.HTTPError as e:
-        if e.code == 404:
-            return None
-        raise
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(request, timeout=60) as response:
+                return response.read(5_000_000).decode("utf-8")
+        except urllib.error.HTTPError as e:
+            if e.code == 404:
+                return None
+            if e.code < 500 or attempt == 2:
+                raise
+        except urllib.error.URLError:
+            if attempt == 2:
+                raise
+        time.sleep(DELAY_S * 4)  # erreur passagère du serveur : on attend avant de réessayer
+        _last[0] = time.time()
+        if _stamp[0] is not None:
+            _stamp[0].write_text(str(_last[0]))
 
 
 def fetch(package):

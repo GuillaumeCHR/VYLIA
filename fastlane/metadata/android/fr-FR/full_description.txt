@@ -1,0 +1,42 @@
+Chaque app installée peut accéder à une partie de votre vie : position, contacts, micro, photos. Beaucoup embarquent aussi des traqueurs. VYLIA vous montre, simplement, ce que vos apps savent de vous, et vous aide à reprendre la main. Tout se passe sur votre téléphone.
+
+Comprendre, avec des mots simples
+• VYLIA explique le fonctionnement des apps derrière l'écran : ce qu'une permission donne vraiment, ce qu'est un traqueur, comment vos données partent chez des entreprises que vous ne connaissez pas.
+• Un lexique des permissions et des traqueurs, sans jargon, accessible à tous, quels que soient votre âge et vos connaissances.
+• Chaque score est expliqué : vous apprenez à juger une app par vous-même.
+• Les bonnes pratiques sont mises en avant autant que les dérives : comprendre, sans faire peur.
+
+Un score de vie privée pour chaque app
+• Chaque app installée reçoit un score de 0 à 100 et une note de A à E, selon les permissions qu'elle demande et les traqueurs qu'elle embarque.
+• Les permissions sont jugées selon la fonction de l'app : le GPS ne coûte rien à une app de navigation, il coûte cher à un jeu. 28 catégories (navigation, messagerie, banque, jeux, santé…) disent ce que chacune justifie, tolère ou interdit.
+• Les traqueurs sont repérés dans le code de chaque app, sur le téléphone, grâce à la base publique d'Exodus Privacy.
+
+Stalkerwares et logiciels espions
+• Les stalkerwares connus, ces apps installées en cachette pour espionner quelqu'un, sont reconnus grâce à la base publique de l'association Echap, même sous un autre nom.
+• Les logiciels espions de surveillance ciblée comme Pegasus ou Predator sont reconnus grâce aux indicateurs publics de MVT, l'outil du Security Lab d'Amnesty International.
+• Les capacités d'espionnage sont signalées : clavier ou accessibilité qui lit la saisie, icône cachée, lecture de l'écran.
+
+Réduire votre exposition
+• Les permissions à retirer, app par app, les scores les plus bas d'abord.
+• Les apps intrusives, et celles que vous n'ouvrez plus (avec l'accès facultatif aux données d'utilisation).
+• Des alternatives plus respectueuses, par catégorie.
+• Les versions web : remplacer une app par le site du même service, installé par votre navigateur.
+
+Bouclier VYLIA : un VPN anti-traqueurs local
+• Le bouclier VYLIA, facultatif, utilise le VpnService d'Android pour créer un VPN sur le téléphone lui-même. Seules les requêtes DNS y passent : celles qui visent des domaines connus de traçage et de logiciels espions sont refusées, les autres continuent sans changement vers le DNS habituel de votre réseau.
+• Aucun serveur distant, aucun journal des sites visités : seul un compteur des blocages est conservé.
+• Vous l'activez vous-même, avec la boîte de dialogue VPN d'Android, depuis l'app ou les réglages rapides, et le mettez en pause ou l'arrêtez quand vous voulez.
+
+Suivre vos progrès
+• Votre score dans le temps, l'historique des installations, suppressions et autorisations, et une alerte si votre exposition augmente.
+• Des points et des trophées pour chaque app intrusive supprimée, et une image à partager qui ne montre jamais le nom d'une app.
+• Des automatisations facultatives : une notification avec le score de chaque nouvelle app, et des scans de fond programmés.
+
+La vie privée d'abord
+• Aucun compte, aucun traqueur, aucune mesure d'audience, aucune donnée collectée.
+• Vos apps sont analysées sur votre téléphone et les résultats y restent. Vous pouvez les exporter, les importer ou les supprimer à tout moment.
+• Internet ne sert que lorsque vous demandez une mise à jour des bases publiques. Rien n'est envoyé sur vos apps.
+• Permissions : liste des apps installées (pour les analyser) ; facultatives : données d'utilisation, VPN (bouclier), notifications et lancement au démarrage (automatisations).
+• Logiciel libre, sous licence GNU GPL v3.
+
+VYLIA est une application indépendante, éditée par Yogi Studio. Elle n'est ni affiliée à Exodus Privacy, Echap, MVT ou Amnesty International, ni approuvée par eux.

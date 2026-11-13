@@ -38,6 +38,17 @@ S = [
  ("detail_trackers_section", "Trackers (%1$d)", "Traqueurs (%1$d)"),
  ("detail_trackers_not_analyzed", "Not analysed yet.", "Non analysés pour l'instant."),
  ("detail_no_tracker", "No known tracker detected.", "Aucun traqueur connu détecté."),
+ # Fiche : exposition avec le bouclier (le score de l'app ne change pas)
+ ("detail_shield_active", "🧿 Shield on · without it: %1$d/100 (%2$s)", "🧿 Bouclier actif · sans lui : %1$d/100 (%2$s)"),
+ ("detail_shield_inactive", "🧿 If you turn on the Shield: %1$d/100 (%2$s)", "🧿 Si vous activez le bouclier : %1$d/100 (%2$s)"),
+ ("detail_shield_hint", "With the Shield on, the score counts what still gets out from this phone. A blocked tracker still counts for part of its weight: it stays in the app and keeps collecting on the phone. The score without the Shield is the one of the public ranking.",
+  "Bouclier actif, le score compte ce qui sort encore de ce téléphone. Un traqueur bloqué compte encore pour une part de son poids : il reste dans l'app et collecte toujours sur le téléphone. Le score sans bouclier est celui du classement public."),
+ ("detail_shield_none", "🧿 The Shield does not block any of this app's trackers.", "🧿 Le bouclier ne bloque aucun traqueur de cette app."),
+ ("detail_shield_turn_on", "Turn on the Shield", "Activer le bouclier"),
+ ("tracker_shield_blocked", "Blocked by the Shield", "Bloqué par le bouclier"),
+ ("tracker_shield_partial", "Partly blocked by the Shield", "Bloqué en partie par le bouclier"),
+ ("tracker_shield_none", "Not blocked by the Shield", "Non bloqué par le bouclier"),
+ ("tracker_shield_unknown", "No known server: the Shield cannot reach it", "Aucun serveur connu : le bouclier ne peut pas l'atteindre"),
  ("detail_trackers_limit", "On-device detection by code signatures (Exodus Privacy database): an obfuscated or renamed SDK can go unnoticed. The absence of trackers is therefore not a guarantee.",
   "Détection locale par signatures de code (base Exodus Privacy) : un SDK obfusqué ou renommé peut passer inaperçu. Une absence de traqueur n'est donc pas une garantie."),
  ("detail_granted", "granted", "accordée"),
@@ -68,4 +79,5 @@ S += [
 ]
 P = [
  ("perms_sensitive_count", ("⚠ %1$d sensitive", "⚠ %1$d sensitive"), ("⚠ %1$d sensible", "⚠ %1$d sensibles")),
+ ("detail_shield_count", ("The Shield blocks %1$d of the %2$d trackers.", "The Shield blocks %1$d of the %2$d trackers."), ("Le bouclier bloque %1$d traqueur sur %2$d.", "Le bouclier bloque %1$d traqueurs sur %2$d.")),
 ]

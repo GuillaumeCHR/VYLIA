@@ -178,9 +178,20 @@ class HistoryRecorder(
          * Une base du score a-t-elle changé depuis [previous] ? Les points enregistrés avant la mémorisation des versions
          * n'en disent rien : seule l'empreinte des règles est alors comparée.
          */
+        /** État du bouclier, gardé avec les versions des bases : il change les scores sans être une base. */
+        const val SHIELD_KEY = "shield"
+        const val SHIELD_ON = "on"
+        const val SHIELD_OFF = "off"
+
+        /** Le bouclier filtrait au point [previous] et ne filtre plus pour [databases]. */
+        fun shieldTurnedOff(previous: ScoreSnapshot, databases: Map<String, String>): Boolean =
+            previous.databases[SHIELD_KEY] == SHIELD_ON && databases[SHIELD_KEY] != SHIELD_ON
+
         fun databasesChanged(previous: ScoreSnapshot, rules: String, databases: Map<String, String>): Boolean {
             val rulesChanged = previous.rules.isNotEmpty() && rules.isNotEmpty() && previous.rules != rules
-            val versionsChanged = previous.databases.isNotEmpty() && databases.isNotEmpty() && previous.databases != databases
+            val before = previous.databases - SHIELD_KEY
+            val now = databases - SHIELD_KEY
+            val versionsChanged = before.isNotEmpty() && now.isNotEmpty() && before != now
             return rulesChanged || versionsChanged
         }
 

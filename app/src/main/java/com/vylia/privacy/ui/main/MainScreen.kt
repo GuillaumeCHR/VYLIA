@@ -100,6 +100,7 @@ fun MainScreen(
     var detailPackage by rememberSaveable { mutableStateOf(initialPackage) }
     val homeState by homeViewModel.uiState.collectAsStateWithLifecycle()
     val rules by homeViewModel.rules.collectAsStateWithLifecycle()
+    val shieldExposure by homeViewModel.shieldExposure.collectAsStateWithLifecycle()
     // Toujours la version la plus récente de l'app (le score évolue pendant l'analyse des traqueurs).
     val detailApp = detailPackage?.let { pkg -> homeState.scannedApps.find { it.app.packageName == pkg } }
 
@@ -174,6 +175,9 @@ fun MainScreen(
                 categoryName = LocalResources.current.categoryName(detailApp.result.categoryId, rules.rules),
                 gradeBands = GradeBands.from(rules.rules.scoring),
                 scoreBase = rules.rules.scoring.base,
+                shieldExposure = shieldExposure.takeIf { BuildConfig.SHIELD_ENABLED },
+                shielded = shieldExposure?.takeIf { BuildConfig.SHIELD_ENABLED }
+                    ?.let { exposure -> rules.scorer.shielded(detailApp.result, exposure::forScore) },
                 onBack = { detailPackage = null },
                 modifier = modifier,
             )

@@ -11,7 +11,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.teemo.co"
+   "website": "https://www.teemo.co",
+   "network_signature": "databerries\\.com"
   },
   "2": {
    "id": 2,
@@ -20,7 +21,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.fidzup.com"
+   "website": "https://www.fidzup.com",
+   "network_signature": "fidzup"
   },
   "3": {
    "id": 3,
@@ -30,7 +32,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://www.salesforce.com/products/marketing-cloud/data-management/?mc=DMP"
+   "website": "https://www.salesforce.com/products/marketing-cloud/data-management/?mc=DMP",
+   "network_signature": "krxd\\.net"
   },
   "4": {
    "id": 4,
@@ -39,7 +42,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.ad4screen.com"
+   "website": "http://www.ad4screen.com",
+   "network_signature": "a4\\.tl|accengage\\.com|ad4push\\.com|ad4screen\\.com"
   },
   "5": {
    "id": 5,
@@ -48,7 +52,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.doubleclickbygoogle.com/"
+   "website": "https://www.doubleclickbygoogle.com/",
+   "network_signature": "2mdn\\.net|dmtry\\.com|doubleclick\\.com|doubleclick\\.net|mng-ads\\.com"
   },
   "6": {
    "id": 6,
@@ -57,7 +62,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.weborama.com"
+   "website": "https://www.weborama.com",
+   "network_signature": "weborama\\.fr|weborama\\.net"
   },
   "7": {
    "id": 7,
@@ -66,14 +72,16 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://smartadserver.com/"
+   "website": "http://smartadserver.com/",
+   "network_signature": "adsrvr\\.org|akamai\\.smartadserver\\.com|cdn1\\.smartadserver\\.com|diff2\\.smartadserver\\.com|diff3\\.smartadserver\\.com|diff\\.smartadserver\\.com|eqx\\.smartadserver\\.com|gallery\\.smartadserver\\.com|im2\\.smartadserver\\.com|insight\\.adsrvr\\.org|itx5-publicidad\\.smartadserver\\.com|itx5\\.smartadserver\\.com|js\\.adsrvr\\.org|match\\.adsrvr\\.org|preview\\.smartadserver\\.com|rtb-csync\\.smartadserver\\.com|saspreview\\.com|smartadserver\\.com|smartadserver\\.ru|tmk\\.smartadserver\\.com|usw\\-lax\\.adsrvr\\.org"
   },
   "8": {
    "id": 8,
    "name": "JW Player",
    "code_signature": "com.longtailvideo.jwplayer.",
    "categories": [],
-   "website": "https://jwplayer.com"
+   "website": "https://jwplayer.com",
+   "network_signature": "g\\.jwpsrv\\.com|jwpltx\\.com|p\\.jwpcdn\\.com"
   },
   "9": {
    "id": 9,
@@ -82,7 +90,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://loggly.com/"
+   "website": "http://loggly.com/",
+   "network_signature": "loggly\\.com"
   },
   "10": {
    "id": 10,
@@ -91,7 +100,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://Xiti.com"
+   "website": "http://Xiti.com",
+   "network_signature": ""
   },
   "11": {
    "id": 11,
@@ -100,7 +110,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.outbrain.com/"
+   "website": "http://www.outbrain.com/",
+   "network_signature": "outbrain\\.com"
   },
   "12": {
    "id": 12,
@@ -109,7 +120,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://AppsFlyer.com"
+   "website": "http://AppsFlyer.com",
+   "network_signature": "appsflyer\\.com"
   },
   "13": {
    "id": 13,
@@ -118,7 +130,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://ligatus.com"
+   "website": "http://ligatus.com",
+   "network_signature": "ligatus\\.com"
   },
   "14": {
    "id": 14,
@@ -127,7 +140,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://widespace.com"
+   "website": "http://widespace.com",
+   "network_signature": "widespace\\.com"
   },
   "15": {
    "id": 15,
@@ -136,7 +150,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.appnexus.com/"
+   "website": "https://www.appnexus.com/",
+   "network_signature": "247realmedia\\.com|adnxs\\.com|appnexus\\.com|appnexus\\.net"
   },
   "16": {
    "id": 16,
@@ -146,7 +161,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "http://localytics.com"
+   "website": "http://localytics.com",
+   "network_signature": "analytics\\.localytics\\.com|manifest\\.localytics\\.com|profile\\.localytics\\.com|sdk-assets\\.localytics\\.com"
   },
   "17": {
    "id": 17,
@@ -157,7 +173,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://www.braze.com"
+   "website": "https://www.braze.com",
+   "network_signature": "appboy\\.com"
   },
   "18": {
    "id": 18,
@@ -166,7 +183,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://mparticle.com"
+   "website": "http://mparticle.com",
+   "network_signature": "mparticle\\.com"
   },
   "20": {
    "id": 20,
@@ -175,7 +193,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://www.s4m.io/"
+   "website": "http://www.s4m.io/",
+   "network_signature": "s4m\\.io|sam4m\\.com"
   },
   "22": {
    "id": 22,
@@ -184,7 +203,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.sizmek.com"
+   "website": "https://www.sizmek.com",
+   "network_signature": "serving-sys\\.com"
   },
   "23": {
    "id": 23,
@@ -194,7 +214,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://batch.com"
+   "website": "https://batch.com",
+   "network_signature": "batch\\.com"
   },
   "24": {
    "id": 24,
@@ -203,7 +224,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.sync2ad.com/"
+   "website": "https://www.sync2ad.com/",
+   "network_signature": "sync2ad\\.com"
   },
   "25": {
    "id": 25,
@@ -213,7 +235,8 @@
     "Advertisement",
     "Analytics"
    ],
-   "website": "http://www.flurry.com"
+   "website": "http://www.flurry.com",
+   "network_signature": "flurry\\.com"
   },
   "26": {
    "id": 26,
@@ -222,7 +245,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "http://hockeyapp.net"
+   "website": "http://hockeyapp.net",
+   "network_signature": "hockeyapp\\.net"
   },
   "27": {
    "id": 27,
@@ -231,7 +255,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "http://crashlytics.com"
+   "website": "http://crashlytics.com",
+   "network_signature": "crashlytics\\.com"
   },
   "28": {
    "id": 28,
@@ -242,7 +267,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://www.leanplum.com/"
+   "website": "https://www.leanplum.com/",
+   "network_signature": "leanplum\\.com"
   },
   "29": {
    "id": 29,
@@ -251,7 +277,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://tinder.com"
+   "website": "http://tinder.com",
+   "network_signature": "etl\\.tindersparks\\.com"
   },
   "30": {
    "id": 30,
@@ -260,7 +287,8 @@
    "categories": [
     "Profiling"
    ],
-   "website": "http://www.schibsted.com/en/ir/"
+   "website": "http://www.schibsted.com/en/ir/",
+   "network_signature": "schibsted\\.com|schibsted\\.io"
   },
   "31": {
    "id": 31,
@@ -269,7 +297,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.atinternet.com/en/"
+   "website": "https://www.atinternet.com/en/",
+   "network_signature": "ati-host\\.net"
   },
   "32": {
    "id": 32,
@@ -278,7 +307,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://tealium.com/"
+   "website": "https://tealium.com/",
+   "network_signature": "tealiumiq\\.com|tiqcdn\\.com"
   },
   "33": {
    "id": 33,
@@ -287,7 +317,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://nexage.com/"
+   "website": "http://nexage.com/",
+   "network_signature": "nexage\\.com"
   },
   "34": {
    "id": 34,
@@ -296,7 +327,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.presage.io/"
+   "website": "http://www.presage.io/",
+   "network_signature": "presage\\.io"
   },
   "35": {
    "id": 35,
@@ -306,7 +338,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://www.mopub.com/"
+   "website": "https://www.mopub.com/",
+   "network_signature": "mopub\\.com"
   },
   "36": {
    "id": 36,
@@ -315,7 +348,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.addapptr.com"
+   "website": "https://www.addapptr.com",
+   "network_signature": "aatkit\\.com"
   },
   "37": {
    "id": 37,
@@ -326,7 +360,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "http://vectaury.io/"
+   "website": "http://vectaury.io/",
+   "network_signature": "vectaury\\.io"
   },
   "38": {
    "id": 38,
@@ -335,7 +370,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.tune.com"
+   "website": "https://www.tune.com",
+   "network_signature": "mobileapptracking\\.com"
   },
   "39": {
    "id": 39,
@@ -344,7 +380,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.pushwoosh.com/"
+   "website": "https://www.pushwoosh.com/",
+   "network_signature": "pushwoosh\\.com"
   },
   "40": {
    "id": 40,
@@ -353,7 +390,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.adobe.com/data-analytics-cloud/audience-manager.html"
+   "website": "https://www.adobe.com/data-analytics-cloud/audience-manager.html",
+   "network_signature": "demdex\\.net"
   },
   "41": {
    "id": 41,
@@ -362,7 +400,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.adswizz.com/"
+   "website": "http://www.adswizz.com/",
+   "network_signature": "adswizz\\.com|cdn\\.adswizz.com\\.edgesuite\\.net"
   },
   "42": {
    "id": 42,
@@ -371,7 +410,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://help.exacttarget.com/en/technical_library/API_Overview/"
+   "website": "http://help.exacttarget.com/en/technical_library/API_Overview/",
+   "network_signature": "\\.exacttarget\\."
   },
   "43": {
    "id": 43,
@@ -381,7 +421,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://www.adobe.com/analytics/adobe-analytics-features.html"
+   "website": "https://www.adobe.com/analytics/adobe-analytics-features.html",
+   "network_signature": "omniture\\.com|omtrdc\\.net"
   },
   "44": {
    "id": 44,
@@ -390,7 +431,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.safegraph.com/"
+   "website": "https://www.safegraph.com/",
+   "network_signature": "api\\.safegraph\\.com"
   },
   "45": {
    "id": 45,
@@ -399,7 +441,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.commandersact.com/"
+   "website": "https://www.commandersact.com/",
+   "network_signature": "\\.commander1\\.com|\\.tagcommander.com"
   },
   "46": {
    "id": 46,
@@ -408,7 +451,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.crowdtangle.com/"
+   "website": "https://www.crowdtangle.com/",
+   "network_signature": "api\\.crowdtangle\\.com"
   },
   "47": {
    "id": 47,
@@ -417,7 +461,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://developers.facebook.com/docs/android/"
+   "website": "https://developers.facebook.com/docs/android/",
+   "network_signature": "\\.facebook\\.com"
   },
   "48": {
    "id": 48,
@@ -426,7 +471,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://www.google.com/analytics/"
+   "website": "http://www.google.com/analytics/",
+   "network_signature": "google-analytics\\.com"
   },
   "49": {
    "id": 49,
@@ -435,7 +481,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://firebase.google.com/"
+   "website": "https://firebase.google.com/",
+   "network_signature": "firebase\\.com|firebaselogging-pa\\.googleapis\\.com"
   },
   "51": {
    "id": 51,
@@ -444,7 +491,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.eulerian.com/en/"
+   "website": "https://www.eulerian.com/en/",
+   "network_signature": "eulerian\\.com"
   },
   "52": {
    "id": 52,
@@ -453,7 +501,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.adjust.com/"
+   "website": "https://www.adjust.com/",
+   "network_signature": "adj\\.st|adjust\\.com|go\\.link"
   },
   "53": {
    "id": 53,
@@ -462,7 +511,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://answers.chartboost.com/en-us/"
+   "website": "https://answers.chartboost.com/en-us/",
+   "network_signature": "\\.chartboost\\.com"
   },
   "54": {
    "id": 54,
@@ -471,7 +521,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.backelite.com/"
+   "website": "https://www.backelite.com/",
+   "network_signature": "backelite\\.com"
   },
   "55": {
    "id": 55,
@@ -480,7 +531,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://areametrics.com/"
+   "website": "https://areametrics.com/",
+   "network_signature": "areametrics\\.com"
   },
   "56": {
    "id": 56,
@@ -490,7 +542,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://comscore.com/"
+   "website": "https://comscore.com/",
+   "network_signature": "comscore\\.com"
   },
   "57": {
    "id": 57,
@@ -500,14 +553,16 @@
     "Analytics",
     "Location"
    ],
-   "website": "http://www.cuebiq.com/"
+   "website": "http://www.cuebiq.com/",
+   "network_signature": "cuebiq\\.com"
   },
   "58": {
    "id": 58,
    "name": "HelpShift",
    "code_signature": "com.helpshift",
    "categories": [],
-   "website": "https://www.helpshift.com"
+   "website": "https://www.helpshift.com",
+   "network_signature": "helpshift\\.com"
   },
   "59": {
    "id": 59,
@@ -516,14 +571,16 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://kontakt.io/"
+   "website": "https://kontakt.io/",
+   "network_signature": "kontakt\\.io"
   },
   "60": {
    "id": 60,
    "name": "Locuslabs",
    "code_signature": "com.locuslabs.sdk",
    "categories": [],
-   "website": "http://locuslabs.com"
+   "website": "http://locuslabs.com",
+   "network_signature": "locuslabs\\.com"
   },
   "61": {
    "id": 61,
@@ -533,7 +590,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://moat.com/analytics"
+   "website": "https://moat.com/analytics",
+   "network_signature": "apx\\.moatads\\.com|geo\\.moatads\\.com|js\\.moatads\\.com|mb\\.moatads\\.com|moat\\.com|pixel\\.moatads\\.com|px\\.moatads\\.com|sejs\\.moatads\\.com|yt\\.moatads\\.com|yts\\.moatads\\.com|z\\.moatads\\.com"
   },
   "62": {
    "id": 62,
@@ -543,7 +601,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://segment.com/"
+   "website": "https://segment.com/",
+   "network_signature": "api\\.segment\\.io|segment\\.com"
   },
   "63": {
    "id": 63,
@@ -552,7 +611,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://docs.microsoft.com/en-us/azure/mobile-engagement/mobile-engagement-android-sdk-overview"
+   "website": "https://docs.microsoft.com/en-us/azure/mobile-engagement/mobile-engagement-android-sdk-overview",
+   "network_signature": "login\\.microsoftonline\\.com|management\\.azure\\.com"
   },
   "64": {
    "id": 64,
@@ -561,7 +621,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://developers.colocator.net"
+   "website": "https://developers.colocator.net",
+   "network_signature": "colocator\\.net"
   },
   "65": {
    "id": 65,
@@ -570,7 +631,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://developers.facebook.com/docs/android"
+   "website": "https://developers.facebook.com/docs/android",
+   "network_signature": "\\.facebook\\.com"
   },
   "66": {
    "id": 66,
@@ -579,7 +641,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://developers.facebook.com/docs/android"
+   "website": "https://developers.facebook.com/docs/android",
+   "network_signature": "\\.facebook\\.com"
   },
   "67": {
    "id": 67,
@@ -588,7 +651,8 @@
    "categories": [
     "Identification"
    ],
-   "website": "https://developers.facebook.com/docs/android"
+   "website": "https://developers.facebook.com/docs/android",
+   "network_signature": "\\.facebook\\.com"
   },
   "68": {
    "id": 68,
@@ -597,7 +661,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://developers.facebook.com/docs/android"
+   "website": "https://developers.facebook.com/docs/android",
+   "network_signature": "\\.facebook\\.com"
   },
   "69": {
    "id": 69,
@@ -606,7 +671,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://developers.facebook.com/docs/android"
+   "website": "https://developers.facebook.com/docs/android",
+   "network_signature": "\\.facebook\\.com"
   },
   "70": {
    "id": 70,
@@ -615,7 +681,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://developers.facebook.com/docs/android"
+   "website": "https://developers.facebook.com/docs/android",
+   "network_signature": "\\.facebook\\.com"
   },
   "71": {
    "id": 71,
@@ -624,7 +691,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://developers.google.com/admob/android"
+   "website": "https://developers.google.com/admob/android",
+   "network_signature": "\\.google\\.com"
   },
   "72": {
    "id": 72,
@@ -636,7 +704,8 @@
     "Identification",
     "Advertisement"
    ],
-   "website": "https://www.applovin.com/"
+   "website": "https://www.applovin.com/",
+   "network_signature": "applovin\\.com|applvn\\.com"
   },
   "73": {
    "id": 73,
@@ -645,7 +714,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.glispa.com"
+   "website": "https://www.glispa.com",
+   "network_signature": "\\.avocarrot\\.com|ads\\.glispa\\.com|exp\\.glispa\\.com|rtb\\.platform\\.glispa\\.com|templates\\.glispaconnect\\.com|trk\\.glispa\\.com"
   },
   "74": {
    "id": 74,
@@ -654,7 +724,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.nativex.com/"
+   "website": "http://www.nativex.com/",
+   "network_signature": "nativex\\.com"
   },
   "75": {
    "id": 75,
@@ -663,7 +734,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://map.baidu.com"
+   "website": "https://map.baidu.com",
+   "network_signature": "map\\.baidu\\.com"
   },
   "76": {
    "id": 76,
@@ -672,7 +744,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://wechat.com"
+   "website": "https://wechat.com",
+   "network_signature": "map\\.qq\\.com"
   },
   "77": {
    "id": 77,
@@ -681,7 +754,8 @@
    "categories": [
     "Location"
    ],
-   "website": "http://hypertrack.com"
+   "website": "http://hypertrack.com",
+   "network_signature": "api\\.hypertrack\\.com|hypertrack\\.amazonaws\\.com|trck\\.at"
   },
   "78": {
    "id": 78,
@@ -690,7 +764,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://uber.com"
+   "website": "https://uber.com",
+   "network_signature": "events\\.uber\\.com"
   },
   "79": {
    "id": 79,
@@ -699,7 +774,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://lisnr.com"
+   "website": "http://lisnr.com",
+   "network_signature": "lisnr\\.com"
   },
   "80": {
    "id": 80,
@@ -708,7 +784,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://silverpush.co"
+   "website": "http://silverpush.co",
+   "network_signature": "54\\.243\\.73\\.253:8080/SilverPush/|silverpush\\.co|silverpush\\.com"
   },
   "81": {
    "id": 81,
@@ -717,7 +794,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://shopkick.com"
+   "website": "https://shopkick.com",
+   "network_signature": "sdk\\.shopkick\\.com|shopkick\\.com|shopkick\\.de"
   },
   "82": {
    "id": 82,
@@ -726,7 +804,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://alphonso.tv"
+   "website": "http://alphonso.tv",
+   "network_signature": "api\\.alphonso\\.tv|prov\\.alphonso\\.tv"
   },
   "83": {
    "id": 83,
@@ -735,7 +814,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://smaato.com"
+   "website": "https://smaato.com",
+   "network_signature": "smaato\\.net|soma\\.smaato\\.net"
   },
   "84": {
    "id": 84,
@@ -744,7 +824,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://scandit.com"
+   "website": "https://scandit.com",
+   "network_signature": "scandit\\.com"
   },
   "85": {
    "id": 85,
@@ -753,7 +834,8 @@
    "categories": [
     "Location"
    ],
-   "website": "http://inrix.com/"
+   "website": "http://inrix.com/",
+   "network_signature": "inrix\\.com|inrix\\.io"
   },
   "86": {
    "id": 86,
@@ -762,14 +844,16 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://www.signal360.com"
+   "website": "http://www.signal360.com",
+   "network_signature": "signal360\\.com|sonicnotify\\.com"
   },
   "87": {
    "id": 87,
    "name": "TeleQuid",
    "code_signature": "com.telequid.",
    "categories": [],
-   "website": "http://www.telequid.com/"
+   "website": "http://www.telequid.com/",
+   "network_signature": "mars\\.telequid\\.com"
   },
   "88": {
    "id": 88,
@@ -778,7 +862,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://retency.com"
+   "website": "http://retency.com",
+   "network_signature": ""
   },
   "89": {
    "id": 89,
@@ -787,7 +872,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://madvertise.com"
+   "website": "http://madvertise.com",
+   "network_signature": "dispatcher\\.mng\\-ads\\.com|mobile\\.mng\\-ads\\.com"
   },
   "90": {
    "id": 90,
@@ -796,7 +882,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://adcolony.com/"
+   "website": "http://adcolony.com/",
+   "network_signature": "adc3-launch\\.adcolony\\.com|adcolony\\.com|ads30\\.adcolony\\.com|androidads20\\.adcolony\\.com|androidads21\\.adcolony\\.com|androidads23\\.adcolony\\.com|events3alt\\.adcolony\\.com|wd\\.adcolony\\.com"
   },
   "91": {
    "id": 91,
@@ -805,7 +892,8 @@
    "categories": [
     "Identification"
    ],
-   "website": "https://www.accountkit.com/"
+   "website": "https://www.accountkit.com/",
+   "network_signature": "graph\\.accountkit\\.com"
   },
   "92": {
    "id": 92,
@@ -814,7 +902,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://developer.amazon.com/public/apis/earn/mobile-ads/docs/quick-start"
+   "website": "https://developer.amazon.com/public/apis/earn/mobile-ads/docs/quick-start",
+   "network_signature": ""
   },
   "93": {
    "id": 93,
@@ -823,7 +912,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://developer.amazon.com/mobile-associates"
+   "website": "https://developer.amazon.com/mobile-associates",
+   "network_signature": ""
   },
   "94": {
    "id": 94,
@@ -832,7 +922,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.radiusnetworks.com/"
+   "website": "https://www.radiusnetworks.com/",
+   "network_signature": "proximitykit\\.radiusnetworks\\.com"
   },
   "95": {
    "id": 95,
@@ -841,7 +932,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://developer.amazon.com/docs/apps-and-games/sdk-downloads.html"
+   "website": "https://developer.amazon.com/docs/apps-and-games/sdk-downloads.html",
+   "network_signature": "mobileanalytics\\.us-east-1\\.amazonaws\\.com"
   },
   "96": {
    "id": 96,
@@ -850,7 +942,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://app.baidu.com/"
+   "website": "https://app.baidu.com/",
+   "network_signature": ""
   },
   "97": {
    "id": 97,
@@ -859,7 +952,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://developer.baidu.com/"
+   "website": "https://developer.baidu.com/",
+   "network_signature": ""
   },
   "99": {
    "id": 99,
@@ -868,7 +962,8 @@
    "categories": [
     "Location"
    ],
-   "website": "http://lbsyun.baidu.com/"
+   "website": "http://lbsyun.baidu.com/",
+   "network_signature": ""
   },
   "100": {
    "id": 100,
@@ -877,7 +972,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://developer.baidu.com/"
+   "website": "https://developer.baidu.com/",
+   "network_signature": ""
   },
   "101": {
    "id": 101,
@@ -886,7 +982,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://developer.baidu.com/"
+   "website": "https://developer.baidu.com/",
+   "network_signature": ""
   },
   "102": {
    "id": 102,
@@ -896,7 +993,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://estimote.com/"
+   "website": "https://estimote.com/",
+   "network_signature": ".*\\.estimote\\.com"
   },
   "103": {
    "id": 103,
@@ -905,7 +1003,8 @@
    "categories": [
     "Location"
    ],
-   "website": "http://lbsyun.baidu.com/index.php?title=android-navsdk"
+   "website": "http://lbsyun.baidu.com/index.php?title=android-navsdk",
+   "network_signature": ""
   },
   "104": {
    "id": 104,
@@ -914,7 +1013,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.fyber.com/"
+   "website": "https://www.fyber.com/",
+   "network_signature": "adproxy\\.fyber\\.com|appengage-video\\.fyber\\.com|banner\\.fyber\\.com|engine\\.fyber\\.com|interstitial\\.fyber\\.com|mbe-cdn\\.fyber\\.com|offer\\.fyber\\.com|service\\.fyber\\.com|tracker\\.fyber\\.com|video-interstitial-assets-cdn\\.fyber\\.com|video\\.fyber\\.com"
   },
   "105": {
    "id": 105,
@@ -923,7 +1023,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.google.com/analytics/tag-manager/"
+   "website": "https://www.google.com/analytics/tag-manager/",
+   "network_signature": "www\\.googletagmanager\\.com|www\\.googletagservices\\.com|www-googletagmanager\\.l\\.google\\.com"
   },
   "106": {
    "id": 106,
@@ -932,7 +1033,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://inmobi.com"
+   "website": "http://inmobi.com",
+   "network_signature": "c\\.w\\.inmobi\\.com|china\\.inmobi\\.com|config-ltvp\\.inmobi\\.com|config\\.inmobi\\.com|et\\.w\\.inmobi\\.com|i\\.l\\.inmobicdn\\.net|i\\.w\\.inmobi\\.com|inmobi\\.cn|inmobi\\.com|inmobi\\.info|inmobi\\.net|inmobi\\.us|inmobicdn\\.com|inmobicdn\\.net|inmobisdk\\-a\\.akamaihd\\.net|japan\\.inmobi\\.com|r\\.w\\.inmobi\\.com|sdkm\\.w\\.inmobi\\.com|sdktm\\.w\\.inmobi\\.com|w\\.inmobi\\.com"
   },
   "107": {
    "id": 107,
@@ -941,7 +1043,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.millennialmedia.com/"
+   "website": "https://www.millennialmedia.com/",
+   "network_signature": "adtech\\.de|contextual\\.media\\.net|media\\.net|millennialmedia\\.com"
   },
   "108": {
    "id": 108,
@@ -950,7 +1053,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://snowplowanalytics.com/"
+   "website": "https://snowplowanalytics.com/",
+   "network_signature": ""
   },
   "109": {
    "id": 109,
@@ -959,7 +1063,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.sponsorpay.com"
+   "website": "http://www.sponsorpay.com",
+   "network_signature": "appengage-video\\.sponsorpay\\.com|cdn1\\.sponsorpay\\.com|cdn2\\.sponsorpay\\.com|cdn3\\.sponsorpay\\.com|cdn4\\.sponsorpay\\.com|engine\\.sponsorpay\\.com"
   },
   "110": {
    "id": 110,
@@ -968,7 +1073,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.supersonic.com/"
+   "website": "https://www.supersonic.com/",
+   "network_signature": "click-haproxy\\.supersonicads\\.com|cx\\.ssacdn\\.com|init\\.supersonicads\\.com|logs\\.supersonic\\.com|outcome\\.supersonicads\\.com|ow-gateway\\.supersonicads\\.com|pixel-tracking\\.sonic-us\\.supersonicads\\.com|rv-gateway\\.supersonicads\\.com|static\\.ssacdn\\.com|supersonic\\.com|supersonicads-a\\.akamaihd\\.net|tag\\-mediation.supersonic.com|ua\\.supersonicads\\.com|v\\.ssacdn\\.com|www\\.supersonicads\\.com"
   },
   "111": {
    "id": 111,
@@ -977,7 +1083,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://carnival.io/"
+   "website": "http://carnival.io/",
+   "network_signature": "devices\\.carnivalmobile\\.com"
   },
   "112": {
    "id": 112,
@@ -986,7 +1093,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://lbs.qq.com/"
+   "website": "https://lbs.qq.com/",
+   "network_signature": ""
   },
   "113": {
    "id": 113,
@@ -995,7 +1103,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.tencent.com/en-us/"
+   "website": "https://www.tencent.com/en-us/",
+   "network_signature": ""
   },
   "114": {
    "id": 114,
@@ -1004,7 +1113,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://mta.qq.com/"
+   "website": "https://mta.qq.com/",
+   "network_signature": ""
   },
   "115": {
    "id": 115,
@@ -1013,7 +1123,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.apptentive.com/"
+   "website": "https://www.apptentive.com/",
+   "network_signature": "api\\.apptentive\\.com"
   },
   "116": {
    "id": 116,
@@ -1022,14 +1133,16 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://stat.qq.com/"
+   "website": "http://stat.qq.com/",
+   "network_signature": ""
   },
   "117": {
    "id": 117,
    "name": "Tencent Weiyun",
    "code_signature": "com.tencent.weiyun",
    "categories": [],
-   "website": "https://www.weiyun.com"
+   "website": "https://www.weiyun.com",
+   "network_signature": ""
   },
   "118": {
    "id": 118,
@@ -1038,7 +1151,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://mixpanel.com/"
+   "website": "https://mixpanel.com/",
+   "network_signature": "api\\.mixpanel\\.com|decide\\.mixpanel\\.com|mixpanel\\.com|switchboard\\.mixpanel\\.com"
   },
   "119": {
    "id": 119,
@@ -1047,14 +1161,16 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.umeng.com/analytics"
+   "website": "https://www.umeng.com/analytics",
+   "network_signature": "alog\\.umeng\\.com|alogs\\.umeng\\.com|ar\\.umeng\\.com|oc\\.umeng\\.com|umeng\\.com|uop\\.umeng\\.com"
   },
   "120": {
    "id": 120,
    "name": "Umeng Feedback",
    "code_signature": "com.umeng.fb",
    "categories": [],
-   "website": "http://dev.umeng.com/feedback"
+   "website": "http://dev.umeng.com/feedback",
+   "network_signature": "alog\\.umeng\\.com|alogs\\.umeng\\.com|ar\\.umeng\\.com|oc\\.umeng\\.com|umeng\\.com|uop\\.umeng\\.com"
   },
   "121": {
    "id": 121,
@@ -1063,7 +1179,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://unity3d.com/"
+   "website": "https://unity3d.com/",
+   "network_signature": "adserver\\.unityads\\.unity3d\\.com|analytics\\.social\\.unity\\.com|api\\.uca\\.cloud\\.unity3d\\.com|auction\\.unityads\\.unity3d\\.com|cdn-highwinds\\.unityads\\.unity3d\\.com|cdn\\.unityads\\.unity3d\\.com|config\\.uca\\.cloud\\.unity3d\\.com|config\\.unityads\\.unity3d\\.com|stats\\.unity3d\\.com|webview\\.unityads\\.unity3d\\.com"
   },
   "122": {
    "id": 122,
@@ -1073,7 +1190,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://count.ly/"
+   "website": "https://count.ly/",
+   "network_signature": ""
   },
   "123": {
    "id": 123,
@@ -1082,7 +1200,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.urbanairship.com/"
+   "website": "https://www.urbanairship.com/",
+   "network_signature": "device-api\\.urbanairship\\.com|urbanairship\\.com|device-api\\.asnapieu\\.com"
   },
   "124": {
    "id": 124,
@@ -1091,7 +1210,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.yandex.com/"
+   "website": "https://www.yandex.com/",
+   "network_signature": "analytics\\.mobile\\.yandex\\.net|appmetrica\\.yandex\\.com|banners-slb\\.mobile\\.yandex\\.net|banners\\.mobile\\.yandex\\.net|mc\\.yandex\\.ru|report\\.appmetrica\\.yandex\\.net|startup\\.mobile\\.yandex\\.net"
   },
   "125": {
    "id": 125,
@@ -1101,7 +1221,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "http://www.amplitude.com"
+   "website": "http://www.amplitude.com",
+   "network_signature": "amplitude\\.com|api\\.amplitude\\.com"
   },
   "126": {
    "id": 126,
@@ -1112,7 +1233,8 @@
     "Profiling",
     "Identification"
    ],
-   "website": "https://www.appsee.com/"
+   "website": "https://www.appsee.com/",
+   "network_signature": "api\\.appsee\\.com"
   },
   "127": {
    "id": 127,
@@ -1123,7 +1245,8 @@
     "Profiling",
     "Advertisement"
    ],
-   "website": "https://www.kochava.com/"
+   "website": "https://www.kochava.com/",
+   "network_signature": "control\\.kochava\\.com|kvinit\\-prod\\.api\\.kochava\\.com"
   },
   "129": {
    "id": 129,
@@ -1132,7 +1255,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.webtrends.com/"
+   "website": "https://www.webtrends.com/",
+   "network_signature": "dc\\.webtrends\\.com|webtrends\\.com"
   },
   "130": {
    "id": 130,
@@ -1141,7 +1265,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://www.newrelic.com"
+   "website": "http://www.newrelic.com",
+   "network_signature": "js-agent\\.newrelic\\.com|mobile-collector\\.newrelic\\.com|newrelic\\.com|nr-data\\.net"
   },
   "131": {
    "id": 131,
@@ -1150,7 +1275,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://appanalytics.io/"
+   "website": "http://appanalytics.io/",
+   "network_signature": ""
   },
   "132": {
    "id": 132,
@@ -1160,7 +1286,8 @@
     "Crash reporting",
     "Analytics"
    ],
-   "website": "http://www.applause.com"
+   "website": "http://www.applause.com",
+   "network_signature": ""
   },
   "133": {
    "id": 133,
@@ -1170,7 +1297,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "http://www.quantcast.com"
+   "website": "http://www.quantcast.com",
+   "network_signature": "quantcast\\.com|quantcast\\.net"
   },
   "135": {
    "id": 135,
@@ -1179,7 +1307,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://www.apptimize.com"
+   "website": "http://www.apptimize.com",
+   "network_signature": "brahe\\.apptimize\\.com|md-a-c\\.apptimize\\.com|md-a-s\\.apptimize\\.com"
   },
   "136": {
    "id": 136,
@@ -1188,7 +1317,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.appbrain.com/info/help/sdk/index.html"
+   "website": "https://www.appbrain.com/info/help/sdk/index.html",
+   "network_signature": "sdk\\.appbrain\\.com"
   },
   "137": {
    "id": 137,
@@ -1197,7 +1327,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.dynatrace.com"
+   "website": "https://www.dynatrace.com",
+   "network_signature": "\\.dynatrace\\.com"
   },
   "138": {
    "id": 138,
@@ -1206,7 +1337,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://matomo.org/mobile"
+   "website": "https://matomo.org/mobile",
+   "network_signature": "matomo\\.org"
   },
   "140": {
    "id": 140,
@@ -1215,7 +1347,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://tech.yandex.com/metrica-mobile-sdk/"
+   "website": "https://tech.yandex.com/metrica-mobile-sdk/",
+   "network_signature": "analytics\\.mobile\\.yandex\\.net|appmetrica\\.yandex\\.com|banners-slb\\.mobile\\.yandex\\.net|banners\\.mobile\\.yandex\\.net|mc\\.yandex\\.ru|report\\.appmetrica\\.yandex\\.net|startup\\.mobile\\.yandex\\.net"
   },
   "142": {
    "id": 142,
@@ -1224,7 +1357,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.singlespot.com/"
+   "website": "https://www.singlespot.com/",
+   "network_signature": "singlespot\\.com"
   },
   "143": {
    "id": 143,
@@ -1233,7 +1367,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.sensoro.com/"
+   "website": "https://www.sensoro.com/",
+   "network_signature": ""
   },
   "144": {
    "id": 144,
@@ -1243,7 +1378,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://sense360.com/"
+   "website": "https://sense360.com/",
+   "network_signature": "android-quinoa-config-prod\\.sense360eng\\.com|incoming-data-sense360\\.s3\\.amazonaws\\.com|quinoa-personal-identify-prod\\.sense360eng\\.com"
   },
   "145": {
    "id": 145,
@@ -1252,7 +1388,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://rubiconproject.com"
+   "website": "https://rubiconproject.com",
+   "network_signature": "ads\\.rubiconproject\\.com|fastlane\\.rubiconproject\\.com|optimized-by\\.rubiconproject\\.com|pixel\\.rubiconproject\\.com|stats\\.aws\\.rubiconproject\\.com|tap2-cdn\\.rubiconproject\\.com|video-ads\\.rubiconproject\\.com"
   },
   "146": {
    "id": 146,
@@ -1261,7 +1398,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.ironsrc.com"
+   "website": "https://www.ironsrc.com",
+   "network_signature": ""
   },
   "147": {
    "id": 147,
@@ -1270,7 +1408,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.heyzap.com"
+   "website": "https://www.heyzap.com",
+   "network_signature": "ads\\.heyzap\\.com|fyc\\.heyzap\\.com|img-cloudflare-2\\.haizap\\.com|img-cloudflare\\.haizap\\.com|med\\.heyzap\\.com|x\\.heyzap\\.com"
   },
   "148": {
    "id": 148,
@@ -1279,7 +1418,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.sap.com/products/crm/customer-data-management.html"
+   "website": "https://www.sap.com/products/crm/customer-data-management.html",
+   "network_signature": "cdn1\\.gigya\\.com|cdn2\\.gigya\\.com|cdn3\\.gigya\\.com|cdn\\.gigya\\.com|cdns\\.us1\\.gigya\\.com|david\\.gigya-cs\\.com"
   },
   "149": {
    "id": 149,
@@ -1288,7 +1428,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.foresee.com"
+   "website": "https://www.foresee.com",
+   "network_signature": "4seeresults\\.com|analytics\\.foresee\\.com|foresee\\.com|foreseeresults\\.com|i\\.4see\\.mobi|rec\\.replay\\.answerscloud\\.com"
   },
   "150": {
    "id": 150,
@@ -1297,7 +1438,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://fiksu.com"
+   "website": "https://fiksu.com",
+   "network_signature": "a\\.fiksu\\.com|sdk\\.fiksu\\.com"
   },
   "151": {
    "id": 151,
@@ -1306,7 +1448,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.ensighten.com"
+   "website": "https://www.ensighten.com",
+   "network_signature": "nexus\\.ensighten\\.com"
   },
   "152": {
    "id": 152,
@@ -1315,7 +1458,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.dynamicyield.com"
+   "website": "https://www.dynamicyield.com",
+   "network_signature": "adm\\.dynamicyield\\.com|api\\.dynamicyield\\.com|cdn\\.dynamicyield\\.com|px\\.dynamicyield\\.com|st\\.dynamicyield\\.com"
   },
   "153": {
    "id": 153,
@@ -1324,7 +1468,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://bluekai.com/registry/"
+   "website": "http://bluekai.com/registry/",
+   "network_signature": "stags\\.bluekai\\.com|tags\\.bluekai\\.com"
   },
   "154": {
    "id": 154,
@@ -1333,7 +1478,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.blueconic.com"
+   "website": "https://www.blueconic.com",
+   "network_signature": ""
   },
   "155": {
    "id": 155,
@@ -1342,7 +1488,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "http://www.apteligent.com"
+   "website": "http://www.apteligent.com",
+   "network_signature": "api\\.crittercism\\.com|appload\\.ingest\\.crittercism\\.com|txn\\.ingest\\.crittercism\\.com"
   },
   "156": {
    "id": 156,
@@ -1351,7 +1498,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.daum.net"
+   "website": "https://www.daum.net",
+   "network_signature": "analytics\\.ad\\.daum\\.net|statistics\\.videofarm\\.daum\\.net"
   },
   "157": {
    "id": 157,
@@ -1360,7 +1508,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://site.adform.com"
+   "website": "https://site.adform.com",
+   "network_signature": "adform\\.com|adformdsp\\.net|adx\\.adform\\.net|files\\.adform\\.net|track\\.adform\\.net"
   },
   "158": {
    "id": 158,
@@ -1369,7 +1518,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adfurikun.jp/adfurikun/"
+   "website": "https://adfurikun.jp/adfurikun/",
+   "network_signature": "adfurikun\\.jp|ginf\\.adfurikun\\.jp"
   },
   "159": {
    "id": 159,
@@ -1379,7 +1529,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://www.mobvista.com/"
+   "website": "https://www.mobvista.com/",
+   "network_signature": "mobvista\\.com"
   },
   "160": {
    "id": 160,
@@ -1388,7 +1539,8 @@
    "categories": [
     "Location"
    ],
-   "website": "http://placed.com/"
+   "website": "http://placed.com/",
+   "network_signature": ""
   },
   "161": {
    "id": 161,
@@ -1397,7 +1549,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://we-are-adot.com/"
+   "website": "https://we-are-adot.com/",
+   "network_signature": "sdk\\.adotmob\\.com|sync\\.adotmob\\.com|tracker\\.adotmob\\.com"
   },
   "162": {
    "id": 162,
@@ -1406,7 +1559,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.appodeal.com"
+   "website": "https://www.appodeal.com",
+   "network_signature": "appodeal\\.com|appodealx\\.com"
   },
   "163": {
    "id": 163,
@@ -1415,7 +1569,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://appmonet.com"
+   "website": "http://appmonet.com",
+   "network_signature": ""
   },
   "164": {
    "id": 164,
@@ -1424,7 +1579,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://soomla.com/"
+   "website": "https://soomla.com/",
+   "network_signature": "soom\\.la"
   },
   "165": {
    "id": 165,
@@ -1433,7 +1589,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.adincube.com/"
+   "website": "https://www.adincube.com/",
+   "network_signature": "sdk\\.adincube\\.com"
   },
   "166": {
    "id": 166,
@@ -1442,7 +1599,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://persona.ly/"
+   "website": "http://persona.ly/",
+   "network_signature": "dev-api\\.persona\\.ly|dev\\.dsp\\.persona\\.ly|dev\\.persona\\.ly|dsp\\.persona\\.ly|persona\\.ly|rtb\\.persona\\.ly|sdk\\.persona\\.ly"
   },
   "167": {
    "id": 167,
@@ -1451,7 +1609,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://branch.io/"
+   "website": "https://branch.io/",
+   "network_signature": "api\\.branch\\.io"
   },
   "168": {
    "id": 168,
@@ -1460,7 +1619,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.cmcm.com/"
+   "website": "https://www.cmcm.com/",
+   "network_signature": "cmcm\\.com"
   },
   "169": {
    "id": 169,
@@ -1469,7 +1629,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://vungle.com"
+   "website": "https://vungle.com",
+   "network_signature": "ads\\.api\\.vungle\\.com|akamai\\.vungle\\-cdn\\.vungle\\.com|api\\.vungle\\.akadns\\.net|api\\.vungle\\.com|bd\\.vungle\\.com|billboard\\.vungle\\.com|cdn\\-lb\\.vungle\\.com|ci\\.vungle\\.com|data\\.vungle\\.com|ingest\\.vungle\\.com|jaeger\\.vungle\\.com|ltv\\-data\\-api\\.kube\\-prod\\.vungle\\.com|monitoring\\.vungle\\.com|ssl\\.vungle\\.com|v\\.vungle\\.com"
   },
   "170": {
    "id": 170,
@@ -1478,7 +1639,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.criteo.com/"
+   "website": "https://www.criteo.com/",
+   "network_signature": "criteo\\.com"
   },
   "171": {
    "id": 171,
@@ -1487,7 +1649,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.mapbox.com/"
+   "website": "https://www.mapbox.com/",
+   "network_signature": "a\\.tiles\\.mapbox\\.com|api\\.tiles\\.mapbox\\.com"
   },
   "172": {
    "id": 172,
@@ -1496,7 +1659,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.optimizely.com/"
+   "website": "https://www.optimizely.com/",
+   "network_signature": "optimizely\\.com|optimizelyapis\\.com"
   },
   "173": {
    "id": 173,
@@ -1505,7 +1669,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.taboola.com/"
+   "website": "https://www.taboola.com/",
+   "network_signature": "taboola\\.com"
   },
   "174": {
    "id": 174,
@@ -1516,7 +1681,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://clevertap.com/"
+   "website": "https://clevertap.com/",
+   "network_signature": "wzrkt\\.com"
   },
   "175": {
    "id": 175,
@@ -1525,7 +1691,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://tracker.my.com/"
+   "website": "https://tracker.my.com/",
+   "network_signature": "tracker-api\\.my\\.com"
   },
   "176": {
    "id": 176,
@@ -1534,7 +1701,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.cloudmobi.net/"
+   "website": "http://www.cloudmobi.net/",
+   "network_signature": "api\\.cloudmobi\\.net|cloudmobi\\.net|logger\\.cloudmobi\\.net|vast\\.cloudmobi\\.net"
   },
   "177": {
    "id": 177,
@@ -1543,7 +1711,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adlibr.com"
+   "website": "https://adlibr.com",
+   "network_signature": "adlibr\\.com"
   },
   "178": {
    "id": 178,
@@ -1552,7 +1721,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.brightcove.com"
+   "website": "https://www.brightcove.com",
+   "network_signature": "metrics\\.brightcove\\.com"
   },
   "179": {
    "id": 179,
@@ -1561,7 +1731,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.dov-e.com/"
+   "website": "https://www.dov-e.com/",
+   "network_signature": "\\.dov-e\\.com"
   },
   "180": {
    "id": 180,
@@ -1570,7 +1741,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://inmarket.com/"
+   "website": "https://inmarket.com/",
+   "network_signature": "m2m-api\\.inmarket\\.com"
   },
   "181": {
    "id": 181,
@@ -1579,7 +1751,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://enterprise.foursquare.com/products/pilgrim"
+   "website": "https://enterprise.foursquare.com/products/pilgrim",
+   "network_signature": "sdk\\.foursquare\\.com"
   },
   "182": {
    "id": 182,
@@ -1588,7 +1761,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.otherlevels.com/"
+   "website": "https://www.otherlevels.com/",
+   "network_signature": "api\\.otherlevels\\.com|geodata\\.otherlevels\\.com|mdn\\.otherlevels\\.com|rich\\.otherlevels\\.com|tags\\.otherlevels\\.com|ws\\.otherlevels\\.com"
   },
   "183": {
    "id": 183,
@@ -1597,7 +1771,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://pubnative.net/"
+   "website": "https://pubnative.net/",
+   "network_signature": "pubnative\\.net"
   },
   "184": {
    "id": 184,
@@ -1606,7 +1781,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.appnext.com/"
+   "website": "https://www.appnext.com/",
+   "network_signature": "appnext.com"
   },
   "185": {
    "id": 185,
@@ -1617,7 +1793,8 @@
     "Profiling",
     "Advertisement"
    ],
-   "website": "https://www.mobfox.com/"
+   "website": "https://www.mobfox.com/",
+   "network_signature": ""
   },
   "186": {
    "id": 186,
@@ -1626,7 +1803,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.shallwead.com"
+   "website": "http://www.shallwead.com",
+   "network_signature": ""
   },
   "187": {
    "id": 187,
@@ -1635,7 +1813,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://deltadna.com/"
+   "website": "https://deltadna.com/",
+   "network_signature": "deltadna\\.net"
   },
   "188": {
    "id": 188,
@@ -1644,7 +1823,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.display.io/en/"
+   "website": "https://www.display.io/en/",
+   "network_signature": "display.io"
   },
   "189": {
    "id": 189,
@@ -1653,7 +1833,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.hyprmx.com"
+   "website": "https://www.hyprmx.com",
+   "network_signature": "hyprmx\\.com"
   },
   "190": {
    "id": 190,
@@ -1662,7 +1843,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://bugly.qq.com/v2/"
+   "website": "https://bugly.qq.com/v2/",
+   "network_signature": "bugly\\.qq\\.com"
   },
   "191": {
    "id": 191,
@@ -1671,7 +1853,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://ad.duapps.com/"
+   "website": "http://ad.duapps.com/",
+   "network_signature": "duapps\\.com"
   },
   "192": {
    "id": 192,
@@ -1682,7 +1865,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://www.swrve.com/"
+   "website": "https://www.swrve.com/",
+   "network_signature": "api\\.swrve\\.com|content\\.swrve\\.com"
   },
   "193": {
    "id": 193,
@@ -1691,7 +1875,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://onesignal.com/"
+   "website": "https://onesignal.com/",
+   "network_signature": "onesignal\\.com"
   },
   "194": {
    "id": 194,
@@ -1701,7 +1886,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://www.appdynamics.com/"
+   "website": "https://www.appdynamics.com/",
+   "network_signature": "eum-appdynamics\\.com|appdynamics\\.com"
   },
   "195": {
    "id": 195,
@@ -1711,7 +1897,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://www.startapp.com"
+   "website": "https://www.startapp.com",
+   "network_signature": "c2i\\.startappnetwork\\.com|c2s\\.startappnetwork\\.com|click\\.startappservice\\.com|dts\\.startappservice\\.com|events\\.startappservice\\.com|images\\.startappservice\\.com|imp\\.startappservice\\.com|info\\.static\\.startappservice\\.com|init\\.startappservice\\.com|req\\.startappservice\\.com|soda\\.startappservice\\.com|startappservice\\.com|va\\.origin\\.startappservice\\.com"
   },
   "196": {
    "id": 196,
@@ -1720,7 +1907,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.aerserv.com/"
+   "website": "https://www.aerserv.com/",
+   "network_signature": "ads\\.aerserv\\.com|debug\\.aerserv\\.com"
   },
   "197": {
    "id": 197,
@@ -1729,7 +1917,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.infonline.de"
+   "website": "https://www.infonline.de",
+   "network_signature": "de\\.ioam\\.de"
   },
   "198": {
    "id": 198,
@@ -1738,7 +1927,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://target.my.com/"
+   "website": "https://target.my.com/",
+   "network_signature": ".target\\.my\\.com"
   },
   "199": {
    "id": 199,
@@ -1747,7 +1937,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.tapjoy.com/"
+   "website": "https://www.tapjoy.com/",
+   "network_signature": "tapjoy\\.com|tapjoyads\\.com|www\\.5rocks\\.io"
   },
   "200": {
    "id": 200,
@@ -1757,7 +1948,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://www.mintegral.com/en/"
+   "website": "https://www.mintegral.com/en/",
+   "network_signature": "analytics\\.rayjump\\.com|cdn-adn\\.rayjump\\.com|de01\\.rayjump\\.com|de\\.rayjump\\.com|detect\\.rayjump\\.com|fk-mtrack\\.rayjump\\.com|hybird\\.rayjump\\.com|jssdk\\.rayjump\\.com|net\\.rayjump\\.com|online\\.rayjump\\.com|rayjump\\.com|setting\\.rayjump\\.com|sg-mtrack\\.rayjump\\.com|sg01\\.rayjump\\.com|sg\\.rayjump\\.com|tknet\\.rayjump\\.com|us01\\.rayjump\\.com"
   },
   "201": {
    "id": 201,
@@ -1766,7 +1958,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://gimbal.com/"
+   "website": "https://gimbal.com/",
+   "network_signature": "analytics-server\\.gimbal\\.com|api\\.gimbal\\.com|registration\\.gimbal\\.com|sdk-info\\.gimbal\\.com"
   },
   "202": {
    "id": 202,
@@ -1775,7 +1968,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.conviva.com/"
+   "website": "https://www.conviva.com/",
+   "network_signature": "cws\\.conviva\\.com"
   },
   "203": {
    "id": 203,
@@ -1784,7 +1978,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.adobe.com/privacy/policies/auditude.html"
+   "website": "https://www.adobe.com/privacy/policies/auditude.html",
+   "network_signature": "auditude\\.com"
   },
   "204": {
    "id": 204,
@@ -1794,7 +1989,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "http://instreamatic.com/"
+   "website": "http://instreamatic.com/",
+   "network_signature": "instreamatic\\.com"
   },
   "205": {
    "id": 205,
@@ -1804,7 +2000,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://gameanalytics.com/features"
+   "website": "https://gameanalytics.com/features",
+   "network_signature": ""
   },
   "206": {
    "id": 206,
@@ -1813,7 +2010,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://instabug.com/crash-reporting"
+   "website": "https://instabug.com/crash-reporting",
+   "network_signature": ""
   },
   "207": {
    "id": 207,
@@ -1822,7 +2020,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://www.bugsnag.com/"
+   "website": "https://www.bugsnag.com/",
+   "network_signature": ""
   },
   "208": {
    "id": 208,
@@ -1832,7 +2031,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://us.moodmedia.com/"
+   "website": "https://us.moodmedia.com/",
+   "network_signature": "moodpresence\\.com"
   },
   "209": {
    "id": 209,
@@ -1842,7 +2042,8 @@
     "Identification",
     "Location"
    ],
-   "website": "https://www.houndify.com/"
+   "website": "https://www.houndify.com/",
+   "network_signature": "houndify\\.com"
   },
   "210": {
    "id": 210,
@@ -1853,7 +2054,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://www.openx.com/"
+   "website": "https://www.openx.com/",
+   "network_signature": "openx\\.com|openx\\.net|openx\\.org|us-ads\\.openx\\.net"
   },
   "211": {
    "id": 211,
@@ -1863,7 +2065,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://taplytics.com"
+   "website": "https://taplytics.com",
+   "network_signature": "api\\.taplytics\\.com|ping\\.tapylitics\\.com"
   },
   "212": {
    "id": 212,
@@ -1874,7 +2077,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "http://www.yinzcam.com/"
+   "website": "http://www.yinzcam.com/",
+   "network_signature": "analytics\\.yinzcam\\.com"
   },
   "213": {
    "id": 213,
@@ -1883,7 +2087,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.ooyala.com/"
+   "website": "https://www.ooyala.com/",
+   "network_signature": "ooyala\\.com"
   },
   "214": {
    "id": 214,
@@ -1892,7 +2097,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.ninthdecimal.com/"
+   "website": "https://www.ninthdecimal.com/",
+   "network_signature": "kiip\\.me"
   },
   "215": {
    "id": 215,
@@ -1901,7 +2107,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://home.mobpowertech.com/"
+   "website": "https://home.mobpowertech.com/",
+   "network_signature": "api\\.mobpowertech\\.com|log\\.mobpowertech\\.com|mobpowertech\\.com|scheme\\.mobpowertech\\.com"
   },
   "216": {
    "id": 216,
@@ -1910,7 +2117,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.adbuddiz.com/abuse?hl=fr"
+   "website": "http://www.adbuddiz.com/abuse?hl=fr",
+   "network_signature": "sdk\\.adbuddiz\\.com"
   },
   "218": {
    "id": 218,
@@ -1919,7 +2127,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://integralads.com"
+   "website": "https://integralads.com",
+   "network_signature": "adsafeprotected\\.com|iasds01\\.com|integralads\\.com"
   },
   "219": {
    "id": 219,
@@ -1928,7 +2137,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://altbeacon.org"
+   "website": "https://altbeacon.org",
+   "network_signature": "data.\\altbeacon\\.org"
   },
   "220": {
    "id": 220,
@@ -1937,7 +2147,8 @@
    "categories": [
     "Profiling"
    ],
-   "website": "https://www.salesforce.com/products/marketing-cloud/"
+   "website": "https://www.salesforce.com/products/marketing-cloud/",
+   "network_signature": ""
   },
   "221": {
    "id": 221,
@@ -1946,7 +2157,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://wiki.mozilla.org/Telemetry"
+   "website": "https://wiki.mozilla.org/Telemetry",
+   "network_signature": ""
   },
   "222": {
    "id": 222,
@@ -1955,14 +2167,16 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://nend.net/en/"
+   "website": "https://nend.net/en/",
+   "network_signature": ""
   },
   "223": {
    "id": 223,
    "name": "Pusher",
    "code_signature": "com.pusher.client.",
    "categories": [],
-   "website": "https://pusher.com/"
+   "website": "https://pusher.com/",
+   "network_signature": ""
   },
   "224": {
    "id": 224,
@@ -1971,7 +2185,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://freewheel.tv/"
+   "website": "http://freewheel.tv/",
+   "network_signature": "fwmrm\\.net"
   },
   "225": {
    "id": 225,
@@ -1980,7 +2195,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.tnkfactory.com"
+   "website": "http://www.tnkfactory.com",
+   "network_signature": ""
   },
   "226": {
    "id": 226,
@@ -1989,7 +2205,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://axonix.com/"
+   "website": "http://axonix.com/",
+   "network_signature": "ads\\.mobclix\\.com|axonix\\.com|data\\.mobclix\\.com|mobclix\\.com|s\\.mobclix\\.com"
   },
   "227": {
    "id": 227,
@@ -1998,7 +2215,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://heatmap.gemius.com"
+   "website": "https://heatmap.gemius.com",
+   "network_signature": "gemius\\.pl"
   },
   "228": {
    "id": 228,
@@ -2007,7 +2225,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.youappi.com"
+   "website": "https://www.youappi.com",
+   "network_signature": ""
   },
   "229": {
    "id": 229,
@@ -2016,7 +2235,8 @@
    "categories": [
     "Profiling"
    ],
-   "website": "https://www.adobe.com/experience-cloud.html"
+   "website": "https://www.adobe.com/experience-cloud.html",
+   "network_signature": ""
   },
   "230": {
    "id": 230,
@@ -2025,7 +2245,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.teads.tv"
+   "website": "https://www.teads.tv",
+   "network_signature": "teads\\.tv"
   },
   "231": {
    "id": 231,
@@ -2034,7 +2255,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://inloco.com.br"
+   "website": "https://inloco.com.br",
+   "network_signature": "inlocomedia\\.com"
   },
   "232": {
    "id": 232,
@@ -2043,7 +2265,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://iqzone.com"
+   "website": "https://iqzone.com",
+   "network_signature": ""
   },
   "233": {
    "id": 233,
@@ -2053,7 +2276,8 @@
     "Crash reporting",
     "Analytics"
    ],
-   "website": "https://bugfender.com/"
+   "website": "https://bugfender.com/",
+   "network_signature": ""
   },
   "234": {
    "id": 234,
@@ -2062,7 +2286,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://wootric.com"
+   "website": "http://wootric.com",
+   "network_signature": ".wootric\\.com\\.herokudns\\.com|wootric\\.com"
   },
   "235": {
    "id": 235,
@@ -2071,7 +2296,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://kidoz.net/kidoz-sdk/"
+   "website": "https://kidoz.net/kidoz-sdk/",
+   "network_signature": ""
   },
   "236": {
    "id": 236,
@@ -2080,7 +2306,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://pubmatic.com/"
+   "website": "https://pubmatic.com/",
+   "network_signature": "ads\\.pubmatic\\.com|aktrack\\.pubmatic\\.com|gads\\.pubmatic\\.com|image2\\.pubmatic\\.com|simage2\\.pubmatic\\.com"
   },
   "237": {
    "id": 237,
@@ -2089,7 +2316,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.kissmetricshq.com/"
+   "website": "https://www.kissmetricshq.com/",
+   "network_signature": ""
   },
   "238": {
    "id": 238,
@@ -2098,7 +2326,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://appcenter.ms/"
+   "website": "https://appcenter.ms/",
+   "network_signature": ""
   },
   "239": {
    "id": 239,
@@ -2107,7 +2336,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.webtrekk.com/"
+   "website": "https://www.webtrekk.com/",
+   "network_signature": ""
   },
   "240": {
    "id": 240,
@@ -2116,7 +2346,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://analytics.withgoogle.com/"
+   "website": "https://analytics.withgoogle.com/",
+   "network_signature": ""
   },
   "241": {
    "id": 241,
@@ -2125,7 +2356,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://www.bugsee.com/"
+   "website": "https://www.bugsee.com/",
+   "network_signature": ""
   },
   "242": {
    "id": 242,
@@ -2134,7 +2366,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://mint.splunk.com/"
+   "website": "https://mint.splunk.com/",
+   "network_signature": ""
   },
   "243": {
    "id": 243,
@@ -2143,7 +2376,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://appcenter.ms/"
+   "website": "https://appcenter.ms/",
+   "network_signature": ""
   },
   "244": {
    "id": 244,
@@ -2152,7 +2386,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.nielsen.com"
+   "website": "https://www.nielsen.com",
+   "network_signature": ""
   },
   "245": {
    "id": 245,
@@ -2162,7 +2397,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://revealmobile.com/"
+   "website": "https://revealmobile.com/",
+   "network_signature": ""
   },
   "246": {
    "id": 246,
@@ -2171,7 +2407,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://metrics.dropwizard.io"
+   "website": "https://metrics.dropwizard.io",
+   "network_signature": ""
   },
   "247": {
    "id": 247,
@@ -2180,7 +2417,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://repro.io/"
+   "website": "https://repro.io/",
+   "network_signature": ""
   },
   "248": {
    "id": 248,
@@ -2189,7 +2427,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.sensorsdata.cn"
+   "website": "https://www.sensorsdata.cn",
+   "network_signature": ""
   },
   "249": {
    "id": 249,
@@ -2198,7 +2437,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.tenjin.com/"
+   "website": "https://www.tenjin.com/",
+   "network_signature": ""
   },
   "250": {
    "id": 250,
@@ -2207,7 +2447,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.tapstream.com/"
+   "website": "https://www.tapstream.com/",
+   "network_signature": ""
   },
   "251": {
    "id": 251,
@@ -2216,7 +2457,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://singular.net/"
+   "website": "https://singular.net/",
+   "network_signature": ""
   },
   "252": {
    "id": 252,
@@ -2225,7 +2467,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://calldorado.com"
+   "website": "http://calldorado.com",
+   "network_signature": ""
   },
   "253": {
    "id": 253,
@@ -2235,7 +2478,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://uxcam.com/"
+   "website": "https://uxcam.com/",
+   "network_signature": "verify.uxcam.com"
   },
   "254": {
    "id": 254,
@@ -2246,7 +2490,8 @@
     "Profiling",
     "Advertisement"
    ],
-   "website": "https://www.upsight.com/"
+   "website": "https://www.upsight.com/",
+   "network_signature": ""
   },
   "255": {
    "id": 255,
@@ -2255,7 +2500,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.appcelerator.com"
+   "website": "https://www.appcelerator.com",
+   "network_signature": "appcelerator\\.com|appcelerator\\.net"
   },
   "256": {
    "id": 256,
@@ -2265,7 +2511,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "http://ad-brix.com/"
+   "website": "http://ad-brix.com/",
+   "network_signature": "ad-brix\\.com"
   },
   "257": {
    "id": 257,
@@ -2274,7 +2521,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.cauly.net"
+   "website": "https://www.cauly.net",
+   "network_signature": "ad\\.cauly\\.co\\.kr"
   },
   "258": {
    "id": 258,
@@ -2283,7 +2531,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.tapdaq.com/"
+   "website": "https://www.tapdaq.com/",
+   "network_signature": "ads\\.tapdaq\\.com"
   },
   "259": {
    "id": 259,
@@ -2292,7 +2541,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.verve.com"
+   "website": "https://www.verve.com",
+   "network_signature": ""
   },
   "260": {
    "id": 260,
@@ -2303,7 +2553,8 @@
     "Profiling",
     "Advertisement"
    ],
-   "website": "https://singular.net"
+   "website": "https://singular.net",
+   "network_signature": "e-ssl\\.apsalar\\.com|e\\.apsalar\\.com"
   },
   "261": {
    "id": 261,
@@ -2312,7 +2563,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://pingstart.com"
+   "website": "http://pingstart.com",
+   "network_signature": "api\\.pingstart\\.com"
   },
   "262": {
    "id": 262,
@@ -2321,7 +2573,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://keen.io"
+   "website": "https://keen.io",
+   "network_signature": "api\\.keen\\.io"
   },
   "263": {
    "id": 263,
@@ -2330,7 +2583,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.crunchbase.com/organization/revmob"
+   "website": "https://www.crunchbase.com/organization/revmob",
+   "network_signature": ""
   },
   "264": {
    "id": 264,
@@ -2339,7 +2593,8 @@
    "categories": [
     "Profiling"
    ],
-   "website": "https://help.emarsys.com/hc/categories/115000670425-Predict"
+   "website": "https://help.emarsys.com/hc/categories/115000670425-Predict",
+   "network_signature": "recommender\\.scarabresearch\\.com"
   },
   "265": {
    "id": 265,
@@ -2348,7 +2603,8 @@
    "categories": [
     "Profiling"
    ],
-   "website": "https://www.lotame.com/"
+   "website": "https://www.lotame.com/",
+   "network_signature": "ad\\.crwdcntrl\\.net"
   },
   "266": {
    "id": 266,
@@ -2357,7 +2613,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.followanalytics.com"
+   "website": "https://www.followanalytics.com",
+   "network_signature": "sdk\\.follow-apps\\.com"
   },
   "267": {
    "id": 267,
@@ -2366,7 +2623,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://chartbeat.com/"
+   "website": "https://chartbeat.com/",
+   "network_signature": ".chartbeat\\.com|.chartbeat\\.net"
   },
   "268": {
    "id": 268,
@@ -2375,7 +2633,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.moengage.com/"
+   "website": "https://www.moengage.com/",
+   "network_signature": "apiv2\\.moengage\\.com"
   },
   "269": {
    "id": 269,
@@ -2384,7 +2643,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.altamob.com/en/index.html"
+   "website": "https://www.altamob.com/en/index.html",
+   "network_signature": "api\\.altamob\\.com"
   },
   "270": {
    "id": 270,
@@ -2393,7 +2653,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://acoustic.co/products/experience-analytics/"
+   "website": "https://acoustic.co/products/experience-analytics/",
+   "network_signature": ""
   },
   "271": {
    "id": 271,
@@ -2402,7 +2663,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.amoad.com"
+   "website": "https://www.amoad.com",
+   "network_signature": ""
   },
   "272": {
    "id": 272,
@@ -2412,7 +2674,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://www.adadapted.com"
+   "website": "https://www.adadapted.com",
+   "network_signature": "ads\\.adadapted\\.com"
   },
   "273": {
    "id": 273,
@@ -2421,7 +2684,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://github.com/admuing"
+   "website": "https://github.com/admuing",
+   "network_signature": ""
   },
   "274": {
    "id": 274,
@@ -2430,7 +2694,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adcash.com"
+   "website": "https://adcash.com",
+   "network_signature": ""
   },
   "275": {
    "id": 275,
@@ -2439,7 +2704,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://admixer.co.kr/"
+   "website": "http://admixer.co.kr/",
+   "network_signature": "admixer\\.co\\.kr|admixer\\.net"
   },
   "276": {
    "id": 276,
@@ -2448,7 +2714,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://admost.com/"
+   "website": "https://admost.com/",
+   "network_signature": "cdn\\-api\\.admost\\.com|go\\.admost\\.com|med\\-api\\.admost\\.com"
   },
   "277": {
    "id": 277,
@@ -2457,7 +2724,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://github.com/biodranik/Alohalytics"
+   "website": "https://github.com/biodranik/Alohalytics",
+   "network_signature": ""
   },
   "278": {
    "id": 278,
@@ -2466,7 +2734,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://amobee.com"
+   "website": "https://amobee.com",
+   "network_signature": "amobee\\.com"
   },
   "279": {
    "id": 279,
@@ -2476,7 +2745,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://anagog.com"
+   "website": "https://anagog.com",
+   "network_signature": ""
   },
   "280": {
    "id": 280,
@@ -2486,7 +2756,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://www.bazaarvoice.com/"
+   "website": "https://www.bazaarvoice.com/",
+   "network_signature": ""
   },
   "281": {
    "id": 281,
@@ -2495,7 +2766,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://beaconsinspace.com"
+   "website": "https://beaconsinspace.com",
+   "network_signature": ""
   },
   "282": {
    "id": 282,
@@ -2504,7 +2776,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.conversantmedia.com"
+   "website": "https://www.conversantmedia.com",
+   "network_signature": "conversantmedia\\.com"
   },
   "283": {
    "id": 283,
@@ -2513,7 +2786,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://glympse.com"
+   "website": "https://glympse.com",
+   "network_signature": "\\.glympse\\.com"
   },
   "284": {
    "id": 284,
@@ -2524,7 +2798,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://herow.io/"
+   "website": "https://herow.io/",
+   "network_signature": ""
   },
   "285": {
    "id": 285,
@@ -2535,7 +2810,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://placer.io/"
+   "website": "https://placer.io/",
+   "network_signature": ""
   },
   "286": {
    "id": 286,
@@ -2544,7 +2820,8 @@
    "categories": [
     "Profiling"
    ],
-   "website": "http://www.pushspring.com/"
+   "website": "http://www.pushspring.com/",
+   "network_signature": "api\\.pushspring\\.com"
   },
   "287": {
    "id": 287,
@@ -2553,7 +2830,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://pyze.com/"
+   "website": "https://pyze.com/",
+   "network_signature": "pyze\\.com"
   },
   "288": {
    "id": 288,
@@ -2562,7 +2840,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://radar.io/"
+   "website": "https://radar.io/",
+   "network_signature": ""
   },
   "289": {
    "id": 289,
@@ -2571,7 +2850,8 @@
    "categories": [
     "Location"
    ],
-   "website": "http://roximity.com/"
+   "website": "http://roximity.com/",
+   "network_signature": "app\\.roximity\\.com"
   },
   "290": {
    "id": 290,
@@ -2580,7 +2860,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.sentiance.com/"
+   "website": "https://www.sentiance.com/",
+   "network_signature": "api\\.sentiance\\.com"
   },
   "291": {
    "id": 291,
@@ -2590,7 +2871,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://www.smartlook.com/"
+   "website": "https://www.smartlook.com/",
+   "network_signature": "smartlook\\.com"
   },
   "292": {
    "id": 292,
@@ -2599,7 +2881,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.squaremetrics.com"
+   "website": "https://www.squaremetrics.com",
+   "network_signature": "api\\.beaconinside\\.com"
   },
   "293": {
    "id": 293,
@@ -2609,7 +2892,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://www.talkingdata.com/"
+   "website": "https://www.talkingdata.com/",
+   "network_signature": "account\\.talkingdata\\.com|av1\\.xdrig\\.com|cloud\\.xdrig\\.com|m\\.talkingdata\\.com|push\\.xdrig\\.com"
   },
   "294": {
    "id": 294,
@@ -2618,7 +2902,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://flymob.com/"
+   "website": "https://flymob.com/",
+   "network_signature": ""
   },
   "295": {
    "id": 295,
@@ -2627,7 +2912,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://adfalcon.com"
+   "website": "http://adfalcon.com",
+   "network_signature": ""
   },
   "296": {
    "id": 296,
@@ -2636,7 +2922,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://bitly.com/"
+   "website": "https://bitly.com/",
+   "network_signature": ""
   },
   "297": {
    "id": 297,
@@ -2645,7 +2932,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://enhance.co"
+   "website": "https://enhance.co",
+   "network_signature": "app-config\\.enhance\\.co|data-location\\.enhance\\.co"
   },
   "298": {
    "id": 298,
@@ -2654,7 +2942,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.arcgis.com/"
+   "website": "https://www.arcgis.com/",
+   "network_signature": ""
   },
   "299": {
    "id": 299,
@@ -2663,7 +2952,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://giphy.com/"
+   "website": "https://giphy.com/",
+   "network_signature": "api\\.giphy\\.com|pingback\\.giphy\\.com"
   },
   "300": {
    "id": 300,
@@ -2672,7 +2962,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://heap.io/"
+   "website": "https://heap.io/",
+   "network_signature": "heapanalytics.com"
   },
   "301": {
    "id": 301,
@@ -2681,7 +2972,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.crunchbase.com/organization/inneractive"
+   "website": "https://www.crunchbase.com/organization/inneractive",
+   "network_signature": ""
   },
   "302": {
    "id": 302,
@@ -2690,7 +2982,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://mdotm.com/"
+   "website": "http://mdotm.com/",
+   "network_signature": "ads\\.mdotm\\.com"
   },
   "303": {
    "id": 303,
@@ -2699,7 +2992,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.metaps.com"
+   "website": "http://www.metaps.com",
+   "network_signature": ""
   },
   "304": {
    "id": 304,
@@ -2708,7 +3002,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.parse.ly/"
+   "website": "https://www.parse.ly/",
+   "network_signature": ""
   },
   "305": {
    "id": 305,
@@ -2717,7 +3012,8 @@
    "categories": [
     "Profiling"
    ],
-   "website": "https://www.pollfish.com"
+   "website": "https://www.pollfish.com",
+   "network_signature": ""
   },
   "306": {
    "id": 306,
@@ -2726,7 +3022,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://www.qualtrics.com/"
+   "website": "http://www.qualtrics.com/",
+   "network_signature": "qualtrics\\.com"
   },
   "307": {
    "id": 307,
@@ -2736,7 +3033,8 @@
     "Location",
     "Analytics"
    ],
-   "website": "https://www.tamoco.com/"
+   "website": "https://www.tamoco.com/",
+   "network_signature": "evt\\.tamoco\\.com"
   },
   "308": {
    "id": 308,
@@ -2747,7 +3045,8 @@
     "Profiling",
     "Advertisement"
    ],
-   "website": "https://www.vpon.com/"
+   "website": "https://www.vpon.com/",
+   "network_signature": ""
   },
   "309": {
    "id": 309,
@@ -2756,7 +3055,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.appbrain.com/stats/libraries/details/yume/yume"
+   "website": "https://www.appbrain.com/stats/libraries/details/yume/yume",
+   "network_signature": ""
   },
   "310": {
    "id": 310,
@@ -2767,7 +3067,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://www.zapr.in/"
+   "website": "https://www.zapr.in/",
+   "network_signature": ".zapr\\.in"
   },
   "311": {
    "id": 311,
@@ -2776,7 +3077,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.mediba.jp"
+   "website": "https://www.mediba.jp",
+   "network_signature": ""
   },
   "312": {
    "id": 312,
@@ -2785,7 +3087,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://admob.google.com"
+   "website": "https://admob.google.com",
+   "network_signature": "2mdn\\.net|dmtry\\.com|doubleclick\\.com|doubleclick\\.net|mng-ads\\.com|mobileads\\.google\\.com|ads\\.google\\.com|googlesyndication\\.com|googleadservices\\.com|googleads\\.g\\.doubleclick\\.net|adservice\\.google\\..*|adservice\\.g\\.cn"
   },
   "313": {
    "id": 313,
@@ -2794,7 +3097,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.unacast.com/"
+   "website": "https://www.unacast.com/",
+   "network_signature": ""
   },
   "314": {
    "id": 314,
@@ -2803,7 +3107,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.factual.com"
+   "website": "https://www.factual.com",
+   "network_signature": "api.factual.com"
   },
   "315": {
    "id": 315,
@@ -2812,7 +3117,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.footmarks.com"
+   "website": "https://www.footmarks.com",
+   "network_signature": ""
   },
   "316": {
    "id": 316,
@@ -2821,7 +3127,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://oztam.com.au/"
+   "website": "https://oztam.com.au/",
+   "network_signature": "deliver.oztam.com.au"
   },
   "317": {
    "id": 317,
@@ -2830,7 +3137,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.receptiv.com/"
+   "website": "https://www.receptiv.com/",
+   "network_signature": ""
   },
   "318": {
    "id": 318,
@@ -2839,7 +3147,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.tutela.com/"
+   "website": "https://www.tutela.com/",
+   "network_signature": ""
   },
   "319": {
    "id": 319,
@@ -2848,7 +3157,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.truedata.co/"
+   "website": "https://www.truedata.co/",
+   "network_signature": ""
   },
   "320": {
    "id": 320,
@@ -2861,7 +3171,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://www.verizonmedia.com/"
+   "website": "https://www.verizonmedia.com/",
+   "network_signature": ""
   },
   "321": {
    "id": 321,
@@ -2870,7 +3181,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adpopcorn.com/"
+   "website": "https://adpopcorn.com/",
+   "network_signature": ""
   },
   "322": {
    "id": 322,
@@ -2879,7 +3191,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adpf-info.i-mobile.co.jp/en/"
+   "website": "https://adpf-info.i-mobile.co.jp/en/",
+   "network_signature": ""
   },
   "323": {
    "id": 323,
@@ -2892,7 +3205,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://www.360dialog.com"
+   "website": "https://www.360dialog.com",
+   "network_signature": ""
   },
   "324": {
    "id": 324,
@@ -2901,7 +3215,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.abtasty.com"
+   "website": "https://www.abtasty.com",
+   "network_signature": "abtasty\\.com"
   },
   "325": {
    "id": 325,
@@ -2910,7 +3225,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://acrcloud.com/"
+   "website": "https://acrcloud.com/",
+   "network_signature": "acrcloud.com|hb-minify-juc1ugur1qwqqqo4.stackpathdns.com"
   },
   "326": {
    "id": 326,
@@ -2922,7 +3238,8 @@
     "Identification",
     "Advertisement"
    ],
-   "website": "https://www.aarki.com"
+   "website": "https://www.aarki.com",
+   "network_signature": ""
   },
   "327": {
    "id": 327,
@@ -2934,7 +3251,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://www.actv8me.com/"
+   "website": "https://www.actv8me.com/",
+   "network_signature": "actv8technologies\\.com"
   },
   "328": {
    "id": 328,
@@ -2944,7 +3262,8 @@
     "Identification",
     "Advertisement"
    ],
-   "website": "https://iabtechlab.com/"
+   "website": "https://iabtechlab.com/",
+   "network_signature": ""
   },
   "333": {
    "id": 333,
@@ -2955,7 +3274,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://developer.huawei.com/consumer/en/hms"
+   "website": "https://developer.huawei.com/consumer/en/hms",
+   "network_signature": "hicloud\\.com|dbankcloud\\.ru|dbankcloud\\.cn|dbankcloud\\.com"
   },
   "334": {
    "id": 334,
@@ -2964,7 +3284,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.akamai.com/"
+   "website": "https://www.akamai.com/",
+   "network_signature": ""
   },
   "336": {
    "id": 336,
@@ -2973,7 +3294,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://mail.ru"
+   "website": "http://mail.ru",
+   "network_signature": ""
   },
   "337": {
    "id": 337,
@@ -2982,7 +3304,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://airpush.com/"
+   "website": "https://airpush.com/",
+   "network_signature": "api\\.airpush\\.com|apidm\\.airpush\\.com|apistaging\\.airpush\\.com|apportal\\.airpush\\.com|appwall\\.api\\.airpush\\.com|beta\\.airpush\\.com|cdnap\\.airpush\\.com|m\\.airpush\\.com"
   },
   "338": {
    "id": 338,
@@ -2991,7 +3314,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.alimama.com/"
+   "website": "https://www.alimama.com/",
+   "network_signature": "\\.alimama\\.|\\.adsmogo\\."
   },
   "339": {
    "id": 339,
@@ -3001,7 +3325,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "http://www.anysdk.com/"
+   "website": "http://www.anysdk.com/",
+   "network_signature": ""
   },
   "340": {
    "id": 340,
@@ -3012,7 +3337,8 @@
     "Profiling",
     "Identification"
    ],
-   "website": "https://www.usebutton.com"
+   "website": "https://www.usebutton.com",
+   "network_signature": "\\.usebutton.com"
   },
   "341": {
    "id": 341,
@@ -3022,7 +3348,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://carto.com"
+   "website": "https://carto.com",
+   "network_signature": ""
   },
   "342": {
    "id": 342,
@@ -3031,7 +3358,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.didomi.io/"
+   "website": "https://www.didomi.io/",
+   "network_signature": ""
   },
   "343": {
    "id": 343,
@@ -3040,7 +3368,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://ir.jiguang.cn/corporate-profile"
+   "website": "https://ir.jiguang.cn/corporate-profile",
+   "network_signature": ".*\\.jiguang\\.cn"
   },
   "344": {
    "id": 344,
@@ -3049,7 +3378,8 @@
    "categories": [
     "Identification"
    ],
-   "website": "https://www.jumio.com/"
+   "website": "https://www.jumio.com/",
+   "network_signature": "mobile-sdk-resources.jumio.com|nv-sdk.jumio.com"
   },
   "345": {
    "id": 345,
@@ -3060,7 +3390,8 @@
     "Identification",
     "Location"
    ],
-   "website": "https://www.lenddo.com/"
+   "website": "https://www.lenddo.com/",
+   "network_signature": "\\.partner-service\\.link"
   },
   "346": {
    "id": 346,
@@ -3069,7 +3400,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.pokkt.com"
+   "website": "https://www.pokkt.com",
+   "network_signature": ""
   },
   "347": {
    "id": 347,
@@ -3078,7 +3410,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://prebid.org"
+   "website": "https://prebid.org",
+   "network_signature": ".prebid.org"
   },
   "348": {
    "id": 348,
@@ -3087,7 +3420,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.skplanet.com/eng"
+   "website": "https://www.skplanet.com/eng",
+   "network_signature": ""
   },
   "349": {
    "id": 349,
@@ -3096,7 +3430,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.split.io/"
+   "website": "https://www.split.io/",
+   "network_signature": "event.split.io|sdk.split.io"
   },
   "350": {
    "id": 350,
@@ -3105,7 +3440,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://exponea.com"
+   "website": "https://exponea.com",
+   "network_signature": "api.infinario.com|sygic-api.infinario.com"
   },
   "351": {
    "id": 351,
@@ -3115,7 +3451,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://www.ipqualityscore.com"
+   "website": "https://www.ipqualityscore.com",
+   "network_signature": "ipqualityscore\\.com"
   },
   "352": {
    "id": 352,
@@ -3125,7 +3462,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://www.opensignal.com"
+   "website": "https://www.opensignal.com",
+   "network_signature": ""
   },
   "353": {
    "id": 353,
@@ -3134,7 +3472,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://signalframe.com/"
+   "website": "https://signalframe.com/",
+   "network_signature": ""
   },
   "354": {
    "id": 354,
@@ -3144,7 +3483,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://xmode.io/"
+   "website": "https://xmode.io/",
+   "network_signature": "api\\.myendpoint\\.io|bin5y4muil\\.execute-api\\.us-east-1\\.amazonaws\\.com|api\\.smartechmetrics\\.com"
   },
   "355": {
    "id": 355,
@@ -3154,7 +3494,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "http://www.oneaudience.com/"
+   "website": "http://www.oneaudience.com/",
+   "network_signature": ""
   },
   "356": {
    "id": 356,
@@ -3163,7 +3504,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.openback.com"
+   "website": "https://www.openback.com",
+   "network_signature": ""
   },
   "357": {
    "id": 357,
@@ -3175,7 +3517,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://www.predic.io/"
+   "website": "https://www.predic.io/",
+   "network_signature": "sdk\\.predic\\.io"
   },
   "358": {
    "id": 358,
@@ -3187,7 +3530,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://adlocus.com"
+   "website": "https://adlocus.com",
+   "network_signature": ""
   },
   "359": {
    "id": 359,
@@ -3196,7 +3540,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://adcenix.com"
+   "website": "http://adcenix.com",
+   "network_signature": ""
   },
   "360": {
    "id": 360,
@@ -3205,7 +3550,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.admitad.com"
+   "website": "https://www.admitad.com",
+   "network_signature": ".*\\.admitad.com"
   },
   "361": {
    "id": 361,
@@ -3214,7 +3560,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://mobile.amap.com/"
+   "website": "https://mobile.amap.com/",
+   "network_signature": "grid\\.amap\\.com|tm\\.amap\\.com|mst[0-9]*\\.is\\.autonavi\\.com|mt[0-9]*\\.google\\.cn|abroad\\.apilocate\\.amap\\.com|apilocate\\.amap\\.com|restapi\\.amap\\.com|yuntuapi\\.amap\\.com|m5\\.amap\\.com|wb\\.amap\\.com|wb\\.amap\\.com|wb\\.amap\\.com|wb\\.amap\\.com|apiinit\\.amap\\.com|restapi\\.amap\\.com|logs\\.amap\\.com|cgicol\\.amap\\.com|lbs\\.amap\\.com|wap\\.amap\\.com"
   },
   "362": {
    "id": 362,
@@ -3223,7 +3570,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.ibm.com/customer-engagement/coremetrics-software"
+   "website": "https://www.ibm.com/customer-engagement/coremetrics-software",
+   "network_signature": "data\\.de\\.coremetrics\\.com"
   },
   "363": {
    "id": 363,
@@ -3232,7 +3580,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.pangleglobal.com"
+   "website": "https://www.pangleglobal.com",
+   "network_signature": ""
   },
   "364": {
    "id": 364,
@@ -3241,7 +3590,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://yoc.com"
+   "website": "https://yoc.com",
+   "network_signature": "yoc-performance\\.com|yoc\\.com"
   },
   "365": {
    "id": 365,
@@ -3250,7 +3600,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://supership.jp/business/adgeneration/"
+   "website": "https://supership.jp/business/adgeneration/",
+   "network_signature": ""
   },
   "366": {
    "id": 366,
@@ -3259,7 +3610,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adjoe.io/"
+   "website": "https://adjoe.io/",
+   "network_signature": ""
   },
   "367": {
    "id": 367,
@@ -3268,7 +3620,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.appvador.com/"
+   "website": "http://www.appvador.com/",
+   "network_signature": ""
   },
   "368": {
    "id": 368,
@@ -3278,7 +3631,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://appodealstack.com/about/"
+   "website": "https://appodealstack.com/about/",
+   "network_signature": ""
   },
   "369": {
    "id": 369,
@@ -3287,7 +3641,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://appsgeyser.com/"
+   "website": "https://appsgeyser.com/",
+   "network_signature": ""
   },
   "370": {
    "id": 370,
@@ -3296,7 +3651,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://bidmachine.io/"
+   "website": "https://bidmachine.io/",
+   "network_signature": ""
   },
   "371": {
    "id": 371,
@@ -3305,7 +3661,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "http://www.bugsense.com/"
+   "website": "http://www.bugsense.com/",
+   "network_signature": ""
   },
   "372": {
    "id": 372,
@@ -3314,7 +3671,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://buzzvil.atlassian.net/wiki/spaces/BDG/pages/486834313/BuzzAd-Benefit+Android+SDK"
+   "website": "https://buzzvil.atlassian.net/wiki/spaces/BDG/pages/486834313/BuzzAd-Benefit+Android+SDK",
+   "network_signature": ""
   },
   "373": {
    "id": 373,
@@ -3323,7 +3681,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.gomfactory.com"
+   "website": "http://www.gomfactory.com",
+   "network_signature": ""
   },
   "374": {
    "id": 374,
@@ -3332,7 +3691,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.millennialmedia.com"
+   "website": "http://www.millennialmedia.com",
+   "network_signature": ""
   },
   "375": {
    "id": 375,
@@ -3341,7 +3701,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://loopme.com/"
+   "website": "https://loopme.com/",
+   "network_signature": ""
   },
   "376": {
    "id": 376,
@@ -3351,7 +3712,8 @@
     "Crash reporting",
     "Analytics"
    ],
-   "website": "https://raygun.com"
+   "website": "https://raygun.com",
+   "network_signature": ""
   },
   "377": {
    "id": 377,
@@ -3360,7 +3722,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://rjfun.github.io/"
+   "website": "https://rjfun.github.io/",
+   "network_signature": ""
   },
   "378": {
    "id": 378,
@@ -3369,7 +3732,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.superawesome.com/"
+   "website": "https://www.superawesome.com/",
+   "network_signature": ""
   },
   "379": {
    "id": 379,
@@ -3379,7 +3743,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://www.tapresearch.com/"
+   "website": "https://www.tapresearch.com/",
+   "network_signature": ""
   },
   "380": {
    "id": 380,
@@ -3388,7 +3753,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.tappx.com/"
+   "website": "https://www.tappx.com/",
+   "network_signature": ""
   },
   "381": {
    "id": 381,
@@ -3398,7 +3764,8 @@
     "Analytics",
     "Identification"
    ],
-   "website": "http://www.thinkingdata.cn/"
+   "website": "http://www.thinkingdata.cn/",
+   "network_signature": ""
   },
   "382": {
    "id": 382,
@@ -3407,7 +3774,8 @@
    "categories": [
     "Identification"
    ],
-   "website": "https://vksdk.github.io/vk-sdk-android/"
+   "website": "https://vksdk.github.io/vk-sdk-android/",
+   "network_signature": ""
   },
   "383": {
    "id": 383,
@@ -3416,7 +3784,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://virgomobile.com/"
+   "website": "http://virgomobile.com/",
+   "network_signature": ""
   },
   "384": {
    "id": 384,
@@ -3425,7 +3794,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "http://analytics.zoho.com/"
+   "website": "http://analytics.zoho.com/",
+   "network_signature": ""
   },
   "385": {
    "id": 385,
@@ -3435,7 +3805,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "http://www.yifants.cn/"
+   "website": "http://www.yifants.cn/",
+   "network_signature": ""
   },
   "386": {
    "id": 386,
@@ -3444,7 +3815,8 @@
    "categories": [
     "Profiling"
    ],
-   "website": "https://www.acuantcorp.com"
+   "website": "https://www.acuantcorp.com",
+   "network_signature": "frm\\.acuant\\.net|medicscan\\.acuant\\.net|services\\.assureid\\.net"
   },
   "387": {
    "id": 387,
@@ -3457,7 +3829,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://cloud.google.com/solutions/media-entertainment/?a=2"
+   "website": "https://cloud.google.com/solutions/media-entertainment/?a=2",
+   "network_signature": ".*\\.anvato\\.net"
   },
   "388": {
    "id": 388,
@@ -3466,7 +3839,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.blesh.com/"
+   "website": "https://www.blesh.com/",
+   "network_signature": ""
   },
   "389": {
    "id": 389,
@@ -3475,7 +3849,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.bluecats.com/"
+   "website": "https://www.bluecats.com/",
+   "network_signature": ""
   },
   "390": {
    "id": 390,
@@ -3485,7 +3860,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://www.cooladata.com/"
+   "website": "https://www.cooladata.com/",
+   "network_signature": ""
   },
   "391": {
    "id": 391,
@@ -3494,7 +3870,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.fluzo.com/"
+   "website": "https://www.fluzo.com/",
+   "network_signature": ""
   },
   "392": {
    "id": 392,
@@ -3503,7 +3880,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://fbflipper.com"
+   "website": "https://fbflipper.com",
+   "network_signature": ""
   },
   "393": {
    "id": 393,
@@ -3512,7 +3890,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.crunchbase.com/organization/gpshopper"
+   "website": "https://www.crunchbase.com/organization/gpshopper",
+   "network_signature": "sdk\\.gpshopper\\.com|sypi\\.gpshopper\\.com"
   },
   "394": {
    "id": 394,
@@ -3522,7 +3901,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "http://www.indooratlas.com/"
+   "website": "http://www.indooratlas.com/",
+   "network_signature": "ipsws\\.indooratlas\\.com"
   },
   "395": {
    "id": 395,
@@ -3531,7 +3911,8 @@
    "categories": [
     "Identification"
    ],
-   "website": "https://en.wikipedia.org/wiki/Janrain"
+   "website": "https://en.wikipedia.org/wiki/Janrain",
+   "network_signature": ""
   },
   "396": {
    "id": 396,
@@ -3542,7 +3923,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://www.mocaplatform.com/"
+   "website": "https://www.mocaplatform.com/",
+   "network_signature": "api-device\\.mocaplatform\\.com"
   },
   "397": {
    "id": 397,
@@ -3552,7 +3934,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://www.pointinside.com/"
+   "website": "https://www.pointinside.com/",
+   "network_signature": ""
   },
   "398": {
    "id": 398,
@@ -3562,14 +3945,16 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://proximi.io/"
+   "website": "https://proximi.io/",
+   "network_signature": "api\\.proximi\\.fi"
   },
   "399": {
    "id": 399,
    "name": "ScoreLoop",
    "code_signature": "com.scoreloop.client.android",
    "categories": [],
-   "website": "https://www.scoreloop.com"
+   "website": "https://www.scoreloop.com",
+   "network_signature": ""
   },
   "400": {
    "id": 400,
@@ -3578,7 +3963,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.alooma.com"
+   "website": "https://www.alooma.com",
+   "network_signature": "inputs\\.alooma\\.com"
   },
   "401": {
    "id": 401,
@@ -3589,7 +3975,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://nicepeopleatwork.com/"
+   "website": "https://nicepeopleatwork.com/",
+   "network_signature": ""
   },
   "402": {
    "id": 402,
@@ -3601,7 +3988,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "https://beintoo.com/"
+   "website": "https://beintoo.com/",
+   "network_signature": ""
   },
   "403": {
    "id": 403,
@@ -3610,7 +3998,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://github.com/BoltsFramework/Bolts-Android"
+   "website": "https://github.com/BoltsFramework/Bolts-Android",
+   "network_signature": ""
   },
   "404": {
    "id": 404,
@@ -3619,7 +4008,8 @@
    "categories": [
     "Location"
    ],
-   "website": "https://www.cedexis.com/"
+   "website": "https://www.cedexis.com/",
+   "network_signature": "cedexis\\-radar\\.net|cedexis\\.com|radar\\.cedexis\\.com"
   },
   "405": {
    "id": 405,
@@ -3630,7 +4020,8 @@
     "Advertisement",
     "Location"
    ],
-   "website": "http://cifrasoft.com"
+   "website": "http://cifrasoft.com",
+   "network_signature": "\\.tele\\.fm"
   },
   "406": {
    "id": 406,
@@ -3641,7 +4032,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://flowsense.com.br/"
+   "website": "https://flowsense.com.br/",
+   "network_signature": ""
   },
   "407": {
    "id": 407,
@@ -3650,7 +4042,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://geniee.co.jp/"
+   "website": "https://geniee.co.jp/",
+   "network_signature": ""
   },
   "408": {
    "id": 408,
@@ -3660,7 +4053,8 @@
     "Analytics",
     "Location"
    ],
-   "website": "https://huq.io/"
+   "website": "https://huq.io/",
+   "network_signature": ""
   },
   "409": {
    "id": 409,
@@ -3669,7 +4063,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://useinsider.com/"
+   "website": "https://useinsider.com/",
+   "network_signature": ""
   },
   "410": {
    "id": 410,
@@ -3679,7 +4074,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://mopinion.com"
+   "website": "https://mopinion.com",
+   "network_signature": ""
   },
   "411": {
    "id": 411,
@@ -3688,7 +4084,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.offertoro.com/"
+   "website": "http://www.offertoro.com/",
+   "network_signature": ""
   },
   "412": {
    "id": 412,
@@ -3697,7 +4094,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://opentelemetry.io/"
+   "website": "https://opentelemetry.io/",
+   "network_signature": ""
   },
   "413": {
    "id": 413,
@@ -3706,7 +4104,8 @@
    "categories": [
     "Identification"
    ],
-   "website": "https://kit.snapchat.com/docs/login-kit"
+   "website": "https://kit.snapchat.com/docs/login-kit",
+   "network_signature": ""
   },
   "414": {
    "id": 414,
@@ -3717,7 +4116,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://www.zendrive.com/"
+   "website": "https://www.zendrive.com/",
+   "network_signature": ""
   },
   "415": {
    "id": 415,
@@ -3726,7 +4126,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.fullstory.com/"
+   "website": "https://www.fullstory.com/",
+   "network_signature": ""
   },
   "416": {
    "id": 416,
@@ -3735,7 +4136,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.pendo.io"
+   "website": "https://www.pendo.io",
+   "network_signature": ""
   },
   "417": {
    "id": 417,
@@ -3744,7 +4146,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.plexure.com/"
+   "website": "https://www.plexure.com/",
+   "network_signature": ""
   },
   "418": {
    "id": 418,
@@ -3753,7 +4156,8 @@
    "categories": [
     "Location"
    ],
-   "website": "http://swirl.com/"
+   "website": "http://swirl.com/",
+   "network_signature": "cdn-api\\.swirl\\.com"
   },
   "419": {
    "id": 419,
@@ -3763,7 +4167,8 @@
     "Analytics",
     "Profiling"
    ],
-   "website": "https://www.treasuredata.com/product/"
+   "website": "https://www.treasuredata.com/product/",
+   "network_signature": ""
   },
   "420": {
    "id": 420,
@@ -3773,7 +4178,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://acoustic.co/"
+   "website": "https://acoustic.co/",
+   "network_signature": "sdk6\\.ibm\\.xtify\\.com"
   },
   "422": {
    "id": 422,
@@ -3783,7 +4189,8 @@
     "Analytics",
     "Advertisement"
    ],
-   "website": "https://solar2d.com/"
+   "website": "https://solar2d.com/",
+   "network_signature": ""
   },
   "423": {
    "id": 423,
@@ -3792,7 +4199,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://aws.amazon.com/amplify/"
+   "website": "https://aws.amazon.com/amplify/",
+   "network_signature": ""
   },
   "424": {
    "id": 424,
@@ -3801,7 +4209,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adxcorp.kr/"
+   "website": "https://adxcorp.kr/",
+   "network_signature": ""
   },
   "425": {
    "id": 425,
@@ -3810,7 +4219,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adgatemedia.com/"
+   "website": "https://adgatemedia.com/",
+   "network_signature": ""
   },
   "426": {
    "id": 426,
@@ -3819,7 +4229,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.crunchbase.com/organization/admarvel"
+   "website": "https://www.crunchbase.com/organization/admarvel",
+   "network_signature": ""
   },
   "427": {
    "id": 427,
@@ -3828,7 +4239,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.adtiming.com/"
+   "website": "https://www.adtiming.com/",
+   "network_signature": ""
   },
   "428": {
    "id": 428,
@@ -3837,7 +4249,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.adjust.com/product/unbotify/"
+   "website": "https://www.adjust.com/product/unbotify/",
+   "network_signature": ""
   },
   "429": {
    "id": 429,
@@ -3848,7 +4261,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "http://lotadata.com"
+   "website": "http://lotadata.com",
+   "network_signature": ""
   },
   "430": {
    "id": 430,
@@ -3857,7 +4271,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://marketo.com"
+   "website": "https://marketo.com",
+   "network_signature": "marketo\\.com|marketo\\.net|mktoedge\\.com|mktossl\\.com|\\.mktorest\\.com"
   },
   "431": {
    "id": 431,
@@ -3866,7 +4281,8 @@
    "categories": [
     "Analytics"
    ],
-   "website": "https://www.playtestcloud.com"
+   "website": "https://www.playtestcloud.com",
+   "network_signature": ""
   },
   "432": {
    "id": 432,
@@ -3875,7 +4291,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://rollbar.com"
+   "website": "https://rollbar.com",
+   "network_signature": ""
   },
   "433": {
    "id": 433,
@@ -3884,7 +4301,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://kit.snapchat.com/docs/ad-kit"
+   "website": "https://kit.snapchat.com/docs/ad-kit",
+   "network_signature": ""
   },
   "434": {
    "id": 434,
@@ -3895,7 +4313,8 @@
     "Identification",
     "Advertisement"
    ],
-   "website": "https://synerise.com"
+   "website": "https://synerise.com",
+   "network_signature": "synerise\\.com"
   },
   "435": {
    "id": 435,
@@ -3907,7 +4326,8 @@
     "Profiling",
     "Location"
    ],
-   "website": "https://www.userexperior.com/"
+   "website": "https://www.userexperior.com/",
+   "network_signature": ""
   },
   "436": {
    "id": 436,
@@ -3916,7 +4336,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://chocolateplatform.com/"
+   "website": "https://chocolateplatform.com/",
+   "network_signature": ""
   },
   "437": {
    "id": 437,
@@ -3925,7 +4346,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adgem.com/"
+   "website": "https://adgem.com/",
+   "network_signature": ""
   },
   "438": {
    "id": 438,
@@ -3934,7 +4356,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://adtrial.com/"
+   "website": "https://adtrial.com/",
+   "network_signature": ""
   },
   "439": {
    "id": 439,
@@ -3943,7 +4366,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://www.pincrux.com/"
+   "website": "https://www.pincrux.com/",
+   "network_signature": ""
   },
   "440": {
    "id": 440,
@@ -3952,7 +4376,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://tutucloud.com"
+   "website": "https://tutucloud.com",
+   "network_signature": "tusdk\\.com"
   },
   "441": {
    "id": 441,
@@ -3961,7 +4386,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "http://www.veloxity.net/"
+   "website": "http://www.veloxity.net/",
+   "network_signature": ""
   },
   "442": {
    "id": 442,
@@ -3970,7 +4396,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://yoadx.com/"
+   "website": "https://yoadx.com/",
+   "network_signature": ""
   },
   "443": {
    "id": 443,
@@ -3979,7 +4406,8 @@
    "categories": [
     "Advertisement"
    ],
-   "website": "https://measurementsys.com/index.php#appdev"
+   "website": "https://measurementsys.com/index.php#appdev",
+   "network_signature": ""
   },
   "444": {
    "id": 444,
@@ -3988,7 +4416,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://www.acra.ch/"
+   "website": "https://www.acra.ch/",
+   "network_signature": ""
   },
   "445": {
    "id": 445,
@@ -3997,7 +4426,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://backtrace.io"
+   "website": "https://backtrace.io",
+   "network_signature": "backtrace\\.io"
   },
   "447": {
    "id": 447,
@@ -4006,7 +4436,8 @@
    "categories": [
     "Crash reporting"
    ],
-   "website": "https://sentry.io/"
+   "website": "https://sentry.io/",
+   "network_signature": ""
   },
   "448": {
    "id": 448,
@@ -4016,7 +4447,8 @@
     "Crash reporting",
     "Analytics"
    ],
-   "website": "https://yueying-docs.effirst.com/"
+   "website": "https://yueying-docs.effirst.com/",
+   "network_signature": ""
   }
  }
 }

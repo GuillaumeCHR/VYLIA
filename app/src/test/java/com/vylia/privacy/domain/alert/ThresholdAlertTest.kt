@@ -5,6 +5,7 @@ import com.vylia.privacy.data.alert.StalkerwareAlerts
 import com.vylia.privacy.domain.history.AppPoint
 import com.vylia.privacy.domain.history.History
 import com.vylia.privacy.domain.history.ScoreSnapshot
+import com.vylia.privacy.domain.history.HistoryRecorder
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.InstalledApp
 import com.vylia.privacy.domain.model.PrivacyScore
@@ -236,6 +237,20 @@ class ThresholdAlertTest {
         val result = cause(stable + before, stable + after)
         assertEquals(DropCause.Type.TRACKER_ADDED, result.type)
         assertEquals("Google AdMob", result.detail)
+    }
+
+    @Test
+    fun `cause - bouclier arrete depuis le point precedent`() {
+        val trackers = listOf("Google AdMob", "Facebook Ads", "Criteo")
+        val shielded = scorer.withShield { com.vylia.privacy.domain.scoring.ShieldCoverage.BLOCKED }
+        val before = stable + shielded.scoreApp(app("org.ads.game", trackers = trackers).app, app("org.ads.game", trackers = trackers).trackerAnalysis)
+        val after = stable + app("org.ads.game", trackers = trackers)
+        val on = mapOf("exodus" to "v1", HistoryRecorder.SHIELD_KEY to HistoryRecorder.SHIELD_ON)
+        val off = mapOf("exodus" to "v1", HistoryRecorder.SHIELD_KEY to HistoryRecorder.SHIELD_OFF)
+        val result = DropCauseAnalyzer.analyze(snapshot(before, databases = on), after, "r1", scorer, off)
+        assertEquals(DropCause.Type.SHIELD_OFF, result.type)
+        assertEquals(AlertTarget.PROTECT, result.target)
+        assertEquals(false, HistoryRecorder.databasesChanged(snapshot(before, databases = on), "r1", off))
     }
 
     @Test

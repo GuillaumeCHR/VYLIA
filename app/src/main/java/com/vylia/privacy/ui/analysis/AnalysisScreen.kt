@@ -116,12 +116,14 @@ fun AnalysisScreen(
                     appCount = homeState.userAppCount + homeState.systemAppCount,
                     filter = AppFilter.ALL,
                     systemAppCount = homeState.systemAppCount,
+                    shield = homeState.allShield,
                 )
             } else {
                 ScoreHeader(
                     averageScore = homeState.userAverageScore,
                     appCount = homeState.userAppCount,
                     filter = AppFilter.USER,
+                    shield = homeState.userShield,
                 )
             }
         }

@@ -51,6 +51,18 @@ data class Scoring(
     @SerialName("declared_only_factor") val declaredOnlyFactor: Double,
     @SerialName("unanalyzed_policy") val unanalyzedPolicy: UnanalyzedPolicy,
     val grades: List<Grade>,
+    /** Exposition avec le bouclier : part du poids d'un traqueur qui reste comptée selon ce que le bouclier bloque. */
+    val shield: ShieldFactors = ShieldFactors(),
+)
+
+/**
+ * Un traqueur bloqué compte encore : le SDK reste dans l'app et collecte sur le téléphone, il envoie plus tard ce
+ * qu'il a gardé (pause, redémarrage, autre VPN) et certaines apps contournent le DNS (adresse IP, DNS chiffré).
+ */
+@Serializable
+data class ShieldFactors(
+    @SerialName("blocked_factor") val blockedFactor: Double = 0.3,
+    @SerialName("partial_factor") val partialFactor: Double = 0.7,
 )
 
 @Serializable
@@ -232,6 +244,27 @@ data class PermissionFinding(
 
 data class TrackerFinding(val name: String, val penalty: Int)
 
+/** Ce que le bouclier bloque d'un traqueur, vu du score : tout, une partie, ou rien (domaines inconnus compris). */
+enum class ShieldCoverage { BLOCKED, PARTIAL, NONE }
+
+/**
+ * Score d'une app avec le bouclier actif : ce qui passe encore sur ce téléphone. Les permissions ne changent pas ; le
+ * score sans bouclier reste celui de l'app elle-même ([ScoreResult.scoreWithoutShield]).
+ */
+data class ShieldedScore(
+    val score: Int,
+    val grade: String,
+    /** Pénalité des traqueurs qui reste, après les facteurs du bouclier et le plafond des traqueurs. */
+    val trackerPenalty: Double,
+    val coverage: Map<String, ShieldCoverage>,
+    /** Avant le plafond de sécurité. */
+    val uncappedScore: Int = score,
+) {
+    val blocked: Int get() = coverage.values.count { it == ShieldCoverage.BLOCKED }
+    val partial: Int get() = coverage.values.count { it == ShieldCoverage.PARTIAL }
+    val exposed: Int get() = coverage.values.count { it == ShieldCoverage.NONE }
+}
+
 data class SecurityFinding(
     val id: String,
     val label: String,
@@ -263,6 +296,11 @@ data class ScoreResult(
     val badges: List<BadgeDef> = emptyList(),
     /** Badges à afficher sur la fiche (triés par gravité, limités à display.max_shown). */
     val displayedBadges: List<BadgeDef> = emptyList(),
+    /** Bouclier appliqué ([PrivacyScorer.withShield]) : son effet ; [score] et [grade] sont alors ceux avec lui. */
+    val shield: ShieldedScore? = null,
+    /** Score et note sans le bouclier : ceux de l'app elle-même, comme dans le classement public. */
+    val scoreWithoutShield: Int = score,
+    val gradeWithoutShield: String = grade,
 ) {
     /** Vrai si le plafond de sécurité a abaissé le score : la somme des pénalités ne l'explique plus. */
     val isCapped: Boolean get() = securityScoreCap != null && score < uncappedScore
@@ -320,9 +358,20 @@ class IocDatabase(
 // ---------------------------------------------------------------------------
 
 class PrivacyScorer(
-    rawRules: Rules,
+    private val rawRules: Rules,
     private val iocs: IocDatabase = IocDatabase.EMPTY,
+    /**
+     * Bouclier actif sur ce téléphone : ce qu'il bloque de chaque traqueur. Les scores sont alors ceux avec le
+     * bouclier ([shielded]) ; [ScoreResult.scoreWithoutShield] garde celui sans. `null` : pas de bouclier.
+     */
+    private val shield: ((String) -> ShieldCoverage)? = null,
 ) {
+    /** Le même moteur avec le bouclier [coverageOf] (`null` : sans bouclier). */
+    fun withShield(coverageOf: ((String) -> ShieldCoverage)?): PrivacyScorer =
+        if (coverageOf == null && shield == null) this else PrivacyScorer(rawRules, iocs, coverageOf)
+
+    val hasShield: Boolean get() = shield != null
+
     /** Règles avec les ensembles « @… » développés en permissions. */
     private val rules = rawRules.expandSets()
     private val securityDetector = SecurityPatternDetector(rules)
@@ -362,7 +411,49 @@ class PrivacyScorer(
         return if (cap != null) min(result.uncappedScore, cap) else result.uncappedScore
     }
 
+    /**
+     * Exposition de l'app avec le bouclier ([ShieldedScore]) : chaque traqueur compte pour une part de son poids
+     * (scoring.shield). La pénalité des traqueurs, déjà plafonnée, baisse dans la même proportion que leur poids :
+     * appliquer le plafond après les facteurs rendrait le bouclier invisible sur les apps qui ont le plus de
+     * traqueurs (16 traqueurs, 120 pts : même 7 bloqués, il en passerait encore plus que le plafond). Le plafond de
+     * sécurité s'applique comme au score. `null` si les traqueurs n'ont pas été analysés : rien ne permet de dire ce
+     * que le bouclier en bloque.
+     */
+    fun shielded(result: ScoreResult, coverageOf: (String) -> ShieldCoverage): ShieldedScore? {
+        result.shield?.let { return it }
+        if (result.confidence != Confidence.FULL) return null
+        val factors = rules.scoring.shield
+        val coverage = result.trackerFindings.associate { it.name to coverageOf(it.name) }
+        val residual = result.trackerFindings.sumOf { finding ->
+            finding.penalty * when (coverage.getValue(finding.name)) {
+                ShieldCoverage.BLOCKED -> factors.blockedFactor
+                ShieldCoverage.PARTIAL -> factors.partialFactor
+                ShieldCoverage.NONE -> 1.0
+            }
+        }
+        val total = result.trackerFindings.sumOf { it.penalty }
+        val trackerPenalty = if (total == 0) 0.0 else result.trackerPenalty * residual / total
+        val raw = max(0, (rules.scoring.base - result.permissionPenalty - trackerPenalty).roundToInt())
+        val score = result.securityScoreCap?.let { min(raw, it) } ?: raw
+        return ShieldedScore(score, letterOf(score), trackerPenalty, coverage, uncappedScore = raw)
+    }
+
+    private fun letterOf(score: Int): String = rules.scoring.grades.sortedByDescending { it.min }.first { score >= it.min }.grade
+
     fun score(scan: AppScan): ScoreResult {
+        val result = scoreWithoutShield(scan)
+        val effect = shield?.let { shielded(result, it) } ?: return result
+        return result.copy(
+            score = effect.score,
+            grade = effect.grade,
+            uncappedScore = effect.uncappedScore,
+            shield = effect,
+            scoreWithoutShield = result.score,
+            gradeWithoutShield = result.grade,
+        )
+    }
+
+    private fun scoreWithoutShield(scan: AppScan): ScoreResult {
         val categoryId = resolveCategory(scan)
 
         // 1. Permissions : poids intrinsèque × contexte × facteur d'octroi. Les permissions neutralisées (publicité,
@@ -417,7 +508,7 @@ class PrivacyScorer(
         // 4. Score final
         val raw = max(0, (rules.scoring.base - permissionPenalty - trackerPenalty).roundToInt())
         val score = if (securityScoreCap != null) min(raw, securityScoreCap) else raw
-        val letter = rules.scoring.grades.sortedByDescending { it.min }.first { score >= it.min }.grade
+        val letter = letterOf(score)
         val grade = if (confidence == Confidence.PARTIAL) letter + policy.gradeSuffix else letter
 
         // 5. Badges

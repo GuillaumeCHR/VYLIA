@@ -6,8 +6,9 @@ Licence : base et résultats de l'API sous Open Database License (ODbL 1.0),
           contenus individuels sous Database Contents License (DbCL 1.0).
           Le snapshot produit est une base dérivée : il reste sous ODbL, avec attribution.
 
-Seuls id, name, code_signature, categories et website sont conservés : l'app n'a besoin que
-de ça et le fichier passe d'environ 570 Ko à environ 50 Ko.
+Seuls id, name, code_signature, categories, website et network_signature sont conservés : l'app n'a
+besoin que de ça et le fichier passe d'environ 570 Ko à environ 110 Ko. network_signature (domaines du
+traqueur) sert à dire ce que le bouclier bloque de chaque traqueur, avant tout téléchargement de la base.
 
 Les catégories manquantes côté Exodus sont complétées par app/src/main/assets/exodus_category_overrides.json,
 appliqué uniquement si "validated" vaut true. Ce mapping est à réviser régulièrement : le script
@@ -90,6 +91,7 @@ def main():
             "code_signature": tracker.get("code_signature", ""),
             "categories": categories,
             "website": tracker.get("website", ""),
+            "network_signature": tracker.get("network_signature", ""),
         }
 
     snapshot = {

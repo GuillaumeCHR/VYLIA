@@ -31,7 +31,12 @@ import com.vylia.privacy.domain.usecase.deviceScore
 import com.vylia.privacy.data.alert.ScanCompletion
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import com.vylia.privacy.data.shield.ShieldExposureRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.drop
+import com.vylia.privacy.domain.shield.TrackerCoverage
+import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.domain.usecase.scoreApp
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,7 +54,20 @@ class ScanViewModel(
     private val alternatives: AlternativesRepository,
     private val historyRecorder: HistoryRecorder,
     private val scanCompletion: ScanCompletion,
+    shieldExposureRepository: ShieldExposureRepository,
+    /** Moteur de score en vigueur, bouclier compris s'il filtre (voir AppContainer.scorer). */
+    private val currentScorer: () -> PrivacyScorer,
 ) : ViewModel() {
+
+    /** Ce que le bouclier bloque des traqueurs, `null` tant que ce n'est pas calculé (fiche d'une app). */
+    val shieldExposure: StateFlow<ShieldExposureRepository.Exposure?> = shieldExposureRepository.exposure
+
+    /**
+     * Moteur des scores affichés, bouclier compris : les calculs dérivés (gain d'un retrait d'autorisation) doivent
+     * partir du même score que l'app.
+     */
+    val scorer: StateFlow<PrivacyScorer> = combine(ruleMatrixRepository.current, shieldExposure) { _, _ -> currentScorer() }
+        .stateIn(viewModelScope, SharingStarted.Eagerly, currentScorer())
 
     private sealed interface ScanState {
         data object Loading : ScanState
@@ -66,9 +84,25 @@ class ScanViewModel(
      * Le scan complet n'est fait qu'une fois ; changer d'onglet filtre simplement
      * le résultat en mémoire, sans relancer de requête au PackageManager.
      */
-    val uiState: StateFlow<ScanUiState> =
-        combine(scanState, selectedFilter, settingsRepository.advancedMode, isAnalyzingTrackers, settingsRepository.lastScanTimestamp, ::reduce)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ScanUiState())
+    val uiState: StateFlow<ScanUiState> = combine(
+        combine(scanState, selectedFilter, settingsRepository.advancedMode, isAnalyzingTrackers, settingsRepository.lastScanTimestamp, ::reduce),
+        shieldExposure,
+        ruleMatrixRepository.current,
+    ) { state, exposure, rules -> if (exposure == null || !BuildConfig.SHIELD_ENABLED) state else withShield(state, exposure, rules) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ScanUiState())
+
+    /** Exposition de l'appareil avec le bouclier, à côté de son score (en-tête d'Analyse). */
+    private fun withShield(
+        state: ScanUiState,
+        exposure: ShieldExposureRepository.Exposure,
+        rules: RuleMatrixRepository.LoadedRules,
+    ): ScanUiState {
+        val shielded = { app: AuditedApp -> rules.scorer.shielded(app.result, exposure::forScore) }
+        return state.copy(
+            userShield = ShieldSummary.of(state.scannedApps.filter { AppFilter.USER.matches(it.app) }, exposure, shielded),
+            allShield = ShieldSummary.of(state.scannedApps, exposure, shielded),
+        )
+    }
 
     val rewards: StateFlow<RewardsState> = badgesManager.state
 
@@ -87,6 +121,8 @@ class ScanViewModel(
         viewModelScope.launch {
             packageRemovalMonitor.removals.collect(::onPackageRemoved)
         }
+        // Bouclier activé, arrêté, contourné, ou autre liste : les scores changent, sans nouveau scan.
+        viewModelScope.launch { scorer.drop(1).collect { rescore(it) } }
     }
 
     fun selectFilter(filter: AppFilter) {
@@ -162,6 +198,11 @@ class ScanViewModel(
     }
 
     /** Remplace une app re-notée et conserve le tri "plus à risque d'abord". */
+    private fun rescore(scorer: PrivacyScorer) {
+        val current = scanState.value as? ScanState.Success ?: return
+        scanState.value = ScanState.Success(current.apps.map { scorer.scoreApp(it.app, it.trackerAnalysis) }.sortedWith(RiskFirstOrder))
+    }
+
     private fun replaceApp(updated: AuditedApp) {
         val current = scanState.value as? ScanState.Success ?: return
         val apps = current.apps
@@ -210,9 +251,34 @@ class ScanViewModel(
     private fun logScores() {
         currentApps().filter { AppFilter.USER.matches(it.app) }.forEach { audited ->
             val r = audited.result
-            Log.d(SCORES_TAG, "${audited.app.packageName}\t${r.score}\t${r.grade}\t${r.categoryId}\t" +
+            Log.d(SCORES_TAG, "${audited.app.packageName}\t${r.score}\t${r.grade}\t${r.scoreWithoutShield}\t${r.categoryId}\t" +
                 "${"%.1f".format(java.util.Locale.ROOT, r.permissionPenalty)}\t${r.trackerPenalty}\t${r.badges.joinToString(",") { it.id }}")
         }
+        logShieldSimulation()
+    }
+
+    /**
+     * Version de développement : chaque app utilisateur sans et avec le bouclier, qu'il filtre ou non, et la moyenne
+     * de l'appareil dans les deux cas (`adb logcat -s VyliaShieldSim`).
+     */
+    private fun logShieldSimulation() {
+        val exposure = shieldExposure.value ?: return
+        val base = ruleMatrixRepository.current.value.scorer
+        val apps = currentApps().filter { AppFilter.USER.matches(it.app) }
+        val rows = apps.map { audited ->
+            val without = audited.result.scoreWithoutShield
+            val with = audited.result.shield?.score ?: base.shielded(audited.result, exposure::forScore)?.score ?: without
+            val trackers = audited.result.trackerFindings.map { exposure.of(it.name) }
+            Log.d(
+                SHIELD_SIM_TAG,
+                "${audited.app.label}\t${audited.app.packageName}\t$without\t$with\t${trackers.size}\t" +
+                    "${trackers.count { it == TrackerCoverage.BLOCKED }}\t${trackers.count { it == TrackerCoverage.PARTIAL }}",
+            )
+            without to with
+        }
+        if (rows.isEmpty()) return
+        Log.d(SHIELD_SIM_TAG, "DEVICE\t${PrivacyScore.ofAverage(rows.map { it.first }.average()).value}\t" +
+            "${PrivacyScore.ofAverage(rows.map { it.second }.average()).value}\t${rows.size}\tactive=${exposure.active}")
     }
 
     private fun List<AuditedApp>.toSnapshots(): Map<String, AppSnapshot> = associate {
@@ -224,6 +290,7 @@ class ScanViewModel(
     companion object {
         private const val TAG = "VyliaScan"
         private const val SCORES_TAG = "VyliaScores"
+        private const val SHIELD_SIM_TAG = "VyliaShieldSim"
 
         val Factory = viewModelFactory {
             initializer {
@@ -238,6 +305,8 @@ class ScanViewModel(
                     container.alternativesRepository,
                     container.historyRecorder,
                     container.scanCompletion,
+                    container.shieldExposureRepository,
+                    container.scorer,
                 )
             }
         }

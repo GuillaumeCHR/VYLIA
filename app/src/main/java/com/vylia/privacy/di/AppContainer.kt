@@ -50,6 +50,9 @@ import com.vylia.privacy.data.safety.SupportResourcesRepository
 import com.vylia.privacy.data.databases.WebServicesSource
 import com.vylia.privacy.data.shield.ShieldListStore
 import com.vylia.privacy.domain.shield.ExodusNetworkTracker
+import com.vylia.privacy.BuildConfig
+import com.vylia.privacy.domain.scoring.PrivacyScorer
+import com.vylia.privacy.data.shield.ShieldExposureRepository
 import com.vylia.privacy.data.databases.FileDatabaseMetaStore
 import com.vylia.privacy.data.databases.HttpsClient
 import com.vylia.privacy.data.trackers.ExodusCategoryOverrides
@@ -80,14 +83,25 @@ class AppContainer(context: Context) {
         historyRecorder, thresholdAlertRepository, ThresholdNotifications(context), stalkerwareAlerts,
         rules = { ruleMatrixRepository.current.value },
         databases = { databaseCenter.scoreVersions() },
+        scorer = { scorer() },
     )
 
-    private val scorer = { ruleMatrixRepository.current.value.scorer }
+    /** Moteur de score en vigueur : les règles, et le bouclier s'il filtre en ce moment (scores avec lui). */
+    val scorer: () -> PrivacyScorer = {
+        val base = ruleMatrixRepository.current.value.scorer
+        if (BuildConfig.SHIELD_ENABLED) shieldExposureRepository.apply(base) else base
+    }
     val webServicesRepository = WebServicesRepository(context)
     private val appScanner = AppScanner(context, webServices = { webServicesRepository.services })
 
     val exodusCategories = ExodusCategoryOverrides(context)
     val trackerSignatureRepository = AssetTrackerSignatureRepository(context, overrides = { exodusCategories.categories })
+
+    /** Ce que le bouclier bloque des traqueurs (fiche d'une app : exposition avec le bouclier). */
+    val shieldExposureRepository = ShieldExposureRepository(shieldController) {
+        trackerSignatureRepository.networkTrackersOrBundled()
+            ?.map { ExodusNetworkTracker(it.name, it.categories, it.networkSignature) }
+    }
 
     val companiesRepository = CompaniesRepository(context)
     val supportResourcesRepository = SupportResourcesRepository(context)
@@ -145,7 +159,10 @@ class AppContainer(context: Context) {
 
     private val fullAuditUseCase = FullAuditUseCase(auditAppsUseCase, analyzeTrackersUseCase)
     val installWatcher = InstallWatcher(context, settingsRepository, fullAuditUseCase, InstallNotifications(context), stalkerwareAlerts, scorer)
-    val backgroundScanner = BackgroundScanner(settingsRepository, fullAuditUseCase, scanCompletion)
+    val backgroundScanner = BackgroundScanner(
+        settingsRepository, fullAuditUseCase, scanCompletion,
+        beforeScan = { if (BuildConfig.SHIELD_ENABLED) shieldExposureRepository.awaitReady() },
+    )
     val automationScheduler = AutomationScheduler(context, settingsRepository)
     val backupRepository = BackupRepository(
         settingsRepository, historyRecorder, badgesManager, ruleMatrixRepository, trackerScanCache,

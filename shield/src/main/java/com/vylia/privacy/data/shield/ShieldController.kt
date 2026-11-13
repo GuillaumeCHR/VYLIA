@@ -12,6 +12,7 @@ import android.os.Build
 import android.os.Process
 import com.vylia.privacy.domain.shield.BlockMatch
 import com.vylia.privacy.domain.shield.BlockedRequest
+import com.vylia.privacy.domain.shield.ExodusNetworkTracker
 import com.vylia.privacy.domain.shield.Blocklist
 import com.vylia.privacy.domain.shield.ShieldBypass
 import com.vylia.privacy.domain.shield.ShieldFilter
@@ -19,6 +20,8 @@ import com.vylia.privacy.domain.shield.ShieldIndicator
 import com.vylia.privacy.domain.shield.ShieldState
 import com.vylia.privacy.domain.shield.ShieldStatus
 import com.vylia.privacy.domain.shield.ShieldTapEffect
+import com.vylia.privacy.domain.shield.TrackerCoverage
+import com.vylia.privacy.domain.shield.TrackerCoverages
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -94,6 +97,11 @@ class ShieldController(
 
     @Volatile
     private var blocklist: Blocklist? = null
+
+    private val _listVersion = MutableStateFlow(0)
+
+    /** Change à chaque recompilation de la liste : ce que le bouclier bloque de chaque traqueur est à recalculer. */
+    val listVersion: StateFlow<Int> = _listVersion.asStateFlow()
     private var unsaved = 0
 
     init {
@@ -224,8 +232,16 @@ class ShieldController(
         val size = result.web + result.mobile
         prefs.edit().putInt(KEY_SIZE, size).apply()
         synchronized(this) { if (blocklist != null) blocklist = base() }
+        _listVersion.update { it + 1 }
         return size
     }
+
+    /**
+     * Ce que la liste en vigueur bloque de chaque traqueur, avec les filtrages actifs ([TrackerCoverages]). Ne garde
+     * pas la liste en mémoire si le bouclier ne tourne pas. Appel bloquant.
+     */
+    fun coverage(trackers: List<ExodusNetworkTracker>): Map<String, TrackerCoverage> =
+        TrackerCoverages.of(trackers, blocklist ?: base(), filters())
 
     /** Nombre de domaines de la liste en vigueur, sans la garder en mémoire si le bouclier ne tourne pas. */
     fun domainCount(): Int {

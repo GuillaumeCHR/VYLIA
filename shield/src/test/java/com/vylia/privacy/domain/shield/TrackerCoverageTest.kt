@@ -49,6 +49,26 @@ class TrackerCoverageTest {
     }
 
     @Test
+    fun `serveurs connus, a la place d'une expression reguliere, en plus d'un domaine de plateforme`() {
+        val list = Blocklist(
+            web = DomainHashSet.of(setOf("adservice.google.com", "googleads.g.doubleclick.net")),
+            mobile = DomainHashSet.of(setOf("an.facebook.com")),
+        )
+        val c = TrackerCoverages.of(
+            listOf(
+                ExodusNetworkTracker("Google AdMob", listOf("Advertisement"), "googleads\\.g\\.doubleclick\\.net|adservice\\.google\\..*"),
+                ExodusNetworkTracker("Facebook Ads", listOf("Advertisement"), "facebook\\.com"),
+            ),
+            list,
+            ShieldFilter.entries.toSet(),
+        )
+        assertEquals(TrackerCoverage.BLOCKED, c["Google AdMob"])
+        assertEquals(TrackerCoverage.PARTIAL, c["Facebook Ads"])
+        // Serveur connu absent de cette liste : il n'est pas compté comme bloqué.
+        assertEquals(TrackerCoverage.NONE, c["Pangle"])
+    }
+
+    @Test
     fun `traqueur sans domaine connu`() {
         assertEquals(TrackerCoverage.UNKNOWN, TrackerCoverages.of("Inconnu", coverage()))
     }

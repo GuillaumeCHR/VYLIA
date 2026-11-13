@@ -1,0 +1,1 @@
+Le bouclier compte dans le score : actif, chaque app est notée sur ce qui sort encore du téléphone, et sa fiche dit quels traqueurs il bloque. Nouveau : Gérer › Traqueurs, les apps dont des traqueurs passent malgré lui. L'aide détaille le calcul du score en formules.

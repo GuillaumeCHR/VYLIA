@@ -15,7 +15,7 @@ comment fonctionnent les apps derrière l'écran : ce qu'une permission donne vr
 vos données partent chez des entreprises que vous ne connaissez pas. Chaque score est justifié, chaque permission et
 chaque traqueur a sa fiche sans jargon : on apprend à juger une app par soi-même, sans avoir peur.
 
-> Version actuelle : **0.9.6** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
+> Version actuelle : **0.9.8** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
 > site : [guillaumechr.github.io/vylia-site](https://guillaumechr.github.io/vylia-site/).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.
@@ -34,8 +34,10 @@ embarquent des traqueurs. L'ensemble forme votre **surface d'exposition**. VYLIA
 dans l'ordre de la barre du bas :
 
 1. **Scanner** : un score par app, de 0 à 100, et une note de A à E. On part de 100, on retire les permissions
-   (50 points au plus) et les traqueurs (60 points au plus). Trois vues : par risque, par catégorie, par badge ; des
-   cartes compactes ou détaillées ; un toucher sur l'icône ouvre la fiche Android de l'app.
+   (50 points au plus) et les traqueurs (60 points au plus). Bouclier actif, le score compte ce qui sort encore du
+   téléphone : un traqueur bloqué ne pèse plus que pour une part de son poids (voir [plus bas](#une-grille-de-score-transparente)).
+   Trois vues : par risque, par catégorie, par badge ; des cartes compactes ou détaillées ; un toucher sur l'icône
+   ouvre la fiche Android de l'app.
 2. **Analyser** : les zones de risque, les anomalies et les traqueurs les plus répandus sur le téléphone ; le **Suivi**
    avec la courbe du score dans le temps, l'historique des installations, suppressions et autorisations, et une
    **alerte de seuil** si votre exposition augmente.
@@ -43,6 +45,9 @@ dans l'ordre de la barre du bas :
    - **Permissions** : une carte par app, les scores les plus bas d'abord, avec les permissions dont elle se sert sans
      en avoir besoin, le gain de chacune et le score qu'elle atteindrait sans elles.
    - **Apps** : les apps intrusives et celles que vous n'ouvrez plus.
+   - **Traqueurs** : les apps dont des traqueurs passent malgré le bouclier (serveur partagé avec un service
+     essentiel, aucun serveur connu…), la plus exposée d'abord : seules la désinstallation ou une alternative les
+     retirent.
    - **Alternatives** : des apps plus respectueuses par catégorie du Play Store, avec leur note Google Play. Aucune ne
      rend exactement le même service : c'est à vous de choisir.
 4. **Filtrer** : réduire l'exposition sans modifier vos apps.
@@ -67,8 +72,9 @@ Et aussi :
 - **Un VPN anti-traqueurs** : le bouclier VYLIA est un VPN local, sur le téléphone, qui ne transporte que les requêtes
   DNS. Il refuse celles des serveurs de traçage connus (plus de 200 000 domaines, d'après Exodus Privacy, EasyList,
   EasyPrivacy et les filtres AdGuard), pour toutes les apps à la fois, sans serveur distant ni journal des sites
-  visités. Les domaines bloqués sont nommés quand c'est possible (« Criteo · ciblage »). Facultatif, il s'active d'un interrupteur ou depuis les réglages
-  rapides, et se met en pause quand une app en a besoin.
+  visités. Les domaines bloqués sont nommés quand c'est possible (« Criteo · ciblage »). Facultatif, il s'active d'un
+  interrupteur ou depuis les réglages rapides, et se met en pause quand une app en a besoin. Son effet se voit dans le
+  score : chaque fiche dit quels traqueurs il bloque, en entier, en partie ou pas du tout.
 - **Des logiciels espions repérés** : la base publique de l'association [Echap](https://echap.eu.org/) (stalkerwares,
   pour espionner un proche) et les indicateurs de [MVT](https://github.com/mvt-project/mvt-indicators) (logiciels
   espions de surveillance ciblée comme Pegasus, Predator ou NoviSpy) sont intégrés ; une app reconnue tombe à 0 et
@@ -81,8 +87,8 @@ Et aussi :
 - **Des badges qui qualifient, sans alarmer** : bonnes pratiques (« Poids plume », « Bio », « Sait se faire oublier »)
   autant que points d'attention (« Fouineuse », « Réseau de pistage », « Moteur, ça tourne ! »).
 - **Une aide pédagogique**, la même depuis chaque écran, avec des mots simples et accessibles à tous : comment
-  fonctionnent les apps et le pistage, comment VYLIA calcule le score, les badges, le lexique des traqueurs et celui
-  des permissions.
+  fonctionnent les apps et le pistage, comment VYLIA calcule le score (jusqu'au calcul détaillé en formules), l'effet
+  du bouclier, les badges, le lexique des traqueurs et celui des permissions.
 - **Des bases toujours à jour** : Paramètres › Bases de données réunit les signatures Exodus, les bases Echap et MVT,
   les listes du bouclier et les données de VYLIA, avec leur état et un bouton **Tout mettre à jour**. Une base
   inchangée n'est pas retéléchargée, une base en échec garde sa version en service, et un traqueur apparu avec une
@@ -102,7 +108,14 @@ comptées) est consultable dans l'app, **Aide › Score › La grille, catégori
 - une capacité d'arrière-plan (micro, caméra, position) ne compte entièrement que si l'accès dont elle dépend est
   accordé ; la capture d'écran, soumise à votre accord à chaque fois, compte comme seulement déclarée ;
 - les permissions de ciblage ne sont pas comptées : le ciblage est déjà sanctionné par les traqueurs ;
-- des permissions proches ne comptent qu'une fois (position précise et approximative, paliers de santé…).
+- des permissions proches ne comptent qu'une fois (position précise et approximative, paliers de santé…) ;
+- bouclier actif, un traqueur bloqué compte encore pour 30 % de son poids, un traqueur bloqué en partie pour 70 % : le
+  SDK reste dans l'app et collecte toujours sur le téléphone, envoie plus tard ce qu'il a gardé, et certaines apps
+  contournent le DNS. La pénalité des traqueurs, déjà plafonnée, baisse d'autant. Le score sans bouclier, celui de
+  l'app elle-même, reste affiché sur sa fiche ;
+- un traqueur n'est compté comme bloqué que si ses serveurs sont connus (base Exodus, complétée dans
+  `ExodusShieldDomains.kt`) et bloqués par les listes du bouclier : VYLIA le repère par son code, le bouclier par ses
+  serveurs.
 
 **VYLIA se note elle-même**, avec la même grille et sans exception. Elle a besoin de la liste de vos apps
 (`QUERY_ALL_PACKAGES`) pour les analyser : elle l'assume, et cette permission lui coûte des points comme à n'importe
@@ -158,13 +171,19 @@ release est construite sans signature. Pour essayer une release sur un télépho
 développement : `./gradlew :app:assembleRelease -Pvylia.idSuffix=.releasetest`.
 
 La version de développement écrit le score de chaque app dans le journal, pour comparer deux versions des règles sur
-un vrai téléphone : `adb logcat -s VyliaScores`.
+un vrai téléphone : `adb logcat -s VyliaScores`, et chaque app sans et avec le bouclier, avec le score de l'appareil
+dans les deux cas : `adb logcat -s VyliaShieldSim`.
 
 ## Architecture
 
 Application en Kotlin et Jetpack Compose (Material 3), sans framework d'injection (conteneur manuel dans
-`di/AppContainer.kt`), en deux modules : `:app` et `:shield`, le bouclier (VPN local de filtrage DNS, voir
-[`docs/shield.md`](docs/shield.md)). Sans `:shield` (`SHIELD_ENABLED` à `false`), Filtrer garde le DNS privé et le WebAPK.
+`di/AppContainer.kt`), en quatre modules :
+
+- `:app`, l'application ;
+- `:scoring`, le moteur de score (Kotlin pur, sans Android), partagé avec l'annuaire ;
+- `:shield`, le bouclier (VPN local de filtrage DNS, voir [`docs/shield.md`](docs/shield.md)). Sans lui
+  (`SHIELD_ENABLED` à `false`), Filtrer garde le DNS privé et le WebAPK, et les scores sont ceux sans bouclier ;
+- `:directory-cli`, l'outil qui note les apps du classement public ([`directory/`](directory/)) avec le même moteur.
 
 ```
 app/src/main/java/com/vylia/privacy/
@@ -177,8 +196,10 @@ app/src/main/java/com/vylia/privacy/
                   detail/, share/, search/, shield/ ; main/ (navigation), splash/ (intro), components/, theme/
 ```
 
-- **Score** : `domain/scoring/PrivacyScorer.kt` applique les règles JSON ; `BadgeEngine.kt` attribue les badges ;
-  `SecurityPatternDetector.kt` évalue les motifs de capacités d'espionnage.
+- **Score** : `scoring/…/PrivacyScorer.kt` applique les règles JSON, et le bouclier s'il filtre (`withShield`) ;
+  `BadgeEngine.kt` attribue les badges ; `SecurityPatternDetector.kt` évalue les motifs de capacités d'espionnage.
+- **Bouclier dans le score** : `shield/…/TrackerCoverage.kt` dit ce que la liste bloque de chaque traqueur ;
+  `data/shield/ShieldExposureRepository.kt` le recalcule quand la liste ou les filtrages changent.
 - **Traqueurs** : `data/trackers/` lit les noms de classes des fichiers DEX en flux et les compare aux signatures
   Exodus (`assets/exodus_trackers.json`), avec un cache par version d'app.
 - **Textes** : anglais par défaut, français dans `values-fr`, générés par [`tools/strings/`](tools/README.md).

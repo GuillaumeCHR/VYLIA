@@ -55,6 +55,10 @@ object RulesValidator {
         require(s.unanalyzedPolicy.assumedTrackerPenalty in 0..s.base) { "pénalité des apps non analysées hors bornes" }
         require(s.unanalyzedPolicy.gradeSuffix.length <= 2) { "suffixe de note trop long" }
         require(s.declaredOnlyFactor.isFinite() && s.declaredOnlyFactor in 0.0..1.0) { "declared_only_factor hors bornes" }
+        require(
+            s.shield.blockedFactor.isFinite() && s.shield.partialFactor.isFinite() &&
+                s.shield.blockedFactor in 0.0..s.shield.partialFactor && s.shield.partialFactor <= 1.0,
+        ) { "facteurs du bouclier hors bornes" }
         require(s.contextMultipliers.keys == CONTEXTS) { "multiplicateurs de contexte attendus : ${CONTEXTS.joinToString()}" }
         require(s.contextMultipliers.values.all { it.isFinite() && it in 0.0..MAX_MULTIPLIER }) { "multiplicateurs hors bornes" }
         require(s.grades.isNotEmpty() && s.grades.size <= 26 && s.grades.all { it.min in 0..s.base && GRADE.matches(it.grade) }) {

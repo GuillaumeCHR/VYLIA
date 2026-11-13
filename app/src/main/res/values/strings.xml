@@ -20,6 +20,9 @@
     <string name="score_out_of">/100</string>
     <string name="header_title">Privacy score</string>
     <string name="header_subtitle_user">Average of your %1$d apps</string>
+    <string name="header_shield_active">🧿 With the Shield: %1$d/100</string>
+    <string name="header_shield_inactive">🧿 If you turn on the Shield: %1$d/100</string>
+    <string name="header_shield_hint">Your score does not change: the trackers stay in your apps. This is what still gets out from this phone.</string>
     <string name="header_subtitle_system">Average of the %1$d system apps</string>
     <string name="header_subtitle_all">Average of your %1$d apps, %2$d of them system apps</string>
     <string name="risk_low">Low risk</string>
@@ -36,6 +39,10 @@
     <string name="card_security_description">Security alert: %1$s.</string>
     <string name="card_security_capped_description">Security alert: %1$s. Score capped at %2$d.</string>
     <string name="permissions_sensitive_none">No sensitive permission granted</string>
+    <plurals name="header_shield_count">
+        <item quantity="one">The Shield blocks %1$d of the %2$d trackers found in these apps.</item>
+        <item quantity="other">The Shield blocks %1$d of the %2$d trackers found in these apps.</item>
+    </plurals>
     <plurals name="trackers_found">
         <item quantity="one">%1$d tracker detected</item>
         <item quantity="other">%1$d trackers detected</item>
@@ -83,6 +90,15 @@
     <string name="detail_trackers_section">Trackers (%1$d)</string>
     <string name="detail_trackers_not_analyzed">Not analysed yet.</string>
     <string name="detail_no_tracker">No known tracker detected.</string>
+    <string name="detail_shield_active">🧿 With the Shield: %1$d/100 (%2$s)</string>
+    <string name="detail_shield_inactive">🧿 If you turn on the Shield: %1$d/100 (%2$s)</string>
+    <string name="detail_shield_hint">The app\'s score does not change: its trackers stay inside it and keep collecting on the phone. This is what still gets out from this phone: a blocked tracker still counts for a share of its weight.</string>
+    <string name="detail_shield_none">🧿 The Shield does not block any of this app\'s trackers.</string>
+    <string name="detail_shield_turn_on">Turn on the Shield</string>
+    <string name="tracker_shield_blocked">Blocked by the Shield</string>
+    <string name="tracker_shield_partial">Partly blocked by the Shield</string>
+    <string name="tracker_shield_none">Not blocked by the Shield</string>
+    <string name="tracker_shield_unknown">No known server: the Shield cannot reach it</string>
     <string name="detail_trackers_limit">On-device detection by code signatures (Exodus Privacy database): an obfuscated or renamed SDK can go unnoticed. The absence of trackers is therefore not a guarantee.</string>
     <string name="detail_granted">granted</string>
     <string name="detail_declared_only">declared only</string>
@@ -107,6 +123,10 @@
     <plurals name="perms_sensitive_count">
         <item quantity="one">⚠ %1$d sensitive</item>
         <item quantity="other">⚠ %1$d sensitive</item>
+    </plurals>
+    <plurals name="detail_shield_count">
+        <item quantity="one">The Shield blocks %1$d of the %2$d trackers.</item>
+        <item quantity="other">The Shield blocks %1$d of the %2$d trackers.</item>
     </plurals>
 
     <!-- Analyse -->

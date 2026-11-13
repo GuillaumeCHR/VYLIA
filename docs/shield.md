@@ -101,6 +101,28 @@ Le réglage mobile l'emporte : un domaine présent dans les deux (Google AdMob, 
 mobile, passe quand le filtrage mobile est coupé. C'est ce qui permet à un joueur de garder le filtrage web sans
 pauses répétées. Au 2026-11-01 : 86 186 domaines web, 1 044 mobile.
 
+## Exposition avec le bouclier (fiche d'une app)
+
+Le score d'une app ne change pas avec le bouclier : il note ce qu'elle embarque, et il est partagé avec le classement
+public. La fiche affiche à côté une **exposition avec le bouclier** : ce qui sort encore de ce téléphone.
+
+- Pour chaque traqueur, `TrackerCoverages` compare ses domaines (`network_signature` Exodus, plus le complément
+  maison) à la liste en vigueur et aux filtrages actifs : **bloqué** (tous), **en partie**, **non bloqué**, ou
+  **aucun serveur connu** (pas de signature réseau : 172 traqueurs Exodus sur 432 au 2026-11-13). Une partie de
+  signature qui n'est pas un domaine (adresse IP) compte comme non bloquée ; un domaine de `NEVER_BLOCK` aussi.
+- `PrivacyScorer.shielded` recalcule seulement la part des traqueurs : bloqué × `scoring.shield.blocked_factor`
+  (0,3), en partie × `partial_factor` (0,7), le reste en entier ; plafond des traqueurs et plafond de sécurité comme
+  pour le score. Un traqueur bloqué compte encore : le SDK collecte toujours sur le téléphone, envoie plus tard ce
+  qu'il a gardé (pause, redémarrage, autre VPN), et certaines apps contournent le DNS.
+- Bouclier actif : « Avec le bouclier : 71/100 (B) ». Arrêté ou contourné : « Si vous activez le bouclier : … » et un
+  lien vers Se protéger. Recalculé quand la liste est recompilée (`ShieldController.listVersion`) ou qu'un filtrage
+  change, jamais pendant le filtrage.
+- Analyse (en-tête du score de l'appareil) : même ligne pour l'appareil, moyenne de l'exposition de chaque app (son
+  score si ses traqueurs ne sont pas analysés), arrondie comme le score de l'appareil, et nombre de traqueurs
+  distincts bloqués (`ShieldSummary`). Le score de l'appareil, le Suivi et les alertes de seuil ne changent pas.
+- Les domaines viennent de la base Exodus téléchargée, sinon de `exodus_trackers.json`, qui garde désormais
+  `network_signature`.
+
 ## Pause réglable
 
 Les vidéos récompensées sont des pubs servies par les régies bloquées : elles tournent dans le vide (constaté sur

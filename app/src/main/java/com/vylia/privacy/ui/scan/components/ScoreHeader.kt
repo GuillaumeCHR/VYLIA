@@ -23,6 +23,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.TextButton
+import androidx.compose.ui.res.pluralStringResource
+import com.vylia.privacy.ui.scan.ShieldSummary
+import com.vylia.privacy.ui.shield.LocalOpenProtect
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.ui.components.ScoreAnimationMillis
@@ -38,6 +43,8 @@ fun ScoreHeader(
     modifier: Modifier = Modifier,
     /** Pour [AppFilter.ALL] : nombre d'apps système comprises dans [appCount]. */
     systemAppCount: Int = 0,
+    /** Exposition avec le bouclier, affichée sous le score (qui ne change pas) ; `null` sans bouclier. */
+    shield: ShieldSummary? = null,
 ) {
     VyliaCard(modifier = modifier.fillMaxWidth()) {
         Row(
@@ -67,6 +74,35 @@ fun ScoreHeader(
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+            }
+        }
+        if (shield != null && averageScore != null && shield.trackers > 0) {
+            ShieldLine(shield, Modifier.padding(start = 20.dp, end = 20.dp, bottom = 16.dp))
+        }
+    }
+}
+
+/** Exposition de l'appareil avec le bouclier : actif, ce qui sort encore ; arrêté, ce qu'il permettrait. */
+@Composable
+private fun ShieldLine(shield: ShieldSummary, modifier: Modifier = Modifier) {
+    Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        Text(
+            stringResource(if (shield.active) R.string.header_shield_active else R.string.header_shield_inactive, shield.score.value),
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
+            color = if (shield.active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+        )
+        Text(
+            pluralStringResource(R.plurals.header_shield_count, shield.trackers, shield.blocked, shield.trackers) + " " +
+                stringResource(R.string.header_shield_hint),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        if (!shield.active) {
+            LocalOpenProtect.current?.let { openProtect ->
+                TextButton(onClick = openProtect, contentPadding = PaddingValues(0.dp)) {
+                    Text(stringResource(R.string.detail_shield_turn_on))
+                }
             }
         }
     }

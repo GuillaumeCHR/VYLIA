@@ -60,6 +60,13 @@ import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.theme.color
 import androidx.annotation.StringRes
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.pluralStringResource
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.material3.TextButton
+import com.vylia.privacy.data.shield.ShieldExposureRepository
+import com.vylia.privacy.domain.scoring.ShieldedScore
+import com.vylia.privacy.domain.shield.TrackerCoverage
+import com.vylia.privacy.ui.shield.LocalOpenProtect
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.web.WebServices
 import com.vylia.privacy.ui.components.currentLocale
@@ -74,6 +81,10 @@ fun AppDetailScreen(
     scoreBase: Int,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
+    /** Ce que le bouclier bloque des traqueurs, `null` sans bouclier ou tant que ce n'est pas calculé. */
+    shieldExposure: ShieldExposureRepository.Exposure? = null,
+    /** Exposition de l'app avec le bouclier, `null` si elle n'est pas calculable. */
+    shielded: ShieldedScore? = null,
 ) {
     BackHandler(onBack = onBack)
     val result = auditedApp.result
@@ -119,6 +130,9 @@ fun AppDetailScreen(
                     color = scoreGradientColor(result.score, scoreBase),
                 )
                 GradeScale(gradeBands, base = scoreBase, marker = result.score)
+                if (shieldExposure != null && shielded != null && result.trackerFindings.isNotEmpty()) {
+                    ShieldedLine(shielded, active = shieldExposure.active, trackers = result.trackerFindings.size)
+                }
             }
         }
 
@@ -170,7 +184,7 @@ fun AppDetailScreen(
                 result.trackerFindings.isEmpty() -> EmptyLine(stringResource(R.string.detail_no_tracker))
                 else -> result.trackerFindings.forEachIndexed { index, finding ->
                     if (index > 0) HorizontalDivider()
-                    TrackerLine(finding)
+                    TrackerLine(finding, shieldExposure?.of(finding.name))
                 }
             }
             Spacer(Modifier.height(8.dp))
@@ -266,10 +280,57 @@ private fun SectionCard(title: String, content: @Composable () -> Unit) {
     }
 }
 
+/**
+ * Exposition avec le bouclier, sous le score de l'app (qui ne change pas) : actif, ce qui sort encore ; arrêté ou
+ * contourné, ce qu'il permettrait, avec un lien vers Se protéger.
+ */
 @Composable
-private fun TrackerLine(finding: TrackerFinding) {
+private fun ShieldedLine(shielded: ShieldedScore, active: Boolean, trackers: Int) {
+    Spacer(Modifier.height(6.dp))
+    if (shielded.blocked + shielded.partial == 0) {
+        Text(stringResource(R.string.detail_shield_none), style = MaterialTheme.typography.bodyMedium)
+        return
+    }
+    Text(
+        stringResource(if (active) R.string.detail_shield_active else R.string.detail_shield_inactive, shielded.score, shielded.grade),
+        fontWeight = FontWeight.Bold,
+        color = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+    )
+    Text(
+        pluralStringResource(R.plurals.detail_shield_count, shielded.blocked, shielded.blocked, trackers) + " " +
+            stringResource(R.string.detail_shield_hint),
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+    )
+    if (!active) {
+        LocalOpenProtect.current?.let { openProtect ->
+            TextButton(onClick = openProtect, contentPadding = PaddingValues(0.dp)) {
+                Text(stringResource(R.string.detail_shield_turn_on))
+            }
+        }
+    }
+}
+
+@Composable
+private fun TrackerLine(finding: TrackerFinding, coverage: TrackerCoverage?) {
     Row(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp), verticalAlignment = Alignment.CenterVertically) {
-        Text(finding.name, modifier = Modifier.weight(1f))
+        Column(modifier = Modifier.weight(1f)) {
+            Text(finding.name)
+            if (coverage != null) {
+                Text(
+                    stringResource(
+                        when (coverage) {
+                            TrackerCoverage.BLOCKED -> R.string.tracker_shield_blocked
+                            TrackerCoverage.PARTIAL -> R.string.tracker_shield_partial
+                            TrackerCoverage.NONE -> R.string.tracker_shield_none
+                            TrackerCoverage.UNKNOWN -> R.string.tracker_shield_unknown
+                        },
+                    ),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (coverage == TrackerCoverage.BLOCKED) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        }
         PenaltyText(finding.penalty.toDouble())
     }
 }

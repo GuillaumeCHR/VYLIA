@@ -50,6 +50,7 @@ import com.vylia.privacy.data.safety.SupportResourcesRepository
 import com.vylia.privacy.data.databases.WebServicesSource
 import com.vylia.privacy.data.shield.ShieldListStore
 import com.vylia.privacy.domain.shield.ExodusNetworkTracker
+import com.vylia.privacy.data.shield.ShieldExposureRepository
 import com.vylia.privacy.data.databases.FileDatabaseMetaStore
 import com.vylia.privacy.data.databases.HttpsClient
 import com.vylia.privacy.data.trackers.ExodusCategoryOverrides
@@ -88,6 +89,12 @@ class AppContainer(context: Context) {
 
     val exodusCategories = ExodusCategoryOverrides(context)
     val trackerSignatureRepository = AssetTrackerSignatureRepository(context, overrides = { exodusCategories.categories })
+
+    /** Ce que le bouclier bloque des traqueurs (fiche d'une app : exposition avec le bouclier). */
+    val shieldExposureRepository = ShieldExposureRepository(shieldController) {
+        trackerSignatureRepository.networkTrackersOrBundled()
+            ?.map { ExodusNetworkTracker(it.name, it.categories, it.networkSignature) }
+    }
 
     val companiesRepository = CompaniesRepository(context)
     val supportResourcesRepository = SupportResourcesRepository(context)

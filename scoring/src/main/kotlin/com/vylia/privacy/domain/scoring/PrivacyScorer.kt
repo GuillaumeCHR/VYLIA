@@ -51,6 +51,18 @@ data class Scoring(
     @SerialName("declared_only_factor") val declaredOnlyFactor: Double,
     @SerialName("unanalyzed_policy") val unanalyzedPolicy: UnanalyzedPolicy,
     val grades: List<Grade>,
+    /** Exposition avec le bouclier : part du poids d'un traqueur qui reste comptée selon ce que le bouclier bloque. */
+    val shield: ShieldFactors = ShieldFactors(),
+)
+
+/**
+ * Un traqueur bloqué compte encore : le SDK reste dans l'app et collecte sur le téléphone, il envoie plus tard ce
+ * qu'il a gardé (pause, redémarrage, autre VPN) et certaines apps contournent le DNS (adresse IP, DNS chiffré).
+ */
+@Serializable
+data class ShieldFactors(
+    @SerialName("blocked_factor") val blockedFactor: Double = 0.3,
+    @SerialName("partial_factor") val partialFactor: Double = 0.7,
 )
 
 @Serializable
@@ -232,6 +244,25 @@ data class PermissionFinding(
 
 data class TrackerFinding(val name: String, val penalty: Int)
 
+/** Ce que le bouclier bloque d'un traqueur, vu du score : tout, une partie, ou rien (domaines inconnus compris). */
+enum class ShieldCoverage { BLOCKED, PARTIAL, NONE }
+
+/**
+ * Exposition d'une app avec le bouclier actif. Ce n'est pas son score : l'app reste notée sur ce qu'elle embarque
+ * ([ScoreResult.score]) ; ceci mesure ce qui passe encore sur ce téléphone. Les permissions ne changent pas.
+ */
+data class ShieldedScore(
+    val score: Int,
+    val grade: String,
+    /** Pénalité des traqueurs qui reste, après les facteurs du bouclier et le plafond des traqueurs. */
+    val trackerPenalty: Double,
+    val coverage: Map<String, ShieldCoverage>,
+) {
+    val blocked: Int get() = coverage.values.count { it == ShieldCoverage.BLOCKED }
+    val partial: Int get() = coverage.values.count { it == ShieldCoverage.PARTIAL }
+    val exposed: Int get() = coverage.values.count { it == ShieldCoverage.NONE }
+}
+
 data class SecurityFinding(
     val id: String,
     val label: String,
@@ -362,6 +393,30 @@ class PrivacyScorer(
         return if (cap != null) min(result.uncappedScore, cap) else result.uncappedScore
     }
 
+    /**
+     * Exposition de l'app avec le bouclier ([ShieldedScore]) : chaque traqueur compte pour une part de son poids
+     * (scoring.shield), le plafond des traqueurs et celui de sécurité s'appliquent comme au score. `null` si les
+     * traqueurs n'ont pas été analysés : rien ne permet de dire ce que le bouclier en bloque.
+     */
+    fun shielded(result: ScoreResult, coverageOf: (String) -> ShieldCoverage): ShieldedScore? {
+        if (result.confidence != Confidence.FULL) return null
+        val factors = rules.scoring.shield
+        val coverage = result.trackerFindings.associate { it.name to coverageOf(it.name) }
+        val residual = result.trackerFindings.sumOf { finding ->
+            finding.penalty * when (coverage.getValue(finding.name)) {
+                ShieldCoverage.BLOCKED -> factors.blockedFactor
+                ShieldCoverage.PARTIAL -> factors.partialFactor
+                ShieldCoverage.NONE -> 1.0
+            }
+        }
+        val trackerPenalty = min(rules.scoring.trackerCap.toDouble(), residual)
+        val raw = max(0, (rules.scoring.base - result.permissionPenalty - trackerPenalty).roundToInt())
+        val score = result.securityScoreCap?.let { min(raw, it) } ?: raw
+        return ShieldedScore(score, letterOf(score), trackerPenalty, coverage)
+    }
+
+    private fun letterOf(score: Int): String = rules.scoring.grades.sortedByDescending { it.min }.first { score >= it.min }.grade
+
     fun score(scan: AppScan): ScoreResult {
         val categoryId = resolveCategory(scan)
 
@@ -417,7 +472,7 @@ class PrivacyScorer(
         // 4. Score final
         val raw = max(0, (rules.scoring.base - permissionPenalty - trackerPenalty).roundToInt())
         val score = if (securityScoreCap != null) min(raw, securityScoreCap) else raw
-        val letter = rules.scoring.grades.sortedByDescending { it.min }.first { score >= it.min }.grade
+        val letter = letterOf(score)
         val grade = if (confidence == Confidence.PARTIAL) letter + policy.gradeSuffix else letter
 
         // 5. Badges

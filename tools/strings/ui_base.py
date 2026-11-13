@@ -14,6 +14,10 @@ S = [
  ("score_out_of", "/100", "/100"),
  ("header_title", "Privacy score", "Score de confidentialité"),
  ("header_subtitle_user", "Average of your %1$d apps", "Moyenne de vos %1$d applications"),
+ ("header_shield_active", "🧿 With the Shield: %1$d/100", "🧿 Avec le bouclier : %1$d/100"),
+ ("header_shield_inactive", "🧿 If you turn on the Shield: %1$d/100", "🧿 Si vous activez le bouclier : %1$d/100"),
+ ("header_shield_hint", "Your score does not change: the trackers stay in your apps. This is what still gets out from this phone.",
+  "Votre score ne change pas : les traqueurs restent dans vos apps. C'est ce qui sort encore de ce téléphone."),
  ("header_subtitle_system", "Average of the %1$d system apps", "Moyenne des %1$d applications système"),
  ("header_subtitle_all", "Average of your %1$d apps, %2$d of them system apps", "Moyenne de vos %1$d applications, dont %2$d système"),
  ("risk_low", "Low risk", "Faible risque"),
@@ -32,6 +36,7 @@ S = [
  ("permissions_sensitive_none", "No sensitive permission granted", "Aucune permission sensible accordée"),
 ]
 P = [
+ ("header_shield_count", ("The Shield blocks %1$d of the %2$d trackers found in these apps.", "The Shield blocks %1$d of the %2$d trackers found in these apps."), ("Le bouclier bloque %1$d des %2$d traqueurs trouvés dans ces apps.", "Le bouclier bloque %1$d des %2$d traqueurs trouvés dans ces apps.")),
  ("trackers_found", ("%1$d tracker detected", "%1$d trackers detected"), ("%1$d traqueur détecté", "%1$d traqueurs détectés")),
  ("permissions_sensitive", ("%1$d sensitive permission granted", "%1$d sensitive permissions granted"), ("%1$d permission sensible accordée", "%1$d permissions sensibles accordées")),
 ]

@@ -62,6 +62,13 @@ class AssetTrackerSignatureRepository(
         return runCatching { parser.parseNetwork(downloadedFile.readText(), overrides()) }.getOrNull()
     }
 
+    /**
+     * Traqueurs Exodus et leurs domaines, depuis la base téléchargée, sinon depuis celle de l'app : sert à dire ce que
+     * le bouclier bloque de chaque traqueur (fiche d'une app). Appel bloquant.
+     */
+    fun networkTrackersOrBundled(): List<ExodusTrackerParser.NetworkTracker>? = networkTrackers()
+        ?: runCatching { parser.parseNetwork(context.assets.open(fileName).bufferedReader().use { it.readText() }, overrides()) }.getOrNull()
+
     companion object {
         /** Snapshot allégé, rafraîchi par tools/update_exodus_trackers.py (données Exodus Privacy, ODbL). */
         const val EXODUS_TRACKERS_ASSET = "exodus_trackers.json"

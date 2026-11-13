@@ -31,6 +31,7 @@ import com.vylia.privacy.domain.usecase.deviceScore
 import com.vylia.privacy.data.alert.ScanCompletion
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import com.vylia.privacy.data.shield.ShieldExposureRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -49,7 +50,11 @@ class ScanViewModel(
     private val alternatives: AlternativesRepository,
     private val historyRecorder: HistoryRecorder,
     private val scanCompletion: ScanCompletion,
+    shieldExposureRepository: ShieldExposureRepository,
 ) : ViewModel() {
+
+    /** Ce que le bouclier bloque des traqueurs, `null` tant que ce n'est pas calculé (fiche d'une app). */
+    val shieldExposure: StateFlow<ShieldExposureRepository.Exposure?> = shieldExposureRepository.exposure
 
     private sealed interface ScanState {
         data object Loading : ScanState
@@ -66,9 +71,25 @@ class ScanViewModel(
      * Le scan complet n'est fait qu'une fois ; changer d'onglet filtre simplement
      * le résultat en mémoire, sans relancer de requête au PackageManager.
      */
-    val uiState: StateFlow<ScanUiState> =
-        combine(scanState, selectedFilter, settingsRepository.advancedMode, isAnalyzingTrackers, settingsRepository.lastScanTimestamp, ::reduce)
-            .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ScanUiState())
+    val uiState: StateFlow<ScanUiState> = combine(
+        combine(scanState, selectedFilter, settingsRepository.advancedMode, isAnalyzingTrackers, settingsRepository.lastScanTimestamp, ::reduce),
+        shieldExposure,
+        ruleMatrixRepository.current,
+    ) { state, exposure, rules -> if (exposure == null || !BuildConfig.SHIELD_ENABLED) state else withShield(state, exposure, rules) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ScanUiState())
+
+    /** Exposition de l'appareil avec le bouclier, à côté de son score (en-tête d'Analyse). */
+    private fun withShield(
+        state: ScanUiState,
+        exposure: ShieldExposureRepository.Exposure,
+        rules: RuleMatrixRepository.LoadedRules,
+    ): ScanUiState {
+        val shielded = { app: AuditedApp -> rules.scorer.shielded(app.result, exposure::forScore) }
+        return state.copy(
+            userShield = ShieldSummary.of(state.scannedApps.filter { AppFilter.USER.matches(it.app) }, exposure, shielded),
+            allShield = ShieldSummary.of(state.scannedApps, exposure, shielded),
+        )
+    }
 
     val rewards: StateFlow<RewardsState> = badgesManager.state
 
@@ -238,6 +259,7 @@ class ScanViewModel(
                     container.alternativesRepository,
                     container.historyRecorder,
                     container.scanCompletion,
+                    container.shieldExposureRepository,
                 )
             }
         }

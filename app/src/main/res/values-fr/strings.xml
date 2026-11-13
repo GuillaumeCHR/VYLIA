@@ -18,6 +18,9 @@
     <string name="score_out_of">/100</string>
     <string name="header_title">Score de confidentialité</string>
     <string name="header_subtitle_user">Moyenne de vos %1$d applications</string>
+    <string name="header_shield_active">🧿 Avec le bouclier : %1$d/100</string>
+    <string name="header_shield_inactive">🧿 Si vous activez le bouclier : %1$d/100</string>
+    <string name="header_shield_hint">Votre score ne change pas : les traqueurs restent dans vos apps. C\'est ce qui sort encore de ce téléphone.</string>
     <string name="header_subtitle_system">Moyenne des %1$d applications système</string>
     <string name="header_subtitle_all">Moyenne de vos %1$d applications, dont %2$d système</string>
     <string name="risk_low">Faible risque</string>
@@ -34,6 +37,11 @@
     <string name="card_security_description">Alerte sécurité : %1$s.</string>
     <string name="card_security_capped_description">Alerte sécurité : %1$s. Score plafonné à %2$d.</string>
     <string name="permissions_sensitive_none">Aucune permission sensible accordée</string>
+    <plurals name="header_shield_count">
+        <item quantity="one">Le bouclier bloque %1$d des %2$d traqueurs trouvés dans ces apps.</item>
+        <item quantity="many">Le bouclier bloque %1$d des %2$d traqueurs trouvés dans ces apps.</item>
+        <item quantity="other">Le bouclier bloque %1$d des %2$d traqueurs trouvés dans ces apps.</item>
+    </plurals>
     <plurals name="trackers_found">
         <item quantity="one">%1$d traqueur détecté</item>
         <item quantity="many">%1$d traqueurs détectés</item>
@@ -83,6 +91,15 @@
     <string name="detail_trackers_section">Traqueurs (%1$d)</string>
     <string name="detail_trackers_not_analyzed">Non analysés pour l\'instant.</string>
     <string name="detail_no_tracker">Aucun traqueur connu détecté.</string>
+    <string name="detail_shield_active">🧿 Avec le bouclier : %1$d/100 (%2$s)</string>
+    <string name="detail_shield_inactive">🧿 Si vous activez le bouclier : %1$d/100 (%2$s)</string>
+    <string name="detail_shield_hint">Le score de l\'app ne change pas : ses traqueurs restent dans l\'app et collectent toujours sur le téléphone. C\'est ce qui sort encore de ce téléphone : un traqueur bloqué compte encore pour une part de son poids.</string>
+    <string name="detail_shield_none">🧿 Le bouclier ne bloque aucun traqueur de cette app.</string>
+    <string name="detail_shield_turn_on">Activer le bouclier</string>
+    <string name="tracker_shield_blocked">Bloqué par le bouclier</string>
+    <string name="tracker_shield_partial">Bloqué en partie par le bouclier</string>
+    <string name="tracker_shield_none">Non bloqué par le bouclier</string>
+    <string name="tracker_shield_unknown">Aucun serveur connu : le bouclier ne peut pas l\'atteindre</string>
     <string name="detail_trackers_limit">Détection locale par signatures de code (base Exodus Privacy) : un SDK obfusqué ou renommé peut passer inaperçu. Une absence de traqueur n\'est donc pas une garantie.</string>
     <string name="detail_granted">accordée</string>
     <string name="detail_declared_only">déclarée seulement</string>
@@ -108,6 +125,11 @@
         <item quantity="one">⚠ %1$d sensible</item>
         <item quantity="many">⚠ %1$d sensibles</item>
         <item quantity="other">⚠ %1$d sensibles</item>
+    </plurals>
+    <plurals name="detail_shield_count">
+        <item quantity="one">Le bouclier bloque %1$d traqueur sur %2$d.</item>
+        <item quantity="many">Le bouclier bloque %1$d traqueurs sur %2$d.</item>
+        <item quantity="other">Le bouclier bloque %1$d traqueurs sur %2$d.</item>
     </plurals>
 
     <!-- Analyse -->

@@ -32,9 +32,8 @@ object ExodusShieldDomains {
             val filter = if ("Advertisement" in tracker.categories) ShieldFilter.MOBILE else ShieldFilter.WEB
             val name = visibleText(tracker.name, 100)
             tracker.networkSignature.split('|').filter { it.isNotEmpty() }.forEach { part ->
-                val domain = part.replace("\\.", ".").replace("\\-", "-").lowercase()
-                    .removePrefix(".*").removePrefix(".")
-                if (Blocklist.DOMAIN.matches(domain) && domain !in BlocklistBuilder.NEVER_BLOCK) named.putIfAbsent(domain, name to filter)
+                val domain = signatureDomain(part)
+                if (domain != null && domain !in BlocklistBuilder.NEVER_BLOCK) named.putIfAbsent(domain, name to filter)
             }
         }
         EXTRA.forEach { (name, value) -> value.second.forEach { named.putIfAbsent(it, name to value.first) } }

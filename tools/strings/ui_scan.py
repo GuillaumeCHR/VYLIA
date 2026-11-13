@@ -38,6 +38,17 @@ S = [
  ("detail_trackers_section", "Trackers (%1$d)", "Traqueurs (%1$d)"),
  ("detail_trackers_not_analyzed", "Not analysed yet.", "Non analysés pour l'instant."),
  ("detail_no_tracker", "No known tracker detected.", "Aucun traqueur connu détecté."),
+ # Fiche : exposition avec le bouclier (le score de l'app ne change pas)
+ ("detail_shield_active", "🧿 With the Shield: %1$d/100 (%2$s)", "🧿 Avec le bouclier : %1$d/100 (%2$s)"),
+ ("detail_shield_inactive", "🧿 If you turn on the Shield: %1$d/100 (%2$s)", "🧿 Si vous activez le bouclier : %1$d/100 (%2$s)"),
+ ("detail_shield_hint", "The app's score does not change: its trackers stay inside it and keep collecting on the phone. This is what still gets out from this phone: a blocked tracker still counts for a share of its weight.",
+  "Le score de l'app ne change pas : ses traqueurs restent dans l'app et collectent toujours sur le téléphone. C'est ce qui sort encore de ce téléphone : un traqueur bloqué compte encore pour une part de son poids."),
+ ("detail_shield_none", "🧿 The Shield does not block any of this app's trackers.", "🧿 Le bouclier ne bloque aucun traqueur de cette app."),
+ ("detail_shield_turn_on", "Turn on the Shield", "Activer le bouclier"),
+ ("tracker_shield_blocked", "Blocked by the Shield", "Bloqué par le bouclier"),
+ ("tracker_shield_partial", "Partly blocked by the Shield", "Bloqué en partie par le bouclier"),
+ ("tracker_shield_none", "Not blocked by the Shield", "Non bloqué par le bouclier"),
+ ("tracker_shield_unknown", "No known server: the Shield cannot reach it", "Aucun serveur connu : le bouclier ne peut pas l'atteindre"),
  ("detail_trackers_limit", "On-device detection by code signatures (Exodus Privacy database): an obfuscated or renamed SDK can go unnoticed. The absence of trackers is therefore not a guarantee.",
   "Détection locale par signatures de code (base Exodus Privacy) : un SDK obfusqué ou renommé peut passer inaperçu. Une absence de traqueur n'est donc pas une garantie."),
  ("detail_granted", "granted", "accordée"),
@@ -68,4 +79,5 @@ S += [
 ]
 P = [
  ("perms_sensitive_count", ("⚠ %1$d sensitive", "⚠ %1$d sensitive"), ("⚠ %1$d sensible", "⚠ %1$d sensibles")),
+ ("detail_shield_count", ("The Shield blocks %1$d of the %2$d trackers.", "The Shield blocks %1$d of the %2$d trackers."), ("Le bouclier bloque %1$d traqueur sur %2$d.", "Le bouclier bloque %1$d traqueurs sur %2$d.")),
 ]

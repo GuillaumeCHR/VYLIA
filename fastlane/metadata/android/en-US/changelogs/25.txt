@@ -1,0 +1,1 @@
+The Shield now counts in the score: when it is on, each app is scored on what still gets out from the phone, and its sheet shows which trackers it blocks. New: Manage › Trackers, the apps whose trackers get past it. The help explains the score calculation in formulas.

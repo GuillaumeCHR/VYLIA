@@ -1,20 +1,32 @@
 {
   "version": "2.0",
-  "last_update": "2026-11-07",
+  "last_update": "2026-11-13",
   "description": "Alternatives par catégorie du Play Store, choisies par tools/alternatives/build_catalogue.py depuis le classement AlternativeTo (filtre F-Droid). fdroid / play : identifiant sur le magasin, absent s'il n'y est pas.",
   "groups": [
     {
       "id": "communication",
       "title": {"en": "Communication", "fr": "Communication"},
-      "replaces": ["com.whatsapp", "com.facebook.orca", "com.viber.voip", "org.telegram.messenger", "com.snapchat.android", "com.android.chrome", "com.microsoft.emmx", "com.opera.browser", "com.sec.android.app.sbrowser", "com.google.android.gm", "com.microsoft.office.outlook", "com.yahoo.mobile.client.android.mail"],
-      "categories": ["MESSAGING", "EMAIL", "BROWSER"],
+      "replaces": ["com.android.chrome", "com.microsoft.emmx", "com.opera.browser", "com.sec.android.app.sbrowser", "com.google.android.gm", "com.microsoft.office.outlook", "com.yahoo.mobile.client.android.mail"],
+      "categories": ["EMAIL", "BROWSER"],
       "alternatives": [
         {"name": "Mozilla Firefox", "package": "org.mozilla.firefox", "play": "org.mozilla.firefox", "open_source": true, "cost": "Free", "rating": 4.7,
          "pitch": {"en": "Independent browser that blocks many trackers by default and accepts add-ons.", "fr": "Navigateur indépendant qui bloque de nombreux traqueurs par défaut et accepte les extensions."}},
         {"name": "Thunderbird", "package": "net.thunderbird.android", "fdroid": "net.thunderbird.android", "play": "net.thunderbird.android", "open_source": true, "cost": "Free", "rating": 4.0,
          "pitch": {"en": "Email app from Mozilla, for all your accounts, open source.", "fr": "Messagerie e-mail de Mozilla, pour tous vos comptes, libre."}},
+        {"name": "DuckDuckGo", "package": "com.duckduckgo.mobile.android", "fdroid": "com.duckduckgo.mobile.android", "play": "com.duckduckgo.mobile.android", "open_source": true, "cost": "Free", "rating": 4.6,
+         "pitch": {"en": "Private browser and search engine that blocks trackers, with a button to erase everything.", "fr": "Navigateur et moteur de recherche privés qui bloquent les traqueurs, avec un bouton pour tout effacer."}}
+      ]
+    },
+    {
+      "id": "messaging",
+      "title": {"en": "Messaging", "fr": "Messagerie"},
+      "replaces": ["com.whatsapp", "com.facebook.orca", "com.viber.voip", "org.telegram.messenger", "com.snapchat.android"],
+      "categories": ["MESSAGING"],
+      "alternatives": [
         {"name": "Signal", "package": "org.thoughtcrime.securesms", "play": "org.thoughtcrime.securesms", "open_source": true, "cost": "Free", "rating": 4.6,
-         "pitch": {"en": "End-to-end encrypted messages and calls, run by a non-profit.", "fr": "Messages et appels chiffrés de bout en bout, par une fondation à but non lucratif."}}
+         "pitch": {"en": "End-to-end encrypted messages and calls, run by a non-profit.", "fr": "Messages et appels chiffrés de bout en bout, par une fondation à but non lucratif."}},
+        {"name": "Olvid", "package": "io.olvid.messenger", "play": "io.olvid.messenger", "open_source": true, "cost": "Free", "rating": 4.4,
+         "pitch": {"en": "French encrypted messenger, with no phone number and no directory, certified by ANSSI.", "fr": "Messagerie chiffrée française, sans numéro de téléphone ni annuaire, certifiée par l'ANSSI."}}
       ]
     },
     {
@@ -28,7 +40,9 @@
         {"name": "Bluesky", "package": "xyz.blueskyweb.app", "play": "xyz.blueskyweb.app", "open_source": true, "cost": "Free", "rating": 3.6,
          "pitch": {"en": "Open social network (AT Protocol), chronological or custom feeds.", "fr": "Réseau social ouvert (protocole AT), fil chronologique ou personnalisé."}},
         {"name": "RedReader", "package": "org.quantumbadger.redreader", "fdroid": "org.quantumbadger.redreader", "play": "org.quantumbadger.redreader", "open_source": true, "cost": "Free", "rating": 4.4,
-         "pitch": {"en": "Reddit reader without tracking.", "fr": "Lecteur Reddit sans pistage."}}
+         "pitch": {"en": "Reddit reader without tracking.", "fr": "Lecteur Reddit sans pistage."}},
+        {"name": "Signal", "package": "org.thoughtcrime.securesms", "play": "org.thoughtcrime.securesms", "open_source": true, "cost": "Free", "rating": 4.6,
+         "pitch": {"en": "End-to-end encrypted messages and calls, run by a non-profit.", "fr": "Messages et appels chiffrés de bout en bout, par une fondation à but non lucratif."}}
       ]
     },
     {

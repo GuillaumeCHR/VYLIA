@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 CATALOGUE = ROOT / "app/src/main/assets/alternatives.json"
 OUT = ROOT / "tools/alternatives/play_ratings.json"
-EXTRA = ["xyz.blueskyweb.app"]  # remplaçants ajoutés par build_catalogue.py (REPLACEMENTS)
+EXTRA = ["xyz.blueskyweb.app", "com.duckduckgo.mobile.android", "io.olvid.messenger"]  # REPLACEMENTS et ADDITIONS de build_catalogue.py
 RATING = re.compile(r'itemprop="starRating"><div[^>]*aria-label="Rated ([0-9.]+) stars out of five stars"')
 PACKAGE = re.compile(r"^[A-Za-z][A-Za-z0-9_]*(\.[A-Za-z0-9_]+)+$")
 

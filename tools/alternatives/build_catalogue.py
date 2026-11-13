@@ -16,7 +16,8 @@ Règles (affichées aussi dans l'app, onglet Alternatives › « Comment cette l
   6. Trois apps par catégorie au plus (deux quand il n'y en a pas plus).
   7. Remplacements choisis à la main (REPLACEMENTS), avec leur raison : une app que le classement F-Droid ne peut pas
      proposer (absente de F-Droid) prend la place d'une autre.
-  8. Note affichée : les étoiles de la fiche Google Play (tools/alternatives/play_ratings.json, relevé par
+  8. Ajouts choisis à la main (ADDITIONS), avec leur raison : une app ajoutée après la sélection, en plus des trois.
+  9. Note affichée : les étoiles de la fiche Google Play (tools/alternatives/play_ratings.json, relevé par
      fetch_play_ratings.py) ; rien si l'app n'est pas sur Google Play ou sans note. Les likes AlternativeTo servent
      au classement seulement.
 """
@@ -34,8 +35,9 @@ PER_CATEGORY = 3
 # Catégories du Play Store → types AlternativeTo (colonne « categorie_source »).
 PLAY = [
     ("communication", "Communication", "Communication",
-     ["Web Browser", "Email Client", "WebMail Provider", "Instant Messenger", "Encrypted Chat App", "Group Chat App", "IRC Client",
-      "Video Calling App", "Phone Dialer", "Unwanted Call Blocker", "Anti-Spam Tool"]),
+     ["Web Browser", "Email Client", "WebMail Provider", "IRC Client", "Phone Dialer", "Unwanted Call Blocker", "Anti-Spam Tool"]),
+    # Messagerie : choisie à la main (ADDITIONS), sans le classement ; ses types AlternativeTo n'y vont plus.
+    ("messaging", "Messaging", "Messagerie", []),
     ("social", "Social", "Réseaux sociaux",
      ["Social Network", "Mastodon Client", "Lemmy Client", "Pixelfed Client", "Bluesky Client", "Twitter Client", "Reddit Client",
       "Hacker News Client"]),
@@ -94,6 +96,31 @@ REPLACEMENTS = {
         "pitch": {"en": "Open social network (AT Protocol), chronological or custom feeds.",
                   "fr": "Réseau social ouvert (protocole AT), fil chronologique ou personnalisé."},
     },
+}
+# Ajouts choisis à la main, après la sélection et en plus d'elle (règle 8) : famille → apps, avec leur raison.
+SIGNAL = {
+    "name": "Signal", "package": "org.thoughtcrime.securesms", "play": "org.thoughtcrime.securesms", "open_source": True,
+    "cost": "Free",
+    "pitch": {"en": "End-to-end encrypted messages and calls, run by a non-profit.",
+              "fr": "Messages et appels chiffrés de bout en bout, par une fondation à but non lucratif."},
+}
+ADDITIONS = {
+    # Messageries chiffrées de bout en bout, à la place de WhatsApp, Messenger, Telegram, Viber ou Snapchat. Olvid :
+    # française, sans numéro de téléphone ni annuaire, absente de F-Droid (donc du classement).
+    "messaging": [SIGNAL, {
+        "name": "Olvid", "package": "io.olvid.messenger", "play": "io.olvid.messenger", "open_source": True, "cost": "Free",
+        "pitch": {"en": "French encrypted messenger, with no phone number and no directory, certified by ANSSI.",
+                  "fr": "Messagerie chiffrée française, sans numéro de téléphone ni annuaire, certifiée par l'ANSSI."},
+    }],
+    # Signal remplace aussi les messageries des réseaux sociaux (Messenger, Instagram, Snapchat).
+    "social": [SIGNAL],
+    # Navigateur qui bloque les traqueurs, sur Google Play comme sur F-Droid ; peu présent dans le classement F-Droid.
+    "communication": [{
+        "name": "DuckDuckGo", "package": "com.duckduckgo.mobile.android", "fdroid": "com.duckduckgo.mobile.android",
+        "play": "com.duckduckgo.mobile.android", "open_source": True, "cost": "Free",
+        "pitch": {"en": "Private browser and search engine that blocks trackers, with a button to erase everything.",
+                  "fr": "Navigateur et moteur de recherche privés qui bloquent les traqueurs, avec un bouton pour tout effacer."},
+    }],
 }
 RATINGS = Path(__file__).resolve().parent / "play_ratings.json"
 
@@ -204,8 +231,8 @@ PITCH = {
 
 # Apps courantes que chaque catégorie peut remplacer (pour le trophée et les conseils).
 REPLACES = {
-    "communication": ["com.whatsapp", "com.facebook.orca", "com.viber.voip", "org.telegram.messenger", "com.snapchat.android",
-                      "com.android.chrome", "com.microsoft.emmx", "com.opera.browser", "com.sec.android.app.sbrowser",
+    "messaging": ["com.whatsapp", "com.facebook.orca", "com.viber.voip", "org.telegram.messenger", "com.snapchat.android"],
+    "communication": ["com.android.chrome", "com.microsoft.emmx", "com.opera.browser", "com.sec.android.app.sbrowser",
                       "com.google.android.gm", "com.microsoft.office.outlook", "com.yahoo.mobile.client.android.mail"],
     "social": ["com.facebook.katana", "com.instagram.android", "com.twitter.android", "com.instagram.barcelona", "com.zhiliaoapp.musically"],
     "music": ["com.spotify.music", "com.soundcloud.android", "com.deezer.android.app", "com.shazam.android"],
@@ -219,7 +246,7 @@ REPLACES = {
     "weather": ["com.lachainemeteo.androidapp", "com.weather.Weather", "com.accuweather.android"],
 }
 CATEGORIES = {
-    "communication": ["MESSAGING", "EMAIL", "BROWSER"], "social": ["SOCIAL"], "music": ["MEDIA_PLAYER"], "photo": ["PHOTO_VIDEO"],
+    "messaging": ["MESSAGING"], "communication": ["EMAIL", "BROWSER"], "social": ["SOCIAL"], "music": ["MEDIA_PLAYER"], "photo": ["PHOTO_VIDEO"],
     "productivity": ["PRODUCTIVITY_CLOUD"], "tools": ["KEYBOARD"], "security": ["SECURITY_AUTH"], "maps": ["NAVIGATION"],
     "weather": ["WEATHER"], "finance": ["FINANCE_ACCOUNTS"], "health": ["FITNESS", "HEALTH_TRACKING"], "news": ["NEWS_READING"],
 }
@@ -267,6 +294,11 @@ def main(xlsx: str):
             entry["cost"] = a["cout"]
             pitch_en, pitch_fr = PITCH[a["nom"]]
             entry["pitch"] = {"en": pitch_en, "fr": pitch_fr}
+            rated(entry, ratings)
+            alternatives.append(entry)
+        for extra in ADDITIONS.get(gid, []):
+            entry = json.loads(json.dumps(extra))
+            report.append(f"  {fr} : {entry['name']} ajoutée")
             rated(entry, ratings)
             alternatives.append(entry)
         group = {"id": gid, "title": {"en": en, "fr": fr}}

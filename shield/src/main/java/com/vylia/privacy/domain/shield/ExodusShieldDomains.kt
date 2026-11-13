@@ -25,6 +25,29 @@ object ExodusShieldDomains {
         "Google Firebase Analytics" to (ShieldFilter.WEB to listOf("app-measurement.com")),
     )
 
+    /**
+     * Serveurs connus de traqueurs dont la `network_signature` Exodus manque ou ne sert pas (expression régulière,
+     * domaine de plateforme) : ils ne servent qu'à dire ce que le bouclier bloque de ces traqueurs (score, fiche).
+     * Jamais ajoutés à la liste de blocage : le bouclier bloque exactement la même chose avec ou sans eux. Chacun est
+     * déjà bloqué par les listes (vérifié par ExodusShieldDomainsTest) ; un traqueur cité ici n'est pas réduit à
+     * ces serveurs, sa signature Exodus compte toujours (Facebook Ads reste bloqué en partie : `facebook.com` passe).
+     */
+    val KNOWN_SERVERS: Map<String, List<String>> = mapOf(
+        "Amazon Advertisement" to listOf("amazon-adsystem.com"),
+        "Pangle" to listOf("pangle.io"),
+        "Appodeal Stack" to listOf("appodeal.com"),
+        "BidMachine" to listOf("bidmachine.io"),
+        "ironSource" to listOf("supersonicads.com"),
+        "Singular" to listOf("sdk-api-v1.singular.net"),
+        "Adobe Experience Cloud" to listOf("omtrdc.net", "demdex.net"),
+        "Nielsen" to listOf("imrworldwide.com"),
+        // Signature Exodus « adservice\.google\..* » (expression régulière) : son domaine principal.
+        "Google AdMob" to listOf("adservice.google.com"),
+        // Audience Network, la régie de Facebook ; graph.facebook.com sert aussi à la connexion et n'est pas bloqué.
+        "Facebook Ads" to listOf("an.facebook.com"),
+        "Facebook Audience" to listOf("an.facebook.com"),
+    )
+
     fun named(trackers: List<ExodusNetworkTracker>): Map<String, Pair<String, ShieldFilter>> {
         val named = LinkedHashMap<String, Pair<String, ShieldFilter>>()
         trackers.forEach { tracker ->

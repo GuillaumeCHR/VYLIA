@@ -111,6 +111,14 @@ comme dans le classement public. Les permissions ne changent pas.
   maison) à la liste en vigueur et aux filtrages actifs : **bloqué** (tous), **en partie**, **non bloqué**, ou
   **aucun serveur connu** (pas de signature réseau : 172 traqueurs Exodus sur 432 au 2026-11-13). Une partie de
   signature qui n'est pas un domaine (adresse IP) compte comme non bloquée ; un domaine de `NEVER_BLOCK` aussi.
+- `ExodusShieldDomains.KNOWN_SERVERS` : serveurs connus de traqueurs sans signature utilisable (Amazon Ads, Pangle,
+  Appodeal, BidMachine, ironSource, Singular, Adobe, Nielsen ; AdMob à la place de son expression régulière ;
+  `an.facebook.com` pour Facebook Ads). Pour le score seulement : jamais ajoutés à la liste, le bouclier bloque la
+  même chose avec ou sans eux ; chacun est déjà bloqué par les listes (test). Mesure du 2026-11-14 sur 108 apps :
+  bloqués 53 → 59 traqueurs, sans serveur connu 20 → 12, score de l'appareil avec bouclier 81 → 83 (74 sans).
+- Liste d'apps de DuckDuckGo (tracker-blocklists) écartée : licence CC BY-NC-SA 4.0 (non commerciale, incompatible
+  avec la GPL et F-Droid), 87 % de ses domaines déjà bloqués, et le reste suppose des exceptions par app que le
+  bouclier, qui ne voit que le DNS, ne peut pas faire (`connect.facebook.net`, `s.pinimg.com`, Braze…).
 - `PrivacyScorer.withShield(coverage)` : bloqué × `scoring.shield.blocked_factor` (0,3), en partie ×
   `partial_factor` (0,7), le reste en entier. La pénalité des traqueurs, déjà plafonnée (60), baisse dans la même
   proportion que leur poids : sinon une app très pistée (16 traqueurs, ~120 pts) resterait au plafond même avec la

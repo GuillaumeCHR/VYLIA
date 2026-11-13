@@ -2,6 +2,7 @@ package com.vylia.privacy.domain.shield
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
+import org.junit.Assert.assertNotNull
 import org.junit.Test
 
 class ExodusShieldDomainsTest {
@@ -26,6 +27,16 @@ class ExodusShieldDomainsTest {
     fun `plateformes et signatures qui ne sont pas des domaines ecartees`() {
         assertFalse("facebook.com" in named)
         assertFalse(named.keys.any { it.contains('[') || it.contains('+') })
+    }
+
+    @Test
+    fun `serveurs connus deja bloques par la liste embarquee, jamais ajoutes a la liste`() {
+        val embedded = Blocklist.parse(java.io.File("src/main/assets/shield_blocklist.json").readText())
+        ExodusShieldDomains.KNOWN_SERVERS.forEach { (name, domains) ->
+            domains.forEach { assertNotNull("$name : $it", embedded.match(it)?.filter) }
+        }
+        val named = ExodusShieldDomains.named(emptyList())
+        assertFalse(ExodusShieldDomains.KNOWN_SERVERS.values.flatten().any { it in named })
     }
 
     @Test

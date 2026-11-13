@@ -16,8 +16,8 @@ enum class TrackerCoverage {
 }
 
 /**
- * Couverture des traqueurs par le bouclier, d'après leur `network_signature` Exodus et le complément maison
- * ([ExodusShieldDomains.EXTRA]). Une partie de signature qui n'est pas un nom de domaine (adresse IP, expression
+ * Couverture des traqueurs par le bouclier, d'après leur `network_signature` Exodus, le complément maison
+ * ([ExodusShieldDomains.EXTRA]) et les serveurs connus ([ExodusShieldDomains.KNOWN_SERVERS]). Une partie de signature qui n'est pas un nom de domaine (adresse IP, expression
  * régulière) compte comme un serveur que le bouclier laisse passer : un SDK qui vise une IP lui échappe.
  */
 object TrackerCoverages {
@@ -34,6 +34,10 @@ object TrackerCoverages {
             tracker.networkSignature.split('|').filter { it.isNotEmpty() }.mapTo(set, ::signatureDomain)
         }
         ExodusShieldDomains.EXTRA.forEach { (name, value) -> parts.getOrPut(name) { LinkedHashSet() } += value.second }
+        ExodusShieldDomains.KNOWN_SERVERS.forEach { (name, domains) ->
+            // Ces serveurs remplacent les parties de signature qui ne sont pas des domaines (expression régulière).
+            parts.getOrPut(name) { LinkedHashSet() }.apply { remove(null); addAll(domains) }
+        }
         return parts.filterValues { it.isNotEmpty() }.mapValues { (_, domains) ->
             val blocked = domains.count { it != null && blocklist.match(it, filters) != null }
             when (blocked) {

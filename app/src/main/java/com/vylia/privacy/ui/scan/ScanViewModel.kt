@@ -34,6 +34,8 @@ import kotlinx.coroutines.Job
 import com.vylia.privacy.data.shield.ShieldExposureRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import com.vylia.privacy.domain.shield.TrackerCoverage
 import com.vylia.privacy.domain.scoring.PrivacyScorer
 import com.vylia.privacy.domain.usecase.scoreApp
@@ -261,8 +263,8 @@ class ScanViewModel(
      * Version de développement : chaque app utilisateur sans et avec le bouclier, qu'il filtre ou non, et la moyenne
      * de l'appareil dans les deux cas (`adb logcat -s VyliaShieldSim`).
      */
-    private fun logShieldSimulation() {
-        val exposure = shieldExposure.value ?: return
+    private fun logShieldSimulation() = viewModelScope.launch {
+        val exposure = shieldExposure.filterNotNull().first()
         val base = ruleMatrixRepository.current.value.scorer
         val apps = currentApps().filter { AppFilter.USER.matches(it.app) }
         val rows = apps.map { audited ->
@@ -276,7 +278,7 @@ class ScanViewModel(
             )
             without to with
         }
-        if (rows.isEmpty()) return
+        if (rows.isEmpty()) return@launch
         Log.d(SHIELD_SIM_TAG, "DEVICE\t${PrivacyScore.ofAverage(rows.map { it.first }.average()).value}\t" +
             "${PrivacyScore.ofAverage(rows.map { it.second }.average()).value}\t${rows.size}\tactive=${exposure.active}")
     }

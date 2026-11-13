@@ -67,7 +67,7 @@ class ExodusCategoryOverrides(private val context: Context) {
 
         /** Une liste non validée (en cours de révision) ne s'applique pas, comme dans les scripts du dépôt. */
         fun parse(text: String): Map<String, List<String>> {
-            val file = json.decodeFromString<FileContent>(text.removePrefix("﻿"))
+            val file = json.decodeFromString<FileContent>(text.removePrefix("\uFEFF"))
             if (!file.validated) return emptyMap()
             return file.categories.entries.asSequence().take(5_000).associate { (name, categories) ->
                 Untrusted.text(name, 100) to categories.take(10).map { Untrusted.text(it, 50) }

@@ -84,3 +84,8 @@ dependencies {
     testImplementation(testFixtures(project(":scoring")))
     testImplementation(libs.kotlinx.coroutines.test)
 }
+
+// Les tests lisent des assets directement sur le disque (src/main/assets) : Gradle doit les relancer quand l'un change.
+tasks.withType<Test>().configureEach {
+    inputs.dir("src/main/assets").withPropertyName("assets").withPathSensitivity(PathSensitivity.RELATIVE)
+}

@@ -30,4 +30,6 @@ dependencies {
 tasks.test {
     // Les tests lisent les règles et les données de l'app depuis la racine du dépôt.
     workingDir = rootProject.projectDir
+    // Ces fichiers sont lus directement sur le disque : Gradle doit relancer les tests quand l'un change.
+    inputs.dir(rootProject.file("app/src/main/assets")).withPropertyName("appAssets").withPathSensitivity(PathSensitivity.RELATIVE)
 }

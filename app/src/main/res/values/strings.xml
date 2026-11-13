@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings/generate.py : ne pas modifier. -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">VYLIA</string>
     <string name="app_tagline" translatable="false">privacy score &amp; manager</string>
 

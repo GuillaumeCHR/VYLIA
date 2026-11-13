@@ -47,7 +47,7 @@ class CsvExporterTest {
         permissionTitle = { "#$it" },
     )
 
-    private fun rows(csv: String) = csv.removePrefix("﻿").trimEnd().split("\r\n")
+    private fun rows(csv: String) = csv.removePrefix("\uFEFF").trimEnd().split("\r\n")
 
     @Test
     fun `exporte la taille reelle de la liste des traqueurs et leurs noms`() {
@@ -71,7 +71,7 @@ class CsvExporterTest {
     fun `echappe les guillemets et commence par un BOM UTF-8`() {
         val csv = CsvExporter.export(listOf(audited("Super \"App\", v2", TrackerAnalysis.NotAnalyzed, isSystemApp = true)), labels)
 
-        assertTrue(csv.startsWith("﻿\"Nom de l'application\""))
+        assertTrue(csv.startsWith("\uFEFF\"Nom de l'application\""))
         assertTrue(rows(csv)[1].startsWith("\"Super \"\"App\"\", v2\",\"com.example.app\",\"Système\""))
     }
 }

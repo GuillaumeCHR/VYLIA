@@ -28,7 +28,7 @@ object EchapIocParser {
     private val SUBKEY = Regex("^ {4}[a-z][a-z0-9_]*\\s*:")
 
     fun parse(text: String): List<Entry> {
-        val lines = text.removePrefix("﻿").lines()
+        val lines = text.removePrefix("\uFEFF").lines()
         require(lines.size <= MAX_LINES) { "fichier trop long" }
         val entries = mutableListOf<Entry>()
         var name: String? = null

@@ -68,7 +68,7 @@ class SupportResources(val version: Int, val resources: List<SupportResource>) {
 
         /** Lit le fichier en écartant toute entrée invalide : lien non HTTPS, numéro avec des lettres, texte démesuré… */
         fun parse(text: String): SupportResources {
-            val file = json.decodeFromString<FileContent>(text.removePrefix("﻿"))
+            val file = json.decodeFromString<FileContent>(text.removePrefix("\uFEFF"))
             val valid = file.resources.asSequence().take(MAX_RESOURCES).mapNotNull(::clean).distinctBy { it.id }.toList()
             return SupportResources(file.version, valid)
         }

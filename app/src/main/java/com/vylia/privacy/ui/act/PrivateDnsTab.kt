@@ -27,6 +27,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,7 +51,6 @@ import com.vylia.privacy.domain.act.localized
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.currentLocale
 import com.vylia.privacy.ui.settings.openUrl
-import java.util.Locale
 
 /**
  * Réduire › DNS privé : ce que c'est (et ce que ce n'est pas), les services proposés (liste de données, modifiable sans
@@ -66,8 +67,11 @@ internal fun PrivateDnsTab(
     shield: @Composable () -> Unit,
 ) {
     val language = currentLocale().language
-    // Région du téléphone (réglage de langue et région), jamais sa position.
-    val resolvers = catalogue.availableIn(Locale.getDefault().country)
+    // Région du téléphone (réglage de langue et région d'Android), jamais sa position. Lue dans la configuration du
+    // système : la langue choisie dans VYLIA n'a pas de région (« fr »), elle effacerait le pays.
+    val configuration = LocalConfiguration.current
+    val country = remember(configuration) { android.content.res.Resources.getSystem().configuration.locales[0]?.country.orEmpty() }
+    val resolvers = catalogue.availableIn(country)
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         // Le bouclier d'abord (le plus important, un geste suffit), puis la différence entre les deux outils et le DNS privé.
         item(key = "shield") { shield() }

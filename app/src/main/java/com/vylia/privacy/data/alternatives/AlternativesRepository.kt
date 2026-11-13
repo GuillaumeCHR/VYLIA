@@ -62,6 +62,6 @@ class AlternativesRepository(private val context: Context) {
         private const val MIN_GROUPS = 5
         private val json = Json { ignoreUnknownKeys = true }
 
-        fun parse(content: String): AlternativeCatalogue = json.decodeFromString(content.removePrefix("﻿"))
+        fun parse(content: String): AlternativeCatalogue = json.decodeFromString(content.removePrefix("\uFEFF"))
     }
 }

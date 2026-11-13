@@ -44,6 +44,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.vylia.privacy.R
+import com.vylia.privacy.BuildConfig
+import com.vylia.privacy.domain.act.ShieldLeak
+import com.vylia.privacy.domain.act.ShieldLeaks
+import com.vylia.privacy.domain.model.AuditedApp
+import com.vylia.privacy.domain.shield.TrackerCoverage
+import com.vylia.privacy.ui.components.currentLocale
+import com.vylia.privacy.ui.components.formatted
+import com.vylia.privacy.ui.shield.LocalOpenProtect
 import com.vylia.privacy.domain.act.RemovalSuggestion
 import com.vylia.privacy.domain.act.AppRevocations
 import com.vylia.privacy.domain.learn.PermissionGlossary
@@ -60,11 +68,19 @@ private const val PreviewCount = 8
  * Réduire : les actions à fort impact. D'abord les autorisations injustifiées à retirer (gain exact recalculé par le
  * moteur de score), puis les apps à supprimer, inutilisées ou intrusives.
  */
-/** Sous-onglets de Gérer : retirer des autorisations, supprimer des apps, remplacer une app. Mémorisé pour la session. */
+/**
+ * Sous-onglets de Gérer : retirer des autorisations, supprimer des apps, traqueurs qui passent malgré le bouclier
+ * (seulement avec le bouclier), remplacer une app. Mémorisé pour la session.
+ */
 enum class ManageSection(@param:StringRes val title: Int) {
     PERMISSIONS(R.string.reduce_tab_permissions),
     REMOVALS(R.string.reduce_tab_removals),
-    ALTERNATIVES(R.string.manage_tab_alternatives),
+    TRACKERS(R.string.reduce_tab_trackers),
+    ALTERNATIVES(R.string.manage_tab_alternatives);
+
+    companion object {
+        fun visible(shieldEnabled: Boolean): List<ManageSection> = if (shieldEnabled) entries else entries - TRACKERS
+    }
 }
 
 @Composable
@@ -75,12 +91,15 @@ internal fun ReduceTab(
     section: ManageSection,
     onSection: (ManageSection) -> Unit,
     alternatives: @Composable () -> Unit,
+    trackers: @Composable () -> Unit = {},
 ) {
+    val sections = ManageSection.visible(BuildConfig.SHIELD_ENABLED)
+    val current = section.takeIf { it in sections } ?: ManageSection.PERMISSIONS
     Column {
-        SecondaryTabRow(selectedTabIndex = section.ordinal) {
-            ManageSection.entries.forEach { entry ->
+        SecondaryTabRow(selectedTabIndex = sections.indexOf(current)) {
+            sections.forEach { entry ->
                 Tab(
-                    selected = section == entry,
+                    selected = current == entry,
                     onClick = { onSection(entry) },
                     text = {
                         Text(
@@ -93,9 +112,10 @@ internal fun ReduceTab(
                 )
             }
         }
-        when (section) {
+        when (current) {
             ManageSection.PERMISSIONS -> RevocationsList(revocations)
             ManageSection.REMOVALS -> RemovalsList(removals, usage)
+            ManageSection.TRACKERS -> trackers()
             ManageSection.ALTERNATIVES -> alternatives()
         }
     }
@@ -139,6 +159,98 @@ private fun RemovalsList(removals: List<RemovalSuggestion>, usage: UsageState) {
 }
 
 @OptIn(ExperimentalLayoutApi::class)
+/**
+ * Gérer › Traqueurs : les apps dont des traqueurs passent malgré le bouclier, la plus exposée d'abord. [leaks] `null` :
+ * la couverture des traqueurs n'est pas encore calculée. [hasAlternative] : une alternative est proposée pour l'app.
+ */
+@Composable
+internal fun LeaksList(
+    leaks: List<ShieldLeak>?,
+    shieldActive: Boolean,
+    analyzing: Boolean,
+    hasAlternative: (AuditedApp) -> Boolean,
+    onAlternatives: () -> Unit,
+) {
+    var all by rememberSaveable { mutableStateOf(false) }
+    if (leaks == null) {
+        ActPlaceholder(null)
+        return
+    }
+    val trackers = ShieldLeaks.distinctTrackers(leaks)
+    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        item {
+            SectionHeader(
+                pluralStringResource(R.plurals.reduce_leaks_title, trackers, trackers) + " · " +
+                    pluralStringResource(R.plurals.reduce_revoke_apps, leaks.size, leaks.size),
+                stringResource(R.string.reduce_leaks_hint),
+            )
+        }
+        if (!shieldActive) item { ShieldOffCard() }
+        if (analyzing) item { Empty(stringResource(R.string.reduce_leaks_pending)) }
+        if (leaks.isEmpty() && !analyzing) item { Empty(stringResource(R.string.reduce_leaks_empty)) }
+        items(if (all) leaks else leaks.take(PreviewCount), key = { "leak-${it.app.app.packageName}" }) {
+            LeakRow(it, hasAlternative(it.app), onAlternatives)
+        }
+        if (leaks.size > PreviewCount) item { ShowAll(all, leaks.size) { all = !all } }
+    }
+}
+
+@Composable
+private fun ShieldOffCard() {
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text(stringResource(R.string.reduce_leaks_shield_off), style = MaterialTheme.typography.bodySmall)
+            LocalOpenProtect.current?.let { openProtect ->
+                Button(onClick = openProtect) { Text(stringResource(R.string.detail_shield_turn_on)) }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalLayoutApi::class)
+@Composable
+private fun LeakRow(leak: ShieldLeak, hasAlternative: Boolean, onAlternatives: () -> Unit) {
+    val manage = rememberManageApp()
+    val app = leak.app.app
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                AppIcon(app.icon, 32.dp)
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(app.label, fontWeight = FontWeight.Bold, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    Text(
+                        stringResource(R.string.reduce_leaks_passing, leak.penalty.formatted(currentLocale(), decimals = 1)),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.error,
+                    )
+                }
+                ScoreBadge(leak.app.score)
+            }
+            leak.trackers.forEach { tracker ->
+                Column {
+                    Text(tracker.name, style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        stringResource(
+                            when (tracker.coverage) {
+                                TrackerCoverage.PARTIAL -> R.string.tracker_shield_partial
+                                TrackerCoverage.UNKNOWN -> R.string.tracker_shield_unknown
+                                else -> R.string.tracker_shield_none
+                            },
+                        ),
+                        style = MaterialTheme.typography.labelSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            }
+            FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                // La fiche Android de l'app, où se trouve le bouton Désinstaller : VYLIA ne désinstalle rien lui-même.
+                OutlinedButton(onClick = { manage(leak.app) }) { Text(stringResource(R.string.reduce_action_uninstall)) }
+                if (hasAlternative) TextButton(onClick = onAlternatives) { Text(stringResource(R.string.reduce_action_alternatives)) }
+            }
+        }
+    }
+}
+
 @Composable
 private fun RevokeRow(entry: AppRevocations) {
     if (LocalCardStyle.current == CardStyle.COMPACT) {

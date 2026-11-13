@@ -10,8 +10,11 @@ class BackgroundScanner(
     private val fullAudit: FullAuditUseCase,
     private val completion: ScanCompletion,
     private val clock: () -> Long = System::currentTimeMillis,
+    /** Avant l'audit : attendre ce dont le score dépend (couverture des traqueurs par le bouclier). */
+    private val beforeScan: suspend () -> Unit = {},
 ) {
     suspend fun run() {
+        beforeScan()
         val apps = fullAudit()
         if (apps.isEmpty()) return
         completion.onFullScan(apps, background = true)

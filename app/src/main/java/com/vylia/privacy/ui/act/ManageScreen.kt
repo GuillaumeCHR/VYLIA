@@ -37,6 +37,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vylia.privacy.R
 import com.vylia.privacy.domain.act.ReductionAdvisor
+import com.vylia.privacy.domain.act.ShieldLeaks
 import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.domain.shield.ShieldStatus
@@ -86,6 +87,7 @@ fun ManageScreen(
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val loadedRules by viewModel.rules.collectAsStateWithLifecycle()
     val usage by actViewModel.usage.collectAsStateWithLifecycle()
+    val exposure by viewModel.shieldExposure.collectAsStateWithLifecycle()
 
     // Au retour des réglages Android, l'accès aux données d'utilisation vient peut-être d'être accordé.
     LifecycleResumeEffect(Unit) {
@@ -94,10 +96,17 @@ fun ManageScreen(
     }
 
     val userApps = remember(state.scannedApps) { state.scannedApps.filter { AppFilter.USER.matches(it.app) } }
-    val scorer = loadedRules.scorer
+    // Même moteur que les scores affichés (bouclier compris) : le gain annoncé part du score de l'app.
+    val scorer by viewModel.scorer.collectAsStateWithLifecycle()
     // Une carte par app : ses autorisations à retirer, et le score qu'elle aurait sans aucune d'elles.
     val revocations = remember(userApps, scorer, pinnedPackage) {
         ReductionAdvisor.byApp(ReductionAdvisor.revocations(userApps, scorer), scorer).pinnedFirst(pinnedPackage) { it.app.app.packageName }
+    }
+    // Traqueurs qui passent malgré le bouclier : `null` tant que leur couverture n'est pas calculée.
+    val leaks = remember(userApps, exposure, loadedRules) {
+        exposure?.let { e ->
+            ShieldLeaks.of(userApps, loadedRules.rules.scoring.shield, e::of).pinnedFirst(pinnedPackage) { it.app.app.packageName }
+        }
     }
     val removals = remember(userApps, usage, pinnedPackage) {
         ReductionAdvisor.removals(userApps, usage.lastUsed, System.currentTimeMillis()).pinnedFirst(pinnedPackage) { it.app.app.packageName }
@@ -111,6 +120,15 @@ fun ManageScreen(
             else -> ReduceTab(
                 revocations, removals, usage, section, onSection,
                 alternatives = { AlternativesTab(state.scannedApps, actViewModel.catalogue, onOpenWebApk) },
+                trackers = {
+                    LeaksList(
+                        leaks,
+                        shieldActive = exposure?.active == true,
+                        analyzing = state.isAnalyzingTrackers,
+                        hasAlternative = { actViewModel.catalogue.groupFor(it) != null },
+                        onAlternatives = { onSection(ManageSection.ALTERNATIVES) },
+                    )
+                },
             )
         }
     }

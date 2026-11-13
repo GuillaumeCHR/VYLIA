@@ -182,6 +182,7 @@ private fun ScoreTab(rules: Rules, stalkerwareCount: Int, targetedCount: Int) {
             item { ScoreOverview(rules) }
             item { PermissionScoring(rules) }
             item { TrackerScoring(rules) }
+            if (BuildConfig.SHIELD_ENABLED) item { ShieldScoring(rules) }
             item { CategoryResolution(rules) }
             item { SecurityCapabilities(rules, stalkerwareCount, targetedCount) }
             item { BadgesSummary() }
@@ -330,6 +331,7 @@ private fun ScoreOverview(rules: Rules) {
         Formula(stringResource(R.string.learn_overview_formula, scoring.base, scoring.permissionCap, scoring.trackerCap))
         Paragraph(stringResource(R.string.learn_overview_weighting))
         Paragraph(stringResource(R.string.learn_overview_caps, scoring.permissionCap, scoring.trackerCap))
+        MathDetail(rules)
         Subtitle(stringResource(R.string.learn_overview_grades))
         val bands = GradeBands.from(scoring)
         GradeScale(bands, base = scoring.base, modifier = Modifier.padding(vertical = 4.dp))
@@ -342,6 +344,38 @@ private fun ScoreOverview(rules: Rules) {
         BulletLine(stringResource(R.string.learn_zone_red))
         Paragraph(stringResource(R.string.learn_overview_rules))
     }
+}
+
+/** Le calcul complet en formules, chaque valeur lue dans les règles en vigueur (une règle importée s'y voit). */
+@Composable
+private fun MathDetail(rules: Rules) {
+    val scoring = rules.scoring
+    val locale = currentLocale()
+    fun n(value: Double) = value.formatted(locale, decimals = 2)
+    val c = scoring.contextMultipliers
+    Subtitle(stringResource(R.string.learn_math_title))
+    Paragraph(stringResource(R.string.learn_math_intro))
+    Formula(stringResource(R.string.learn_math_permissions, scoring.permissionCap))
+    BulletLine(
+        stringResource(
+            R.string.learn_math_context,
+            n(c.getValue("allowed")), n(c.getValue("tolerated")), n(c.getValue("unexpected")), n(c.getValue("forbidden")),
+        )
+    )
+    BulletLine(stringResource(R.string.learn_math_grant, n(scoring.declaredOnlyFactor)))
+    if (rules.permissionRules.groups.isNotEmpty()) BulletLine(stringResource(R.string.learn_math_groups))
+    Formula(stringResource(R.string.learn_math_trackers, scoring.trackerCap))
+    BulletLine(stringResource(R.string.learn_math_tracker_weight))
+    BulletLine(stringResource(R.string.learn_math_unanalyzed, scoring.unanalyzedPolicy.assumedTrackerPenalty))
+    if (BuildConfig.SHIELD_ENABLED) {
+        Formula(stringResource(R.string.learn_math_shield))
+        BulletLine(stringResource(R.string.learn_math_shield_f, n(scoring.shield.blockedFactor), n(scoring.shield.partialFactor)))
+    }
+    Formula(
+        if (BuildConfig.SHIELD_ENABLED) stringResource(R.string.learn_math_score, scoring.base)
+        else stringResource(R.string.learn_math_score, scoring.base).replace("T′", "T")
+    )
+    BulletLine(stringResource(R.string.learn_math_cap))
 }
 
 @Composable
@@ -416,6 +450,26 @@ private fun TrackerScoring(rules: Rules) {
         Paragraph(stringResource(R.string.learn_trackers_unanalyzed_text, policy.assumedTrackerPenalty, policy.gradeSuffix))
         Subtitle(stringResource(R.string.learn_limit_title))
         Paragraph(stringResource(R.string.learn_limit_text))
+    }
+}
+
+/** Règles du bouclier dans le score (scoring.shield) : part du poids d'un traqueur selon ce que le bouclier bloque. */
+@Composable
+private fun ShieldScoring(rules: Rules) {
+    val factors = rules.scoring.shield
+    val locale = currentLocale()
+    fun percent(factor: Double) = (factor * 100).formatted(locale, decimals = 0)
+    LearnCard(stringResource(R.string.learn_shield_title)) {
+        Paragraph(stringResource(R.string.learn_shield_what))
+        Paragraph(stringResource(R.string.learn_shield_how))
+        BulletLine(stringResource(R.string.learn_shield_blocked, percent(factors.blockedFactor)))
+        BulletLine(stringResource(R.string.learn_shield_partial, percent(factors.partialFactor)))
+        BulletLine(stringResource(R.string.learn_shield_none))
+        Paragraph(stringResource(R.string.learn_shield_why))
+        Subtitle(stringResource(R.string.learn_shield_limits_title))
+        Paragraph(stringResource(R.string.learn_shield_limits))
+        Paragraph(stringResource(R.string.learn_shield_cap, rules.scoring.trackerCap))
+        Paragraph(stringResource(R.string.learn_shield_off))
     }
 }
 

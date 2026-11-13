@@ -18,9 +18,9 @@
     <string name="score_out_of">/100</string>
     <string name="header_title">Score de confidentialité</string>
     <string name="header_subtitle_user">Moyenne de vos %1$d applications</string>
-    <string name="header_shield_active">🧿 Avec le bouclier : %1$d/100</string>
+    <string name="header_shield_active">🧿 Bouclier actif · sans lui : %1$d/100</string>
     <string name="header_shield_inactive">🧿 Si vous activez le bouclier : %1$d/100</string>
-    <string name="header_shield_hint">Votre score ne change pas : les traqueurs restent dans vos apps. C\'est ce qui sort encore de ce téléphone.</string>
+    <string name="header_shield_hint">Bouclier actif, le score compte ce qui sort encore de ce téléphone : un traqueur bloqué compte encore pour une part de son poids, car il reste dans l\'app.</string>
     <string name="header_subtitle_system">Moyenne des %1$d applications système</string>
     <string name="header_subtitle_all">Moyenne de vos %1$d applications, dont %2$d système</string>
     <string name="risk_low">Faible risque</string>
@@ -91,9 +91,9 @@
     <string name="detail_trackers_section">Traqueurs (%1$d)</string>
     <string name="detail_trackers_not_analyzed">Non analysés pour l\'instant.</string>
     <string name="detail_no_tracker">Aucun traqueur connu détecté.</string>
-    <string name="detail_shield_active">🧿 Avec le bouclier : %1$d/100 (%2$s)</string>
+    <string name="detail_shield_active">🧿 Bouclier actif · sans lui : %1$d/100 (%2$s)</string>
     <string name="detail_shield_inactive">🧿 Si vous activez le bouclier : %1$d/100 (%2$s)</string>
-    <string name="detail_shield_hint">Le score de l\'app ne change pas : ses traqueurs restent dans l\'app et collectent toujours sur le téléphone. C\'est ce qui sort encore de ce téléphone : un traqueur bloqué compte encore pour une part de son poids.</string>
+    <string name="detail_shield_hint">Bouclier actif, le score compte ce qui sort encore de ce téléphone. Un traqueur bloqué compte encore pour une part de son poids : il reste dans l\'app et collecte toujours sur le téléphone. Le score sans bouclier est celui du classement public.</string>
     <string name="detail_shield_none">🧿 Le bouclier ne bloque aucun traqueur de cette app.</string>
     <string name="detail_shield_turn_on">Activer le bouclier</string>
     <string name="tracker_shield_blocked">Bloqué par le bouclier</string>
@@ -142,6 +142,7 @@
     <string name="cause_trackers">%1$s : %2$s ajouté par une mise à jour (score %3$d)</string>
     <string name="cause_security">%1$s : %2$s (score %3$d)</string>
     <string name="cause_rules">Mise à jour des règles de score</string>
+    <string name="cause_shield_off">Bouclier arrêté : les traqueurs qu\'il bloquait passent de nouveau</string>
     <string name="cause_spread">Baisse répartie sur plusieurs apps</string>
     <string name="cause_databases">Mise à jour des bases : traqueurs ou motifs de sécurité nouvellement connus dans %1$s apps qui n\'ont pas changé</string>
     <string name="tracking_threshold_active">Alerte active · seuil %1$d · score actuel %2$d</string>
@@ -250,6 +251,7 @@
     <string name="reduce_tab_permissions">Permissions</string>
     <string name="reduce_tab_removals">Apps</string>
     <string name="manage_tab_alternatives">Alternatives</string>
+    <string name="reduce_tab_trackers">Traqueurs</string>
     <string name="manage_tab_webapk">WebAPK</string>
     <string name="webapk_intro_title">La version web, installée comme une app</string>
     <string name="webapk_intro">Beaucoup de services existent aussi en site web. Votre navigateur peut l\'installer sur l\'écran d\'accueil : il a alors son icône et s\'ouvre en plein écran, comme une app. C\'est un WebAPK.</string>
@@ -427,6 +429,12 @@
     <string name="manage_subtitle">Réduire votre exposition : permissions à retirer, apps à supprimer, alternatives. Les apps au score le plus bas d\'abord.</string>
     <string name="reduce_action_permissions">Gérer les permissions</string>
     <string name="reduce_action_uninstall">Désinstaller</string>
+    <string name="reduce_leaks_hint">Le bouclier ne peut pas les arrêter : serveur partagé avec un service essentiel (Google, Facebook…), adresse IP fixe, ou aucun serveur connu. Seules la désinstallation de l\'app ou une alternative les retirent.</string>
+    <string name="reduce_leaks_empty">Le bouclier bloque tous les traqueurs connus de vos apps.</string>
+    <string name="reduce_leaks_pending">Analyse des traqueurs en cours…</string>
+    <string name="reduce_leaks_shield_off">Le bouclier est arrêté : cette liste suppose qu\'il est activé. Activez-le pour bloquer les autres traqueurs de vos apps.</string>
+    <string name="reduce_leaks_passing">−%1$s pts passent encore</string>
+    <string name="reduce_action_alternatives">Voir les alternatives</string>
     <string name="protect_subtitle">Réduire votre exposition sans modifier vos apps : le bouclier, un VPN anti-traqueurs local, filtre les traqueurs sur tout l\'appareil, et la version web d\'un service remplace son app et les traqueurs intégrés à son code.</string>
     <string name="celebrate_device_score">Score de vos apps</string>
     <string name="celebrate_progress_none">Votre évolution s\'affichera après quelques jours de scans.</string>
@@ -451,6 +459,11 @@
         <item quantity="one">dans %1$d app</item>
         <item quantity="many">dans %1$d apps</item>
         <item quantity="other">dans %1$d apps</item>
+    </plurals>
+    <plurals name="reduce_leaks_title">
+        <item quantity="one">%1$d traqueur passe malgré le bouclier</item>
+        <item quantity="many">%1$d traqueurs passent malgré le bouclier</item>
+        <item quantity="other">%1$d traqueurs passent malgré le bouclier</item>
     </plurals>
     <plurals name="reduce_remove_title">
         <item quantity="one">Supprimer %1$d app</item>
@@ -511,8 +524,21 @@
     <string name="learn_overview_intro">Chaque application part de %1$d points. Elle en perd selon les autorisations qu\'elle demande et les traqueurs qu\'elle embarque, et des capacités d\'espionnage peuvent plafonner son score. Tout est calculé sur votre téléphone, sans connexion.</string>
     <string name="learn_overview_rules">L\'algorithme est open source et les règles qu\'il applique sont dans Paramètres › Règles de score : vous pouvez les exporter, les modifier et les réimporter.</string>
     <string name="learn_overview_formula">Score = %1$d − permissions (max %2$d) − traqueurs (max %3$d)</string>
-    <string name="learn_overview_weighting">La pénalité des permissions n\'est pas la même pour toutes les apps : elle dépend de ce à quoi sert l\'app. Le GPS ne coûte rien à une app de navigation, qui en a besoin, mais coûte cher à un jeu, qui n\'en a aucune raison (détails en 1 et 3 ci-dessous).</string>
+    <string name="learn_overview_weighting">La pénalité des permissions n\'est pas la même pour toutes les apps : elle dépend de ce à quoi sert l\'app. Le GPS ne coûte rien à une app de navigation, qui en a besoin, mais coûte cher à un jeu, qui n\'en a aucune raison (détails en 1 et 4 ci-dessous).</string>
     <string name="learn_overview_caps">Les plafonds évitent qu\'un seul aspect écrase tout : une app ne perd jamais plus de %1$d points pour ses permissions ni plus de %2$d pour ses traqueurs.</string>
+    <string name="learn_math_title">Le calcul détaillé</string>
+    <string name="learn_math_intro">Pour chaque app, avec les valeurs des règles en vigueur :</string>
+    <string name="learn_math_permissions">P = min(%1$d, Σ poids × contexte × octroi)</string>
+    <string name="learn_math_context">contexte : %1$s justifiée, %2$s tolérée, %3$s inattendue, %4$s interdite pour la catégorie de l\'app</string>
+    <string name="learn_math_grant">octroi : 1 si accordée, %1$s si seulement déclarée</string>
+    <string name="learn_math_groups">permissions liées (ex. position précise et approximative) : seule la plus lourde compte en entier, les autres pour rien ou pour moitié selon le groupe</string>
+    <string name="learn_math_trackers">T = min(%1$d, Σ poids de chaque traqueur)</string>
+    <string name="learn_math_tracker_weight">poids d\'un traqueur : le plus élevé de ses catégories (voir 2)</string>
+    <string name="learn_math_unanalyzed">traqueurs pas encore analysés : T = %1$d</string>
+    <string name="learn_math_shield">T′ = T × Σ (poids × f) ÷ Σ poids</string>
+    <string name="learn_math_shield_f">f : %1$s bloqué, %2$s bloqué en partie, 1 sinon ; bouclier arrêté : T′ = T (voir 3)</string>
+    <string name="learn_math_score">Score = min(C, arrondi(%1$d − P − T′)), jamais sous 0</string>
+    <string name="learn_math_cap">C : le plus bas plafond des capacités d\'espionnage de l\'app, aucun sinon (voir 5)</string>
     <string name="learn_overview_grades">La note et le risque associé</string>
     <string name="learn_overview_partial">Un « %1$s » après la note (ex. %2$s) signale un score provisoire : les traqueurs n\'ont pas encore pu être analysés.</string>
     <string name="learn_overview_zones">Les zones de couleur</string>
@@ -549,9 +575,20 @@
     <string name="learn_trackers_cap">Les traqueurs ne peuvent pas faire perdre plus de %1$d points au total.</string>
     <string name="learn_trackers_unanalyzed_title">Si l\'analyse n\'a pas pu se faire</string>
     <string name="learn_trackers_unanalyzed_text">En attendant l\'analyse (ou si l\'app n\'a pas pu être lue), on retire forfaitairement %1$d points et la note porte un « %2$s ».</string>
+    <string name="learn_shield_title">3. Le bouclier dans le score</string>
+    <string name="learn_shield_what">Quand le bouclier VYLIA est actif (onglet Filtrer), le score des apps compte ce qui sort encore de ce téléphone. Les permissions ne changent pas : le bouclier n\'agit que sur les traqueurs.</string>
+    <string name="learn_shield_how">Pour chaque traqueur, VYLIA compare ses serveurs connus (base Exodus Privacy) à la liste du bouclier et aux filtrages activés. Chaque traqueur compte alors pour une part de son poids :</string>
+    <string name="learn_shield_blocked">Bloqué (tous ses serveurs) : %1$s %% de son poids</string>
+    <string name="learn_shield_partial">Bloqué en partie : %1$s %% de son poids</string>
+    <string name="learn_shield_none" formatted="false">Non bloqué, ou aucun serveur connu : 100 % de son poids</string>
+    <string name="learn_shield_why">Un traqueur bloqué compte encore : il reste dans l\'app et collecte toujours sur le téléphone, il envoie plus tard ce qu\'il a gardé (bouclier en pause, téléphone redémarré, autre VPN), et certaines apps contournent le DNS (adresse IP fixe, DNS chiffré).</string>
+    <string name="learn_shield_limits_title">Pourquoi certains traqueurs passent</string>
+    <string name="learn_shield_limits">VYLIA repère un traqueur par son code dans l\'app ; le bouclier le bloque par le nom des serveurs qu\'il contacte. Les deux ne sont pas liés : le bouclier n\'arrête qu\'un traqueur dont les serveurs sont connus. Certains n\'en ont aucun de répertorié, d\'autres passent par des serveurs partagés avec des services essentiels (Google, Facebook…), impossibles à bloquer sans casser des apps.</string>
+    <string name="learn_shield_cap">La pénalité des traqueurs, déjà plafonnée à %1$d points, baisse dans la même proportion que leur poids : une app très pistée profite aussi du bouclier.</string>
+    <string name="learn_shield_off">Bouclier arrêté, en pause ou contourné (DNS privé, autre VPN) : les scores sont ceux sans le bouclier. Le score sans bouclier est aussi celui du classement public, indiqué sur la fiche de chaque app.</string>
     <string name="learn_limit_title">Limite</string>
     <string name="learn_limit_text">La détection repose sur des noms de code connus. Un traqueur caché (code obfusqué) ou trop récent peut passer inaperçu : « aucun traqueur détecté » n\'est pas une garantie absolue.</string>
-    <string name="learn_category_title">3. La catégorie de l\'app</string>
+    <string name="learn_category_title">4. La catégorie de l\'app</string>
     <string name="learn_category_text">Ce qui est « justifié » dépend de ce que fait l\'app : le micro est normal pour Shazam, pas pour une calculatrice. VYLIA classe chaque app dans l\'une de %1$d catégories, d\'après une liste d\'apps connues ou, à défaut, la catégorie déclarée par l\'éditeur.</string>
     <string name="learn_category_default">Une app « Non catégorisée » n\'a aucun passe-droit : chaque permission sensible y est considérée comme inattendue.</string>
     <string name="learn_category_grid_title">La grille, catégorie par catégorie</string>
@@ -561,7 +598,7 @@
     <string name="learn_category_forbidden">Interdites (%1$d)</string>
     <string name="learn_category_exceptions">Quelques apps connues ont leur propre exception : %1$s.</string>
     <string name="learn_category_exception">%1$s (%2$s justifié)</string>
-    <string name="learn_security_title">4. Les capacités d\'espionnage</string>
+    <string name="learn_security_title">5. Les capacités d\'espionnage</string>
     <string name="learn_security_text">Certaines combinaisons sont typiques des logiciels espions : lire ce que vous tapez, enregistrer en arrière-plan, cacher son icône avec des accès sensibles, lire l\'écran et dessiner par-dessus les autres apps. Elles décrivent ce qu\'une app PEUT faire, pas ce qu\'elle fait, mais elles plafonnent son score :</string>
     <string name="learn_security_line">%1$s : %2$d au plus</string>
     <string name="learn_stalkerware_title">Les stalkerwares connus (base d\'Echap)</string>
@@ -572,7 +609,7 @@
     <string name="learn_mvt_title">Les logiciels espions de surveillance ciblée (MVT)</string>
     <string name="learn_mvt_text">Des logiciels espions comme Pegasus, Predator ou NoviSpy sont vendus à des États pour surveiller des journalistes, militants ou avocats. VYLIA compare aussi chaque app aux indicateurs publics de MVT, l\'outil du Security Lab d\'Amnesty International : %1$d campagnes sont reconnues par leurs noms de paquet ou leurs certificats de signature. Une app reconnue tombe à 0, comme un stalkerware. Quand il est actif, le bouclier bloque aussi les domaines de ces campagnes.</string>
     <string name="learn_mvt_help">Si VYLIA en trouve un, ne le désinstallez pas tout de suite : c\'est une preuve. Les logiciels espions de type Pegasus ne laissent souvent aucune app visible : VYLIA ne peut pas les détecter, et un score correct ne prouve pas qu\'un appareil est sain. Voir « Si vous pensez être surveillé·e » dans Comment ça marche.</string>
-    <string name="learn_badges_title">5. Les badges</string>
+    <string name="learn_badges_title">6. Les badges</string>
     <string name="learn_badges_text">Les badges résument d\'un coup d\'œil ce qu\'une app fait bien et ce qui mérite votre attention. Ils ne changent pas le score. Chaque badge et sa règle sont dans l\'onglet Badges.</string>
     <string name="learn_grade_line">%1$s · %2$d à %3$d</string>
     <string name="learn_grade_a">Peu ou pas de permissions sensibles, et elles servent la fonction de l\'app ; aucun traqueur ou presque.</string>

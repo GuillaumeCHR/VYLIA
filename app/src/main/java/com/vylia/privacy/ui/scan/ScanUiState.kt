@@ -36,11 +36,12 @@ data class ScanUiState(
 )
 
 /**
- * Exposition d'un groupe d'apps avec le bouclier : moyenne de l'exposition de chaque app ([ShieldedScore], son score
- * si ses traqueurs ne sont pas analysés), et traqueurs distincts que le bouclier bloque. Le score de l'appareil, lui,
- * ne change pas.
+ * Le bouclier pour un groupe d'apps, à côté de son score : bouclier actif, les scores sont déjà ceux avec lui et
+ * [score] est la moyenne sans lui ; arrêté, [score] est la moyenne qu'il donnerait. Une app dont les traqueurs ne
+ * sont pas analysés garde son score. Aussi : les traqueurs distincts que le bouclier bloque.
  */
 data class ShieldSummary(
+    /** Bouclier actif : score sans lui ; sinon : score avec lui. */
     val score: PrivacyScore,
     /** Traqueurs distincts bloqués en entier, en partie, et en tout dans ces apps. */
     val blocked: Int,
@@ -56,7 +57,9 @@ data class ShieldSummary(
             shielded: (AuditedApp) -> ShieldedScore?,
         ): ShieldSummary? {
             if (apps.isEmpty()) return null
-            val score = PrivacyScore.ofAverage(apps.map { shielded(it)?.score ?: it.score.value }.average())
+            val score = PrivacyScore.ofAverage(
+                apps.map { if (exposure.active) it.result.scoreWithoutShield else shielded(it)?.score ?: it.score.value }.average(),
+            )
             val names = apps.flatMapTo(HashSet()) { app -> app.result.trackerFindings.map { it.name } }
             val coverage = names.map(exposure::of)
             return ShieldSummary(

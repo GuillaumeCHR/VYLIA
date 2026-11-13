@@ -46,12 +46,27 @@ class ShieldedScoreTest {
     }
 
     @Test
-    fun `plafond des traqueurs applique apres les facteurs`() {
-        val many = (1..12).map { Tracker("Ads$it", setOf("Advertisement")) } // 144, plafonné à 60
+    fun `traqueurs au plafond, le bouclier baisse la penalite plafonnee dans la meme proportion`() {
+        val many = (1..16).map { Tracker("Ads$it", setOf("Advertisement")) } // 192, plafonné à 60
         val result = scorer.score(scan(many))
-        val shielded = scorer.shielded(result) { ShieldCoverage.PARTIAL }!!
-        assertEquals(rules.scoring.trackerCap.toDouble(), shielded.trackerPenalty, 1e-9)
-        assertEquals(result.score, shielded.score)
+        val blocked = (1..7).map { "Ads$it" }.toSet()
+        val shielded = scorer.shielded(result) { if (it in blocked) ShieldCoverage.BLOCKED else ShieldCoverage.NONE }!!
+        val share = (7 * 12 * rules.scoring.shield.blockedFactor + 9 * 12) / (16 * 12)
+        assertEquals(rules.scoring.trackerCap * share, shielded.trackerPenalty, 1e-9)
+        assertTrue(shielded.score > result.score)
+    }
+
+    @Test
+    fun `moteur avec bouclier, le score de l'app est celui avec le bouclier`() {
+        val coverage = mapOf("Ads" to ShieldCoverage.BLOCKED)
+        val plain = scorer.score(scan(listOf(ads, stats)))
+        val result = scorer.withShield { coverage[it] ?: ShieldCoverage.NONE }.score(scan(listOf(ads, stats)))
+        assertEquals(scorer.shielded(plain) { coverage[it] ?: ShieldCoverage.NONE }!!.score, result.score)
+        assertEquals(plain.score, result.scoreWithoutShield)
+        assertEquals(plain.grade, result.gradeWithoutShield)
+        assertTrue(result.score > plain.score)
+        assertEquals(result.shield, scorer.shielded(result) { ShieldCoverage.NONE })
+        assertEquals(plain, scorer.withShield(null).score(scan(listOf(ads, stats))))
     }
 
     @Test

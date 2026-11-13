@@ -69,9 +69,9 @@ internal fun PrivateDnsTab(
     // Région du téléphone (réglage de langue et région), jamais sa position.
     val resolvers = catalogue.availableIn(Locale.getDefault().country)
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        // D'abord la différence entre les deux outils, puis le bouclier (un geste suffit), puis le DNS privé.
-        item(key = "intro") { IntroCard() }
+        // Le bouclier d'abord (le plus important, un geste suffit), puis la différence entre les deux outils et le DNS privé.
         item(key = "shield") { shield() }
+        item(key = "intro") { IntroCard() }
         item { StatusCard(status, catalogue, shieldOn) }
         item { WhyCard() }
         item { ExplanationCard() }

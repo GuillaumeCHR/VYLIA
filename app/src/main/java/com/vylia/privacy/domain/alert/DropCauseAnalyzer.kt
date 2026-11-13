@@ -27,7 +27,8 @@ import com.vylia.privacy.domain.usecase.scoreWithoutTrackers
  *    différence est la contribution de la mise à jour des bases ([DropCause.Type.DATABASES_UPDATED]).
  * Le changement qui contribue le plus l'emporte. Si les règles de score ont changé et qu'aucun changement d'app
  * n'explique au moins la moitié de la baisse, la cause est la mise à jour des règles ; sans changement d'app qui
- * fasse baisser la moyenne, la baisse est répartie sur plusieurs apps.
+ * fasse baisser la moyenne, la baisse est répartie sur plusieurs apps. De même pour le bouclier : arrêté depuis le
+ * point précédent, il est la cause si aucun changement d'app n'explique au moins la moitié de la baisse.
  */
 object DropCauseAnalyzer {
 
@@ -109,7 +110,9 @@ object DropCauseAnalyzer {
         val best = candidates.maxByOrNull { it.contribution }?.takeIf { it.contribution > 0.0 }
         val drop = previous.average - average
         val rulesChanged = previous.rules.isNotEmpty() && rules.isNotEmpty() && previous.rules != rules
+        val shieldOff = HistoryRecorder.shieldTurnedOff(previous, databases)
         val cause = when {
+            shieldOff && (best == null || best.contribution < drop / 2) -> DropCause(DropCause.Type.SHIELD_OFF)
             best?.cause?.type == DropCause.Type.DATABASES_UPDATED -> best.cause
             rulesChanged && (best == null || best.contribution < drop / 2) -> DropCause(DropCause.Type.RULES_UPDATED)
             best != null -> best.cause

@@ -72,6 +72,7 @@ class ThresholdNotifications(private val context: Context) : ThresholdNotifier {
                 .putExtra(MainActivity.EXTRA_PIN_PACKAGE, cause.pinnedPackage)
             AlertTarget.APP_DETAIL -> intent.putExtra(MainActivity.EXTRA_OPEN_PACKAGE, cause.packageName)
             AlertTarget.TRACKING -> intent.putExtra(MainActivity.EXTRA_OPEN_TAB, MainActivity.TAB_TRACKING)
+            AlertTarget.PROTECT -> intent.putExtra(MainActivity.EXTRA_OPEN_TAB, MainActivity.TAB_PROTECT)
         }
     }
 

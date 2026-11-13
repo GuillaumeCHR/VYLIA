@@ -20,9 +20,9 @@
     <string name="score_out_of">/100</string>
     <string name="header_title">Privacy score</string>
     <string name="header_subtitle_user">Average of your %1$d apps</string>
-    <string name="header_shield_active">🧿 With the Shield: %1$d/100</string>
+    <string name="header_shield_active">🧿 Shield on · without it: %1$d/100</string>
     <string name="header_shield_inactive">🧿 If you turn on the Shield: %1$d/100</string>
-    <string name="header_shield_hint">Your score does not change: the trackers stay in your apps. This is what still gets out from this phone.</string>
+    <string name="header_shield_hint">With the Shield on, the score counts what still gets out from this phone: a blocked tracker still counts for part of its weight, since it stays in the app.</string>
     <string name="header_subtitle_system">Average of the %1$d system apps</string>
     <string name="header_subtitle_all">Average of your %1$d apps, %2$d of them system apps</string>
     <string name="risk_low">Low risk</string>
@@ -90,9 +90,9 @@
     <string name="detail_trackers_section">Trackers (%1$d)</string>
     <string name="detail_trackers_not_analyzed">Not analysed yet.</string>
     <string name="detail_no_tracker">No known tracker detected.</string>
-    <string name="detail_shield_active">🧿 With the Shield: %1$d/100 (%2$s)</string>
+    <string name="detail_shield_active">🧿 Shield on · without it: %1$d/100 (%2$s)</string>
     <string name="detail_shield_inactive">🧿 If you turn on the Shield: %1$d/100 (%2$s)</string>
-    <string name="detail_shield_hint">The app\'s score does not change: its trackers stay inside it and keep collecting on the phone. This is what still gets out from this phone: a blocked tracker still counts for a share of its weight.</string>
+    <string name="detail_shield_hint">With the Shield on, the score counts what still gets out from this phone. A blocked tracker still counts for part of its weight: it stays in the app and keeps collecting on the phone. The score without the Shield is the one of the public ranking.</string>
     <string name="detail_shield_none">🧿 The Shield does not block any of this app\'s trackers.</string>
     <string name="detail_shield_turn_on">Turn on the Shield</string>
     <string name="tracker_shield_blocked">Blocked by the Shield</string>
@@ -139,6 +139,7 @@
     <string name="cause_trackers">%1$s: %2$s added by an update (score %3$d)</string>
     <string name="cause_security">%1$s: %2$s (score %3$d)</string>
     <string name="cause_rules">Scoring rules update</string>
+    <string name="cause_shield_off">Shield turned off: trackers it was blocking get through again</string>
     <string name="cause_spread">Drop spread over several apps</string>
     <string name="cause_databases">Database update: trackers or security patterns newly known in %1$s apps that did not change</string>
     <string name="tracking_threshold_active">Alert on · threshold %1$d · current score %2$d</string>
@@ -243,6 +244,7 @@
     <string name="reduce_tab_permissions">Permissions</string>
     <string name="reduce_tab_removals">Apps</string>
     <string name="manage_tab_alternatives">Alternatives</string>
+    <string name="reduce_tab_trackers">Trackers</string>
     <string name="manage_tab_webapk">WebAPK</string>
     <string name="webapk_intro_title">The web version, installed like an app</string>
     <string name="webapk_intro">Many services also exist as a website. Your browser can install it on the home screen: it then has its own icon and opens full screen, like an app. This is a WebAPK.</string>
@@ -420,6 +422,12 @@
     <string name="manage_subtitle">Reduce your exposure: permissions to revoke, apps to remove, alternatives. The apps with the lowest score come first.</string>
     <string name="reduce_action_permissions">Manage permissions</string>
     <string name="reduce_action_uninstall">Uninstall</string>
+    <string name="reduce_leaks_hint">The Shield cannot stop them: server shared with an essential service (Google, Facebook…), fixed IP address, or no known server. Only uninstalling the app or replacing it removes them.</string>
+    <string name="reduce_leaks_empty">The Shield blocks every known tracker of your apps.</string>
+    <string name="reduce_leaks_pending">Tracker analysis in progress…</string>
+    <string name="reduce_leaks_shield_off">The Shield is off: this list assumes it is on. Turn it on to block the other trackers of your apps.</string>
+    <string name="reduce_leaks_passing">−%1$s pts still get through</string>
+    <string name="reduce_action_alternatives">See alternatives</string>
     <string name="protect_subtitle">Reduce your exposure without changing your apps: the shield, a local anti-tracker VPN, filters trackers across the whole device, and the web version of a service replaces its app and the trackers built into it.</string>
     <string name="celebrate_device_score">Your apps\' score</string>
     <string name="celebrate_progress_none">Your progress will show after a few days of scans.</string>
@@ -440,6 +448,10 @@
     <plurals name="reduce_revoke_apps">
         <item quantity="one">in %1$d app</item>
         <item quantity="other">in %1$d apps</item>
+    </plurals>
+    <plurals name="reduce_leaks_title">
+        <item quantity="one">%1$d tracker gets past the Shield</item>
+        <item quantity="other">%1$d trackers get past the Shield</item>
     </plurals>
     <plurals name="reduce_remove_title">
         <item quantity="one">Remove %1$d app</item>
@@ -492,8 +504,21 @@
     <string name="learn_overview_intro">Every app starts with %1$d points. It loses points for the permissions it requests and the trackers it embeds, and spying capabilities can cap its score. Everything is computed on your phone, offline.</string>
     <string name="learn_overview_rules">The algorithm is open source and the rules it applies are in Settings › Scoring rules: you can export them, edit them and import them back.</string>
     <string name="learn_overview_formula">Score = %1$d − permissions (max %2$d) − trackers (max %3$d)</string>
-    <string name="learn_overview_weighting">The permission penalty is not the same for every app: it depends on what the app is for. GPS costs nothing to a navigation app, which needs it, but costs a lot to a game, which has no reason to use it (details in 1 and 3 below).</string>
+    <string name="learn_overview_weighting">The permission penalty is not the same for every app: it depends on what the app is for. GPS costs nothing to a navigation app, which needs it, but costs a lot to a game, which has no reason to use it (details in 1 and 4 below).</string>
     <string name="learn_overview_caps">The caps keep a single aspect from crushing everything: an app never loses more than %1$d points for its permissions nor more than %2$d for its trackers.</string>
+    <string name="learn_math_title">The calculation, step by step</string>
+    <string name="learn_math_intro">For each app, with the values of the rules in force:</string>
+    <string name="learn_math_permissions">P = min(%1$d, Σ weight × context × grant)</string>
+    <string name="learn_math_context">context: %1$s justified, %2$s tolerated, %3$s unexpected, %4$s forbidden for the app\'s category</string>
+    <string name="learn_math_grant">grant: 1 if granted, %1$s if only declared</string>
+    <string name="learn_math_groups">related permissions (e.g. precise and approximate location): only the heaviest counts in full, the others count for nothing or for half depending on the group</string>
+    <string name="learn_math_trackers">T = min(%1$d, Σ weight of each tracker)</string>
+    <string name="learn_math_tracker_weight">weight of a tracker: the highest weight of its categories (see 2)</string>
+    <string name="learn_math_unanalyzed">trackers not analysed yet: T = %1$d</string>
+    <string name="learn_math_shield">T′ = T × Σ (weight × f) ÷ Σ weight</string>
+    <string name="learn_math_shield_f">f: %1$s blocked, %2$s partly blocked, 1 otherwise; Shield off: T′ = T (see 3)</string>
+    <string name="learn_math_score">Score = min(C, round(%1$d − P − T′)), never below 0</string>
+    <string name="learn_math_cap">C: the lowest cap of the app\'s spying capabilities, none otherwise (see 5)</string>
     <string name="learn_overview_grades">The grade and its risk level</string>
     <string name="learn_overview_partial">A “%1$s” after the grade (e.g. %2$s) marks a provisional score: the trackers could not be analysed yet.</string>
     <string name="learn_overview_zones">The colour zones</string>
@@ -530,9 +555,20 @@
     <string name="learn_trackers_cap">Trackers cannot cost more than %1$d points in total.</string>
     <string name="learn_trackers_unanalyzed_title">If the analysis could not be done</string>
     <string name="learn_trackers_unanalyzed_text">Until the analysis is done (or if the app could not be read), a flat %1$d points are deducted and the grade carries a “%2$s”.</string>
+    <string name="learn_shield_title">3. The Shield in the score</string>
+    <string name="learn_shield_what">When the VYLIA Shield is on (Filter tab), app scores count what still gets out from this phone. Permissions do not change: the Shield only acts on trackers.</string>
+    <string name="learn_shield_how">For each tracker, VYLIA compares its known servers (Exodus Privacy database) with the Shield\'s list and the filters switched on. Each tracker then counts for part of its weight:</string>
+    <string name="learn_shield_blocked">Blocked (all its servers): %1$s%% of its weight</string>
+    <string name="learn_shield_partial">Partly blocked: %1$s%% of its weight</string>
+    <string name="learn_shield_none" formatted="false">Not blocked, or no known server: 100% of its weight</string>
+    <string name="learn_shield_why">A blocked tracker still counts: it stays in the app and keeps collecting on the phone, it sends later what it kept (Shield paused, phone restarted, another VPN), and some apps bypass the DNS (fixed IP address, encrypted DNS).</string>
+    <string name="learn_shield_limits_title">Why some trackers get through</string>
+    <string name="learn_shield_limits">VYLIA finds a tracker by its code inside the app; the Shield blocks it by the name of the servers it contacts. The two are not linked: the Shield can only stop a tracker whose servers are known. Some have none listed, and others use servers shared with essential services (Google, Facebook…) that cannot be blocked without breaking apps.</string>
+    <string name="learn_shield_cap">The tracker penalty, already capped at %1$d points, goes down in the same proportion as their weight: an app with many trackers also benefits from the Shield.</string>
+    <string name="learn_shield_off">Shield off, paused or bypassed (private DNS, another VPN): scores are those without the Shield. The score without the Shield is also the one of the public ranking, shown on each app\'s sheet.</string>
     <string name="learn_limit_title">Limitation</string>
     <string name="learn_limit_text">Detection relies on known code names. A hidden (obfuscated) or very recent tracker can go unnoticed: “no tracker detected” is not an absolute guarantee.</string>
-    <string name="learn_category_title">3. The app\'s category</string>
+    <string name="learn_category_title">4. The app\'s category</string>
     <string name="learn_category_text">What is “justified” depends on what the app does: the microphone is normal for Shazam, not for a calculator. VYLIA puts each app into one of %1$d categories, based on a list of known apps or, failing that, the category declared by the publisher.</string>
     <string name="learn_category_default">An “Uncategorised” app gets no special treatment: every sensitive permission is considered unexpected.</string>
     <string name="learn_category_grid_title">The grid, category by category</string>
@@ -542,7 +578,7 @@
     <string name="learn_category_forbidden">Forbidden (%1$d)</string>
     <string name="learn_category_exceptions">A few known apps have their own exception: %1$s.</string>
     <string name="learn_category_exception">%1$s (%2$s justified)</string>
-    <string name="learn_security_title">4. Spying capabilities</string>
+    <string name="learn_security_title">5. Spying capabilities</string>
     <string name="learn_security_text">Some combinations are typical of spyware: reading what you type, recording in the background, hiding its icon with sensitive accesses, reading the screen and drawing over other apps. They describe what an app CAN do, not what it does, but they cap its score:</string>
     <string name="learn_security_line">%1$s: %2$d at most</string>
     <string name="learn_stalkerware_title">Known stalkerware (Echap\'s database)</string>
@@ -553,7 +589,7 @@
     <string name="learn_mvt_title">Targeted surveillance spyware (MVT)</string>
     <string name="learn_mvt_text">Spyware such as Pegasus, Predator or NoviSpy is sold to governments to watch journalists, activists or lawyers. VYLIA also compares each app with the public indicators of MVT, the tool of Amnesty International\'s Security Lab: %1$d campaigns are recognised by their package names or signing certificates. A recognised app drops to 0, like a stalkerware. When it is on, the shield also blocks the domains of these campaigns.</string>
     <string name="learn_mvt_help">If VYLIA finds one, don\'t uninstall it right away: it is evidence. Pegasus-type spyware often leaves no visible app: VYLIA cannot detect it, and a good score does not prove a device is safe. See “If you think you are being watched” in How it works.</string>
-    <string name="learn_badges_title">5. Badges</string>
+    <string name="learn_badges_title">6. Badges</string>
     <string name="learn_badges_text">Badges sum up at a glance what an app does well and what deserves your attention. They do not change the score. Every badge and its rule are in the Badges tab.</string>
     <string name="learn_grade_line">%1$s · %2$d to %3$d</string>
     <string name="learn_grade_a">Few or no sensitive permissions, and they serve the app\'s purpose; no trackers, or almost none.</string>

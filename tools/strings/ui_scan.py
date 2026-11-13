@@ -39,10 +39,10 @@ S = [
  ("detail_trackers_not_analyzed", "Not analysed yet.", "Non analysés pour l'instant."),
  ("detail_no_tracker", "No known tracker detected.", "Aucun traqueur connu détecté."),
  # Fiche : exposition avec le bouclier (le score de l'app ne change pas)
- ("detail_shield_active", "🧿 With the Shield: %1$d/100 (%2$s)", "🧿 Avec le bouclier : %1$d/100 (%2$s)"),
+ ("detail_shield_active", "🧿 Shield on · without it: %1$d/100 (%2$s)", "🧿 Bouclier actif · sans lui : %1$d/100 (%2$s)"),
  ("detail_shield_inactive", "🧿 If you turn on the Shield: %1$d/100 (%2$s)", "🧿 Si vous activez le bouclier : %1$d/100 (%2$s)"),
- ("detail_shield_hint", "The app's score does not change: its trackers stay inside it and keep collecting on the phone. This is what still gets out from this phone: a blocked tracker still counts for a share of its weight.",
-  "Le score de l'app ne change pas : ses traqueurs restent dans l'app et collectent toujours sur le téléphone. C'est ce qui sort encore de ce téléphone : un traqueur bloqué compte encore pour une part de son poids."),
+ ("detail_shield_hint", "With the Shield on, the score counts what still gets out from this phone. A blocked tracker still counts for part of its weight: it stays in the app and keeps collecting on the phone. The score without the Shield is the one of the public ranking.",
+  "Bouclier actif, le score compte ce qui sort encore de ce téléphone. Un traqueur bloqué compte encore pour une part de son poids : il reste dans l'app et collecte toujours sur le téléphone. Le score sans bouclier est celui du classement public."),
  ("detail_shield_none", "🧿 The Shield does not block any of this app's trackers.", "🧿 Le bouclier ne bloque aucun traqueur de cette app."),
  ("detail_shield_turn_on", "Turn on the Shield", "Activer le bouclier"),
  ("tracker_shield_blocked", "Blocked by the Shield", "Bloqué par le bouclier"),

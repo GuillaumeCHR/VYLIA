@@ -42,11 +42,11 @@ class ShieldSummaryTest {
 
     private val exposure = ShieldExposureRepository.Exposure(
         mapOf("Ads" to TrackerCoverage.BLOCKED, "Stats" to TrackerCoverage.PARTIAL),
-        active = true,
+        active = false,
     )
 
     @Test
-    fun `moyenne des expositions, score de l'app si non calculable, traqueurs distincts`() {
+    fun `bouclier arrete, moyenne qu'il donnerait, score de l'app si non calculable, traqueurs distincts`() {
         val a = audited(50, "Ads", "Stats")
         val b = audited(60, "Ads", "Maps")
         val c = audited(90)
@@ -58,6 +58,15 @@ class ShieldSummaryTest {
         assertEquals(1, summary.blocked)
         assertEquals(1, summary.partial)
         assertEquals(3, summary.trackers)
+    }
+
+    @Test
+    fun `bouclier actif, les scores sont deja avec lui, moyenne sans lui`() {
+        val a = audited(70, "Ads").let { it.copy(result = it.result.copy(scoreWithoutShield = 50)) }
+        val b = audited(90)
+        val summary = ShieldSummary.of(listOf(a, b), exposure.copy(active = true)) { null }!!
+        assertEquals(PrivacyScore.ofAverage((50 + 90) / 2.0), summary.score)
+        assertEquals(true, summary.active)
     }
 
     @Test

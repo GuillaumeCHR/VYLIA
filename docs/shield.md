@@ -101,25 +101,32 @@ Le réglage mobile l'emporte : un domaine présent dans les deux (Google AdMob, 
 mobile, passe quand le filtrage mobile est coupé. C'est ce qui permet à un joueur de garder le filtrage web sans
 pauses répétées. Au 2026-11-01 : 86 186 domaines web, 1 044 mobile.
 
-## Exposition avec le bouclier (fiche d'une app)
+## Le bouclier dans le score
 
-Le score d'une app ne change pas avec le bouclier : il note ce qu'elle embarque, et il est partagé avec le classement
-public. La fiche affiche à côté une **exposition avec le bouclier** : ce qui sort encore de ce téléphone.
+Bouclier actif (ni arrêté, ni en pause hors délai, ni contourné), le score de chaque app compte ce qui sort encore
+de ce téléphone ; le score sans bouclier reste affiché (fiche, en-tête d'Analyse) : c'est celui de l'app elle-même,
+comme dans le classement public. Les permissions ne changent pas.
 
 - Pour chaque traqueur, `TrackerCoverages` compare ses domaines (`network_signature` Exodus, plus le complément
   maison) à la liste en vigueur et aux filtrages actifs : **bloqué** (tous), **en partie**, **non bloqué**, ou
   **aucun serveur connu** (pas de signature réseau : 172 traqueurs Exodus sur 432 au 2026-11-13). Une partie de
   signature qui n'est pas un domaine (adresse IP) compte comme non bloquée ; un domaine de `NEVER_BLOCK` aussi.
-- `PrivacyScorer.shielded` recalcule seulement la part des traqueurs : bloqué × `scoring.shield.blocked_factor`
-  (0,3), en partie × `partial_factor` (0,7), le reste en entier ; plafond des traqueurs et plafond de sécurité comme
-  pour le score. Un traqueur bloqué compte encore : le SDK collecte toujours sur le téléphone, envoie plus tard ce
-  qu'il a gardé (pause, redémarrage, autre VPN), et certaines apps contournent le DNS.
-- Bouclier actif : « Avec le bouclier : 71/100 (B) ». Arrêté ou contourné : « Si vous activez le bouclier : … » et un
-  lien vers Se protéger. Recalculé quand la liste est recompilée (`ShieldController.listVersion`) ou qu'un filtrage
-  change, jamais pendant le filtrage.
-- Analyse (en-tête du score de l'appareil) : même ligne pour l'appareil, moyenne de l'exposition de chaque app (son
-  score si ses traqueurs ne sont pas analysés), arrondie comme le score de l'appareil, et nombre de traqueurs
-  distincts bloqués (`ShieldSummary`). Le score de l'appareil, le Suivi et les alertes de seuil ne changent pas.
+- `PrivacyScorer.withShield(coverage)` : bloqué × `scoring.shield.blocked_factor` (0,3), en partie ×
+  `partial_factor` (0,7), le reste en entier. La pénalité des traqueurs, déjà plafonnée (60), baisse dans la même
+  proportion que leur poids : sinon une app très pistée (16 traqueurs, ~120 pts) resterait au plafond même avec la
+  moitié bloquée. Plafond de sécurité comme pour le score. `ScoreResult.scoreWithoutShield` garde le score sans.
+  Un traqueur bloqué compte encore : le SDK collecte toujours sur le téléphone, envoie plus tard ce qu'il a gardé
+  (pause, redémarrage, autre VPN), et certaines apps contournent le DNS.
+- Un seul moteur partout (`AppContainer.scorer`, via `ShieldExposureRepository.apply`) : listes, fiche, gains de
+  Gérer, Suivi, alertes, scan de fond (qui attend la couverture, 10 s au plus). Activer, arrêter ou contourner le
+  bouclier renote les apps en mémoire, sans nouveau scan.
+- Suivi : l'état du bouclier est gardé avec chaque point (`databases["shield"]`, sans compter comme une mise à jour
+  des bases). Arrêté depuis le point précédent, il est la cause d'une baisse (`DropCause.Type.SHIELD_OFF`, la
+  notification ouvre Filtrer) si aucun changement d'app n'en explique la moitié.
+- Bouclier arrêté : la fiche et l'en-tête montrent « Si vous activez le bouclier : … » et un lien vers Se protéger.
+- Gérer › Traqueurs (`ShieldLeaks`) : les apps dont des traqueurs passent malgré le bouclier (en partie, pas du
+  tout, ou sans serveur connu), la plus exposée d'abord, avec Désinstaller et, s'il y en a, les alternatives.
+- Aide › Score : section « Le bouclier dans le score », facteurs lus dans les règles.
 - Les domaines viennent de la base Exodus téléchargée, sinon de `exodus_trackers.json`, qui garde désormais
   `network_signature`.
 

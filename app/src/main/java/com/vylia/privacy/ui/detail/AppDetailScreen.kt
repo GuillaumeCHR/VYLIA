@@ -131,7 +131,7 @@ fun AppDetailScreen(
                 )
                 GradeScale(gradeBands, base = scoreBase, marker = result.score)
                 if (shieldExposure != null && shielded != null && result.trackerFindings.isNotEmpty()) {
-                    ShieldedLine(shielded, active = shieldExposure.active, trackers = result.trackerFindings.size)
+                    ShieldedLine(shielded, result, trackers = result.trackerFindings.size)
                 }
             }
         }
@@ -172,7 +172,7 @@ fun AppDetailScreen(
                 }
                 Spacer(Modifier.height(4.dp))
                 PenaltyRow(stringResource(R.string.detail_permissions), result.permissionPenalty)
-                PenaltyRow(stringResource(R.string.detail_trackers), result.trackerPenalty.toDouble())
+                PenaltyRow(stringResource(R.string.detail_trackers), result.shield?.trackerPenalty ?: result.trackerPenalty.toDouble())
             }
         }
 
@@ -285,14 +285,17 @@ private fun SectionCard(title: String, content: @Composable () -> Unit) {
  * contourné, ce qu'il permettrait, avec un lien vers Se protéger.
  */
 @Composable
-private fun ShieldedLine(shielded: ShieldedScore, active: Boolean, trackers: Int) {
+private fun ShieldedLine(shielded: ShieldedScore, result: ScoreResult, trackers: Int) {
+    // Bouclier appliqué au score : la ligne donne le score sans lui ; sinon, celui qu'il donnerait.
+    val active = result.shield != null
     Spacer(Modifier.height(6.dp))
     if (shielded.blocked + shielded.partial == 0) {
         Text(stringResource(R.string.detail_shield_none), style = MaterialTheme.typography.bodyMedium)
         return
     }
     Text(
-        stringResource(if (active) R.string.detail_shield_active else R.string.detail_shield_inactive, shielded.score, shielded.grade),
+        if (active) stringResource(R.string.detail_shield_active, result.scoreWithoutShield, result.gradeWithoutShield)
+        else stringResource(R.string.detail_shield_inactive, shielded.score, shielded.grade),
         fontWeight = FontWeight.Bold,
         color = if (active) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
     )

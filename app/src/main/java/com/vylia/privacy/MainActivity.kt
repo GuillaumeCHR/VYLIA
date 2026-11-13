@@ -45,6 +45,7 @@ class MainActivity : AppCompatActivity() {
                 val openTab = when (tabExtra) {
                     TAB_MANAGE, "reduce" -> AppTab.MANAGE
                     TAB_TRACKING -> AppTab.ANALYZE
+                    TAB_PROTECT -> AppTab.PROTECT
                     else -> null
                 }
                 val manageSection = when (intent.getStringExtra(EXTRA_OPEN_SECTION)) {
@@ -83,6 +84,8 @@ class MainActivity : AppCompatActivity() {
         const val TAB_MANAGE = "manage"
         /** Analyser › Suivi. */
         const val TAB_TRACKING = "tracking"
+        /** Filtrer (le bouclier) : alerte de seuil après son arrêt. */
+        const val TAB_PROTECT = "protect"
         /** Sous-onglet de Gérer : [SECTION_APPS] ou [SECTION_PERMISSIONS]. */
         const val EXTRA_OPEN_SECTION = "com.vylia.privacy.OPEN_SECTION"
         const val SECTION_APPS = "apps"

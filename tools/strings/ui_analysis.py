@@ -8,6 +8,7 @@ S = [
  ("cause_trackers", "%1$s: %2$s added by an update (score %3$d)", "%1$s : %2$s ajouté par une mise à jour (score %3$d)"),
  ("cause_security", "%1$s: %2$s (score %3$d)", "%1$s : %2$s (score %3$d)"),
  ("cause_rules", "Scoring rules update", "Mise à jour des règles de score"),
+ ("cause_shield_off", "Shield turned off: trackers it was blocking get through again", "Bouclier arrêté : les traqueurs qu'il bloquait passent de nouveau"),
  ("cause_spread", "Drop spread over several apps", "Baisse répartie sur plusieurs apps"),
  ("cause_databases", "Database update: trackers or security patterns newly known in %1$s apps that did not change", "Mise à jour des bases : traqueurs ou motifs de sécurité nouvellement connus dans %1$s apps qui n'ont pas changé"),
  ("tracking_threshold_active", "Alert on · threshold %1$d · current score %2$d", "Alerte active · seuil %1$d · score actuel %2$d"),

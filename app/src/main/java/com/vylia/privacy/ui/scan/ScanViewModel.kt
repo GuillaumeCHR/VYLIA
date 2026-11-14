@@ -65,6 +65,8 @@ class ScanViewModel(
     private val currentScorer: () -> PrivacyScorer,
     /** Liste UAD-ng des apps préinstallées, lue au passage en mode Avancé. */
     private val preinstalled: PreinstalledRepository,
+    /** Score du téléphone recalculé sans nouveau scan (widget d'écran d'accueil). */
+    private val onDeviceScore: (Int) -> Unit = {},
 ) : ViewModel() {
 
     /** Ce que le bouclier bloque des traqueurs, `null` tant que ce n'est pas calculé (fiche d'une app). */
@@ -236,6 +238,7 @@ class ScanViewModel(
         val current = scanState.value as? ScanState.Success ?: return
         val removed = current.apps.find { it.app.packageName == packageName } ?: return
         scanState.value = ScanState.Success(current.apps - removed)
+        if (!isAnalyzingTrackers.value) (current.apps - removed).deviceScore()?.let { onDeviceScore(it.value) }
         if (!removed.app.isSystemApp) reward(badgesManager.onAppsRemoved(listOf(removed).toSnapshots()))
     }
 
@@ -246,7 +249,10 @@ class ScanViewModel(
     /** Remplace une app re-notée et conserve le tri "plus à risque d'abord". */
     private fun rescore(scorer: PrivacyScorer) {
         val current = scanState.value as? ScanState.Success ?: return
-        scanState.value = ScanState.Success(current.apps.map { scorer.scoreApp(it.app, it.trackerAnalysis) }.sortedWith(RiskFirstOrder))
+        val apps = current.apps.map { scorer.scoreApp(it.app, it.trackerAnalysis) }.sortedWith(RiskFirstOrder)
+        scanState.value = ScanState.Success(apps)
+        // Bouclier activé ou coupé : le score du téléphone change sans nouveau scan, le widget aussi.
+        if (!isAnalyzingTrackers.value) apps.deviceScore()?.let { onDeviceScore(it.value) }
     }
 
     private fun replaceApp(updated: AuditedApp) {
@@ -355,6 +361,7 @@ class ScanViewModel(
                     container.shieldExposureRepository,
                     container.scorer,
                     container.preinstalledRepository,
+                    onDeviceScore = container.widgetUpdater::onScore,
                 )
             }
         }

@@ -76,6 +76,9 @@ class AppContainer(context: Context) {
         // Indicateurs MVT mis à jour depuis les Paramètres : leurs domaines remplacent ceux de la liste embarquée.
         mvtRepository.current.value.takeIf { it.downloadedAt != null }?.let { setSpywareDomains(it.database.domains) }
     }
+    /** Widget d'écran d'accueil : son score, et ses mises à jour quand le bouclier change. */
+    val widgetScoreStore = com.vylia.privacy.ui.widget.WidgetScoreStore(context)
+    val widgetUpdater = com.vylia.privacy.ui.widget.WidgetUpdater(context, widgetScoreStore, shieldController)
     val usageStatsReader = UsageStatsReader(context)
     val historyRecorder = HistoryRecorder(FileHistoryStore(File(context.filesDir, "history.json")))
     val thresholdAlertRepository = ThresholdAlertRepository(context)
@@ -87,6 +90,7 @@ class AppContainer(context: Context) {
         databases = { databaseCenter.scoreVersions() },
         scorer = { scorer() },
         onApps = { updateBaselines.replaceAll(it) },
+        onDeviceScore = { widgetUpdater.onScore(it) },
     )
 
     /** Derniers états connus des apps : l'alerte de mise à jour dit ce qui a changé depuis. */
@@ -186,5 +190,6 @@ class AppContainer(context: Context) {
         clearShieldCounter = shieldController::clear,
         alerts = thresholdAlertRepository,
         clearBaselines = { updateBaselines.clear() },
+        clearWidget = { widgetUpdater.onScore(null) },
     )
 }

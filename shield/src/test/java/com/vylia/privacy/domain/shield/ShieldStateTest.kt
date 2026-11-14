@@ -26,4 +26,15 @@ class ShieldStateTest {
         assertEquals(120, ShieldState.longerPause(120))
         assertEquals(5, ShieldState().pauseMinutes)
     }
+
+    @Test
+    fun `compteur du jour - repart de zero a minuit, le total continue`() {
+        val request = BlockedRequest("ads.example", null, 0L)
+        val day1 = ShieldState().onBlocked(request, day = 100).onBlocked(request, day = 100)
+        assertEquals(2L, day1.blockedOn(100))
+        assertEquals(0L, day1.blockedOn(101))
+        val day2 = day1.onBlocked(request, day = 101)
+        assertEquals(1L, day2.blockedOn(101))
+        assertEquals(3L, day2.blockedTotal)
+    }
 }

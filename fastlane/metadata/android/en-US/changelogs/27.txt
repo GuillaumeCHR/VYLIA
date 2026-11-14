@@ -1,1 +1,3 @@
-Update alert: when an update adds or removes trackers, or permissions that cost points, VYLIA tells you what changed and how the score moves (Settings › Automations, off by default).
+Widget: the phone's score and, when wider, the Shield state, requests blocked today and a pause or turn on button.
+Preinstalled apps (Advanced mode): apps that came with the phone, with a filter in Scan and a tab in Manage.
+Update alert: when an update adds or removes trackers or permissions that cost points, VYLIA tells you what changed and how the score moves (off by default).

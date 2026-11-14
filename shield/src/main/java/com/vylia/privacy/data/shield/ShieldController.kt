@@ -63,6 +63,8 @@ class ShieldController(
     private val _state = MutableStateFlow(
         ShieldState(
             blockedTotal = prefs.getLong(KEY_TOTAL, 0),
+            blockedToday = prefs.getLong(KEY_TODAY, 0),
+            blockedDay = prefs.getLong(KEY_DAY, -1),
             filters = ShieldFilter.AVAILABLE.filterTo(HashSet()) { prefs.getBoolean(KEY_FILTER + it.name, true) }
                 .ifEmpty { ShieldFilter.AVAILABLE },
             pauseMinutes = prefs.getInt(KEY_PAUSE_MINUTES, ShieldState.PAUSE_STEPS.first())
@@ -332,26 +334,40 @@ class ShieldController(
 
     /** Appelé par le fil de lecture du VPN, un seul à la fois. */
     internal fun onBlocked(domain: String, match: BlockMatch) {
-        val next = _state.updateAndGet { it.onBlocked(BlockedRequest(domain, match.trackerName, System.currentTimeMillis())) }
+        val now = System.currentTimeMillis()
+        val next = _state.updateAndGet { it.onBlocked(BlockedRequest(domain, match.trackerName, now), today()) }
         if (next.blockedSession == 1L) onFirstBlock()
         if (++unsaved >= SAVE_EVERY) flush()
     }
 
     /** Supprimer mes données : le total repart de zéro (l'état en cours du bouclier est gardé). */
     fun clear() {
-        _state.update { it.copy(blockedSession = 0, blockedTotal = 0, recent = emptyList()) }
+        _state.update { it.copy(blockedSession = 0, blockedTotal = 0, blockedToday = 0, recent = emptyList()) }
         flush()
     }
 
     @Synchronized
     private fun flush() {
         unsaved = 0
-        prefs.edit().putLong(KEY_TOTAL, _state.value.blockedTotal).apply()
+        val state = _state.value
+        prefs.edit()
+            .putLong(KEY_TOTAL, state.blockedTotal)
+            .putLong(KEY_TODAY, state.blockedToday)
+            .putLong(KEY_DAY, state.blockedDay)
+            .apply()
     }
+
+    /** Requêtes bloquées aujourd'hui (jour local). */
+    fun blockedToday(): Long = _state.value.blockedOn(today())
 
     companion object {
         const val ASSET = "shield_blocklist.json"
         private const val KEY_TOTAL = "blocked_total"
+        private const val KEY_TODAY = "blocked_today"
+        private const val KEY_DAY = "blocked_day"
+
+        /** Jour local, au sens de `LocalDate.toEpochDay`. */
+        fun today(): Long = java.time.LocalDate.now().toEpochDay()
         private const val KEY_FILTER = "filter_"
         private const val KEY_PAUSE_MINUTES = "pause_minutes"
         private const val KEY_LIST = "list_"

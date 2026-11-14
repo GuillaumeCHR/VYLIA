@@ -22,6 +22,9 @@ data class ShieldState(
     val blockedSession: Long = 0,
     /** Requêtes bloquées depuis toujours (effacé par « Supprimer mes données »). */
     val blockedTotal: Long = 0,
+    /** Requêtes bloquées le jour [blockedDay] (jour local, `LocalDate.toEpochDay`), pour le widget. */
+    val blockedToday: Long = 0,
+    val blockedDay: Long = -1,
     /** Du plus récent au plus ancien, au plus [MAX_RECENT]. */
     val recent: List<BlockedRequest> = emptyList(),
     /** Pause en cours : rien n'est bloqué jusqu'à cet instant, puis le bouclier reprend seul. */
@@ -33,9 +36,15 @@ data class ShieldState(
 ) {
     fun isPaused(now: Long): Boolean = pausedUntil != null && now < pausedUntil
 
-    fun onBlocked(request: BlockedRequest): ShieldState = copy(
+    /** Requêtes bloquées le jour [day] : zéro si le dernier blocage date d'un autre jour. */
+    fun blockedOn(day: Long): Long = if (day == blockedDay) blockedToday else 0
+
+    /** [day] : jour local de la requête ; le compteur du jour repart de zéro à minuit. */
+    fun onBlocked(request: BlockedRequest, day: Long): ShieldState = copy(
         blockedSession = blockedSession + 1,
         blockedTotal = blockedTotal + 1,
+        blockedToday = blockedOn(day) + 1,
+        blockedDay = day,
         recent = (listOf(request) + recent).take(MAX_RECENT),
     )
 

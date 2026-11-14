@@ -33,6 +33,8 @@ class ScanCompletion(
     private val scorer: () -> PrivacyScorer = { rules().scorer },
     /** Après le point du Suivi : l'état de chaque app, auquel ses prochaines mises à jour seront comparées. */
     private val onApps: (List<AuditedApp>) -> Unit = {},
+    /** Score du téléphone de ce scan (widget d'écran d'accueil). */
+    private val onDeviceScore: (Int) -> Unit = {},
 ) {
     /** [background] : scan de fond ; sinon l'écran Scan est ouvert et montre déjà une alerte stalkerware. */
     @Synchronized
@@ -48,6 +50,7 @@ class ScanCompletion(
         history.record(userApps.associate { it.app.packageName to it.historyPoint() }, loaded.fingerprint, versions)
         onApps(userApps)
         val score = userApps.deviceScore()?.value ?: return
+        onDeviceScore(score)
         val now = clock()
         alerts.onScan(score, now) {
             val cause = DropCauseAnalyzer.analyze(previous, userApps, loaded.fingerprint, scorer, versions)

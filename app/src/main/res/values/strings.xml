@@ -1321,4 +1321,31 @@
         <item quantity="one">Copy the command (%1$d app)</item>
         <item quantity="other">Copy the commands (%1$d apps)</item>
     </plurals>
+
+    <!-- Ménage guidé (Gérer) -->
+    <string name="cleanup_title">5-minute cleanup</string>
+    <string name="cleanup_nothing">Nothing to tidy up right now: no action would raise the phone score. Well done!</string>
+    <string name="cleanup_step_title">Step %1$d of %2$d</string>
+    <string name="cleanup_revoke_title">Revoke permissions from %1$s</string>
+    <string name="cleanup_revoke_hint">In the app\'s Android page, open Permissions and set these to \"Don\'t allow\". The app keeps working: it will ask again if it really needs one.</string>
+    <string name="cleanup_remove_title">Uninstall %1$s</string>
+    <string name="cleanup_remove_intrusive">One of the most intrusive apps on this phone</string>
+    <string name="cleanup_shield_title">Turn on the VYLIA Shield</string>
+    <string name="cleanup_shield_text">It blocks tracking requests from all your apps, right on the phone: nothing is sent elsewhere.</string>
+    <string name="cleanup_app_score">App score: %1$d → %2$d</string>
+    <string name="cleanup_device_score">Phone score: %1$d → %2$d</string>
+    <string name="cleanup_device_gain_small">+%1$s point on the phone score</string>
+    <string name="cleanup_step_done">✓ Done</string>
+    <string name="cleanup_next">Next step</string>
+    <string name="cleanup_see_summary">See the result</string>
+    <string name="cleanup_skip">Skip</string>
+    <string name="cleanup_stop">Stop</string>
+    <string name="cleanup_close">Close</string>
+    <string name="cleanup_summary_title">Cleanup finished</string>
+    <plurals name="cleanup_summary_done">
+        <item quantity="one">%1$d step out of %2$d done.</item>
+        <item quantity="other">%1$d steps out of %2$d done.</item>
+    </plurals>
+    <string name="cleanup_summary_none">No step done this time. No problem: the steps stay in Manage.</string>
+    <string name="cleanup_summary_again">The cleanup will be offered again if the phone score drops.</string>
 </resources>

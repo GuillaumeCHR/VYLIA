@@ -19,6 +19,7 @@ enum class Badge(val emoji: String, @param:StringRes val title: Int, @param:Stri
     DETOX("💊", R.string.badge_detox, R.string.badge_detox_description),
     GOOD_SWAP("🔄", R.string.badge_good_swap, R.string.badge_good_swap_description),
     SHIELD_ACTIVE("🧿", R.string.badge_shield_active, R.string.badge_shield_active_description),
+    GUIDED_CLEANUP("✨", R.string.badge_guided_cleanup, R.string.badge_guided_cleanup_description),
 }
 
 /** Dernier état connu d'une app utilisateur, référence pour détecter sa suppression. */
@@ -56,6 +57,13 @@ data class RewardsState(
     val swaps: Set<String> = emptySet(),
     /** Le Bouclier VYLIA a bloqué au moins une requête de traçage. */
     val shieldBlocked: Boolean = false,
+    /** Ménages guidés menés à bout avec au moins une étape faite. */
+    val guidedCleanups: Int = 0,
+    /**
+     * Score du téléphone à la fin du dernier ménage guidé, fait ou passé : la carte de Gérer ne revient que s'il baisse.
+     * `null` : jamais proposé jusqu'au bout.
+     */
+    val cleanupScore: Int? = null,
 ) {
     val points: Int get() = removedApps.sumOf { it.points }
 }
@@ -132,6 +140,20 @@ class BadgesManager(
         update(next.copy(unlockedBadges = unlock(next, userApps = null)))
     }
 
+    /**
+     * Fin d'un ménage guidé : [deviceScore] devient la référence de la carte de Gérer ; avec au moins une étape faite
+     * ([stepsDone]), le ménage compte pour le badge Grand ménage.
+     */
+    @Synchronized
+    fun onGuidedCleanupFinished(deviceScore: Int?, stepsDone: Int) {
+        val current = _state.value
+        val next = current.copy(
+            guidedCleanups = current.guidedCleanups + if (stepsDone > 0) 1 else 0,
+            cleanupScore = deviceScore ?: current.cleanupScore,
+        )
+        update(next.copy(unlockedBadges = unlock(next, userApps = null)))
+    }
+
     /** [userApps] `null` : seuls les badges liés aux suppressions sont évalués. */
     private fun unlock(state: RewardsState, userApps: Collection<AppSnapshot>?): Map<Badge, Long> {
         val earned = buildSet {
@@ -142,6 +164,7 @@ class BadgesManager(
             if (state.revokedPermissions >= DETOX_REVOCATIONS) add(Badge.DETOX)
             if (state.swaps.isNotEmpty()) add(Badge.GOOD_SWAP)
             if (state.shieldBlocked) add(Badge.SHIELD_ACTIVE)
+            if (state.guidedCleanups > 0) add(Badge.GUIDED_CLEANUP)
             if (!userApps.isNullOrEmpty()) {
                 if (userApps.none { it.score < INTRUSIVE_THRESHOLD }) add(Badge.NO_RED_ZONE)
                 if (userApps.map { it.score }.average() >= 80) add(Badge.GREEN_DEVICE)

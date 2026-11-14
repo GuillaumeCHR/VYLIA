@@ -225,6 +225,9 @@ class ScanViewModel(
     /** Toutes les apps du dernier scan (les deux onglets), pour l'export. */
     fun exportCsv(labels: CsvExporter.Labels): String = CsvExporter.export(currentApps(), labels)
 
+    /** Fin d'un ménage guidé (voir [BadgesManager.onGuidedCleanupFinished]). */
+    fun finishGuidedCleanup(deviceScore: Int?, stepsDone: Int) = badgesManager.onGuidedCleanupFinished(deviceScore, stepsDone)
+
     fun dismissRecentRewards() {
         _recentRewards.value = emptyList()
     }
@@ -241,6 +244,22 @@ class ScanViewModel(
 
     private fun reward(rewarded: List<RemovedApp>) {
         if (rewarded.isNotEmpty()) _recentRewards.value = rewarded + _recentRewards.value
+    }
+
+    /**
+     * Relit les autorisations accordées des apps [packages], sans nouveau scan ni nouvelle analyse des traqueurs : au
+     * retour des réglages Android (ménage guidé), une autorisation vient peut-être d'être retirée.
+     */
+    fun refreshApps(packages: Set<String>) {
+        if (packages.isEmpty()) return
+        viewModelScope.launch {
+            val fresh = runCatching { auditApps(AppFilter.USER, only = packages) }.getOrNull() ?: return@launch
+            val scorer = scorer.value
+            fresh.forEach { app ->
+                val known = currentApps().find { it.app.packageName == app.app.packageName } ?: return@forEach
+                replaceApp(scorer.scoreApp(app.app, known.trackerAnalysis))
+            }
+        }
     }
 
     /** Remplace une app re-notée et conserve le tri "plus à risque d'abord". */

@@ -14,6 +14,7 @@ import com.vylia.privacy.data.shield.ShieldController
 import com.vylia.privacy.domain.shield.ShieldFilter
 import com.vylia.privacy.domain.shield.ShieldState
 import com.vylia.privacy.domain.act.AlternativeCatalogue
+import com.vylia.privacy.domain.act.CleanupStep
 import com.vylia.privacy.domain.act.PrivateDnsCatalogue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +25,19 @@ import kotlinx.coroutines.withContext
 
 /** Accès aux données d'utilisation et dernière utilisation de chaque app (`null` tant qu'il n'est pas accordé). */
 data class UsageState(val hasAccess: Boolean = false, val lastUsed: Map<String, Long>? = null)
+
+/**
+ * Ménage guidé en cours : les étapes choisies au départ (elles ne changent plus ensuite), l'étape affichée ([index] égal
+ * au nombre d'étapes : le bilan), les étapes constatées faites et le score du téléphone au départ.
+ */
+data class CleanupSession(
+    val steps: List<CleanupStep>,
+    val index: Int = 0,
+    val done: Set<String> = emptySet(),
+    val startScore: Int?,
+) {
+    val current: CleanupStep? get() = steps.getOrNull(index)
+}
 
 /** Données propres à l'onglet Agir ; les apps, les règles et les récompenses viennent de ScanViewModel. */
 /** Résultat de « Mettre à jour la liste » des services DNS. */
@@ -98,6 +112,29 @@ class ActViewModel(
                 else -> DnsListUpdate.UNCHANGED
             }
         }
+    }
+
+    private val _cleanup = MutableStateFlow<CleanupSession?>(null)
+
+    /** Ménage guidé en cours, `null` sinon. Gardé ici pour survivre à l'aller-retour vers les réglages Android. */
+    val cleanup: StateFlow<CleanupSession?> = _cleanup.asStateFlow()
+
+    fun startCleanup(steps: List<CleanupStep>, deviceScore: Int?) {
+        if (steps.isNotEmpty()) _cleanup.value = CleanupSession(steps, startScore = deviceScore)
+    }
+
+    /** L'étape [key] est constatée faite (autorisation retirée, app supprimée, bouclier actif). */
+    fun cleanupDone(key: String) {
+        _cleanup.value = _cleanup.value?.let { if (key in it.done) it else it.copy(done = it.done + key) }
+    }
+
+    /** Étape suivante, ou le bilan après la dernière ; [stop] : directement le bilan. */
+    fun cleanupNext(stop: Boolean = false) {
+        _cleanup.value = _cleanup.value?.let { it.copy(index = if (stop) it.steps.size else it.index + 1) }
+    }
+
+    fun endCleanup() {
+        _cleanup.value = null
     }
 
     private val _usage = MutableStateFlow(UsageState())

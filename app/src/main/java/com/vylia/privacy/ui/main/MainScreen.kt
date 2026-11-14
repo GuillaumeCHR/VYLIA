@@ -1,5 +1,6 @@
 package com.vylia.privacy.ui.main
 
+import com.vylia.privacy.ui.act.rememberGuidedCleanup
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.LocalOnBackPressedDispatcherOwner
 import androidx.annotation.DrawableRes
@@ -121,6 +122,9 @@ fun MainScreen(
         currentTab = AppTab.PROTECT
     }
 
+    // Ménage guidé : lancé depuis le balai de la barre, par-dessus l'écran affiché.
+    val cleanup = rememberGuidedCleanup(homeViewModel)
+
     CompositionLocalProvider(LocalOpenProtect provides openProtect) {
     Scaffold(
         topBar = {
@@ -132,6 +136,7 @@ fun MainScreen(
                     onSearch = { overlay = Overlay.SEARCH },
                     onHelp = { help = true },
                     onSettings = { overlay = Overlay.SETTINGS },
+                    cleanup = cleanup,
                 )
             }
         },

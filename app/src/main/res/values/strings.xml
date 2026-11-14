@@ -358,7 +358,7 @@
     <string name="alt_method_text">These apps come from AlternativeTo, a site where people recommend alternatives to one another. In each category, VYLIA keeps the free apps that users like most, available on Android, and opens their Google Play page (or F-Droid if there is none). A few apps that the ranking misses are added by hand (Bluesky, Signal, Olvid, DuckDuckGo). It reflects popularity, not an audit: their score appears in VYLIA once you install them. The rating shown is the one on Google Play, when the app is there.</string>
     <string name="adtrack_intro_title">Two ways to cut tracking</string>
     <string name="adtrack_intro_text">Before contacting a tracker\'s server, an app asks for its address (a DNS request). Refusing to answer that request stops the data from being sent, for every app at once. Two tools can do it:</string>
-    <string name="adtrack_intro_shield">• VYLIA Shield: the filtering is done on the phone, with VYLIA\'s lists. One switch, a choice between web and mobile filtering, a pause, and a live counter. It uses a local VPN (Android allows only one VPN at a time) and does not encrypt the requests it lets through.</string>
+    <string name="adtrack_intro_shield">• VYLIA Shield: the filtering is done on the phone, with VYLIA\'s lists. One switch, a pause, and a live counter. It uses a local VPN (Android allows only one VPN at a time) and does not encrypt the requests it lets through.</string>
     <string name="adtrack_intro_private_dns">• Private DNS: your requests are encrypted and sent to a service you choose, set once in Android\'s settings, with no VPN. It only blocks trackers if that service filters them (NextDNS can, Quad9 does not), and the service sees your requests.</string>
     <string name="adtrack_intro_choice">Use one or the other: when private DNS is set to a service, Android sends it the requests directly and the Shield sees none of them. To block trackers simply, choose the Shield; to also encrypt your requests, choose a private DNS that filters (NextDNS).</string>
     <string name="shield_title">VYLIA Shield</string>
@@ -384,7 +384,7 @@
     <string name="shield_filter_web">Web filtering</string>
     <string name="shield_filter_web_text">Trackers of websites, including those opened inside apps, and audience measurement of apps (Firebase, Amplitude, Adjust…). It rarely bothers apps or games.</string>
     <string name="shield_filter_mobile">Mobile filtering</string>
-    <string name="shield_filter_mobile_text">Profiling networks of apps and games (AppLovin, Unity, ironSource, Google AdMob…): the profile they build of you is blocked.</string>
+    <string name="shield_filter_mobile_text">Profiling networks of apps and games (AppLovin, Unity, ironSource…): the profile they build of you is blocked.</string>
     <string name="shield_resume">Resume now</string>
     <string name="shield_paused_until">Paused until %1$s: nothing is blocked, then the Shield resumes by itself.</string>
     <string name="shield_pause_title">When to pause it?</string>
@@ -392,7 +392,7 @@
     <string name="shield_pause_offers">• A promo code, cashback or referral is not credited: these offers rely on tracking to know where you came from.</string>
     <string name="shield_pause_diagnose">• An app shows an error, a blank page or keeps loading: if the pause fixes it, the Shield was the cause, and the latest blocks show which server.</string>
     <string name="shield_pause_note">Nothing is counted during the pause: the trackers contacted then are not blocked.</string>
-    <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0), AdGuard DNS filter, EasyPrivacy, EasyList, AdGuard Mobile Ads and AdGuard French (GPL v3), %1$s tracking domains. Updated in Settings › Databases.</string>
+    <string name="shield_lists">Lists: Exodus Privacy (ODbL 1.0) and EasyPrivacy (GPL v3), %1$s tracking domains. Updated in Settings › Databases. The Shield blocks trackers, not ads.</string>
     <string name="shield_company">%1$s · %2$s</string>
     <string name="company_targeting">targeting</string>
     <string name="company_audience">audience measurement</string>
@@ -422,7 +422,7 @@
     <string name="manage_subtitle">Reduce your exposure: permissions to revoke, apps to remove, alternatives. The apps with the lowest score come first.</string>
     <string name="reduce_action_permissions">Manage permissions</string>
     <string name="reduce_action_uninstall">Uninstall</string>
-    <string name="reduce_leaks_hint">The Shield cannot stop them: server shared with an essential service (Google, Facebook…), fixed IP address, or no known server. Only uninstalling the app or replacing it removes them.</string>
+    <string name="reduce_leaks_hint">The Shield does not stop them: advertising network (the Shield blocks trackers, not the ads apps display), server shared with an essential service (Google, Facebook…), fixed IP address, or no known server. Only uninstalling the app or replacing it removes them.</string>
     <string name="reduce_leaks_empty">The Shield blocks every known tracker of your apps.</string>
     <string name="reduce_leaks_pending">Tracker analysis in progress…</string>
     <string name="reduce_leaks_shield_off">The Shield is off: this list assumes it is on. Turn it on to block the other trackers of your apps.</string>
@@ -563,7 +563,7 @@
     <string name="learn_shield_none" formatted="false">Not blocked, or no known server: 100% of its weight</string>
     <string name="learn_shield_why">A blocked tracker still counts: it stays in the app and keeps collecting on the phone, it sends later what it kept (Shield paused, phone restarted, another VPN), and some apps bypass the DNS (fixed IP address, encrypted DNS).</string>
     <string name="learn_shield_limits_title">Why some trackers get through</string>
-    <string name="learn_shield_limits">VYLIA finds a tracker by its code inside the app; the Shield blocks it by the name of the servers it contacts. The two are not linked: the Shield can only stop a tracker whose servers are known. Some have none listed, and others use servers shared with essential services (Google, Facebook…) that cannot be blocked without breaking apps.</string>
+    <string name="learn_shield_limits">VYLIA finds a tracker by its code inside the app; the Shield blocks it by the name of the servers it contacts. The two are not linked: the Shield can only stop a tracker whose servers are known. Some have none listed, and others use servers shared with essential services (Google, Facebook…) that cannot be blocked without breaking apps. The advertising networks of apps (AdMob, AppLovin, Unity…) are not blocked either: the Shield blocks trackers, not the ads apps display.</string>
     <string name="learn_shield_cap">The tracker penalty, already capped at %1$d points, goes down in the same proportion as their weight: an app with many trackers also benefits from the Shield.</string>
     <string name="learn_shield_off">Shield off, paused or bypassed (private DNS, another VPN): scores are those without the Shield. The score without the Shield is also the one of the public ranking, shown on each app\'s sheet.</string>
     <string name="learn_limit_title">Limitation</string>
@@ -870,7 +870,7 @@
     <string name="about_license">VYLIA is free software, licensed under the GNU GPL v3 (or any later version): you may study, modify and redistribute it under its terms. It comes with no warranty.</string>
     <string name="about_license_trademarks">The VYLIA and Yogi Studio names, their logos and the app icon are not covered by the licence. The Exodus Privacy logo belongs to the Exodus Privacy association.</string>
     <string name="about_font">The VYLIA name is set in Unbounded, by The Unbounded Project Authors, under the SIL Open Font License 1.1.</string>
-    <string name="about_shield_lists">The VYLIA Shield filters DNS requests with public lists, built into the app and updated in Settings › Databases: Exodus Privacy (ODbL 1.0), EasyList and EasyPrivacy by the EasyList authors (GPL v3), and AdGuard\'s DNS filter, Mobile Ads filter and French filter (GPL v3) and, if you add it, its CNAME trackers list (MIT). Blocked domains are named with AdGuard companiesdb (CC BY-SA 4.0). VYLIA is neither affiliated with nor endorsed by these projects.</string>
+    <string name="about_shield_lists">The VYLIA Shield filters DNS requests with public lists, built into the app and updated in Settings › Databases: Exodus Privacy (ODbL 1.0), EasyPrivacy by the EasyList authors (GPL v3) and, if you add it, AdGuard\'s CNAME trackers list (MIT). It blocks trackers, not ads. Blocked domains are named with AdGuard companiesdb (CC BY-SA 4.0). VYLIA is neither affiliated with nor endorsed by these projects.</string>
     <string name="about_source">Source code: %1$s</string>
     <string name="about_source_button">View the source code</string>
     <string name="about_privacy_policy_button">Privacy policy</string>
@@ -915,8 +915,8 @@
     <string name="credits_casting_name">The AlternativeTo community</string>
     <string name="credits_casting_note">Thousands of recommendations between users. VYLIA picks two or three per category, and lets you choose.</string>
     <string name="credits_shield">Shield DNS filtering</string>
-    <string name="credits_shield_name">EasyList, EasyPrivacy and the AdGuard filters</string>
-    <string name="credits_shield_note">Lists of tracking servers, kept up to date by their communities and shared under GPL v3. The shield reads them on your phone, to say no on your behalf.</string>
+    <string name="credits_shield_name">EasyPrivacy</string>
+    <string name="credits_shield_note">A list of tracking servers, kept up to date by its community and shared under GPL v3. The shield reads it on your phone, to say no on your behalf.</string>
     <string name="credits_cast">Opening titles cast</string>
     <string name="credits_cast_name">The little spies</string>
     <string name="credits_cast_note">Friendly and unpaid. They leave the screen as soon as they are spotted, which is all we ask of trackers.</string>
@@ -939,7 +939,7 @@
     <string name="credits_thanks_exodus">To Exodus Privacy, for years of patient tracker hunting, shared with everyone.</string>
     <string name="credits_thanks_echap">To Echap, for supporting victims of technology-facilitated violence and sharing what they know about stalkerware with everyone.</string>
     <string name="credits_thanks_mvt">To MVT, Amnesty International\'s Security Lab, Citizen Lab and all the researchers who expose mercenary spyware and share its indicators with everyone.</string>
-    <string name="credits_thanks_lists">To the EasyList authors and to AdGuard, whose tracking server lists let the shield block before anything leaves the phone.</string>
+    <string name="credits_thanks_lists">To the EasyList authors, whose EasyPrivacy list lets the shield block trackers before anything leaves the phone, and to AdGuard, whose companies database names the servers it blocks.</string>
     <string name="credits_thanks_alternativeto">To the AlternativeTo community, whose recommendations feed the alternatives.</string>
     <string name="credits_thanks_apps">To the apps that ask for the microphone to show the weather: without you, VYLIA would not exist.</string>
     <string name="credits_outro">No personal data was collected during these credits. We checked.</string>

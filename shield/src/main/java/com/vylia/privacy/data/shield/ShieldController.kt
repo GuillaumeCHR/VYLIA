@@ -63,8 +63,8 @@ class ShieldController(
     private val _state = MutableStateFlow(
         ShieldState(
             blockedTotal = prefs.getLong(KEY_TOTAL, 0),
-            filters = ShieldFilter.entries.filterTo(HashSet()) { prefs.getBoolean(KEY_FILTER + it.name, true) }
-                .ifEmpty { ShieldFilter.entries.toSet() },
+            filters = ShieldFilter.AVAILABLE.filterTo(HashSet()) { prefs.getBoolean(KEY_FILTER + it.name, true) }
+                .ifEmpty { ShieldFilter.AVAILABLE },
             pauseMinutes = prefs.getInt(KEY_PAUSE_MINUTES, ShieldState.PAUSE_STEPS.first())
                 .takeIf { it in ShieldState.PAUSE_STEPS } ?: ShieldState.PAUSE_STEPS.first(),
         ),
@@ -179,7 +179,10 @@ class ShieldController(
     }
 
     /** Listes téléchargées depuis l'app (Paramètres › Bases de données) et leur compilation. */
-    val lists = ShieldListStore(context)
+    val lists = ShieldListStore(context).also {
+        // Listes retirées de l'app : la liste compilée avec elles est effacée, la liste embarquée la remplace.
+        if (it.dropRetired()) prefs.edit().remove(KEY_SIZE).apply()
+    }
 
     /** Listes actives : celles de base, sauf retirées, et les listes proposées que l'utilisateur a ajoutées. */
     fun enabledLists(): List<ShieldList> =
@@ -294,6 +297,7 @@ class ShieldController(
 
     /** Active ou coupe un filtrage ; le dernier actif ne peut pas être coupé (c'est le rôle de l'interrupteur). */
     fun setFilter(filter: ShieldFilter, enabled: Boolean) {
+        if (filter !in ShieldFilter.AVAILABLE) return
         val next = _state.updateAndGet { s ->
             val filters = if (enabled) s.filters + filter else s.filters - filter
             if (filters.isEmpty()) s else s.copy(filters = filters)

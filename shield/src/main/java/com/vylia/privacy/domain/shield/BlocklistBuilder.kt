@@ -6,8 +6,10 @@ package com.vylia.privacy.domain.shield
  *
  * - Les traqueurs nommés (Exodus, complément maison) viennent de la base Exodus téléchargée par l'app ([exodus],
  *   voir [ExodusShieldDomains]), sinon de la liste embarquée, et gardent leur nom.
- * - Groupe mobile : les listes de rôle [ShieldFilter.MOBILE] (AdGuard Mobile Ads) et les traqueurs nommés mobiles ;
- *   un domaine des deux groupes est mobile (c'est le réglage mobile qui décide pour lui).
+ * - Groupe mobile : les listes de rôle [ShieldFilter.MOBILE] et les traqueurs nommés mobiles ; un domaine des deux
+ *   groupes est mobile (c'est le réglage mobile qui décide pour lui). Tant que le filtrage mobile n'est pas proposé
+ *   ([ShieldFilter.AVAILABLE]), le groupe reste vide : ses domaines et leurs sous-domaines ne sont pas bloqués.
+ * - [NEVER_BLOCK_ADS] (Google AdMob, DoubleClick) : toujours en exception, même si une liste de traqueurs les cite.
  * - Les exceptions `@@||domaine^` de chaque liste s'appliquent à toutes les sources, sous-domaines compris, même si un
  *   domaine parent est listé ; [NEVER_BLOCK] retire aussi ses domaines des listes.
  * - Un sous-domaine d'un domaine déjà présent est retiré (la recherche se fait par suffixe).
@@ -31,6 +33,16 @@ object BlocklistBuilder {
         "github.com", "githubusercontent.com", "twitter.com", "x.com", "tiktok.com", "yahoo.com", "qq.com", "baidu.com",
     )
 
+    /**
+     * Serveurs publicitaires de Google (AdMob, DoubleClick) : jamais bloqués, ni eux ni leurs sous-domaines, car ils
+     * affichent les pubs des apps. Même liste que NEVER_BLOCK_ADS dans tools/update_shield_blocklist.py.
+     */
+    val NEVER_BLOCK_ADS = setOf(
+        "2mdn.net", "dmtry.com", "doubleclick.com", "doubleclick.net", "mng-ads.com", "mobileads.google.com",
+        "ads.google.com", "googlesyndication.com", "googleadservices.com", "adservice.google.com", "adservice.g.cn",
+        "admob.com", "googletagservices.com",
+    )
+
     data class Result(val blocklist: Blocklist, val web: Int, val mobile: Int, val exceptions: Int)
 
     fun build(
@@ -42,6 +54,7 @@ object BlocklistBuilder {
         val exceptions = HashSet<String>()
         sources.forEach { exceptions += it.list.exceptions }
         if (fallback) exceptions += embedded.allow
+        exceptions += NEVER_BLOCK_ADS
         fun allowed(domain: String) = domain !in exceptions && domain !in NEVER_BLOCK
 
         val named = (exodus ?: embedded.named).filterKeys(::allowed)
@@ -58,7 +71,7 @@ object BlocklistBuilder {
         }
         webAll.removeAll(mobileAll)
 
-        val mobile = dropRedundant(mobileAll, emptySet())
+        val mobile = if (ShieldFilter.MOBILE in ShieldFilter.AVAILABLE) dropRedundant(mobileAll, emptySet()) else emptySet()
         // Un domaine web sous un domaine mobile suit déjà le réglage mobile : inutile de le garder.
         val web = dropRedundant(webAll, mobileAll)
         require(web.size + mobile.size <= Blocklist.MAX_RULES) { "liste trop grande (${web.size + mobile.size} domaines)" }

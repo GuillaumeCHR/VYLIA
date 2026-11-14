@@ -2,7 +2,7 @@ Chaque app installée peut accéder à une partie de votre vie : position, conta
 
 Comprendre, avec des mots simples
 • VYLIA explique le fonctionnement des apps derrière l'écran : ce qu'une permission donne vraiment, ce qu'est un traqueur, comment vos données partent chez des entreprises que vous ne connaissez pas.
-• Un lexique des permissions et des traqueurs, sans jargon, accessible à tous, quels que soient votre âge et vos connaissances.
+• Un lexique des permissions et des traqueurs, sans jargon, accessible à tous.
 • Chaque score est expliqué : vous apprenez à juger une app par vous-même.
 • Les bonnes pratiques sont mises en avant autant que les dérives : comprendre, sans faire peur.
 
@@ -23,9 +23,10 @@ Réduire votre exposition
 • Les versions web : remplacer une app par le site du même service, installé par votre navigateur.
 
 Bouclier VYLIA : un VPN anti-traqueurs local
-• Le bouclier VYLIA, facultatif, utilise le VpnService d'Android pour créer un VPN sur le téléphone lui-même. Seules les requêtes DNS y passent : celles qui visent des domaines connus de traçage et de logiciels espions sont refusées, les autres continuent sans changement vers le DNS habituel de votre réseau.
+• Le bouclier VYLIA, facultatif, utilise le VpnService d'Android pour créer un VPN sur le téléphone lui-même. Seules les requêtes DNS y passent : celles qui visent des domaines connus de traçage et de logiciels espions sont refusées, les autres passent sans changement vers le DNS de votre réseau.
+• Il bloque les traqueurs, pas les pubs qu'affichent les apps.
 • Aucun serveur distant, aucun journal des sites visités : seul un compteur des blocages est conservé.
-• Vous l'activez vous-même, avec la boîte de dialogue VPN d'Android, depuis l'app ou les réglages rapides, et le mettez en pause ou l'arrêtez quand vous voulez.
+• Vous l'activez vous-même (boîte de dialogue VPN d'Android), depuis l'app ou les réglages rapides, et le mettez en pause ou l'arrêtez à tout moment.
 
 Suivre vos progrès
 • Votre score dans le temps, l'historique des installations, suppressions et autorisations, et une alerte si votre exposition augmente.

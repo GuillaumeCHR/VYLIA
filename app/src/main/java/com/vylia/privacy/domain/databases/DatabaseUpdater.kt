@@ -18,9 +18,9 @@ import java.security.MessageDigest
 /**
  * Mise à jour des bases, une par une ou toutes ensemble, sans Android.
  *
- * - Trois téléchargements à la fois au plus ([CONCURRENCY]) : les listes viennent de trois hébergeurs (easylist.to,
- *   filters.adtidy.org, GitHub), aucun n'est sollicité par plus d'un ou deux fichiers à la fois, et le pic de mémoire
- *   et de radio reste modeste (la plus grosse liste fait 10 Mo décompressée).
+ * - Trois téléchargements à la fois au plus ([CONCURRENCY]) : les bases viennent de quelques hébergeurs (Exodus,
+ *   easylist.to, GitHub), aucun n'est sollicité par plus d'un ou deux fichiers à la fois, et le pic de mémoire et de
+ *   radio reste modeste (la plus grosse liste fait 10 Mo décompressée).
  * - Requêtes conditionnelles (`If-None-Match`, `If-Modified-Since`) : une base inchangée n'est pas retéléchargée.
  * - Un échec n'interrompt pas les autres bases ; la base en échec garde sa version en service.
  * - Une seule mise à jour à la fois.

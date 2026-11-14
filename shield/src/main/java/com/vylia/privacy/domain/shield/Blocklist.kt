@@ -5,11 +5,24 @@ import kotlinx.serialization.json.Json
 
 /** Les deux filtrages du bouclier, activables séparément. */
 enum class ShieldFilter {
-    /** Pubs et pistage des sites, mesure d'audience et profilage des apps. Gêne rarement les apps. */
+    /** Pistage des sites, mesure d'audience et profilage des apps. Gêne rarement les apps. */
     WEB,
 
-    /** Régies publicitaires des apps et des jeux : leurs pubs, leur profilage, et les vidéos récompensées. */
+    /**
+     * Réseaux de profilage des apps et des jeux (traqueurs Exodus de catégorie Advertisement). Pas proposé dans cette
+     * version ([AVAILABLE]) : leurs domaines ne sont pas bloqués, et la liste embarquée n'a pas de groupe mobile.
+     */
     MOBILE,
+    ;
+
+    companion object {
+        /**
+         * Filtrages proposés dans cette version : le bouclier bloque les traqueurs, pas les régies publicitaires des
+         * apps (règles Google Play sur les apps qui gênent l'affichage des pubs d'autres apps). Le filtrage mobile
+         * pourra revenir en option, désactivée d'office.
+         */
+        val AVAILABLE: Set<ShieldFilter> = setOf(WEB)
+    }
 }
 
 /**
@@ -23,7 +36,7 @@ data class BlockMatch(val rule: String, val filter: ShieldFilter?, val trackerNa
  * y figure (`ads.example.com` est bloqué par `example.com`, pas l'inverse), à condition que son filtrage soit actif.
  *
  * Le filtrage mobile l'emporte : un domaine qui relève (lui ou un parent) d'une régie mobile passe quand le filtrage
- * mobile est coupé, même si une liste web le cite aussi. C'est ce qui laisse passer les vidéos récompensées.
+ * mobile est coupé, même si une liste web le cite aussi : couper le filtrage mobile suffit à rétablir une app qui en dépend.
  */
 class Blocklist(
     private val web: DomainHashSet,

@@ -25,6 +25,7 @@ Reduce your exposure
 
 VYLIA Shield: a local anti-tracker VPN
 • The optional VYLIA Shield uses Android's VpnService to create a VPN on the phone itself. Only DNS requests go through it: requests for known tracking and spyware domains are refused, all others go on unchanged to your network's usual DNS.
+• It blocks trackers, not the ads apps display.
 • No remote server, no data sent to VYLIA, no log of the sites you visit: only a counter of blocked requests is kept.
 • You turn it on yourself, through Android's VPN consent dialog, from the app or from a quick settings tile, and you can pause or stop it at any time.
 • Private DNS is also covered, with a step-by-step guide.

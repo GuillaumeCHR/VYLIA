@@ -52,8 +52,8 @@ dans l'ordre de la barre du bas :
      rend exactement le même service : c'est à vous de choisir.
 4. **Filtrer** : réduire l'exposition sans modifier vos apps.
    - **Filtrage DNS** : le **bouclier VYLIA**, un VPN local qui répond « introuvable » aux domaines des traqueurs, sur tout
-     l'appareil et y compris dans les apps que vous gardez (filtrage web et mobile au choix, pause, compteur en direct,
-     tuile des réglages rapides). Ou le **DNS privé** d'Android, avec un guide pas à pas (NextDNS
+     l'appareil et y compris dans les apps que vous gardez (pause, compteur en direct, tuile des réglages rapides). Il
+     bloque les traqueurs, pas les publicités qu'affichent les apps. Ou le **DNS privé** d'Android, avec un guide pas à pas (NextDNS
      pour bloquer les traqueurs, Quad9 sans compte).
    - **WebAPK** : remplacer une app par la version web du même service, installée par le navigateur comme une app.
      L'app native, ses permissions et les traqueurs de son code disparaissent. VYLIA repère vos apps qui ont un site
@@ -70,8 +70,8 @@ Et aussi :
 - **Des traqueurs détectés localement** : VYLIA cherche dans le code de chaque app les signatures de la base publique
   [Exodus Privacy](https://exodus-privacy.eu.org/), sans rien envoyer.
 - **Un VPN anti-traqueurs** : le bouclier VYLIA est un VPN local, sur le téléphone, qui ne transporte que les requêtes
-  DNS. Il refuse celles des serveurs de traçage connus (plus de 200 000 domaines, d'après Exodus Privacy, EasyList,
-  EasyPrivacy et les filtres AdGuard), pour toutes les apps à la fois, sans serveur distant ni journal des sites
+  DNS. Il refuse celles des serveurs de traçage connus (plus de 40 000 domaines, d'après Exodus Privacy et
+  EasyPrivacy), pour toutes les apps à la fois, sans serveur distant ni journal des sites
   visités. Les domaines bloqués sont nommés quand c'est possible (« Criteo · ciblage »). Facultatif, il s'active d'un
   interrupteur ou depuis les réglages rapides, et se met en pause quand une app en a besoin. Son effet se voit dans le
   score : chaque fiche dit quels traqueurs il bloque, en entier, en partie ou pas du tout.
@@ -132,7 +132,7 @@ Politique complète : [confidentialité](https://guillaumechr.github.io/vylia-si
 
 - Aucun traqueur, aucun outil de mesure d'audience, aucune donnée revendue.
 - Internet ne sert qu'à mettre à jour les bases, à votre demande ou avant le scan de fond si vous l'avez activé : Exodus
-  Privacy, Echap, MVT, les listes du bouclier (EasyList, EasyPrivacy, AdGuard), AdGuard companiesdb et les fichiers
+  Privacy, Echap, MVT, les listes du bouclier (EasyPrivacy, traqueurs CNAME d'AdGuard si vous l'ajoutez), AdGuard companiesdb et les fichiers
   publiés dans ce dépôt (règles, alternatives, DNS privés, ressources d'aide). Ce sont des fichiers publics, téléchargés
   en HTTPS depuis leur source officielle : rien n'est envoyé sur vous ni sur vos applications.
 - Le bouclier filtre sur le téléphone. Les requêtes qu'il laisse passer vont directement au DNS de votre réseau, comme
@@ -217,9 +217,8 @@ Outils du dépôt : voir [`tools/README.md`](tools/README.md). Feuille de route 
 - **Logiciels espions de surveillance ciblée** : [MVT, mvt-indicators](https://github.com/mvt-project/mvt-indicators)
   (licence MIT), avec les indicateurs publiés par Amnesty International, Citizen Lab, Google, Lookout et d'autres
   chercheurs (extrait : noms de paquet, certificats et domaines, voir [`tools/update_mvt_iocs.py`](tools/update_mvt_iocs.py)).
-- **Listes du bouclier** : [EasyList et EasyPrivacy](https://easylist.to/) (GPL v3), filtres DNS, Mobile Ads et French
-  d'[AdGuard](https://github.com/AdguardTeam/AdguardFilters) (GPL v3), liste des traqueurs CNAME d'AdGuard (MIT, à
-  ajouter dans l'app) ; noms des domaines bloqués d'après [AdGuard companiesdb](https://github.com/AdguardTeam/companiesdb)
+- **Listes du bouclier** : [EasyPrivacy](https://easylist.to/) (GPL v3), liste des
+  [traqueurs CNAME](https://github.com/AdguardTeam/cname-trackers) d'AdGuard (MIT, à ajouter dans l'app) ; noms des domaines bloqués d'après [AdGuard companiesdb](https://github.com/AdguardTeam/companiesdb)
   (CC BY-SA 4.0, téléchargée seulement). VYLIA n'est affiliée à aucun de ces projets.
 - **Alternatives** : classement d'après les recommandations de la communauté [AlternativeTo](https://alternativeto.net/),
   notes relevées sur Google Play.

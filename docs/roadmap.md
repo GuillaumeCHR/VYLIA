@@ -130,6 +130,8 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
      temps réel les requêtes de traçage sortantes sans envoyer aucune donnée vers l'extérieur, activable par un simple
      interrupteur. Attention : demande l'accès Internet et un service au premier plan, à refléter dans l'écran
      « Vie privée » et dans la grille (VYLIA est exclue de son propre score).
+     Depuis le 2026-11-14 : traqueurs seulement, pas de publicité (Google Play), une seule version de l'app ; filtrage
+     des régies à revoir en option désactivée d'office une fois l'app acceptée sur Play (voir `docs/shield.md`).
 6. ~~§8~~ (fait en 0.6.0). §8 Paramètres › Gestion des données : remplacer l'écran « Export et données » par Exporter / Importer / Supprimer
    mes données, comme dans Molkky Board, en gardant l'export CSV des résultats du scan (voir §8).
 7. ~~**Bug Analyse en mode avancé :**~~ (corrigé en 0.6.4) deux scores de confidentialité s'affichent (apps utilisateur et apps système).

@@ -28,8 +28,9 @@ object ExodusShieldDomains {
     /**
      * Serveurs connus de traqueurs dont la `network_signature` Exodus manque ou ne sert pas (expression régulière,
      * domaine de plateforme) : ils ne servent qu'à dire ce que le bouclier bloque de ces traqueurs (score, fiche).
-     * Jamais ajoutés à la liste de blocage : le bouclier bloque exactement la même chose avec ou sans eux. Chacun est
-     * déjà bloqué par les listes (vérifié par ExodusShieldDomainsTest) ; un traqueur cité ici n'est pas réduit à
+     * Jamais ajoutés à la liste de blocage : le bouclier bloque exactement la même chose avec ou sans eux. Les serveurs
+     * des régies publicitaires ne sont pas bloqués (pas de filtrage mobile dans cette version : le score les compte en
+     * entier), les autres le sont déjà par les listes (vérifié par ExodusShieldDomainsTest) ; un traqueur cité ici n'est pas réduit à
      * ces serveurs, sa signature Exodus compte toujours (Facebook Ads reste bloqué en partie : `facebook.com` passe).
      */
     val KNOWN_SERVERS: Map<String, List<String>> = mapOf(

@@ -157,6 +157,80 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
    le téléphone si elles sont installées, sinon d'après le rapport Exodus. Signaler aussi, sur la fiche d'une app,
    quand son dernier rapport Exodus a plus d'un an (cas de TikTok, rapport de 2024) : sa note de traqueurs porte
    alors sur une version dépassée.
+11. **Menu « Apps préinstallées » dans le mode Avancé** (idée du 2026-11-14) : les apps système pèsent dans le score
+   mais Gérer › Apps ne peut rien proposer pour elles, faute de désinstallation possible.
+   - **Inventaire par origine** : constructeur (Samsung, Xiaomi…), opérateur, Google, partenaires (Facebook, Netflix
+     préinstallés). Point de départ : `directory/oem-google-play.json`.
+   - **Trois niveaux par app** : sans risque à désactiver, à vos risques (une fonction casse), indispensable (ne jamais
+     toucher). Indispensable : un mauvais paquet désactivé peut empêcher le téléphone de démarrer. Liste de départ :
+     celle d'Universal Android Debloater (UAD-ng, GPL v3, compatible), reprise avec attribution et vérifiée à la main
+     pour les grandes marques.
+   - **Actions en paliers, sans root** : (1) lien vers la fiche Android (bouton « Désactiver » quand le système le
+     permet, révocation des permissions) ; (2) guide ADB qui génère les commandes à copier
+     (`pm disable-user --user 0 …`), réversibles ; (3) plus tard, **Shizuku** en option « si vous l'avez déjà » :
+     boutons Désactiver / Réactiver depuis VYLIA, limités à ces seules actions. Shizuku reste une option pour les
+     connaisseurs (débogage sans fil, à relancer après chaque redémarrage) et pas un passage obligé.
+   - **Score** : un seul score (décision 0.6.4) ; afficher seulement la part du « socle constructeur ».
+12. **Bouclier et apps préinstallées** (idée du 2026-11-14), deux pistes :
+   - **A. Télémétrie des constructeurs** : listes de domaines d'analytics par marque (Xiaomi, Samsung, Huawei…),
+     activées depuis le menu Préinstallées pour la marque du téléphone. Ce sont des traqueurs et pas des publicités :
+     compatible avec la règle Play « traqueurs seulement ». Liste prudente : certains domaines servent aussi aux mises
+     à jour système.
+   - **B. Journal par app** : sur Android 10 et plus, `ConnectivityManager.getConnectionOwnerUid` permet au
+     `VpnService` de retrouver l'app à l'origine d'une connexion, et donc d'afficher le comportement observé
+     (« 12 tentatives vers des traqueurs cette semaine ») en plus du code analysé. À tester sur téléphone d'abord :
+     l'attribution n'est pas garantie pour les requêtes passées par le résolveur DNS du système.
+   - Ordre : A d'abord, B si le test est concluant.
+13. **Base communautaire des scores** (idée du 2026-11-14, après l'acceptation sur Play) : faire grandir l'annuaire
+   du site avec les analyses faites sur les téléphones, surtout pour les apps préinstallées qu'Exodus n'analyse pas
+   (elles ne sont pas sur le Play Store).
+   - **Étape 0, sans collecte** : « Demander une analyse à Exodus » pour une app sans rapport, qui ouvre leur
+     formulaire.
+   - **Vie privée** (la promesse « aucune donnée collectée » reste vraie par défaut) : contribution app par app depuis
+     la fiche, jamais d'envoi en masse (une liste d'apps peut révéler santé, religion, rencontres : RGPD art. 9) ;
+     aperçu exact de ce qui part puis confirmation ; aucun identifiant d'appareil ni de compte ; permissions déclarées
+     seulement, jamais celles accordées.
+   - **Contenu envoyé** : paquet, `versionCode`, empreinte du certificat de signature, traqueurs détectés, permissions
+     déclarées, versions des règles et de VYLIA. Pas le score : le serveur le recalcule avec `:scoring`, comme
+     l'annuaire.
+   - **Contre l'empoisonnement** : une fiche n'est publiée qu'après plusieurs envois concordants (même version, même
+     certificat), et elle est comparée au rapport Exodus quand il existe.
+   - **Infrastructure** : le site est statique, il faut un petit service de réception (par exemple un Worker
+     Cloudflare avec une base D1, sans journaux d'IP). À mettre à jour : fiche « Sécurité des données » de Play,
+     politique de confidentialité du site, licence ODbL de la base.
+14. **Alerte à la mise à jour** (idée du 2026-11-14) : les apps changent surtout en se mettant à jour, pas à
+   l'installation. Quand une app installée change de version, comparer avec l'analyse de la version précédente et
+   prévenir si elle ajoute des traqueurs ou des permissions : « Cette mise à jour de X ajoute 2 traqueurs et l'accès
+   aux contacts : 72 → 58 ». S'appuie sur l'alerte d'installation (§7, Paramètres › Automatisations, désactivée par
+   défaut) et sur l'historique du Suivi, qui reçoit un nouvel événement « mise à jour ». Une mise à jour qui améliore la
+   note se signale aussi (philosophie non anxiogène). Comme pour les bases, un traqueur qui n'apparaît qu'avec une mise
+   à jour des signatures Exodus n'est pas imputé à la mise à jour de l'app.
+15. **Comparer avec la fiche « Sécurité des données » de Play** (idée du 2026-11-14, pour l'annuaire du site) :
+   repérer les apps qui déclarent « aucune donnée partagée avec des tiers » alors qu'elles embarquent des traqueurs.
+   Un script de poste de dev, sur le modèle de l'idée n° 9, lit la fiche Play des apps de l'annuaire ; rien n'est
+   demandé à Google depuis le téléphone. Précautions : la fiche est déclarative et Google a ses propres définitions
+   (un SDK peut être « prestataire » et pas « partage ») ; présenter un écart constaté et sourcé, daté, jamais une
+   accusation ; le grattage casse si Google change le HTML de ses pages.
+16. **Ménage guidé en 5 minutes** (idée du 2026-11-14) : un parcours qui enchaîne les 3 actions qui rapportent le plus
+   sur ce téléphone (par exemple une permission inutile, une app inutilisée à mauvais score, le bouclier), une à la
+   fois, avec le gain de score de chacune, puis un badge à la fin. Les gains viennent des calculs déjà faits dans
+   Gérer (gain exact par permission, apps inutilisées) ; chaque étape peut être passée. Entrée depuis Scanner ou
+   Célébrer, et proposé de nouveau quand le score baisse.
+17. **Widget d'écran d'accueil** (idée du 2026-11-14) : le score du téléphone et sa note (A à E), l'état du bouclier
+   (actif, en pause, arrêté) avec un bouton pour l'activer ou le mettre en pause, et le nombre de requêtes bloquées
+   aujourd'hui. Un toucher ailleurs ouvre VYLIA. Deux tailles : petite (score seul), moyenne (score et bouclier).
+   - **Vie privée** : l'écran d'accueil est vu par l'entourage, donc aucun nom d'app, comme l'image partagée.
+   - **Technique** : `AppWidgetProvider` et `RemoteViews`, sans bibliothèque (dans l'esprit du JobScheduler des
+     automatisations), ou Jetpack Glance si la mise en page Compose le justifie. Mis à jour à la fin d'un scan et quand
+     le bouclier change d'état, sans tâche périodique de plus ; le compteur se rafraîchit au plus toutes les quelques
+     minutes pour ne pas coûter de batterie.
+   - **Bouclier** : même logique que la tuile des réglages rapides. Si Android n'a pas encore donné l'accord VPN
+     (`VpnService.prepare`), le bouton ouvre VYLIA pour le demander.
+   - Thème clair et sombre, et couleurs dynamiques (Material You) quand le téléphone les propose.
+18. **Ordre proposé (2026-11-14)** : menu Préinstallées v1 (inventaire, niveaux, fiche Android, guide ADB) ; alerte à
+   la mise à jour ; ménage guidé ; widget ; bouclier, piste A ; points déjà notés en n° 10 (rapport Exodus ancien, version
+   Lite) ; comparaison « Sécurité des données » sur le site ; base communautaire après Play, en commençant par
+   l'étape 0 ; journal par app (piste B) après le test ; Shizuku en dernier.
 
 ### Versions
 

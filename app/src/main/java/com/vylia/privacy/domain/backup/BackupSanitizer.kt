@@ -54,6 +54,7 @@ object BackupSanitizer {
             revokedPermissions = r.revokedPermissions.coerceIn(0, MAX_COUNTER),
             swaps = swaps,
             shieldBlocked = r.shieldBlocked,
+            guidedCleanups = r.guidedCleanups.coerceIn(0, MAX_COUNTER),
         )
         val crossings = keep(file.thresholdCrossings, ThresholdAlert.MAX_CROSSINGS, ::crossing)
         // Réglages et règles ne sont jamais appliqués : inutile de garder plus que l'information.

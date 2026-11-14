@@ -372,7 +372,7 @@ private fun RemovalRow(suggestion: RemovalSuggestion, usageKnown: Boolean) {
  * été ouverte depuis plus d'un an.
  */
 @Composable
-private fun lastUsedText(lastUsedAt: Long?, usageKnown: Boolean): String {
+internal fun lastUsedText(lastUsedAt: Long?, usageKnown: Boolean): String {
     if (lastUsedAt == null) {
         return stringResource(if (usageKnown) R.string.reduce_unused_year else R.string.reduce_last_used_unknown)
     }

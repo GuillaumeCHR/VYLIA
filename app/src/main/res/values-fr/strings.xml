@@ -1369,4 +1369,31 @@
         <item quantity="one">Copier la commande (%1$d app)</item>
         <item quantity="other">Copier les commandes (%1$d apps)</item>
     </plurals>
+
+    <!-- Ménage guidé (Gérer) -->
+    <string name="cleanup_title">Ménage en 5 minutes</string>
+    <string name="cleanup_nothing">Rien à ranger pour l\'instant : aucune action ne ferait monter le score du téléphone. Bravo !</string>
+    <string name="cleanup_step_title">Étape %1$d sur %2$d</string>
+    <string name="cleanup_revoke_title">Retirer des autorisations à %1$s</string>
+    <string name="cleanup_revoke_hint">Dans la fiche Android de l\'app, ouvrez Autorisations et passez celles-ci sur « Refuser ». L\'app continue de fonctionner : elle redemandera si elle en a vraiment besoin.</string>
+    <string name="cleanup_remove_title">Désinstaller %1$s</string>
+    <string name="cleanup_remove_intrusive">Une des apps les plus intrusives de ce téléphone</string>
+    <string name="cleanup_shield_title">Activer le Bouclier VYLIA</string>
+    <string name="cleanup_shield_text">Il bloque les requêtes de traçage de toutes vos apps, sur le téléphone même : rien n\'est envoyé ailleurs.</string>
+    <string name="cleanup_app_score">Score de l\'app : %1$d → %2$d</string>
+    <string name="cleanup_device_score">Score du téléphone : %1$d → %2$d</string>
+    <string name="cleanup_device_gain_small">+%1$s point sur le score du téléphone</string>
+    <string name="cleanup_step_done">✓ Fait</string>
+    <string name="cleanup_next">Étape suivante</string>
+    <string name="cleanup_see_summary">Voir le résultat</string>
+    <string name="cleanup_skip">Passer</string>
+    <string name="cleanup_stop">Arrêter</string>
+    <string name="cleanup_close">Fermer</string>
+    <string name="cleanup_summary_title">Ménage terminé</string>
+    <plurals name="cleanup_summary_done">
+        <item quantity="one">%1$d étape faite sur %2$d.</item>
+        <item quantity="other">%1$d étapes faites sur %2$d.</item>
+    </plurals>
+    <string name="cleanup_summary_none">Aucune étape faite cette fois. Pas de souci : les actions restent dans Gérer.</string>
+    <string name="cleanup_summary_again">Le ménage vous sera proposé de nouveau si le score du téléphone baisse.</string>
 </resources>

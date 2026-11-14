@@ -397,6 +397,8 @@
     <string name="badge_good_swap_description">Install an alternative from the catalogue</string>
     <string name="badge_shield_active">Shield on</string>
     <string name="badge_shield_active_description">Turn on the VYLIA Shield and block a first tracking request</string>
+    <string name="badge_guided_cleanup">Big cleanup</string>
+    <string name="badge_guided_cleanup_description">Finish the 5-minute cleanup with at least one step done</string>
 
     <!-- Permissions à risque (puces des cartes, export CSV) -->
     <string name="risk_access_background_location">Background location</string>

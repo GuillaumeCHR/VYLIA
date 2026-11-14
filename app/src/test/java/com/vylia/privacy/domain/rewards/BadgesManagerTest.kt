@@ -105,4 +105,16 @@ class BadgesManagerTest {
         assertTrue(saved === store.saved) // rien de réécrit
         assertTrue(manager.state.value.shieldBlocked)
     }
+
+    @Test
+    fun `menage guide - badge Grand menage seulement avec une etape faite, score retenu dans tous les cas`() {
+        manager.onGuidedCleanupFinished(deviceScore = 61, stepsDone = 0)
+        assertFalse(Badge.GUIDED_CLEANUP in manager.state.value.unlockedBadges)
+        assertEquals(61, manager.state.value.cleanupScore)
+
+        manager.onGuidedCleanupFinished(deviceScore = 64, stepsDone = 2)
+        assertTrue(Badge.GUIDED_CLEANUP in manager.state.value.unlockedBadges)
+        assertEquals(1, manager.state.value.guidedCleanups)
+        assertEquals(64, store.saved?.cleanupScore)
+    }
 }

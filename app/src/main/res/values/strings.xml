@@ -1321,4 +1321,27 @@
         <item quantity="one">Copy the command (%1$d app)</item>
         <item quantity="other">Copy the commands (%1$d apps)</item>
     </plurals>
+
+    <!-- Widget d'écran d'accueil -->
+    <string name="widget_description">Phone score and VYLIA Shield, without any app name</string>
+    <string name="widget_grade">Grade %1$s</string>
+    <string name="widget_no_score">Open VYLIA</string>
+    <string name="widget_score_description">Phone score: %1$d out of 100, grade %2$s</string>
+    <string name="widget_shield_active">Shield on</string>
+    <string name="widget_shield_paused">Paused</string>
+    <string name="widget_paused_until">Until %1$s</string>
+    <string name="widget_shield_starting">Shield starting…</string>
+    <string name="widget_shield_off">Shield off</string>
+    <string name="widget_shield_bypassed">Shield bypassed</string>
+    <plurals name="widget_blocked_today">
+        <item quantity="one">%1$d request blocked today</item>
+        <item quantity="other">%1$d requests blocked today</item>
+    </plurals>
+    <string name="widget_action_pause">Pause</string>
+    <string name="widget_action_resume">Resume</string>
+    <string name="widget_action_activate">Turn on</string>
+    <string name="widget_action_open">See</string>
+    <string name="widget_preview_score" translatable="false">72</string>
+    <string name="widget_preview_grade">Grade B</string>
+    <string name="widget_preview_blocked">48 requests blocked today</string>
 </resources>

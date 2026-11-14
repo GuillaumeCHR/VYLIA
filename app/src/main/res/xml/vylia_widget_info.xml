@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget d'écran d'accueil : redimensionnable de la petite taille (score seul) à la moyenne (score et bouclier).
+     Aucune mise à jour périodique : l'app le met à jour à la fin d'un scan et quand le bouclier change. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/widget_description"
+    android:initialLayout="@layout/widget_medium"
+    android:minWidth="110dp"
+    android:minHeight="50dp"
+    android:minResizeWidth="80dp"
+    android:minResizeHeight="40dp"
+    android:previewLayout="@layout/widget_preview"
+    android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="4"
+    android:targetCellHeight="1"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="home_screen" />

@@ -1,1 +1,3 @@
-Alerte à la mise à jour : quand une mise à jour ajoute ou retire des traqueurs, ou des permissions qui coûtent des points, VYLIA vous dit ce qui a changé et comment le score bouge (Paramètres › Automatisations, désactivée par défaut).
+Widget : le score du téléphone et, en plus large, l'état du bouclier, les requêtes bloquées aujourd'hui et un bouton pause ou activation.
+Apps préinstallées (mode Avancé) : les apps livrées avec le téléphone, avec un filtre dans Scanner et un onglet dans Gérer.
+Alerte à la mise à jour : quand une mise à jour ajoute ou retire des traqueurs ou des permissions qui coûtent des points, VYLIA vous dit ce qui change et comment le score bouge (désactivée par défaut).

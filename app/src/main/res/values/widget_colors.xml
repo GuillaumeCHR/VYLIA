@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Widget d'écran d'accueil, thème clair. Android 12 et plus : couleurs du téléphone (values-v31). -->
+<resources>
+    <color name="widget_background">#FFF8FAFC</color>
+    <color name="widget_text">#FF0F172A</color>
+    <color name="widget_text_secondary">#FF475569</color>
+    <color name="widget_button">#FF0F766E</color>
+    <color name="widget_on_button">#FFFFFFFF</color>
+    <!-- Score : vert, orange, rouge, assez foncés pour se lire sur fond clair. -->
+    <color name="widget_score_good">#FF047857</color>
+    <color name="widget_score_fair">#FFB45309</color>
+    <color name="widget_score_poor">#FFB91C1C</color>
+</resources>

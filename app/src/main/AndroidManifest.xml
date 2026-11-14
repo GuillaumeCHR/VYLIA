@@ -61,6 +61,24 @@
 
         <!-- Bouclier VYLIA : déclaré par le module :shield (service VPN et tuile). -->
 
+        <!-- Widget d'écran d'accueil : score du téléphone et bouclier, sans aucun nom d'app. Exporté pour que
+             l'écran d'accueil s'y lie. Il n'accepte que les mises à jour d'Android. -->
+        <receiver
+            android:name=".ui.widget.VyliaWidgetProvider"
+            android:exported="true"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/vylia_widget_info" />
+        </receiver>
+        <!-- Bouton du bouclier du widget : non exporté, seul le PendingIntent de VYLIA l'atteint. -->
+        <receiver
+            android:name=".ui.widget.WidgetShieldReceiver"
+            android:exported="false" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

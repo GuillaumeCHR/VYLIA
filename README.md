@@ -105,6 +105,9 @@ Et aussi :
   autre quand une mise à jour ajoute ou retire des traqueurs ou des permissions qui coûtent des points (« ajoute 2
   traqueurs : 72 → 58 », par rapport à la dernière analyse de l'app), et des scans de fond hebdomadaires ou mensuels qui alimentent le Suivi, précédés d'une mise à jour des bases (une fois par
   semaine au plus, en Wi-Fi par défaut).
+- **Un widget d'écran d'accueil** : le score du téléphone et sa note ; en plus large, l'état du bouclier, les requêtes
+  bloquées aujourd'hui et un bouton pour le mettre en pause, le reprendre ou l'activer. Jamais de nom d'app, clair ou
+  sombre selon le téléphone, aux couleurs Material You à partir d'Android 12.
 - **Vos données, à vous** : exporter tout ce que VYLIA conserve dans un fichier lisible, l'importer sur un autre
   téléphone sans rien écraser, ou tout supprimer.
 

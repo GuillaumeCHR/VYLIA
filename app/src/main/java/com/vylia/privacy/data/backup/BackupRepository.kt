@@ -37,6 +37,8 @@ class BackupRepository(
     private val alerts: ThresholdAlertRepository? = null,
     /** Derniers états connus des apps, pour l'alerte de mise à jour : ils contiennent la liste de vos apps. */
     private val clearBaselines: () -> Unit = {},
+    /** Score du widget d'écran d'accueil, effacé avec le Suivi. */
+    private val clearWidget: () -> Unit = {},
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
     suspend fun export(out: OutputStream) {
@@ -91,6 +93,7 @@ class BackupRepository(
         rewards.clear()
         trackerCache.clear()
         clearBaselines()
+        clearWidget()
         settings.clearScanTimestamps()
         clearShieldCounter()
     }

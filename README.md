@@ -15,7 +15,7 @@ comment fonctionnent les apps derrière l'écran : ce qu'une permission donne vr
 vos données partent chez des entreprises que vous ne connaissez pas. Chaque score est justifié, chaque permission et
 chaque traqueur a sa fiche sans jargon : on apprend à juger une app par soi-même, sans avoir peur.
 
-> Version actuelle : **0.9.8** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
+> Version actuelle : **0.9.9** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
 > site : [guillaumechr.github.io/vylia-site](https://guillaumechr.github.io/vylia-site/).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.

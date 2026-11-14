@@ -1,0 +1,1 @@
+The Shield now focuses on trackers: it no longer blocks the ads apps display, and its lists are Exodus Privacy and EasyPrivacy (over 40,000 domains). The choice between web and mobile filtering is gone.

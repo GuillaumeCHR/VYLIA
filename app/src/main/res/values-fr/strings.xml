@@ -365,7 +365,7 @@
     <string name="alt_method_text">Ces apps viennent d\'AlternativeTo, un site où les internautes se recommandent des alternatives. Dans chaque catégorie, VYLIA retient les apps gratuites qu\'ils apprécient le plus, disponibles sur Android, et ouvre leur fiche Play Store (ou F-Droid à défaut). Quelques apps que le classement oublie sont ajoutées à la main (Bluesky, Signal, Olvid, DuckDuckGo). C\'est un reflet de leur popularité, pas un audit : leur score apparaît dans VYLIA une fois qu\'elles sont installées. La note affichée est celle de Google Play, quand l\'app y est.</string>
     <string name="adtrack_intro_title">Deux façons de réduire le traçage</string>
     <string name="adtrack_intro_text">Avant de contacter le serveur d\'un traqueur, une app demande son adresse (une requête DNS). Refuser de répondre à cette requête empêche les données de partir, pour toutes les apps à la fois. Deux outils le font :</string>
-    <string name="adtrack_intro_shield">• Bouclier VYLIA : le filtrage se fait sur le téléphone, avec les listes de VYLIA. Un interrupteur, le choix entre filtrage web et mobile, une pause, et un compteur en direct. Il utilise un VPN local (Android n\'en autorise qu\'un à la fois) et ne chiffre pas les requêtes qu\'il laisse passer.</string>
+    <string name="adtrack_intro_shield">• Bouclier VYLIA : le filtrage se fait sur le téléphone, avec les listes de VYLIA. Un interrupteur, une pause, et un compteur en direct. Il utilise un VPN local (Android n\'en autorise qu\'un à la fois) et ne chiffre pas les requêtes qu\'il laisse passer.</string>
     <string name="adtrack_intro_private_dns">• DNS privé : vos requêtes sont chiffrées et envoyées à un service que vous choisissez, réglé une fois dans les paramètres d\'Android, sans VPN. Il ne bloque les traqueurs que si ce service les filtre (NextDNS le peut, Quad9 non), et ce service voit vos requêtes.</string>
     <string name="adtrack_intro_choice">L\'un ou l\'autre : quand le DNS privé est réglé sur un service, Android lui envoie directement les requêtes et le bouclier n\'en voit aucune. Pour bloquer les traqueurs simplement, choisissez le bouclier ; pour chiffrer aussi vos requêtes, un DNS privé qui filtre (NextDNS).</string>
     <string name="shield_title">Bouclier VYLIA</string>
@@ -391,7 +391,7 @@
     <string name="shield_filter_web">Filtrage web</string>
     <string name="shield_filter_web_text">Traqueurs des sites, y compris ceux ouverts dans les apps, et mesure d\'audience des apps (Firebase, Amplitude, Adjust…). Gêne rarement les apps et les jeux.</string>
     <string name="shield_filter_mobile">Filtrage mobile</string>
-    <string name="shield_filter_mobile_text">Réseaux de profilage des apps et des jeux (AppLovin, Unity, ironSource, Google AdMob…) : le profil qu\'ils dressent de vous est bloqué.</string>
+    <string name="shield_filter_mobile_text">Réseaux de profilage des apps et des jeux (AppLovin, Unity, ironSource…) : le profil qu\'ils dressent de vous est bloqué.</string>
     <string name="shield_resume">Reprendre maintenant</string>
     <string name="shield_paused_until">En pause jusqu\'à %1$s : rien n\'est bloqué, puis le bouclier reprend tout seul.</string>
     <string name="shield_pause_title">Quand faire une pause ?</string>
@@ -399,7 +399,7 @@
     <string name="shield_pause_offers">• Un code promo, un cashback ou un parrainage n\'est pas crédité : ces offres reposent sur le suivi pour savoir d\'où vous venez.</string>
     <string name="shield_pause_diagnose">• Une app affiche une erreur, une page blanche ou charge sans fin : si la pause règle le problème, le bouclier en était la cause, et les derniers blocages montrent quel serveur.</string>
     <string name="shield_pause_note">Rien n\'est compté pendant la pause : les traqueurs contactés à ce moment-là ne sont pas bloqués.</string>
-    <string name="shield_lists">Listes : Exodus Privacy (ODbL 1.0), AdGuard DNS filter, EasyPrivacy, EasyList, AdGuard Mobile Ads et AdGuard French (GPL v3), %1$s domaines de traçage. Mises à jour dans Paramètres › Bases de données.</string>
+    <string name="shield_lists">Listes : Exodus Privacy (ODbL 1.0) et EasyPrivacy (GPL v3), %1$s domaines de traçage. Mises à jour dans Paramètres › Bases de données. Le bouclier bloque les traqueurs, pas les publicités.</string>
     <string name="shield_company">%1$s · %2$s</string>
     <string name="company_targeting">ciblage</string>
     <string name="company_audience">mesure d\'audience</string>
@@ -429,7 +429,7 @@
     <string name="manage_subtitle">Réduire votre exposition : permissions à retirer, apps à supprimer, alternatives. Les apps au score le plus bas d\'abord.</string>
     <string name="reduce_action_permissions">Gérer les permissions</string>
     <string name="reduce_action_uninstall">Désinstaller</string>
-    <string name="reduce_leaks_hint">Le bouclier ne peut pas les arrêter : serveur partagé avec un service essentiel (Google, Facebook…), adresse IP fixe, ou aucun serveur connu. Seules la désinstallation de l\'app ou une alternative les retirent.</string>
+    <string name="reduce_leaks_hint">Le bouclier ne les arrête pas : régie publicitaire (le bouclier bloque les traqueurs, pas les pubs qu\'affichent les apps), serveur partagé avec un service essentiel (Google, Facebook…), adresse IP fixe, ou aucun serveur connu. Seules la désinstallation de l\'app ou une alternative les retirent.</string>
     <string name="reduce_leaks_empty">Le bouclier bloque tous les traqueurs connus de vos apps.</string>
     <string name="reduce_leaks_pending">Analyse des traqueurs en cours…</string>
     <string name="reduce_leaks_shield_off">Le bouclier est arrêté : cette liste suppose qu\'il est activé. Activez-le pour bloquer les autres traqueurs de vos apps.</string>
@@ -583,7 +583,7 @@
     <string name="learn_shield_none" formatted="false">Non bloqué, ou aucun serveur connu : 100 % de son poids</string>
     <string name="learn_shield_why">Un traqueur bloqué compte encore : il reste dans l\'app et collecte toujours sur le téléphone, il envoie plus tard ce qu\'il a gardé (bouclier en pause, téléphone redémarré, autre VPN), et certaines apps contournent le DNS (adresse IP fixe, DNS chiffré).</string>
     <string name="learn_shield_limits_title">Pourquoi certains traqueurs passent</string>
-    <string name="learn_shield_limits">VYLIA repère un traqueur par son code dans l\'app ; le bouclier le bloque par le nom des serveurs qu\'il contacte. Les deux ne sont pas liés : le bouclier n\'arrête qu\'un traqueur dont les serveurs sont connus. Certains n\'en ont aucun de répertorié, d\'autres passent par des serveurs partagés avec des services essentiels (Google, Facebook…), impossibles à bloquer sans casser des apps.</string>
+    <string name="learn_shield_limits">VYLIA repère un traqueur par son code dans l\'app ; le bouclier le bloque par le nom des serveurs qu\'il contacte. Les deux ne sont pas liés : le bouclier n\'arrête qu\'un traqueur dont les serveurs sont connus. Certains n\'en ont aucun de répertorié, d\'autres passent par des serveurs partagés avec des services essentiels (Google, Facebook…), impossibles à bloquer sans casser des apps. Les régies publicitaires des apps (AdMob, AppLovin, Unity…) ne sont pas bloquées non plus : le bouclier bloque les traqueurs, pas les pubs qu\'affichent les apps.</string>
     <string name="learn_shield_cap">La pénalité des traqueurs, déjà plafonnée à %1$d points, baisse dans la même proportion que leur poids : une app très pistée profite aussi du bouclier.</string>
     <string name="learn_shield_off">Bouclier arrêté, en pause ou contourné (DNS privé, autre VPN) : les scores sont ceux sans le bouclier. Le score sans bouclier est aussi celui du classement public, indiqué sur la fiche de chaque app.</string>
     <string name="learn_limit_title">Limite</string>
@@ -898,7 +898,7 @@
     <string name="about_license">VYLIA est un logiciel libre, sous licence GNU GPL v3 (ou toute version ultérieure) : vous pouvez l\'étudier, le modifier et le redistribuer selon ses termes. Il est fourni sans aucune garantie.</string>
     <string name="about_license_trademarks">Les noms VYLIA et Yogi Studio, leurs logos et l\'icône de l\'application ne sont pas couverts par la licence. Le logo Exodus Privacy appartient à l\'association Exodus Privacy.</string>
     <string name="about_font">Le nom VYLIA est composé en Unbounded, de The Unbounded Project Authors, sous SIL Open Font License 1.1.</string>
-    <string name="about_shield_lists">Le bouclier VYLIA filtre les requêtes DNS avec des listes publiques, intégrées à l\'app et mises à jour dans Paramètres › Bases de données : Exodus Privacy (ODbL 1.0), EasyList et EasyPrivacy des auteurs d\'EasyList (GPL v3), et les filtres DNS, Mobile Ads et French d\'AdGuard (GPL v3), ainsi que, si vous l\'ajoutez, sa liste des traqueurs CNAME (MIT). Les domaines bloqués sont nommés grâce à AdGuard companiesdb (CC BY-SA 4.0). VYLIA n\'est ni affiliée à ces projets ni approuvée par eux.</string>
+    <string name="about_shield_lists">Le bouclier VYLIA filtre les requêtes DNS avec des listes publiques, intégrées à l\'app et mises à jour dans Paramètres › Bases de données : Exodus Privacy (ODbL 1.0), EasyPrivacy des auteurs d\'EasyList (GPL v3) et, si vous l\'ajoutez, la liste des traqueurs CNAME d\'AdGuard (MIT). Il bloque les traqueurs, pas les publicités. Les domaines bloqués sont nommés grâce à AdGuard companiesdb (CC BY-SA 4.0). VYLIA n\'est ni affiliée à ces projets ni approuvée par eux.</string>
     <string name="about_source">Code source : %1$s</string>
     <string name="about_source_button">Voir le code source</string>
     <string name="about_privacy_policy_button">Règles de confidentialité</string>
@@ -943,8 +943,8 @@
     <string name="credits_casting_name">La communauté AlternativeTo</string>
     <string name="credits_casting_note">Des milliers de recommandations entre utilisateurs. VYLIA en retient deux ou trois par catégorie, et vous laisse choisir.</string>
     <string name="credits_shield">Filtrage DNS du bouclier</string>
-    <string name="credits_shield_name">EasyList, EasyPrivacy et les filtres AdGuard</string>
-    <string name="credits_shield_note">Des listes de serveurs de traçage, tenues à jour par leurs communautés et partagées sous GPL v3. Le bouclier les lit sur votre téléphone, pour dire non à votre place.</string>
+    <string name="credits_shield_name">EasyPrivacy</string>
+    <string name="credits_shield_note">Une liste de serveurs de traçage, tenue à jour par sa communauté et partagée sous GPL v3. Le bouclier la lit sur votre téléphone, pour dire non à votre place.</string>
     <string name="credits_cast">Figurants du générique d\'ouverture</string>
     <string name="credits_cast_name">Les petits espions</string>
     <string name="credits_cast_note">Bienveillants et non rémunérés. Ils quittent l\'écran dès qu\'on les repère, c\'est tout ce qu\'on demande aux traqueurs.</string>
@@ -967,7 +967,7 @@
     <string name="credits_thanks_exodus">À Exodus Privacy, pour des années de chasse aux traqueurs, partagée avec tout le monde.</string>
     <string name="credits_thanks_echap">À Echap, qui accompagne les victimes de violences numériques et partage avec tout le monde ce qu\'elle sait des stalkerwares.</string>
     <string name="credits_thanks_mvt">À MVT, au Security Lab d\'Amnesty International, à Citizen Lab et à tous les chercheurs qui démasquent les logiciels espions mercenaires et partagent leurs indicateurs avec tout le monde.</string>
-    <string name="credits_thanks_lists">Aux auteurs d\'EasyList et à AdGuard, dont les listes de serveurs de traçage permettent au bouclier de bloquer avant que rien ne parte du téléphone.</string>
+    <string name="credits_thanks_lists">Aux auteurs d\'EasyList, dont la liste EasyPrivacy permet au bouclier de bloquer les traqueurs avant que rien ne parte du téléphone, et à AdGuard, dont la base des entreprises nomme les serveurs qu\'il bloque.</string>
     <string name="credits_thanks_alternativeto">À la communauté AlternativeTo, dont les recommandations nourrissent les alternatives.</string>
     <string name="credits_thanks_apps">Aux apps qui demandent le micro pour afficher la météo : sans vous, VYLIA n\'existerait pas.</string>
     <string name="credits_outro">Aucune donnée personnelle n\'a été collectée pendant ce générique. Nous avons vérifié.</string>

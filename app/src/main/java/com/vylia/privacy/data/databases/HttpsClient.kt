@@ -84,8 +84,6 @@ class HttpsClient(private val allowedHosts: Set<String> = ALLOWED_HOSTS) : Http 
             "reports.exodus-privacy.eu.org",
             "raw.githubusercontent.com",
             "easylist.to",
-            "filters.adtidy.org",
-            "adguardteam.github.io",
         )
     }
 }

@@ -1,7 +1,13 @@
 # Bouclier VYLIA (V2) — VPN local de filtrage DNS
 
-Branche `feature/shield-local-vpn`. Agir › Réduire › Traçage pub : un interrupteur qui bloque, sur le téléphone, les
-requêtes DNS vers les serveurs de traçage, avec un compteur en direct. Débloque le badge 🧿 « Bouclier actif ».
+Filtrer › Filtrage DNS : un interrupteur qui bloque, sur le téléphone, les requêtes DNS vers les serveurs de traçage,
+avec un compteur en direct. Débloque le badge 🧿 « Bouclier actif ».
+
+**Des traqueurs, pas des publicités** (depuis le 2026-11-14) : Google Play interdit aux apps de gêner l'affichage des
+pubs d'autres apps. Le bouclier n'embarque donc aucune liste de publicité (EasyList, AdGuard DNS filter, Mobile Ads et
+French retirées) et ne bloque pas les régies des apps (traqueurs Exodus « Advertisement », Google AdMob, DoubleClick).
+C'est le positionnement d'App Tracking Protection de DuckDuckGo. Une seule version de l'app, Play comme GitHub ; le
+filtrage des régies pourra revenir plus tard en option désactivée d'office (`ShieldFilter.AVAILABLE`).
 
 ## Principe
 
@@ -55,19 +61,23 @@ Deux chemins, qui produisent la même liste :
   `shield/src/main/assets/shield_blocklist.json`, utilisée tant qu'aucune liste n'a été téléchargée.
 - **Listes téléchargées par l'app** (Paramètres › Bases de données, « Tout mettre à jour », ou avant le scan
   périodique) : `ShieldListStore` analyse chaque liste (`AdblockListParser`), n'en garde qu'un extrait compressé
-  (`filesDir/shield/<id>.gz`), puis `BlocklistBuilder` refait la fusion du script et écrit `compiled.bin`.
+  (`filesDir/shield/<id>.gz`), puis `BlocklistBuilder` refait la fusion du script et écrit `compiled2.bin`. `compiled.bin`, compilé avant le
+  2026-11-14 avec les listes de publicité, et les extraits des listes retirées (`ShieldListStore.RETIRED`) sont
+  effacés au démarrage : la liste embarquée reprend la main jusqu'à la prochaine mise à jour.
   `ShieldController.rebuild()` remplace la liste à chaud : le tunnel n'est pas coupé.
 
-Sources (mesures du 2026-11-08) :
+Sources :
 
 | Liste | Licence | Domaines DNS | Rôle |
 |---|---|---|---|
 | Exodus Privacy (`network_signature`) | ODbL | ~540 | traqueurs nommés ; depuis la base Exodus téléchargée par l'app (`ExodusShieldDomains`), catégories complétées par `exodus_category_overrides.json` |
-| AdGuard DNS filter | GPL v3 | 189 910 | base, compilée par AdGuard pour le DNS |
-| EasyList, EasyPrivacy | GPL v3 / CC BY-SA 3.0 | 44 851, 43 351 | EasyPrivacy apporte 11 000 domaines absents du DNS filter |
-| AdGuard Mobile Ads | GPL v3 | 925 | définit le groupe **mobile** |
-| AdGuard French | GPL v3 | 5 308 | sites français |
-| AdGuard CNAME trackers | MIT | 306 600 | **proposée** (2,4 Mo compressés) : +10 000 domaines |
+| EasyPrivacy | GPL v3 / CC BY-SA 3.0 | 43 351 | pistage des sites et des apps |
+| AdGuard CNAME trackers | MIT | 306 600 | **proposée** (2,4 Mo compressés) : traqueurs déguisés en sous-domaine, +10 000 domaines |
+
+Retirées le 2026-11-14 (listes de publicité) : AdGuard DNS filter (189 910 domaines, qui reprend EasyList), EasyList,
+AdGuard Mobile Ads et AdGuard French. Mesure sur un téléphone de 108 apps : score de l'appareil avec bouclier 83 → 79
+(74 sans), traqueurs bloqués 253 → 142 sur 442 ; la perte vient des régies (groupe mobile : −3 points), EasyList et
+le DNS filter ne changeaient rien au score. Les jeux et les apps d'info perdent le plus (State.io 75 → 42).
 
 Écartées : Tracking Protection et Base (déjà compilées dans le DNS filter : 103 et 19 domaines en plus), URL
 Tracking (paramètres d'URL, rien au niveau DNS), Social Media et Fanboy Social (cosmétiques), Annoyances / Cookies
@@ -77,29 +87,29 @@ traqueurs, jamais un site pour son contenu (légal).
 Règles retenues : `||domaine^`, `||domaine^$important`, hosts, domaine seul ; `$badfilter` annule la règle visée ;
 `$third-party` et les autres modificateurs sont écartés (au niveau DNS, ils bloqueraient le site lui-même). Les
 exceptions (`@@||d^`, `@@||d^|`, `@@|d^|`) de toutes les listes protègent le domaine et ses sous-domaines, même si un
-parent est listé ; `NEVER_BLOCK` protège les plateformes.
+parent est listé ; `NEVER_BLOCK` protège les plateformes ; `NEVER_BLOCK_ADS` (AdMob, DoubleClick) est toujours en
+exception, sous-domaines compris, même si EasyPrivacy les cite.
 
 Mémoire : `DomainHashSet` (empreintes FNV-1a 64 bits triées) : 215 000 domaines en 1,9 Mo au lieu d'environ 25 Mo,
-libérés à l'arrêt du bouclier. Total au 2026-11-08 : 205 036 domaines web, 1 046 mobiles.
+libérés à l'arrêt du bouclier. Total au 2026-11-14 : 43 540 domaines web, aucun mobile.
 
 Les domaines bloqués sans traqueur nommé sont nommés dans l'app grâce à AdGuard companiesdb (CC BY-SA 4.0,
 téléchargée seulement) : « Criteo · ciblage ».
 
 Les versions de développement journalisent les domaines autorisés (`adb logcat -s VyliaShield`) : c'est ainsi qu'on
-repère une régie oubliée en jouant à un jeu.
+repère un traqueur oublié.
 
-## Filtrage web et filtrage mobile
+## Groupes de la liste
 
-La liste (format 2) range chaque domaine dans un groupe, activable séparément (au moins un reste actif) :
+La liste (format 2) range chaque domaine dans un groupe :
 
-- **mobile** : régies publicitaires des apps et des jeux (AdGuard Mobile Ads, traqueurs Exodus « Advertisement ») ;
-  les bloquer coupe aussi les vidéos récompensées ;
-- **web** : tout le reste, soit pubs et pistage des sites (EasyList, EasyPrivacy) et mesure d'audience / profilage
-  des apps (Exodus hors publicité, `app-measurement.com`). Gêne rarement les apps.
-
-Le réglage mobile l'emporte : un domaine présent dans les deux (Google AdMob, DoubleClick), ou dont un parent est
-mobile, passe quand le filtrage mobile est coupé. C'est ce qui permet à un joueur de garder le filtrage web sans
-pauses répétées. Au 2026-11-01 : 86 186 domaines web, 1 044 mobile.
+- **web** : pistage des sites, mesure d'audience et profilage des apps (EasyPrivacy, Exodus hors publicité,
+  `app-measurement.com`). Gêne rarement les apps. C'est le seul filtrage proposé (`ShieldFilter.AVAILABLE`) : la
+  section « Que filtrer ? » de la carte du bouclier ne s'affiche pas.
+- **mobile** : vide. Les traqueurs Exodus « Advertisement » sont rangés à part pour en être exclus : ni eux ni leurs
+  sous-domaines ne restent dans le groupe web, même si EasyPrivacy les cite. Le format et la recherche
+  (`Blocklist.match`, le filtrage mobile l'emporte) restent en place pour une future option.
+- **spyware** : indicateurs MVT, toujours bloqués ; **allow** : exceptions, dont `NEVER_BLOCK_ADS`.
 
 ## Le bouclier dans le score
 
@@ -114,7 +124,8 @@ comme dans le classement public. Les permissions ne changent pas.
 - `ExodusShieldDomains.KNOWN_SERVERS` : serveurs connus de traqueurs sans signature utilisable (Amazon Ads, Pangle,
   Appodeal, BidMachine, ironSource, Singular, Adobe, Nielsen ; AdMob à la place de son expression régulière ;
   `an.facebook.com` pour Facebook Ads). Pour le score seulement : jamais ajoutés à la liste, le bouclier bloque la
-  même chose avec ou sans eux ; chacun est déjà bloqué par les listes (test). Mesure du 2026-11-14 sur 108 apps :
+  même chose avec ou sans eux. Ceux des régies ne sont pas bloqués (le score les compte en entier, « non bloqué »
+  plutôt que « aucun serveur connu »), les autres le sont déjà par les listes (test). Mesure du 2026-11-14 sur 108 apps :
   bloqués 53 → 59 traqueurs, sans serveur connu 20 → 12, score de l'appareil avec bouclier 81 → 83 (74 sans).
 - Liste d'apps de DuckDuckGo (tracker-blocklists) écartée : licence CC BY-NC-SA 4.0 (non commerciale, incompatible
   avec la GPL et F-Droid), 87 % de ses domaines déjà bloqués, et le reste suppose des exceptions par app que le
@@ -140,13 +151,12 @@ comme dans le classement public. Les permissions ne changent pas.
 
 ## Pause réglable
 
-Les vidéos récompensées sont des pubs servies par les régies bloquées : elles tournent dans le vide (constaté sur
-State.io et Mr Autofire). La pause laisse le VPN en place mais transmet tout, sans rien compter, puis le filtrage
-reprend seul à l'heure dite : rien à relancer (Android limite les démarrages de service en arrière-plan), pas de
-risque d'oublier de réactiver. Durée choisie avec − et + (5, 10, 15, 30, 45, 60, 90, 120 min), mémorisée ; pendant
-une pause, − et + la raccourcissent ou la prolongent. L'écran explique quand s'en servir : vidéo récompensée (dans
-un jeu par exemple), lien d'e-mail ou de pub suivi, code promo / cashback / parrainage, résultat sponsorisé, et
-diagnostic d'une app qui ne marche plus (si la pause règle le problème, les derniers blocages montrent le serveur).
+Certaines fonctions des apps dépendent d'un serveur que le bouclier bloque. La pause laisse le VPN en place mais
+transmet tout, sans rien compter, puis le filtrage reprend seul à l'heure dite : rien à relancer (Android limite les
+démarrages de service en arrière-plan), pas de risque d'oublier de réactiver. Durée choisie avec − et + (5, 10, 15,
+30, 45, 60, 90, 120 min), mémorisée ; pendant une pause, − et + la raccourcissent ou la prolongent. L'écran explique
+quand s'en servir : code promo / cashback / parrainage non crédité, et diagnostic d'une app qui ne marche plus (si la
+pause règle le problème, les derniers blocages montrent le serveur).
 
 ## Vie privée
 
@@ -182,5 +192,7 @@ tests unitaires (liste, paquets, badge), essai sur téléphone (accord VPN, dém
    journée, passage Wi-Fi ↔ 4G, `app-measurement.com` (Firebase Analytics) absent des listes.
 2. Liste d'exceptions par l'utilisateur (« ne plus bloquer ce domaine ») depuis les derniers blocages.
 3. ~~Crédits~~ (faits). Politique de confidentialité (vylia-site) : dire que le bouclier télécharge ses listes.
-4. ~~EasyList~~, ~~régies mobiles~~, ~~pause~~, ~~mise à jour des listes depuis l'app~~ (faits, 0.9.5).
+4. ~~EasyList~~, ~~régies mobiles~~, ~~pause~~, ~~mise à jour des listes depuis l'app~~ (faits, 0.9.5). EasyList, les
+   filtres AdGuard de publicité et les régies retirés le 2026-11-14 (Google Play).
+6. Filtrage des régies en option, désactivée d'office, une fois l'app acceptée sur Google Play (voir en tête).
 5. Version 0.9.0 une fois validé.

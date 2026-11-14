@@ -115,7 +115,7 @@ class CompaniesSource(private val repository: CompaniesRepository) : DatabaseSou
     override suspend fun update(fetch: Fetch): Outcome = repository.update(fetch)
 }
 
-/** Une liste du bouclier (EasyList, AdGuard…), analysée et gardée compressée par le module du bouclier. */
+/** Une liste du bouclier (EasyPrivacy, traqueurs CNAME d'AdGuard), analysée et gardée compressée par le module du bouclier. */
 class ShieldListSource(
     private val list: com.vylia.privacy.data.shield.ShieldList,
     private val controller: com.vylia.privacy.data.shield.ShieldController,

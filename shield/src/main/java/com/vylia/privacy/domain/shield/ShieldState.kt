@@ -43,7 +43,7 @@ data class ShieldState(
         const val MAX_RECENT = 20
 
         /**
-         * Durées de pause proposées par « − » et « + » : de quoi regarder une vidéo récompensée ou ouvrir un lien (5 min)
+         * Durées de pause proposées par « − » et « + » : de quoi ouvrir un lien ou faire créditer une offre (5 min)
          * jusqu'à une longue session de jeu (2 h).
          */
         val PAUSE_STEPS = listOf(5, 10, 15, 30, 45, 60, 90, 120)

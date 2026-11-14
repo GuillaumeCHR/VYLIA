@@ -66,25 +66,22 @@ class BlocklistTest {
         assert(embedded.size > 10_000) { "liste trop courte : ${embedded.size}" }
         listOf("www.google.com", "graph.facebook.com", "api.github.com", "www.wikipedia.org", "fonts.gstatic.com")
             .forEach { assertNull(it, embedded.match(it)) }
-        assertEquals("Google DoubleClick", embedded.match("ad.doubleclick.net")?.trackerName)
+        assertEquals("Google Firebase Analytics", embedded.match("app-measurement.com")?.trackerName)
     }
 
     @Test
-    fun `la liste embarquee couvre les regies des jeux mobiles`() {
+    fun `la liste embarquee bloque les traqueurs mais pas les regies publicitaires`() {
         val embedded = Blocklist.parse(File("src/main/assets/shield_blocklist.json").readText())
+        // Ni groupe mobile ni régie dans le groupe web, tous filtrages actifs : Google Play interdit de gêner les pubs.
         listOf(
             "outcome-ssp.supersonicads.com", // ironSource
             "an.facebook.com", // Meta Audience Network
             "api16-access-sg.pangle.io", // Pangle
-            "configure.rayjump.com", "analytics.mtgglobals.com", // Mintegral
             "auction.unityads.unity3d.com", // Unity Ads
             "ms.applovin.com", // AppLovin
-        ).forEach { assert(embedded.match(it) != null) { "$it devrait être bloqué" } }
-        assertEquals("Google Firebase Analytics", embedded.match("app-measurement.com")?.trackerName)
-        // Filtrage mobile coupé : les régies des jeux passent, la mesure d'audience reste bloquée.
+            "googleads.g.doubleclick.net", "pagead2.googlesyndication.com", "adservice.google.com", // AdMob, DoubleClick
+        ).forEach { assertNull(it, embedded.match(it)) }
         val web = setOf(ShieldFilter.WEB)
-        listOf("ms.applovin.com", "auction.unityads.unity3d.com", "outcome-ssp.supersonicads.com", "googleads.g.doubleclick.net")
-            .forEach { assertNull(it, embedded.match(it, web)) }
         assertEquals(ShieldFilter.WEB, embedded.match("app-measurement.com", web)?.filter)
         assertEquals(ShieldFilter.WEB, embedded.match("api2.amplitude.com", web)?.filter)
     }

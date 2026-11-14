@@ -32,12 +32,13 @@ data class ShieldList(
 /**
  * Listes du bouclier téléchargées depuis l'app. Le texte reçu n'est pas gardé : seul l'extrait utile au DNS (domaines
  * et exceptions) est écrit, compressé (`filesDir/shield/<id>.gz`), et relu seulement pour recompiler la liste. La liste
- * compilée (`compiled.bin`, empreintes des domaines) est celle que le bouclier charge au démarrage.
+ * compilée (`compiled2.bin`, empreintes des domaines) est celle que le bouclier charge au démarrage.
  */
 class ShieldListStore(private val context: Context) {
 
     private val dir = File(context.filesDir, "shield").apply { mkdirs() }
-    private val compiled = File(dir, "compiled.bin")
+    /** `compiled.bin` avant le 2026-11-14 : compilé avec les listes de publicité, il n'est plus lu ([dropRetired]). */
+    private val compiled = File(dir, "compiled2.bin")
 
     /** Ce qu'une liste installée apporte : domaines retenus, exceptions, règles écartées. */
     data class Installed(val domains: Int, val exceptions: Int, val ignored: Int, val version: String?)
@@ -64,6 +65,19 @@ class ShieldListStore(private val context: Context) {
     }
 
     fun isDownloaded(id: String): Boolean = extract(id).exists()
+
+    /**
+     * Efface les extraits des listes qui ne sont plus proposées ([RETIRED]) et l'ancienne liste compilée ; s'il y avait
+     * un extrait retiré, la liste compilée avec lui aussi. Renvoie `true` si quelque chose a été effacé.
+     */
+    fun dropRetired(): Boolean {
+        val legacy = File(dir, "compiled.bin").delete()
+        val retired = RETIRED.map(::extract).filter { it.exists() }
+        if (retired.isEmpty()) return legacy
+        retired.forEach { it.delete() }
+        compiled.delete()
+        return true
+    }
 
     /** Liste retirée par l'utilisateur (liste proposée) : son extrait est effacé. */
     fun remove(id: String) {
@@ -145,30 +159,18 @@ class ShieldListStore(private val context: Context) {
         private const val MIN_EXODUS_DOMAINS = 200
 
         /**
-         * Listes du bouclier. Écartées (mesures du 2026-11-08, voir docs/shield.md) : AdGuard Tracking Protection et
-         * Base (déjà compilées dans le DNS filter), URL Tracking (paramètres d'URL, sans effet au niveau DNS), Social
-         * Media et Fanboy Social (règles cosmétiques), Liste FR (doublon d'AdGuard French).
+         * Listes du bouclier : des traqueurs seulement. Écartées (mesures du 2026-11-08, voir docs/shield.md) : AdGuard
+         * Tracking Protection et Base (déjà compilées dans le DNS filter), URL Tracking (paramètres d'URL, sans effet au
+         * niveau DNS), Social Media et Fanboy Social (règles cosmétiques), Liste FR (doublon d'AdGuard French). Retirées
+         * le 2026-11-14 ([RETIRED]) : les listes de publicité (EasyList, AdGuard DNS filter, Mobile Ads et French).
          */
+        /** Identifiants des listes que l'app ne propose plus : leurs extraits sont effacés ([dropRetired]). */
+        val RETIRED = listOf("adguard_dns", "easylist", "adguard_mobile", "adguard_french")
+
         val LISTS = listOf(
-            ShieldList(
-                "adguard_dns", "AdGuard DNS filter", "https://adguardteam.github.io/AdGuardSDNSFilter/Filters/filter.txt",
-                "GPL v3", ShieldFilter.WEB, maxBytes = 20 * MB, minDomains = 50_000, downloadBytes = 1_570_000, rawBytes = 4_670_000,
-            ),
-            ShieldList(
-                "easylist", "EasyList", "https://easylist.to/easylist/easylist.txt",
-                "GPL v3", ShieldFilter.WEB, maxBytes = 10 * MB, minDomains = 10_000, downloadBytes = 730_000, rawBytes = 2_090_000,
-            ),
             ShieldList(
                 "easyprivacy", "EasyPrivacy", "https://easylist.to/easylist/easyprivacy.txt",
                 "GPL v3", ShieldFilter.WEB, maxBytes = 10 * MB, minDomains = 10_000, downloadBytes = 450_000, rawBytes = 1_510_000,
-            ),
-            ShieldList(
-                "adguard_mobile", "AdGuard Mobile Ads filter", "https://filters.adtidy.org/extension/ublock/filters/11.txt",
-                "GPL v3", ShieldFilter.MOBILE, maxBytes = 5 * MB, minDomains = 300, downloadBytes = 155_000, rawBytes = 530_000,
-            ),
-            ShieldList(
-                "adguard_french", "AdGuard French filter", "https://filters.adtidy.org/extension/ublock/filters/16.txt",
-                "GPL v3", ShieldFilter.WEB, maxBytes = 5 * MB, minDomains = 1_000, downloadBytes = 190_000, rawBytes = 605_000,
             ),
             ShieldList(
                 "adguard_cname", "AdGuard CNAME trackers",

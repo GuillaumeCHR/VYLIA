@@ -218,15 +218,20 @@ internal fun ShieldCard(
     }
 }
 
-/** Que filtrer : web et mobile, avec ce que chacun bloque ; le dernier filtrage actif ne peut pas être coupé. */
+/**
+ * Que filtrer : les filtrages proposés dans cette version ([ShieldFilter.AVAILABLE]), avec ce que chacun bloque ; le
+ * dernier filtrage actif ne peut pas être coupé. Rien à choisir s'il n'y en a qu'un : la section n'est pas affichée.
+ */
 @Composable
 private fun FiltersSection(filters: Set<ShieldFilter>, onFilter: (ShieldFilter, Boolean) -> Unit) {
-    HorizontalDivider(Modifier.padding(vertical = 4.dp))
-    Text(stringResource(R.string.shield_filters_title), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-    listOf(
+    val offered = listOf(
         Triple(ShieldFilter.WEB, R.string.shield_filter_web, R.string.shield_filter_web_text),
         Triple(ShieldFilter.MOBILE, R.string.shield_filter_mobile, R.string.shield_filter_mobile_text),
-    ).forEach { (filter, title, text) ->
+    ).filter { it.first in ShieldFilter.AVAILABLE }
+    if (offered.size < 2) return
+    HorizontalDivider(Modifier.padding(vertical = 4.dp))
+    Text(stringResource(R.string.shield_filters_title), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+    offered.forEach { (filter, title, text) ->
         val on = filter in filters
         val label = stringResource(title)
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(12.dp)) {

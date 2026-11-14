@@ -3,6 +3,7 @@ package com.vylia.privacy.domain.shield
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNotNull
+import org.junit.Assert.assertNull
 import org.junit.Test
 
 class ExodusShieldDomainsTest {
@@ -30,10 +31,17 @@ class ExodusShieldDomainsTest {
     }
 
     @Test
-    fun `serveurs connus deja bloques par la liste embarquee, jamais ajoutes a la liste`() {
+    fun `serveurs connus bloques par la liste embarquee sauf les regies, jamais ajoutes a la liste`() {
         val embedded = Blocklist.parse(java.io.File("src/main/assets/shield_blocklist.json").readText())
+        // Régies publicitaires : pas de filtrage mobile dans cette version, leurs serveurs passent.
+        val ads = setOf(
+            "Amazon Advertisement", "Pangle", "Appodeal Stack", "BidMachine", "ironSource", "Singular", "Google AdMob",
+            "Facebook Ads", "Facebook Audience",
+        )
         ExodusShieldDomains.KNOWN_SERVERS.forEach { (name, domains) ->
-            domains.forEach { assertNotNull("$name : $it", embedded.match(it)?.filter) }
+            domains.forEach {
+                if (name in ads) assertNull("$name : $it", embedded.match(it)) else assertNotNull("$name : $it", embedded.match(it)?.filter)
+            }
         }
         val named = ExodusShieldDomains.named(emptyList())
         assertFalse(ExodusShieldDomains.KNOWN_SERVERS.values.flatten().any { it in named })

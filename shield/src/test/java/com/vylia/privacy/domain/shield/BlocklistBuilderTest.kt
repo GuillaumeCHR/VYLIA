@@ -26,7 +26,8 @@ class BlocklistBuilderTest {
         val result = BlocklistBuilder.build(embedded, listOf(web, mobile), fallback = false)
         val list = result.blocklist
         assertEquals(BlockMatch("tracker.example.com", ShieldFilter.WEB, null), list.match("x.tracker.example.com"))
-        assertEquals(BlockMatch("ads.example.net", ShieldFilter.MOBILE, null), list.match("ads.example.net"))
+        // Liste de rôle mobile : pas de filtrage mobile dans cette version, ses domaines ne sont pas bloqués.
+        assertNull(list.match("ads.example.net"))
         assertEquals("Firebase Analytics", list.match("app-measurement.example.com")?.trackerName)
         assertEquals(BlockMatch("evil.example.net", null, "Pegasus"), list.match("evil.example.net"))
     }
@@ -34,9 +35,9 @@ class BlocklistBuilderTest {
     @Test
     fun `dedoublonne les sous-domaines`() {
         val result = BlocklistBuilder.build(embedded, listOf(web, mobile), fallback = false)
-        // web : tracker.example.com et app-measurement (sub.tracker retiré, admob est mobile) ; mobile : admob, ads.
+        // web : tracker.example.com et app-measurement (sub.tracker retiré, admob est mobile) ; mobile : vide.
         assertEquals(2, result.web)
-        assertEquals(2, result.mobile)
+        assertEquals(0, result.mobile)
     }
 
     @Test
@@ -47,11 +48,20 @@ class BlocklistBuilderTest {
     }
 
     @Test
-    fun `le groupe mobile l emporte`() {
+    fun `une regie nommee n est pas bloquee meme citee par une liste web`() {
         val list = BlocklistBuilder.build(embedded, listOf(web, mobile), fallback = false).blocklist
-        // admob est nommé mobile dans la liste embarquée et cité par une liste web : filtrage mobile coupé, il passe.
-        assertNull(list.match("admob.example.com", setOf(ShieldFilter.WEB)))
-        assertEquals(ShieldFilter.MOBILE, list.match("admob.example.com")?.filter)
+        // admob est nommé mobile dans la liste embarquée et cité par une liste web : il passe, ses sous-domaines aussi.
+        assertNull(list.match("admob.example.com"))
+        assertNull(list.match("x.admob.example.com"))
+    }
+
+    @Test
+    fun `AdMob et DoubleClick ne sont jamais bloques`() {
+        val ads = BlocklistBuilder.Source(ShieldFilter.WEB, parsed("||doubleclick.net^", "||pagead2.googlesyndication.com^", "||tracker.example.com^"))
+        val list = BlocklistBuilder.build(embedded, listOf(ads), fallback = false).blocklist
+        assertNull(list.match("googleads.g.doubleclick.net"))
+        assertNull(list.match("pagead2.googlesyndication.com"))
+        assertEquals(ShieldFilter.WEB, list.match("tracker.example.com")?.filter)
     }
 
     @Test
@@ -60,7 +70,7 @@ class BlocklistBuilderTest {
         assertNull(without.match("old-web.example.com"))
         val with = BlocklistBuilder.build(embedded, listOf(web, mobile), fallback = true).blocklist
         assertEquals(ShieldFilter.WEB, with.match("old-web.example.com")?.filter)
-        assertEquals(ShieldFilter.MOBILE, with.match("old-mobile.example.com")?.filter)
+        assertNull(with.match("old-mobile.example.com"))
     }
 
     @Test

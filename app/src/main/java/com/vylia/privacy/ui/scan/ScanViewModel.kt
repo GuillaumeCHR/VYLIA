@@ -29,6 +29,10 @@ import com.vylia.privacy.domain.usecase.AuditAppsUseCase
 import com.vylia.privacy.domain.usecase.RiskFirstOrder
 import com.vylia.privacy.domain.usecase.deviceScore
 import com.vylia.privacy.data.alert.ScanCompletion
+import com.vylia.privacy.data.preinstalled.PreinstalledRepository
+import com.vylia.privacy.domain.preinstalled.AppGroup
+import com.vylia.privacy.domain.preinstalled.DisableRisk
+import com.vylia.privacy.domain.preinstalled.PreinstalledDatabase
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import com.vylia.privacy.data.shield.ShieldExposureRepository
@@ -59,6 +63,8 @@ class ScanViewModel(
     shieldExposureRepository: ShieldExposureRepository,
     /** Moteur de score en vigueur, bouclier compris s'il filtre (voir AppContainer.scorer). */
     private val currentScorer: () -> PrivacyScorer,
+    /** Liste UAD-ng des apps préinstallées, lue au passage en mode Avancé. */
+    private val preinstalled: PreinstalledRepository,
 ) : ViewModel() {
 
     /** Ce que le bouclier bloque des traqueurs, `null` tant que ce n'est pas calculé (fiche d'une app). */
@@ -78,7 +84,8 @@ class ScanViewModel(
     }
 
     private val scanState = MutableStateFlow<ScanState>(ScanState.Loading)
-    private val selectedFilter = MutableStateFlow(AppFilter.USER)
+    private val selectedFilter = MutableStateFlow(ScanFilter.USER)
+    private val riskFilter = MutableStateFlow<DisableRisk?>(null)
     private val isAnalyzingTrackers = MutableStateFlow(false)
     private var scanJob: Job? = null
 
@@ -91,7 +98,36 @@ class ScanViewModel(
         shieldExposure,
         ruleMatrixRepository.current,
     ) { state, exposure, rules -> if (exposure == null || !BuildConfig.SHIELD_ENABLED) state else withShield(state, exposure, rules) }
+        .combine(combine(preinstalled.current, selectedFilter, riskFilter, ::Triple)) { state, (list, selected, risk) ->
+            withGroups(state, list?.database, selected, risk)
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), ScanUiState())
+
+    /**
+     * Mode Avancé : classe les apps système (préinstallées ou composants d'Android) et applique le filtre choisi. Tant
+     * que la liste UAD-ng n'est pas lue, les deux filtres montrent toutes les apps système.
+     */
+    private fun withGroups(state: ScanUiState, list: PreinstalledDatabase?, selected: ScanFilter, risk: DisableRisk?): ScanUiState {
+        if (!state.advancedMode || list == null) return state
+        val info = state.scannedApps.filter { it.app.isSystemApp }.associate { it.app.packageName to list.classify(it.app) }
+        val preinstalledApps = state.scannedApps.filter { info[it.app.packageName]?.group == AppGroup.PREINSTALLED }
+        val riskCounts = preinstalledApps.groupingBy { info.getValue(it.app.packageName).risk }.eachCount()
+        val activeRisk = risk.takeIf { selected == ScanFilter.PREINSTALLED && it in riskCounts }
+        val visible = when (selected) {
+            ScanFilter.USER -> state.apps
+            ScanFilter.PREINSTALLED -> preinstalledApps.filter { activeRisk == null || info.getValue(it.app.packageName).risk == activeRisk }
+            ScanFilter.SYSTEM -> state.scannedApps.filter { info[it.app.packageName]?.group == AppGroup.SYSTEM }
+        }
+        return state.copy(
+            apps = visible,
+            averageScore = PrivacyScore.average(visible.map { it.score }),
+            riskFilter = activeRisk,
+            preinstalled = info,
+            preinstalledCount = preinstalledApps.size,
+            coreSystemCount = info.count { it.value.group == AppGroup.SYSTEM },
+            riskCounts = riskCounts,
+        )
+    }
 
     /** Exposition de l'appareil avec le bouclier, à côté de son score (en-tête d'Analyse). */
     private fun withShield(
@@ -116,6 +152,8 @@ class ScanViewModel(
     val recentRewards: StateFlow<List<RemovedApp>> = _recentRewards.asStateFlow()
 
     init {
+        // La liste des apps préinstallées n'est lue (1,6 Mo) qu'en mode Avancé, la première fois qu'il est actif.
+        viewModelScope.launch { settingsRepository.advancedMode.first { it }; preinstalled.load() }
         // Premier scan, puis nouveau scan à chaque changement de mode ou de matrice de règles.
         viewModelScope.launch {
             combine(settingsRepository.advancedMode, ruleMatrixRepository.current) { _, _ -> }.collect { refresh() }
@@ -127,8 +165,14 @@ class ScanViewModel(
         viewModelScope.launch { scorer.drop(1).collect { rescore(it) } }
     }
 
-    fun selectFilter(filter: AppFilter) {
+    fun selectFilter(filter: ScanFilter) {
+        if (filter != selectedFilter.value) riskFilter.value = null
         selectedFilter.value = filter
+    }
+
+    /** Sous Préinstallées : un niveau de risque, ou `null` pour tous. */
+    fun selectRisk(risk: DisableRisk?) {
+        riskFilter.value = risk
     }
 
     fun refresh() {
@@ -213,14 +257,15 @@ class ScanViewModel(
         scanState.value = ScanState.Success(apps)
     }
 
-    private fun reduce(scan: ScanState, selected: AppFilter, advanced: Boolean, analyzing: Boolean, lastScanAt: Long?): ScanUiState {
-        val filter = if (advanced) selected else AppFilter.USER
+    private fun reduce(scan: ScanState, chosen: ScanFilter, advanced: Boolean, analyzing: Boolean, lastScanAt: Long?): ScanUiState {
+        val selected = if (advanced) chosen else ScanFilter.USER
+        val filter = selected.appFilter
         return when (scan) {
-            ScanState.Loading -> ScanUiState(isLoading = true, advancedMode = advanced, selectedFilter = filter, lastScanAt = lastScanAt)
+            ScanState.Loading -> ScanUiState(isLoading = true, advancedMode = advanced, selectedFilter = selected, lastScanAt = lastScanAt)
             is ScanState.Failure -> ScanUiState(
                 isLoading = false,
                 advancedMode = advanced,
-                selectedFilter = filter,
+                selectedFilter = selected,
                 errorMessage = scan.message,
                 lastScanAt = lastScanAt,
             )
@@ -230,7 +275,7 @@ class ScanViewModel(
                 ScanUiState(
                     isLoading = false,
                     advancedMode = advanced,
-                    selectedFilter = filter,
+                    selectedFilter = selected,
                     apps = visible,
                     scannedApps = scan.apps,
                     averageScore = PrivacyScore.average(visible.map { it.score }),
@@ -309,6 +354,7 @@ class ScanViewModel(
                     container.scanCompletion,
                     container.shieldExposureRepository,
                     container.scorer,
+                    container.preinstalledRepository,
                 )
             }
         }

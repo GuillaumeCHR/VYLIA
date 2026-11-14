@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.items
@@ -76,10 +77,13 @@ enum class ManageSection(@param:StringRes val title: Int) {
     PERMISSIONS(R.string.reduce_tab_permissions),
     REMOVALS(R.string.reduce_tab_removals),
     TRACKERS(R.string.reduce_tab_trackers),
-    ALTERNATIVES(R.string.manage_tab_alternatives);
+    ALTERNATIVES(R.string.manage_tab_alternatives),
+    PREINSTALLED(R.string.manage_tab_preinstalled);
 
     companion object {
-        fun visible(shieldEnabled: Boolean): List<ManageSection> = if (shieldEnabled) entries else entries - TRACKERS
+        /** Traqueurs : seulement avec le bouclier ; Préinstallées : seulement en mode Avancé. */
+        fun visible(shieldEnabled: Boolean, advanced: Boolean = false): List<ManageSection> =
+            entries.filter { (it != TRACKERS || shieldEnabled) && (it != PREINSTALLED || advanced) }
     }
 }
 
@@ -92,11 +96,13 @@ internal fun ReduceTab(
     onSection: (ManageSection) -> Unit,
     alternatives: @Composable () -> Unit,
     trackers: @Composable () -> Unit = {},
+    advanced: Boolean = false,
+    preinstalled: @Composable () -> Unit = {},
 ) {
-    val sections = ManageSection.visible(BuildConfig.SHIELD_ENABLED)
+    val sections = ManageSection.visible(BuildConfig.SHIELD_ENABLED, advanced)
     val current = section.takeIf { it in sections } ?: ManageSection.PERMISSIONS
     Column {
-        SecondaryTabRow(selectedTabIndex = sections.indexOf(current)) {
+        val tabs: @Composable () -> Unit = {
             sections.forEach { entry ->
                 Tab(
                     selected = current == entry,
@@ -112,11 +118,15 @@ internal fun ReduceTab(
                 )
             }
         }
+        // Cinq sous-onglets (mode Avancé avec le bouclier) ne tiennent pas en largeur : la barre défile.
+        if (sections.size > 4) SecondaryScrollableTabRow(selectedTabIndex = sections.indexOf(current), edgePadding = 8.dp, tabs = tabs)
+        else SecondaryTabRow(selectedTabIndex = sections.indexOf(current), tabs = tabs)
         when (current) {
             ManageSection.PERMISSIONS -> RevocationsList(revocations)
             ManageSection.REMOVALS -> RemovalsList(removals, usage)
             ManageSection.TRACKERS -> trackers()
             ManageSection.ALTERNATIVES -> alternatives()
+            ManageSection.PREINSTALLED -> preinstalled()
         }
     }
 }

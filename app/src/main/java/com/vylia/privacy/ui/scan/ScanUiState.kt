@@ -1,17 +1,40 @@
 package com.vylia.privacy.ui.scan
 
 import com.vylia.privacy.domain.model.AppFilter
+import com.vylia.privacy.domain.preinstalled.AppGroup
+import com.vylia.privacy.domain.preinstalled.DisableRisk
+import com.vylia.privacy.domain.preinstalled.PreinstalledInfo
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.data.shield.ShieldExposureRepository
 import com.vylia.privacy.domain.scoring.ShieldedScore
 import com.vylia.privacy.domain.shield.TrackerCoverage
 
+/** Filtre de Scanner en mode Avancé : apps utilisateur, préinstallées, ou composants d'Android. */
+enum class ScanFilter(val group: AppGroup) {
+    USER(AppGroup.USER),
+    PREINSTALLED(AppGroup.PREINSTALLED),
+    SYSTEM(AppGroup.SYSTEM),
+    ;
+
+    /** Apps lues pour ce filtre avant le classement : utilisateur, ou système (préinstallées et composants). */
+    val appFilter: AppFilter get() = if (this == USER) AppFilter.USER else AppFilter.SYSTEM
+}
+
 data class ScanUiState(
     val isLoading: Boolean = true,
     /** Mode Basique (`false`) : seules les apps utilisateur sont scannées et l'onglet Système est masqué. */
     val advancedMode: Boolean = false,
-    val selectedFilter: AppFilter = AppFilter.USER,
+    val selectedFilter: ScanFilter = ScanFilter.USER,
+    /** Sous Préinstallées : niveau de risque choisi, `null` pour tous. */
+    val riskFilter: DisableRisk? = null,
+    /** Classement de chaque app système (mode Avancé, une fois la liste UAD-ng lue). */
+    val preinstalled: Map<String, PreinstalledInfo> = emptyMap(),
+    val preinstalledCount: Int = 0,
+    /** Composants d'Android : les apps système qui ne sont pas des apps préinstallées. */
+    val coreSystemCount: Int = 0,
+    /** Apps préinstallées par niveau de risque. */
+    val riskCounts: Map<DisableRisk, Int> = emptyMap(),
     /** Apps de l'onglet sélectionné, de la plus à risque à la moins à risque. */
     val apps: List<AuditedApp> = emptyList(),
     /** Toutes les apps du scan (les deux onglets en mode Avancé) : écran Analyse et détail d'une app. */

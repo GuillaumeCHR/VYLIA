@@ -87,6 +87,7 @@ private val CREDITS = listOf(
     CreditBlock(R.string.credits_investigation, R.string.credits_investigation_name, R.string.credits_investigation_note),
     CreditBlock(R.string.credits_counter_spy, R.string.credits_counter_spy_name, R.string.credits_counter_spy_note),
     CreditBlock(R.string.credits_targeted, R.string.credits_targeted_name, R.string.credits_targeted_note),
+    CreditBlock(R.string.credits_debloat, R.string.credits_debloat_name, R.string.credits_debloat_note),
     CreditBlock(R.string.credits_shield, R.string.credits_shield_name, R.string.credits_shield_note),
     CreditBlock(R.string.credits_casting, R.string.credits_casting_name, R.string.credits_casting_note),
     CreditBlock(R.string.credits_cast, R.string.credits_cast_name, R.string.credits_cast_note),

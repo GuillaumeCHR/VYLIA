@@ -1,5 +1,8 @@
 package com.vylia.privacy.ui.scan.components
 
+import com.vylia.privacy.ui.preinstalled.LocalPreinstalled
+import com.vylia.privacy.ui.preinstalled.PreinstalledPill
+import com.vylia.privacy.ui.preinstalled.originLabel
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -87,6 +90,7 @@ private fun CompactAppCard(auditedApp: AuditedApp, modifier: Modifier, onClick: 
                 )
                 PenaltyLine(result)
                 if (result.securityFindings.isNotEmpty()) SecurityLine(result)
+                LocalPreinstalled.current[app.packageName]?.let { PreinstalledPill(it, app.enabled) }
             }
             ScoreBadge(auditedApp.score)
         }
@@ -162,6 +166,16 @@ private fun DetailedAppCard(auditedApp: AuditedApp, modifier: Modifier, onClick:
                     )
                     Text(
                         text = app.packageName,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                LocalPreinstalled.current[app.packageName]?.let { info ->
+                    PreinstalledPill(info, app.enabled)
+                    Text(
+                        text = LocalResources.current.originLabel(info),
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         maxLines = 1,

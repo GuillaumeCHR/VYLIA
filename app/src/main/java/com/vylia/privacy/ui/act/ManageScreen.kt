@@ -44,6 +44,7 @@ import com.vylia.privacy.domain.shield.ShieldStatus
 import com.vylia.privacy.ui.components.ScoreBadge
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.scan.ScanViewModel
+import com.vylia.privacy.ui.preinstalled.PreinstalledTab
 
 import androidx.compose.ui.text.style.TextAlign
 
@@ -129,6 +130,8 @@ fun ManageScreen(
                         onAlternatives = { onSection(ManageSection.ALTERNATIVES) },
                     )
                 },
+                advanced = state.advancedMode,
+                preinstalled = { PreinstalledTab(state.scannedApps, state.preinstalled) },
             )
         }
     }

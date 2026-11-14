@@ -78,6 +78,15 @@ class SettingsRepository(context: Context) {
         _installAlerts.value = enabled
     }
 
+    /** Notification quand une mise à jour change les traqueurs ou les permissions notées d'une app (désactivée par défaut). */
+    private val _updateAlerts = MutableStateFlow(prefs.getBoolean(KEY_UPDATE_ALERTS, false))
+    val updateAlerts: StateFlow<Boolean> = _updateAlerts.asStateFlow()
+
+    fun setUpdateAlerts(enabled: Boolean) {
+        prefs.edit().putBoolean(KEY_UPDATE_ALERTS, enabled).apply()
+        _updateAlerts.value = enabled
+    }
+
     /** Notification dédiée quand une app est reconnue comme stalkerware connu (désactivée par défaut). */
     private val _stalkerwareAlerts = MutableStateFlow(prefs.getBoolean(KEY_STALKERWARE_ALERTS, false))
     val stalkerwareAlerts: StateFlow<Boolean> = _stalkerwareAlerts.asStateFlow()
@@ -168,6 +177,7 @@ class SettingsRepository(context: Context) {
         private const val KEY_UPDATE_WIFI_ONLY = "update_wifi_only"
         private const val KEY_LAST_AUTO_UPDATE = "last_auto_update"
         private const val KEY_INSTALL_ALERTS = "install_alerts"
+        private const val KEY_UPDATE_ALERTS = "update_alerts"
         private const val KEY_STALKERWARE_ALERTS = "stalkerware_alerts"
         private const val KEY_HOW_IT_WORKS_SHOWN = "how_it_works_shown"
         private const val KEY_NOTIFIED_STALKERWARE = "notified_stalkerware"

@@ -768,7 +768,7 @@
     <string name="settings_automation_both">Alertes d\'installation et scans de fond activés</string>
     <string name="automation_install_title">À l\'installation d\'une app</string>
     <string name="automation_install_switch">Me prévenir avec son score</string>
-    <string name="automation_install_hint">VYLIA vérifie environ toutes les 15 minutes si une app a été installée, l\'analyse sur le téléphone et vous notifie son score et ses badges d\'alerte. Les mises à jour ne sont pas signalées.</string>
+    <string name="automation_install_hint">VYLIA vérifie environ toutes les 15 minutes si une app a été installée, l\'analyse sur le téléphone et vous notifie son score et ses badges d\'alerte. Les mises à jour ont leur propre alerte, juste en dessous.</string>
     <string name="automation_notifications_blocked">Les notifications de VYLIA sont bloquées dans les réglages d\'Android : rien ne s\'affichera.</string>
     <string name="automation_open_notification_settings">Ouvrir les réglages des notifications</string>
     <string name="automation_scan_title">Scans de fond programmés</string>
@@ -802,6 +802,24 @@
     <string name="notif_install_if_all_granted">Rien n\'est encore accordé. Si vous lui accordez tout ce qu\'elle demande : %1$d/100</string>
     <string name="notif_install_warnings">Alertes : %1$s</string>
     <string name="notif_install_no_warning">Aucun badge d\'alerte. Touchez pour voir le détail.</string>
+    <string name="automation_app_update_title">À la mise à jour d\'une app</string>
+    <string name="automation_app_update_switch">Me dire ce que la mise à jour change</string>
+    <string name="automation_app_update_hint">Quand une mise à jour ajoute ou retire des traqueurs, ou des permissions qui coûtent des points, VYLIA vous prévient, par rapport à sa dernière analyse de l\'app. Une mise à jour qui ne change rien de tout cela n\'est pas signalée. Un traqueur qui n\'apparaît qu\'avec une mise à jour des bases n\'est pas imputé à l\'app.</string>
+    <string name="notif_channel_updates">Mises à jour des apps</string>
+    <string name="notif_channel_updates_description">Ce qu\'une mise à jour change dans les traqueurs et les permissions d\'une app</string>
+    <string name="notif_update_title">Mise à jour de %1$s : %2$d → %3$d/100</string>
+    <string name="notif_update_title_score">Mise à jour de %1$s : %2$d/100</string>
+    <plurals name="notif_update_trackers_added">
+        <item quantity="one">Ajoute %1$d traqueur : %2$s</item>
+        <item quantity="other">Ajoute %1$d traqueurs : %2$s</item>
+    </plurals>
+    <plurals name="notif_update_trackers_removed">
+        <item quantity="one">Retire %1$d traqueur : %2$s</item>
+        <item quantity="other">Retire %1$d traqueurs : %2$s</item>
+    </plurals>
+    <string name="notif_update_permissions_added">Demande en plus : %1$s</string>
+    <string name="notif_update_permissions_removed">Ne demande plus : %1$s</string>
+    <string name="notif_update_public">VYLIA a analysé une mise à jour.</string>
     <string name="settings_data">Données</string>
     <string name="settings_data_entry">Gestion des données</string>
     <string name="settings_data_hint">Exporter, importer ou supprimer vos données ; rapport d\'audit (CSV)</string>

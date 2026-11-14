@@ -740,7 +740,7 @@
     <string name="settings_automation_both">Install alerts and background scans on</string>
     <string name="automation_install_title">When an app is installed</string>
     <string name="automation_install_switch">Notify me with its score</string>
-    <string name="automation_install_hint">VYLIA checks for new apps about every 15 minutes, analyses them on the phone and notifies you of their score and warning badges. Updates are not reported.</string>
+    <string name="automation_install_hint">VYLIA checks for new apps about every 15 minutes, analyses them on the phone and notifies you of their score and warning badges. Updates have their own alert, below.</string>
     <string name="automation_notifications_blocked">Notifications from VYLIA are blocked in Android settings: nothing will be shown.</string>
     <string name="automation_open_notification_settings">Open notification settings</string>
     <string name="automation_scan_title">Scheduled background scans</string>
@@ -774,6 +774,24 @@
     <string name="notif_install_if_all_granted">Nothing granted yet. If you grant everything it asks for: %1$d/100</string>
     <string name="notif_install_warnings">Warnings: %1$s</string>
     <string name="notif_install_no_warning">No warning badge. Tap to see the details.</string>
+    <string name="automation_app_update_title">When an app is updated</string>
+    <string name="automation_app_update_switch">Tell me what the update changes</string>
+    <string name="automation_app_update_hint">When an update adds or removes trackers, or permissions that cost points, VYLIA notifies you, compared with its last analysis of the app. Updates that change none of this are not reported. A tracker that only appears because the databases were updated is not blamed on the app.</string>
+    <string name="notif_channel_updates">App updates</string>
+    <string name="notif_channel_updates_description">What an update changes in an app\'s trackers and permissions</string>
+    <string name="notif_update_title">%1$s update: %2$d → %3$d/100</string>
+    <string name="notif_update_title_score">%1$s update: %2$d/100</string>
+    <plurals name="notif_update_trackers_added">
+        <item quantity="one">Adds %1$d tracker: %2$s</item>
+        <item quantity="other">Adds %1$d trackers: %2$s</item>
+    </plurals>
+    <plurals name="notif_update_trackers_removed">
+        <item quantity="one">Removes %1$d tracker: %2$s</item>
+        <item quantity="other">Removes %1$d trackers: %2$s</item>
+    </plurals>
+    <string name="notif_update_permissions_added">Now asks for: %1$s</string>
+    <string name="notif_update_permissions_removed">No longer asks for: %1$s</string>
+    <string name="notif_update_public">VYLIA has analysed an app update.</string>
     <string name="settings_data">Data</string>
     <string name="settings_data_entry">Data management</string>
     <string name="settings_data_hint">Export, import or delete your data; audit report (CSV)</string>

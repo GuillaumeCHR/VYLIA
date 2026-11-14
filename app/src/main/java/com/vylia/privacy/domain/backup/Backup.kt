@@ -40,6 +40,7 @@ data class BackupFile(
 data class BackupSettings(
     val advancedMode: Boolean = false,
     val installAlerts: Boolean = false,
+    val updateAlerts: Boolean = false,
     val backgroundScan: String = "OFF",
     val language: String? = null,
 )

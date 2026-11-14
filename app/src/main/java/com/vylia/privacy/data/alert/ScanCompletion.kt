@@ -31,6 +31,8 @@ class ScanCompletion(
     private val clock: () -> Long = System::currentTimeMillis,
     /** Moteur des scores du scan, bouclier compris : la cause d'une baisse se mesure avec lui. */
     private val scorer: () -> PrivacyScorer = { rules().scorer },
+    /** Après le point du Suivi : l'état de chaque app, auquel ses prochaines mises à jour seront comparées. */
+    private val onApps: (List<AuditedApp>) -> Unit = {},
 ) {
     /** [background] : scan de fond ; sinon l'écran Scan est ouvert et montre déjà une alerte stalkerware. */
     @Synchronized
@@ -44,6 +46,7 @@ class ScanCompletion(
         // Le bouclier change les scores : son état est gardé avec le point, pour expliquer une baisse à son arrêt.
         val versions = databases() + (HistoryRecorder.SHIELD_KEY to if (scorer.hasShield) HistoryRecorder.SHIELD_ON else HistoryRecorder.SHIELD_OFF)
         history.record(userApps.associate { it.app.packageName to it.historyPoint() }, loaded.fingerprint, versions)
+        onApps(userApps)
         val score = userApps.deviceScore()?.value ?: return
         val now = clock()
         alerts.onScan(score, now) {

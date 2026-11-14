@@ -73,6 +73,7 @@ data class AutomationUiState(
     val backgroundScan: BackgroundScan = BackgroundScan.OFF,
     val lastBackgroundScan: Long? = null,
     val stalkerwareAlerts: Boolean = false,
+    val updateAlerts: Boolean = false,
     val updateBeforeScan: Boolean = true,
     val updateWifiOnly: Boolean = true,
 )
@@ -189,17 +190,26 @@ class SettingsViewModel(
         ),
         settingsRepository.updateBeforeScan,
         settingsRepository.updateWifiOnly,
-    ) { state, before, wifi -> state.copy(updateBeforeScan = before, updateWifiOnly = wifi) }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AutomationUiState())
+        settingsRepository.updateAlerts,
+    ) { state, before, wifi, updates -> state.copy(updateBeforeScan = before, updateWifiOnly = wifi, updateAlerts = updates) }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), AutomationUiState())
 
-    /** Le contrôle des installations repart de maintenant s'il ne tournait pas déjà pour l'autre alerte. */
+    /** Le contrôle des installations repart de maintenant s'il ne tournait pas déjà pour une autre alerte. */
     private fun startWatchingInstalls() {
-        if (!settingsRepository.installAlerts.value && !settingsRepository.stalkerwareAlerts.value) installWatcher.start()
+        val watching = settingsRepository.installAlerts.value || settingsRepository.updateAlerts.value || settingsRepository.stalkerwareAlerts.value
+        if (!watching) installWatcher.start()
     }
 
     /** Seules les apps installées après l'activation seront signalées. */
     fun setInstallAlerts(enabled: Boolean) {
         if (enabled) startWatchingInstalls()
         settingsRepository.setInstallAlerts(enabled)
+        automationScheduler.sync()
+    }
+
+    /** Seules les mises à jour qui suivent l'activation seront signalées, comparées à la dernière analyse de l'app. */
+    fun setUpdateAlerts(enabled: Boolean) {
+        if (enabled) startWatchingInstalls()
+        settingsRepository.setUpdateAlerts(enabled)
         automationScheduler.sync()
     }
 

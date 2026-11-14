@@ -16,7 +16,7 @@ class InstallDetectorTest {
     }
 
     @Test
-    fun `new installs are reported, updates, system apps and removed apps are not`() {
+    fun `new installs are reported, system apps and removed apps are not`() {
         val apps = mapOf(
             "new" to Installed(1_500, ignored = false),
             "updated" to Installed(500, ignored = false),
@@ -27,6 +27,19 @@ class InstallDetectorTest {
         assertEquals(10, asked)
         assertEquals(listOf("new"), result.packages)
         assertEquals(InstallCursor(3, 15, 2_000), result.cursor)
+    }
+
+    @Test
+    fun `updates of apps already there are reported apart`() {
+        val apps = mapOf(
+            "new" to Installed(1_500, ignored = false, lastUpdateTime = 1_800),
+            "updated" to Installed(500, ignored = false, lastUpdateTime = 1_500),
+            "old" to Installed(500, ignored = false, lastUpdateTime = 800),
+            "system" to Installed(500, ignored = true, lastUpdateTime = 1_500),
+        )
+        val result = InstallDetector.detect(cursor, 3, 2_000, { 15 to apps.keys.toList() }, apps::get)
+        assertEquals(listOf("new"), result.packages)
+        assertEquals(listOf("updated"), result.updated)
     }
 
     @Test

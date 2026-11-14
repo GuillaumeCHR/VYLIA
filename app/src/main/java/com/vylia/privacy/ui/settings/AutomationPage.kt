@@ -56,7 +56,7 @@ import java.text.DateFormat
 import java.util.Date
 
 /**
- * Paramètres › Automatisations : notification à l'installation, alerte stalkerware, alerte de seuil et scans de fond
+ * Paramètres › Automatisations : notification à l'installation, alerte de mise à jour, alerte stalkerware, alerte de seuil et scans de fond
  * programmés, tous désactivés par défaut.
  */
 @Composable
@@ -127,6 +127,13 @@ internal fun AutomationPage(
                     )
                 }) { Text(stringResource(R.string.automation_open_notification_settings)) }
             }
+        }
+
+        InfoCard(R.string.automation_app_update_title) {
+            SwitchRow(stringResource(R.string.automation_app_update_switch), state.updateAlerts) {
+                withPermission(it, viewModel::setUpdateAlerts)
+            }
+            Hint(stringResource(R.string.automation_app_update_hint))
         }
 
         InfoCard(R.string.automation_stalkerware_title) {

@@ -15,7 +15,7 @@ comment fonctionnent les apps derrière l'écran : ce qu'une permission donne vr
 vos données partent chez des entreprises que vous ne connaissez pas. Chaque score est justifié, chaque permission et
 chaque traqueur a sa fiche sans jargon : on apprend à juger une app par soi-même, sans avoir peur.
 
-> Version actuelle : **0.9.9** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
+> Version actuelle : **0.10.0** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
 > site : [guillaumechr.github.io/vylia-site](https://guillaumechr.github.io/vylia-site/).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.
@@ -93,8 +93,9 @@ Et aussi :
   les listes du bouclier et les données de VYLIA, avec leur état et un bouton **Tout mettre à jour**. Une base
   inchangée n'est pas retéléchargée, une base en échec garde sa version en service, et un traqueur apparu avec une
   mise à jour des bases n'est pas imputé à une app qui n'a pas changé.
-- **Automatisations** (désactivées par défaut) : une notification à l'installation d'une app avec son score, et des
-  scans de fond hebdomadaires ou mensuels qui alimentent le Suivi, précédés d'une mise à jour des bases (une fois par
+- **Automatisations** (désactivées par défaut) : une notification à l'installation d'une app avec son score, une
+  autre quand une mise à jour ajoute ou retire des traqueurs ou des permissions qui coûtent des points (« ajoute 2
+  traqueurs : 72 → 58 », par rapport à la dernière analyse de l'app), et des scans de fond hebdomadaires ou mensuels qui alimentent le Suivi, précédés d'une mise à jour des bases (une fois par
   semaine au plus, en Wi-Fi par défaut).
 - **Vos données, à vous** : exporter tout ce que VYLIA conserve dans un fichier lisible, l'importer sur un autre
   téléphone sans rien écraser, ou tout supprimer.

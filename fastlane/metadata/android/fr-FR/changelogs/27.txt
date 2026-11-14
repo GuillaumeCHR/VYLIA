@@ -1,0 +1,1 @@
+Alerte à la mise à jour : quand une mise à jour ajoute ou retire des traqueurs, ou des permissions qui coûtent des points, VYLIA vous dit ce qui a changé et comment le score bouge (Paramètres › Automatisations, désactivée par défaut).

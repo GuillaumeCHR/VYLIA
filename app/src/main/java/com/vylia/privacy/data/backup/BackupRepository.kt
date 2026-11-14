@@ -35,6 +35,8 @@ class BackupRepository(
     private val clearShieldCounter: () -> Unit = {},
     /** Franchissements de l'alerte de seuil : sauvegardés, restaurés et effacés avec le Suivi. */
     private val alerts: ThresholdAlertRepository? = null,
+    /** Derniers états connus des apps, pour l'alerte de mise à jour : ils contiennent la liste de vos apps. */
+    private val clearBaselines: () -> Unit = {},
     private val clock: () -> Long = System::currentTimeMillis,
 ) {
     suspend fun export(out: OutputStream) {
@@ -46,6 +48,7 @@ class BackupRepository(
             settings = BackupSettings(
                 advancedMode = settings.advancedMode.value,
                 installAlerts = settings.installAlerts.value,
+                updateAlerts = settings.updateAlerts.value,
                 backgroundScan = settings.backgroundScan.value.name,
                 language = language(),
             ),
@@ -87,6 +90,7 @@ class BackupRepository(
         alerts?.clearCrossings()
         rewards.clear()
         trackerCache.clear()
+        clearBaselines()
         settings.clearScanTimestamps()
         clearShieldCounter()
     }

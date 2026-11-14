@@ -23,6 +23,8 @@ import com.vylia.privacy.data.trackers.TrackerUpdater
 import com.vylia.privacy.domain.rewards.BadgesManager
 import com.vylia.privacy.domain.history.HistoryRecorder
 import com.vylia.privacy.data.history.FileHistoryStore
+import com.vylia.privacy.data.automation.FileBaselineStore
+import com.vylia.privacy.data.automation.UpdateBaselines
 import com.vylia.privacy.domain.usecase.AnalyzeTrackersUseCase
 import com.vylia.privacy.domain.usecase.AuditAppsUseCase
 import com.vylia.privacy.data.automation.AutomationScheduler
@@ -84,7 +86,17 @@ class AppContainer(context: Context) {
         rules = { ruleMatrixRepository.current.value },
         databases = { databaseCenter.scoreVersions() },
         scorer = { scorer() },
+        onApps = { updateBaselines.replaceAll(it) },
     )
+
+    /** Derniers états connus des apps : l'alerte de mise à jour dit ce qui a changé depuis. */
+    private val updateBaselines by lazy {
+        UpdateBaselines(
+            FileBaselineStore(File(context.filesDir, "app_baselines.json")),
+            databases = { databaseCenter.scoreVersions() + ("rules" to ruleMatrixRepository.current.value.fingerprint) },
+            shield = { scorer().hasShield },
+        )
+    }
 
     /** Moteur de score en vigueur : les règles, et le bouclier s'il filtre en ce moment (scores avec lui). */
     val scorer: () -> PrivacyScorer = {
@@ -158,7 +170,7 @@ class AppContainer(context: Context) {
     val analyzeTrackersUseCase = AnalyzeTrackersUseCase(trackerAnalyzer, scorer = scorer)
 
     private val fullAuditUseCase = FullAuditUseCase(auditAppsUseCase, analyzeTrackersUseCase)
-    val installWatcher = InstallWatcher(context, settingsRepository, fullAuditUseCase, InstallNotifications(context), stalkerwareAlerts, scorer)
+    val installWatcher = InstallWatcher(context, settingsRepository, fullAuditUseCase, InstallNotifications(context), updateBaselines, stalkerwareAlerts, scorer)
     val backgroundScanner = BackgroundScanner(
         settingsRepository, fullAuditUseCase, scanCompletion,
         beforeScan = { if (BuildConfig.SHIELD_ENABLED) shieldExposureRepository.awaitReady() },
@@ -169,5 +181,6 @@ class AppContainer(context: Context) {
         language = { AppLanguage.current().tag },
         clearShieldCounter = shieldController::clear,
         alerts = thresholdAlertRepository,
+        clearBaselines = { updateBaselines.clear() },
     )
 }

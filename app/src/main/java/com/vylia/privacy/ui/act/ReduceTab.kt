@@ -76,10 +76,13 @@ enum class ManageSection(@param:StringRes val title: Int) {
     PERMISSIONS(R.string.reduce_tab_permissions),
     REMOVALS(R.string.reduce_tab_removals),
     TRACKERS(R.string.reduce_tab_trackers),
-    ALTERNATIVES(R.string.manage_tab_alternatives);
+    ALTERNATIVES(R.string.manage_tab_alternatives),
+    PREINSTALLED(R.string.manage_tab_preinstalled);
 
     companion object {
-        fun visible(shieldEnabled: Boolean): List<ManageSection> = if (shieldEnabled) entries else entries - TRACKERS
+        /** Traqueurs : seulement avec le bouclier ; Préinstallées : seulement en mode Avancé. */
+        fun visible(shieldEnabled: Boolean, advanced: Boolean = false): List<ManageSection> =
+            entries.filter { (it != TRACKERS || shieldEnabled) && (it != PREINSTALLED || advanced) }
     }
 }
 
@@ -92,8 +95,10 @@ internal fun ReduceTab(
     onSection: (ManageSection) -> Unit,
     alternatives: @Composable () -> Unit,
     trackers: @Composable () -> Unit = {},
+    advanced: Boolean = false,
+    preinstalled: @Composable () -> Unit = {},
 ) {
-    val sections = ManageSection.visible(BuildConfig.SHIELD_ENABLED)
+    val sections = ManageSection.visible(BuildConfig.SHIELD_ENABLED, advanced)
     val current = section.takeIf { it in sections } ?: ManageSection.PERMISSIONS
     Column {
         SecondaryTabRow(selectedTabIndex = sections.indexOf(current)) {
@@ -117,6 +122,7 @@ internal fun ReduceTab(
             ManageSection.REMOVALS -> RemovalsList(removals, usage)
             ManageSection.TRACKERS -> trackers()
             ManageSection.ALTERNATIVES -> alternatives()
+            ManageSection.PREINSTALLED -> preinstalled()
         }
     }
 }

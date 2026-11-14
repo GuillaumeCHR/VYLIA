@@ -180,6 +180,7 @@ fun MainScreen(
                     ?.let { exposure -> rules.scorer.shielded(detailApp.result, exposure::forScore) },
                 onBack = { detailPackage = null },
                 modifier = modifier,
+                preinstalled = homeState.preinstalled[detailApp.app.packageName],
             )
             return@Scaffold
         }
@@ -187,7 +188,14 @@ fun MainScreen(
             Overlay.SEARCH -> GlobalSearchScreen(homeState.scannedApps, query, onAppClick = { detailPackage = it.app.packageName }, modifier)
             Overlay.SETTINGS -> SettingsScreen(modifier, openAutomation = openAutomation, onOpenHowItWorks = { help = true })
             null -> when (currentTab) {
-                AppTab.SCAN -> ScanScreen(modifier, onAppClick = { detailPackage = it.app.packageName })
+                AppTab.SCAN -> ScanScreen(
+                    modifier,
+                    onAppClick = { detailPackage = it.app.packageName },
+                    onOpenPreinstalled = {
+                        manageSection = ManageSection.PREINSTALLED
+                        currentTab = AppTab.MANAGE
+                    },
+                )
                 AppTab.ANALYZE -> AnalysisScreen(
                     modifier,
                     onAppClick = { detailPackage = it.app.packageName },

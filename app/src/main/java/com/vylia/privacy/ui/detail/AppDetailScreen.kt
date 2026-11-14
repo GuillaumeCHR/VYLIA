@@ -1,5 +1,8 @@
 package com.vylia.privacy.ui.detail
 
+import com.vylia.privacy.domain.preinstalled.AppGroup
+import com.vylia.privacy.domain.preinstalled.PreinstalledInfo
+import com.vylia.privacy.ui.preinstalled.PreinstalledCard
 import androidx.compose.foundation.layout.heightIn
 
 import androidx.compose.material3.Button
@@ -85,6 +88,8 @@ fun AppDetailScreen(
     shieldExposure: ShieldExposureRepository.Exposure? = null,
     /** Exposition de l'app avec le bouclier, `null` si elle n'est pas calculable. */
     shielded: ShieldedScore? = null,
+    /** App système classée (mode Avancé) : carte « App préinstallée » ou « Composant d'Android ». */
+    preinstalled: PreinstalledInfo? = null,
 ) {
     BackHandler(onBack = onBack)
     val result = auditedApp.result
@@ -135,6 +140,8 @@ fun AppDetailScreen(
                 }
             }
         }
+
+        preinstalled?.takeIf { it.group != AppGroup.USER }?.let { PreinstalledCard(app, it) }
 
         // WebAPK : son score ne couvre que l'APK du navigateur, pas les traqueurs du site.
         auditedApp.app.webStartUrl?.let { url ->

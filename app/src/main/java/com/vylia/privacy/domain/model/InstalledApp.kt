@@ -37,4 +37,8 @@ data class InstalledApp(
     val requestedPermissions: List<String>,
     /** Permission la plus intrusive de chaque famille détectée, de la plus à la moins pénalisante. */
     val permissions: List<DetectedPermission>,
+    /** Une icône dans le tiroir d'apps : sert à classer une app système absente de la liste UAD-ng. */
+    val hasLauncherIcon: Boolean = true,
+    /** `false` : app désactivée (par l'utilisateur ou par `pm disable-user`). */
+    val enabled: Boolean = true,
 )

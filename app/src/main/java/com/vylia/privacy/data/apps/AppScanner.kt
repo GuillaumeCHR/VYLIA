@@ -78,7 +78,7 @@ class AppScanner(
                         hasLauncherIcon = packageInfo.packageName in launcherPackages,
                         snap = signalSnapshot,
                     )
-                    loadApp(packageInfo, appInfo, isSystemApp, specialAccess, signals)
+                    loadApp(packageInfo, appInfo, isSystemApp, specialAccess, signals, packageInfo.packageName in launcherPackages)
                 } else {
                     null
                 }
@@ -127,6 +127,7 @@ class AppScanner(
         isSystemApp: Boolean,
         specialAccess: SpecialAccess,
         signals: Set<String>,
+        hasLauncherIcon: Boolean,
     ): InstalledApp {
         val packageName = packageInfo.packageName
         val webStartUrl = webStartUrl(appInfo)
@@ -199,6 +200,8 @@ class AppScanner(
                 }
                 DetectedPermission(strongest, isGranted = familyGranted)
             },
+            hasLauncherIcon = hasLauncherIcon,
+            enabled = appInfo.enabled,
         )
     }
 

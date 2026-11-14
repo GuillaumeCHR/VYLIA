@@ -52,6 +52,19 @@ son nom, ses noms de paquet et les empreintes SHA-1 de ses certificats, avec le 
 Chaque valeur est vérifiée ; une entrée invalide fait échouer la génération. Après mise à jour :
 `./gradlew testDebugUnitTest` (`BadgeEngineTest` contrôle la base embarquée). L'écran À propos affiche la version.
 
+## Apps préinstallées (UAD-ng)
+
+```
+python3 tools/update_uad_list.py                         # télécharge le dernier uad_lists.json (branche main)
+python3 tools/update_uad_list.py --source uad_lists.json --commit <sha>
+```
+
+Copie `uad_lists.json` d'[Universal Android Debloater Next Generation](https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation)
+(GPL v3) **tel quel** dans `app/src/main/assets/`, et note le commit source dans `uad_lists.source.json`. L'app lit
+le fichier embarqué et celui qu'elle télécharge avec le même code (`UadList.parse`), qui écarte les entrées invalides ;
+le script vérifie seulement qu'il s'agit bien de la liste (au moins 4 000 paquets). Après mise à jour :
+`./gradlew testDebugUnitTest` (`PreinstalledTest` lit la liste embarquée).
+
 ## Logiciels espions de surveillance ciblée (MVT)
 
 ```

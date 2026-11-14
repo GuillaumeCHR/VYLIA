@@ -149,3 +149,15 @@ class SupportResourcesSource(private val repository: com.vylia.privacy.data.safe
     override fun entries(): Int = repository.size
     override suspend fun update(fetch: Fetch): Outcome = repository.update(fetch)
 }
+
+/** Apps préinstallées d'UAD-ng : origine et risque à les désactiver (mode Avancé). Ne change aucun score. */
+class PreinstalledSource(private val repository: com.vylia.privacy.data.preinstalled.PreinstalledRepository) : DatabaseSource {
+    override val id = "uad"
+    override val group = DatabaseGroup.ENRICHMENT
+    override val name = "UAD-ng · apps préinstallées"
+    override val attribution = "Universal Android Debloater · GPL v3"
+    override val checkUrl = com.vylia.privacy.data.preinstalled.PreinstalledRepository.UPDATE_URL
+    override val affectsScore = false
+    override fun entries(): Int? = repository.size
+    override suspend fun update(fetch: Fetch): Outcome = repository.update(fetch)
+}

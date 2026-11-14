@@ -136,6 +136,28 @@ class PreinstalledTest {
     }
 
     @Test
+    fun `translations are keyed by the English text, as the Python tool computes it`() {
+        assertEquals("90056ea35d69c0f6", UadList.keyOf("Samsung Weather"))
+        val translations = UadTranslations.parse(
+            """{"format": 1, "language": "fr", "translations": {
+                "90056ea35d69c0f6": "Météo Samsung\u202e",
+                "NOT-A-KEY": "x",
+                "0123456789abcdef": "",
+                "fedcba9876543210": 42
+            }}""",
+        )
+        assertEquals(1, translations.size)
+        // Caractères invisibles retirés (inversion du sens d'écriture).
+        assertEquals("Météo Samsung", translations.of("Samsung Weather"))
+        val info = list.withTranslations(translations).classify(app("com.samsung.android.weather"))
+        assertEquals("Météo Samsung", info.translatedDescription)
+        // Texte anglais changé par UAD-ng : plus de traduction, l'app montre l'anglais.
+        assertNull(translations.of("Samsung Weather app"))
+        assertTrue(runCatching { UadTranslations.parse("""{"format": 2, "language": "fr", "translations": {}}""") }.isFailure)
+        assertTrue(runCatching { UadTranslations.parse("""{"format": 1, "language": "f r", "translations": {}}""") }.isFailure)
+    }
+
+    @Test
     fun `the embedded list is read in full`() {
         val embedded = UadList.parse(File("src/main/assets/uad_lists.json").readText())
         assertTrue(embedded.size.toString(), embedded.size >= UadList.MIN_ENTRIES)

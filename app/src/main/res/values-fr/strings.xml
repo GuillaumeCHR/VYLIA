@@ -915,7 +915,7 @@
     <string name="about_license_title">Licence et code source</string>
     <string name="about_license">VYLIA est un logiciel libre, sous licence GNU GPL v3 (ou toute version ultérieure) : vous pouvez l\'étudier, le modifier et le redistribuer selon ses termes. Il est fourni sans aucune garantie.</string>
     <string name="about_license_trademarks">Les noms VYLIA et Yogi Studio, leurs logos et l\'icône de l\'application ne sont pas couverts par la licence. Le logo Exodus Privacy appartient à l\'association Exodus Privacy.</string>
-    <string name="about_uad">La liste des apps préinstallées (origine, risque à la désactivation, descriptions) vient d\'Universal Android Debloater Next Generation (UAD-ng), de l\'Universal Debloater Alliance, sous GPL v3. Elle est intégrée à l\'app et mise à jour dans Paramètres › Bases de données.</string>
+    <string name="about_uad">La liste des apps préinstallées (origine, risque à la désactivation, descriptions) vient d\'Universal Android Debloater Next Generation (UAD-ng), de l\'Universal Debloater Alliance, sous GPL v3. Elle est intégrée à l\'app et mise à jour dans Paramètres › Bases de données. Ses descriptions sont traduites en français par VYLIA, sous la même licence.</string>
     <string name="about_font">Le nom VYLIA est composé en Unbounded, de The Unbounded Project Authors, sous SIL Open Font License 1.1.</string>
     <string name="about_shield_lists">Le bouclier VYLIA filtre les requêtes DNS avec des listes publiques, intégrées à l\'app et mises à jour dans Paramètres › Bases de données : Exodus Privacy (ODbL 1.0), EasyPrivacy des auteurs d\'EasyList (GPL v3) et, si vous l\'ajoutez, la liste des traqueurs CNAME d\'AdGuard (MIT). Il bloque les traqueurs, pas les publicités. Les domaines bloqués sont nommés grâce à AdGuard companiesdb (CC BY-SA 4.0). VYLIA n\'est ni affiliée à ces projets ni approuvée par eux.</string>
     <string name="about_source">Code source : %1$s</string>
@@ -1346,7 +1346,7 @@
     <string name="pre_tab_all">Toutes</string>
     <string name="pre_tab_empty">Aucune app préinstallée à désactiver sur ce téléphone.</string>
     <string name="pre_section_disabled">Déjà désactivées (%1$d)</string>
-    <string name="pre_source">Origine, risque et descriptions : Universal Android Debloater (UAD-ng), GPL v3.</string>
+    <string name="pre_source">Origine, risque et descriptions : Universal Android Debloater (UAD-ng), GPL v3. Descriptions traduites par VYLIA.</string>
     <string name="pre_action_settings">Ouvrir dans les paramètres d\'Android</string>
     <string name="pre_action_copy">Copier la commande ADB</string>
     <string name="pre_action_copy_enable">Copier la commande de réactivation</string>
@@ -1356,6 +1356,9 @@
     <string name="pre_card_risk">Désactivation : %1$s</string>
     <string name="pre_card_disabled">Cette app est désactivée.</string>
     <string name="pre_card_description_source">Ce qu\'elle fait, d\'après UAD-ng (en anglais)</string>
+    <string name="pre_card_description_source_translated">Ce qu\'elle fait, d\'après UAD-ng (traduit par VYLIA)</string>
+    <string name="content_language">fr</string>
+    <string name="db_name_uad_fr">Traductions UAD-ng (VYLIA)</string>
     <string name="pre_card_needed_by">D\'autres apps en ont besoin : %1$s</string>
     <string name="pre_card_why">Une app préinstallée ne se désinstalle pas sans root, mais elle peut être désactivée : elle disparaît et ne tourne plus, et on peut la réactiver.</string>
     <string name="db_name_uad">UAD-ng · apps préinstallées</string>

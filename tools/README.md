@@ -65,6 +65,20 @@ le fichier embarqué et celui qu'elle télécharge avec le même code (`UadList.
 le script vérifie seulement qu'il s'agit bien de la liste (au moins 4 000 paquets). Après mise à jour :
 `./gradlew testDebugUnitTest` (`PreinstalledTest` lit la liste embarquée).
 
+### Traductions françaises des descriptions
+
+```
+python3 tools/translate_uad.py status            # traduites, manquantes, orphelines
+python3 tools/translate_uad.py export <dossier>  # lots {clé: texte anglais} des descriptions sans traduction
+python3 tools/translate_uad.py merge <dossier>   # fusionne les lots traduits {clé: texte français}
+```
+
+`app/src/main/assets/uad_descriptions_fr.json` (GPL v3, comme la liste) : une traduction par description anglaise,
+indexée par l'empreinte de son texte (SHA-256, 16 caractères, comme `UadList.keyOf`). Après une mise à jour de la
+liste, `export` ne propose que les descriptions nouvelles ou modifiées ; une description modifiée perd sa traduction
+et l'app affiche l'anglais en attendant. `merge` vérifie que chaque traduction garde les adresses web et les noms de
+paquets de l'original. Le fichier est publié dans ce dépôt et l'app le met à jour avec les autres bases.
+
 ## Logiciels espions de surveillance ciblée (MVT)
 
 ```

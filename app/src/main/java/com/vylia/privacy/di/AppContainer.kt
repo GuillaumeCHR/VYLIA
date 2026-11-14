@@ -152,6 +152,7 @@ class AppContainer(context: Context) {
                 SupportResourcesSource(supportResourcesRepository),
                 CompaniesSource(companiesRepository),
                 com.vylia.privacy.data.databases.PreinstalledSource(preinstalledRepository),
+                com.vylia.privacy.data.databases.PreinstalledTranslationsSource(preinstalledRepository),
             )
         },
         http = HttpsClient(),

@@ -99,6 +99,18 @@ fun PreinstalledPill(info: PreinstalledInfo, enabled: Boolean, modifier: Modifie
     }
 }
 
+/**
+ * Description à afficher : la traduction de VYLIA si l'app est en français et qu'elle existe pour ce texte, sinon
+ * celle d'UAD-ng (en anglais). Le booléen dit si c'est une traduction ; `null` sans description.
+ */
+@Composable
+fun PreinstalledInfo.displayedDescription(): Pair<String, Boolean>? {
+    val original = entry?.description?.takeIf { it.isNotBlank() } ?: return null
+    val french = stringResource(R.string.content_language) == "fr"
+    val translated = translatedDescription.takeIf { french }
+    return if (translated != null) translated to true else original to false
+}
+
 /** Fiche Android de l'app : « Désactiver » quand Android le permet, et ses autorisations. */
 fun openAppSettings(context: Context, packageName: String) {
     context.startActivity(

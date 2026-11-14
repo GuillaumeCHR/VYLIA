@@ -39,6 +39,8 @@ data class PreinstalledInfo(
     val entry: PreinstalledEntry?,
     val brand: String?,
     val chipset: String? = null,
+    /** Description traduite par VYLIA (en français), `null` si elle manque ou ne correspond plus au texte d'UAD-ng. */
+    val translatedDescription: String? = null,
 ) {
     val risk: DisableRisk get() = entry?.risk ?: DisableRisk.UNKNOWN
 
@@ -46,9 +48,14 @@ data class PreinstalledInfo(
     val actionable: Boolean get() = group == AppGroup.PREINSTALLED && (risk == DisableRisk.SAFE || risk == DisableRisk.CAUTION)
 }
 
-/** La liste UAD-ng, réduite à ce que VYLIA affiche. */
-class PreinstalledDatabase(private val entries: Map<String, PreinstalledEntry>) {
+/** La liste UAD-ng, réduite à ce que VYLIA affiche, avec les traductions de ses descriptions. */
+class PreinstalledDatabase(
+    private val entries: Map<String, PreinstalledEntry>,
+    val translations: UadTranslations = UadTranslations.EMPTY,
+) {
     val size: Int get() = entries.size
+
+    fun withTranslations(translations: UadTranslations) = PreinstalledDatabase(entries, translations)
 
     operator fun get(packageName: String): PreinstalledEntry? = entries[packageName]
 
@@ -71,7 +78,7 @@ class PreinstalledDatabase(private val entries: Map<String, PreinstalledEntry>) 
         }
         val origin = entry?.origin
         val brand = if (origin == null || origin == PreinstalledOrigin.OEM || origin == PreinstalledOrigin.CARRIER) Brands.of(app.packageName) else null
-        return PreinstalledInfo(group, entry, brand.takeIf { chipset == null }, chipset)
+        return PreinstalledInfo(group, entry, brand.takeIf { chipset == null }, chipset, entry?.description?.let(translations::of))
     }
 
     companion object {
@@ -109,6 +116,11 @@ object UadList {
         return PreinstalledDatabase(entries)
     }
 
+    /** Empreinte d'une description (telle que gardée : rognée et coupée), clé de sa traduction : 16 caractères hexadécimaux. */
+    fun keyOf(description: String): String =
+        java.security.MessageDigest.getInstance("SHA-256").digest(description.toByteArray(Charsets.UTF_8))
+            .joinToString("") { "%02x".format(it) }.take(16)
+
     /** UAD-ng recense plus de 5 000 paquets : beaucoup moins, c'est une liste tronquée ou falsifiée. */
     const val MIN_ENTRIES = 4_000
 
@@ -140,6 +152,44 @@ object UadList {
         (this[key] as? JsonArray).orEmpty()
             .mapNotNull { (it as? JsonPrimitive)?.takeIf { p -> p.isString }?.content?.takeIf(PackageNames::isValid) }
             .take(MAX_LINKS)
+}
+
+/**
+ * Traductions des descriptions d'UAD-ng, publiées dans le dépôt VYLIA (GPL v3, comme la liste). Indexées par
+ * l'empreinte du texte anglais ([UadList.keyOf]) : une description modifiée par UAD-ng n'a plus de traduction, et
+ * l'app montre le texte anglais plutôt qu'une traduction dépassée. Le fichier est traité comme hostile.
+ */
+class UadTranslations(val language: String, private val byKey: Map<String, String>) {
+    val size: Int get() = byKey.size
+
+    fun of(description: String): String? = if (description.isBlank()) null else byKey[UadList.keyOf(description)]
+
+    companion object {
+        val EMPTY = UadTranslations("fr", emptyMap())
+        const val MAX_TEXT = 1_500
+        private const val MAX_ENTRIES = 20_000
+        private val KEY = Regex("[0-9a-f]{16}")
+        private val LANGUAGE = Regex("[a-z]{2}")
+        /** Caractères de contrôle et de mise en forme invisibles (dont l'inversion du sens d'écriture), sauf le saut de ligne. */
+        private val INVISIBLE = Regex("[\\p{Cc}\\p{Cf}&&[^\\n]]")
+        private val json = Json { ignoreUnknownKeys = true }
+
+        fun parse(text: String): UadTranslations {
+            val root = json.parseToJsonElement(text).jsonObject
+            require((root["format"] as? JsonPrimitive)?.content == "1") { "format inconnu" }
+            val language = (root["language"] as? JsonPrimitive)?.content.orEmpty()
+            require(LANGUAGE.matches(language)) { "langue invalide" }
+            val translations = root["translations"] as? JsonObject ?: error("traductions absentes")
+            require(translations.size <= MAX_ENTRIES) { "trop de traductions" }
+            val byKey = HashMap<String, String>(translations.size * 2)
+            translations.forEach { (key, value) ->
+                if (!KEY.matches(key)) return@forEach
+                val fr = (value as? JsonPrimitive)?.takeIf { it.isString }?.content?.replace(INVISIBLE, "")?.trim()?.take(MAX_TEXT)
+                if (!fr.isNullOrEmpty()) byKey[key] = fr
+            }
+            return UadTranslations(language, byKey)
+        }
+    }
 }
 
 object PackageNames {

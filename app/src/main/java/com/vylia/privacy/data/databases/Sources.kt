@@ -161,3 +161,15 @@ class PreinstalledSource(private val repository: com.vylia.privacy.data.preinsta
     override fun entries(): Int? = repository.size
     override suspend fun update(fetch: Fetch): Outcome = repository.update(fetch)
 }
+
+/** Traductions françaises des descriptions d'UAD-ng, dépôt VYLIA (GPL v3, comme la liste). */
+class PreinstalledTranslationsSource(private val repository: com.vylia.privacy.data.preinstalled.PreinstalledRepository) : DatabaseSource {
+    override val id = "uad_fr"
+    override val group = DatabaseGroup.ENRICHMENT
+    override val name = "Traductions UAD-ng (VYLIA)"
+    override val attribution = "VYLIA · GPL v3"
+    override val checkUrl = com.vylia.privacy.data.preinstalled.PreinstalledRepository.TRANSLATIONS_URL
+    override val affectsScore = false
+    override fun entries(): Int? = repository.translationCount
+    override suspend fun update(fetch: Fetch): Outcome = repository.updateTranslations(fetch)
+}

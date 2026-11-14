@@ -201,9 +201,9 @@ private fun PreinstalledRow(
                 }
                 ScoreBadge(row.app.score)
             }
-            info.entry?.description?.takeIf { it.isNotBlank() }?.let {
+            info.displayedDescription()?.let { (description, _) ->
                 Text(
-                    it,
+                    description,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = if (expanded) Int.MAX_VALUE else 2,

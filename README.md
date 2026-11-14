@@ -231,7 +231,8 @@ Outils du dépôt : voir [`tools/README.md`](tools/README.md). Feuille de route 
   (CC BY-SA 4.0, téléchargée seulement). VYLIA n'est affiliée à aucun de ces projets.
 - **Apps préinstallées** : [Universal Android Debloater Next Generation](https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation)
   (UAD-ng, GPL v3), fichier `uad_lists.json` embarqué tel quel (voir [`tools/update_uad_list.py`](tools/update_uad_list.py))
-  et mis à jour depuis l'app ; marque des apps de constructeur déduite du nom du paquet par VYLIA.
+  et mis à jour depuis l'app ; marque des apps de constructeur déduite du nom du paquet par VYLIA. Descriptions
+  traduites en français par VYLIA (`uad_descriptions_fr.json`, GPL v3, voir [`tools/translate_uad.py`](tools/translate_uad.py)).
 - **Alternatives** : classement d'après les recommandations de la communauté [AlternativeTo](https://alternativeto.net/),
   notes relevées sur Google Play.
 - **Signatures de traqueurs** : [Exodus Privacy](https://exodus-privacy.eu.org/), base sous

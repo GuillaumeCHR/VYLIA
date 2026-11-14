@@ -1307,7 +1307,10 @@
     <string name="pre_card_origin">Origin: %1$s</string>
     <string name="pre_card_risk">Disabling: %1$s</string>
     <string name="pre_card_disabled">This app is disabled.</string>
-    <string name="pre_card_description_source">What it does, according to UAD-ng (in English)</string>
+    <string name="pre_card_description_source">What it does, according to UAD-ng</string>
+    <string name="pre_card_description_source_translated">What it does, according to UAD-ng</string>
+    <string name="content_language">en</string>
+    <string name="db_name_uad_fr">UAD-ng translations (VYLIA)</string>
     <string name="pre_card_needed_by">Other apps need it: %1$s</string>
     <string name="pre_card_why">A preinstalled app cannot be uninstalled without root, but it can be disabled: it disappears and stops running, and it can be re-enabled.</string>
     <string name="db_name_uad">UAD-ng · preinstalled apps</string>

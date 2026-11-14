@@ -78,8 +78,12 @@ fun PreinstalledCard(app: InstalledApp, info: PreinstalledInfo, modifier: Modifi
             if (!app.enabled) {
                 Text(stringResource(R.string.pre_card_disabled), style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.Bold)
             }
-            info.entry?.description?.takeIf { it.isNotBlank() }?.let { description ->
-                Text(stringResource(R.string.pre_card_description_source), style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            info.displayedDescription()?.let { (description, translated) ->
+                Text(
+                    stringResource(if (translated) R.string.pre_card_description_source_translated else R.string.pre_card_description_source),
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 Text(description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             info.entry?.neededBy?.takeIf { it.isNotEmpty() }?.let {

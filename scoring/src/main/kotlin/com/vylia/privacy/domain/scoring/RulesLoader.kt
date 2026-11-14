@@ -9,11 +9,11 @@ import kotlinx.serialization.json.Json
 object RulesLoader {
     private val json = Json { ignoreUnknownKeys = true }
 
-    fun parse(content: String): Rules = json.decodeFromString(content.removePrefix("﻿"))
+    fun parse(content: String): Rules = json.decodeFromString(content.removePrefix("\uFEFF"))
 
     /** Les deux contrôles de [RulesValidator], dans l'ordre : texte brut, puis règles décodées. */
     fun checked(content: String, reference: Rules): Rules {
-        val text = content.removePrefix("﻿")
+        val text = content.removePrefix("\uFEFF")
         RulesValidator.checkDocument(text)
         return parse(text).also { RulesValidator.validate(it, reference) }
     }

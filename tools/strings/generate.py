@@ -56,7 +56,8 @@ def entry(name, text):
 def screens_xml(lang):
     i = 1 if lang == "en" else 2
     seen = set()
-    out = ['<?xml version="1.0" encoding="utf-8"?>', "<!-- Généré par tools/strings/generate.py : ne pas modifier. -->", "<resources>"]
+    out = ['<?xml version="1.0" encoding="utf-8"?>', "<!-- Généré par tools/strings/generate.py : ne pas modifier. -->",
+           '<resources xmlns:tools="http://schemas.android.com/tools">']
     if lang == "en":
         out += ['    <string name="app_name" translatable="false">VYLIA</string>',
                 '    <string name="app_tagline" translatable="false">privacy score &amp; manager</string>']
@@ -71,7 +72,10 @@ def screens_xml(lang):
             assert name not in seen, f"clé en double : {name}"
             seen.add(name)
             one, other = en if lang == "en" else fr
-            out.append(f'    <plurals name="{name}">')
+            # Libellé sans nombre, affiché à côté d'un nombre écrit à part : en français, « one » vaut pour 0 et 1
+            # (« 0 traqueur détecté »), ce que le lint ImpliedQuantity prend à tort pour « 1 seulement ».
+            ignore = ' tools:ignore="ImpliedQuantity"' if lang == "fr" and "%" not in one else ""
+            out.append(f'    <plurals name="{name}"{ignore}>')
             out.append(f"        <item quantity=\"one\">{esc(one)}</item>")
             if lang == "fr":
                 out.append(f"        <item quantity=\"many\">{esc(other)}</item>")

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Généré par tools/strings/generate.py : ne pas modifier. -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Écran Scan, cartes et en-tête -->
     <string name="splash_presents">Yogi Studio présente</string>
@@ -1206,32 +1206,32 @@
     <string name="share_text_shield">Le Bouclier VYLIA a déjà bloqué %1$s requêtes de pistage sur mon téléphone.</string>
     <string name="share_text_progress">Mon score de confidentialité est passé de %1$d à %2$d avec VYLIA.</string>
     <string name="share_text_trophies">%1$d trophées VYLIA débloqués pour reprendre la main sur mes données.</string>
-    <plurals name="card_stat_trackers">
+    <plurals name="card_stat_trackers" tools:ignore="ImpliedQuantity">
         <item quantity="one">traqueur détecté</item>
         <item quantity="many">traqueurs détectés</item>
         <item quantity="other">traqueurs détectés</item>
     </plurals>
-    <plurals name="card_stat_blocked">
+    <plurals name="card_stat_blocked" tools:ignore="ImpliedQuantity">
         <item quantity="one">pistage bloqué</item>
         <item quantity="many">pistages bloqués</item>
         <item quantity="other">pistages bloqués</item>
     </plurals>
-    <plurals name="card_stat_trophies">
+    <plurals name="card_stat_trophies" tools:ignore="ImpliedQuantity">
         <item quantity="one">trophée</item>
         <item quantity="many">trophées</item>
         <item quantity="other">trophées</item>
     </plurals>
-    <plurals name="card_stat_apps">
+    <plurals name="card_stat_apps" tools:ignore="ImpliedQuantity">
         <item quantity="one">app analysée</item>
         <item quantity="many">apps analysées</item>
         <item quantity="other">apps analysées</item>
     </plurals>
-    <plurals name="card_trackers_label">
+    <plurals name="card_trackers_label" tools:ignore="ImpliedQuantity">
         <item quantity="one">traqueur démasqué</item>
         <item quantity="many">traqueurs démasqués</item>
         <item quantity="other">traqueurs démasqués</item>
     </plurals>
-    <plurals name="card_shield_label">
+    <plurals name="card_shield_label" tools:ignore="ImpliedQuantity">
         <item quantity="one">requête de pistage bloquée</item>
         <item quantity="many">requêtes de pistage bloquées</item>
         <item quantity="other">requêtes de pistage bloquées</item>

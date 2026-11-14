@@ -89,6 +89,6 @@ class PrivateDnsRepository(private val context: Context) {
         private val json = Json { ignoreUnknownKeys = true }
 
         fun parse(text: String): PrivateDnsCatalogue =
-            PrivateDnsValidator.validate(json.decodeFromString<PrivateDnsCatalogue>(text.removePrefix("﻿")))
+            PrivateDnsValidator.validate(json.decodeFromString<PrivateDnsCatalogue>(text.removePrefix("\uFEFF")))
     }
 }

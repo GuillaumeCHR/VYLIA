@@ -74,8 +74,8 @@ class CompaniesLookup(private val byDomain: Map<String, Company>) {
 
         /** Construit l'index à partir des deux fichiers de companiesdb ; les entrées invalides sont écartées. */
         fun parse(trackersJson: String, companiesJson: String): CompaniesLookup {
-            val trackers = json.decodeFromString<TrackersFile>(trackersJson.removePrefix("﻿"))
-            val companies = json.decodeFromString<CompaniesFile>(companiesJson.removePrefix("﻿")).companies
+            val trackers = json.decodeFromString<TrackersFile>(trackersJson.removePrefix("\uFEFF"))
+            val companies = json.decodeFromString<CompaniesFile>(companiesJson.removePrefix("\uFEFF")).companies
             val byDomain = HashMap<String, Company>()
             trackers.trackerDomains.entries.asSequence().take(MAX_DOMAINS).forEach { (rawDomain, trackerId) ->
                 val domain = rawDomain.lowercase()

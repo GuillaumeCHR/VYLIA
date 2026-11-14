@@ -50,8 +50,13 @@ fun PreinstalledCard(app: InstalledApp, info: PreinstalledInfo, modifier: Modifi
     if (caution) CautionDialog(onConfirm = { copyCommand(context, AdbCommands.disable(app.packageName)) }, onDismiss = { caution = false })
 
     val system = info.group == AppGroup.SYSTEM
-    // Un composant d'Android absent de la liste reste « inconnu » ; dans la liste, il garde son niveau.
-    val risk = if (system && info.entry == null) DisableRisk.UNKNOWN else info.risk
+    // Composant d'Android : absent de la liste, il reste « inconnu » ; service de la puce, il est indispensable (UAD-ng
+    // le dit parfois « sans risque », VYLIA ne le propose pas) ; sinon il garde son niveau.
+    val risk = when {
+        system && info.chipset != null -> DisableRisk.ESSENTIAL
+        system && info.entry == null -> DisableRisk.UNKNOWN
+        else -> info.risk
+    }
     VyliaCard(modifier = modifier.fillMaxWidth()) {
         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(

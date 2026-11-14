@@ -1324,6 +1324,7 @@
     <string name="origin_google">Google</string>
     <string name="origin_third_party">Partenaire</string>
     <string name="origin_android">Android (AOSP)</string>
+    <string name="origin_chipset">Fabricant de la puce · %1$s</string>
     <string name="origin_unknown">Origine inconnue</string>
     <string name="pre_clip_label">Commande ADB</string>
     <string name="pre_copied">Commande copiée</string>

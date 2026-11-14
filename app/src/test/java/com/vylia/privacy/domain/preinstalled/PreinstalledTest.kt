@@ -23,6 +23,8 @@ class PreinstalledTest {
           "com.example.level": {"list": "Oem", "description": "unknown level", "removal": "Maybe"},
           "com.example.list": {"list": "Nope", "description": "unknown list", "removal": "Recommended"},
           "com.example.long": {"list": "Misc", "description": "${"x".repeat(5_000)}", "removal": "Unsafe"},
+          "com.qualcomm.qti.ims": {"list": "Misc", "description": "IMS (VoLTE)", "dependencies": [], "neededBy": [], "labels": [], "removal": "Recommended"},
+          "com.facebook.appmanager": {"list": "Misc", "description": "Facebook updates", "dependencies": [], "neededBy": [], "labels": [], "removal": "Recommended"},
           "com.example.notobject": 42
         }
         """.trimIndent(),
@@ -49,7 +51,7 @@ class PreinstalledTest {
 
     @Test
     fun `invalid package names, unknown lists and levels are dropped`() {
-        assertEquals(6, list.size)
+        assertEquals(8, list.size)
         assertNull(list["com.x; rm -rf ~"])
         assertNull(list["com.example.level"])
         assertNull(list["com.example.list"])
@@ -78,6 +80,19 @@ class PreinstalledTest {
         // Hors de la liste : l'icône dans le tiroir d'apps décide.
         assertEquals(AppGroup.PREINSTALLED, list.classify(app("com.vendor.gallery", launcher = true)).group)
         assertEquals(AppGroup.SYSTEM, list.classify(app("com.vendor.service")).group)
+    }
+
+    @Test
+    fun `chip maker services without an icon are Android components, whatever their level`() {
+        val ims = list.classify(app("com.qualcomm.qti.ims"))
+        assertEquals(AppGroup.SYSTEM, ims.group)
+        assertEquals("Qualcomm", ims.chipset)
+        assertFalse(ims.actionable)
+        assertEquals(AppGroup.SYSTEM, list.classify(app("com.mediatek.unknown.service")).group)
+        // Avec une icône, c'est une app qu'on voit : elle reste préinstallée.
+        assertEquals(AppGroup.PREINSTALLED, list.classify(app("com.qualcomm.qti.ims", launcher = true)).group)
+        // Les autres « divers » (Facebook préinstallé) restent préinstallés.
+        assertEquals(AppGroup.PREINSTALLED, list.classify(app("com.facebook.appmanager")).group)
     }
 
     @Test

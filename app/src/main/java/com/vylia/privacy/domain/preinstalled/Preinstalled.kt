@@ -30,11 +30,15 @@ data class PreinstalledEntry(
     val neededBy: List<String> = emptyList(),
 )
 
-/** Une app système classée : son groupe, son entrée UAD-ng si elle y figure, et la marque déduite du paquet. */
+/**
+ * Une app système classée : son groupe, son entrée UAD-ng si elle y figure, la marque déduite du paquet, et le fabricant
+ * de la puce si c'est un de ses services (Qualcomm, MediaTek…).
+ */
 data class PreinstalledInfo(
     val group: AppGroup,
     val entry: PreinstalledEntry?,
     val brand: String?,
+    val chipset: String? = null,
 ) {
     val risk: DisableRisk get() = entry?.risk ?: DisableRisk.UNKNOWN
 
@@ -51,19 +55,23 @@ class PreinstalledDatabase(private val entries: Map<String, PreinstalledEntry>) 
     /**
      * Groupe d'une app : une app utilisateur reste [AppGroup.USER]. Une app système de la liste est préinstallée si elle
      * ne vient pas d'Android lui-même et qu'on peut la désactiver (sans risque ou à vos risques) ; sinon c'est un
-     * composant d'Android. Absente de la liste, une app avec une icône dans le tiroir d'apps est préinstallée.
+     * composant d'Android. Absente de la liste, une app avec une icône dans le tiroir d'apps est préinstallée. Un service
+     * du fabricant de la puce (Qualcomm, MediaTek…) sans icône est un composant d'Android, quel que soit son niveau : il
+     * fait marcher le matériel (appels 4G, empreinte digitale…), et UAD-ng en dit parfois « sans risque » à tort.
      */
     fun classify(app: InstalledApp): PreinstalledInfo {
         if (!app.isSystemApp) return PreinstalledInfo(AppGroup.USER, null, null)
         val entry = entries[app.packageName]
+        val chipset = Chipsets.of(app.packageName)
         val group = when {
+            chipset != null && !app.hasLauncherIcon -> AppGroup.SYSTEM
             entry != null -> if (entry.origin != PreinstalledOrigin.ANDROID && entry.risk in DISABLEABLE) AppGroup.PREINSTALLED else AppGroup.SYSTEM
             app.hasLauncherIcon -> AppGroup.PREINSTALLED
             else -> AppGroup.SYSTEM
         }
         val origin = entry?.origin
         val brand = if (origin == null || origin == PreinstalledOrigin.OEM || origin == PreinstalledOrigin.CARRIER) Brands.of(app.packageName) else null
-        return PreinstalledInfo(group, entry, brand)
+        return PreinstalledInfo(group, entry, brand.takeIf { chipset == null }, chipset)
     }
 
     companion object {
@@ -154,6 +162,18 @@ object AdbCommands {
         require(PackageNames.isValid(packageName)) { "nom de paquet invalide" }
         return packageName
     }
+}
+
+/** Fabricant de la puce dont l'app est un service, d'après le début de son nom de paquet. */
+object Chipsets {
+    private val PREFIXES = listOf(
+        "com.qualcomm." to "Qualcomm", "com.qti." to "Qualcomm", "vendor.qti." to "Qualcomm", "com.quicinc." to "Qualcomm",
+        "org.codeaurora." to "Qualcomm",
+        "com.mediatek." to "MediaTek", "com.mtk." to "MediaTek", "vendor.mediatek." to "MediaTek",
+        "com.unisoc." to "Unisoc", "com.sprd." to "Unisoc", "com.spreadtrum." to "Unisoc",
+    )
+
+    fun of(packageName: String): String? = PREFIXES.firstOrNull { packageName.startsWith(it.first) }?.second
 }
 
 /** Marque d'une app de constructeur ou d'opérateur, déduite du début de son nom de paquet (UAD-ng ne la donne pas). */

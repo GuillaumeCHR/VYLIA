@@ -68,6 +68,7 @@ fun DisableRisk.color(): Color = when (this) {
 
 /** « Constructeur · Samsung », « Google », « Android (AOSP) »… ; « Origine inconnue » hors de la liste UAD-ng. */
 fun Resources.originLabel(info: PreinstalledInfo): String {
+    info.chipset?.let { return getString(R.string.origin_chipset, it) }
     val brand = info.brand
     return when (info.entry?.origin) {
         PreinstalledOrigin.OEM -> if (brand != null) getString(R.string.origin_oem_brand, brand) else getString(R.string.origin_oem)

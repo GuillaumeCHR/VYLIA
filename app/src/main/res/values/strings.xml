@@ -1276,6 +1276,7 @@
     <string name="origin_google">Google</string>
     <string name="origin_third_party">Partner</string>
     <string name="origin_android">Android (AOSP)</string>
+    <string name="origin_chipset">Chip maker · %1$s</string>
     <string name="origin_unknown">Unknown origin</string>
     <string name="pre_clip_label">ADB command</string>
     <string name="pre_copied">Command copied</string>

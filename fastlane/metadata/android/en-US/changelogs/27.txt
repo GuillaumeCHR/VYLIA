@@ -1,0 +1,1 @@
+Update alert: when an update adds or removes trackers, or permissions that cost points, VYLIA tells you what changed and how the score moves (Settings › Automations, off by default).

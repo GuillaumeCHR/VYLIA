@@ -68,7 +68,7 @@ fun AboutScreen(modifier: Modifier = Modifier, onBack: () -> Unit) {
         }
 
         InfoCard(R.string.about_license_title) {
-            listOf(R.string.about_license, R.string.about_license_trademarks, R.string.about_shield_lists, R.string.about_font).forEach {
+            listOf(R.string.about_license, R.string.about_license_trademarks, R.string.about_shield_lists, R.string.about_uad, R.string.about_font).forEach {
                 Text(stringResource(it), style = MaterialTheme.typography.bodyMedium)
             }
             Text(stringResource(R.string.about_source, SOURCE_URL), style = MaterialTheme.typography.bodyMedium)

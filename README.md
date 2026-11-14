@@ -37,7 +37,8 @@ dans l'ordre de la barre du bas :
    (50 points au plus) et les traqueurs (60 points au plus). Bouclier actif, le score compte ce qui sort encore du
    téléphone : un traqueur bloqué ne pèse plus que pour une part de son poids (voir [plus bas](#une-grille-de-score-transparente)).
    Trois vues : par risque, par catégorie, par badge ; des cartes compactes ou détaillées ; un toucher sur l'icône
-   ouvre la fiche Android de l'app.
+   ouvre la fiche Android de l'app. En mode Avancé, trois filtres : vos apps, les apps **préinstallées** (par niveau de
+   risque à les désactiver) et les **composants d'Android**.
 2. **Analyser** : les zones de risque, les anomalies et les traqueurs les plus répandus sur le téléphone ; le **Suivi**
    avec la courbe du score dans le temps, l'historique des installations, suppressions et autorisations, et une
    **alerte de seuil** si votre exposition augmente.
@@ -50,6 +51,11 @@ dans l'ordre de la barre du bas :
      retirent.
    - **Alternatives** : des apps plus respectueuses par catégorie du Play Store, avec leur note Google Play. Aucune ne
      rend exactement le même service : c'est à vous de choisir.
+   - **Préinstallées** (mode Avancé) : les apps livrées avec le téléphone (constructeur, Google, opérateur,
+     partenaires), qu'on ne peut pas désinstaller sans root mais qu'on peut désactiver. Pour chacune, son origine et le
+     risque à la désactiver (sans risque, à vos risques), d'après la liste d'Universal Android Debloater ; un lien vers
+     sa fiche Android et la commande ADB à copier (`pm disable-user`, réversible), avec un guide pas à pas. La fiche
+     d'une app système dit aussi si c'est une app préinstallée ou un composant d'Android à ne pas toucher.
 4. **Filtrer** : réduire l'exposition sans modifier vos apps.
    - **Filtrage DNS** : le **bouclier VYLIA**, un VPN local qui répond « introuvable » aux domaines des traqueurs, sur tout
      l'appareil et y compris dans les apps que vous gardez (pause, compteur en direct, tuile des réglages rapides). Il
@@ -133,8 +139,8 @@ Politique complète : [confidentialité](https://guillaumechr.github.io/vylia-si
 
 - Aucun traqueur, aucun outil de mesure d'audience, aucune donnée revendue.
 - Internet ne sert qu'à mettre à jour les bases, à votre demande ou avant le scan de fond si vous l'avez activé : Exodus
-  Privacy, Echap, MVT, les listes du bouclier (EasyPrivacy, traqueurs CNAME d'AdGuard si vous l'ajoutez), AdGuard companiesdb et les fichiers
-  publiés dans ce dépôt (règles, alternatives, DNS privés, ressources d'aide). Ce sont des fichiers publics, téléchargés
+  Privacy, Echap, MVT, les listes du bouclier (EasyPrivacy, traqueurs CNAME d'AdGuard si vous l'ajoutez), AdGuard companiesdb, la liste des apps préinstallées
+  d'UAD-ng et les fichiers publiés dans ce dépôt (règles, alternatives, DNS privés, ressources d'aide). Ce sont des fichiers publics, téléchargés
   en HTTPS depuis leur source officielle : rien n'est envoyé sur vous ni sur vos applications.
 - Le bouclier filtre sur le téléphone. Les requêtes qu'il laisse passer vont directement au DNS de votre réseau, comme
   sans lui : aucun serveur de VYLIA, aucun journal des sites visités.
@@ -221,6 +227,9 @@ Outils du dépôt : voir [`tools/README.md`](tools/README.md). Feuille de route 
 - **Listes du bouclier** : [EasyPrivacy](https://easylist.to/) (GPL v3), liste des
   [traqueurs CNAME](https://github.com/AdguardTeam/cname-trackers) d'AdGuard (MIT, à ajouter dans l'app) ; noms des domaines bloqués d'après [AdGuard companiesdb](https://github.com/AdguardTeam/companiesdb)
   (CC BY-SA 4.0, téléchargée seulement). VYLIA n'est affiliée à aucun de ces projets.
+- **Apps préinstallées** : [Universal Android Debloater Next Generation](https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation)
+  (UAD-ng, GPL v3), fichier `uad_lists.json` embarqué tel quel (voir [`tools/update_uad_list.py`](tools/update_uad_list.py))
+  et mis à jour depuis l'app ; marque des apps de constructeur déduite du nom du paquet par VYLIA.
 - **Alternatives** : classement d'après les recommandations de la communauté [AlternativeTo](https://alternativeto.net/),
   notes relevées sur Google Play.
 - **Signatures de traqueurs** : [Exodus Privacy](https://exodus-privacy.eu.org/), base sous

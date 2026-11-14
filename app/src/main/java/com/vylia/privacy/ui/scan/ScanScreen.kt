@@ -1,5 +1,13 @@
 package com.vylia.privacy.ui.scan
 
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.foundation.background
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.layout.size
+import com.vylia.privacy.domain.preinstalled.DisableRisk
+import com.vylia.privacy.ui.preinstalled.LocalPreinstalled
+import com.vylia.privacy.ui.preinstalled.color
+import com.vylia.privacy.ui.preinstalled.label
 import android.graphics.Color as AndroidColor
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -63,7 +71,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.vylia.privacy.R
-import com.vylia.privacy.domain.model.AppFilter
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.domain.model.DetectedPermission
 import com.vylia.privacy.domain.model.InstalledApp
@@ -96,12 +103,12 @@ import com.vylia.privacy.ui.components.VyliaLogotype
 import androidx.compose.ui.platform.LocalResources
 import com.vylia.privacy.ui.components.categoryName
 
-private val Tabs = listOf(AppFilter.USER, AppFilter.SYSTEM)
-
 @Composable
 fun ScanScreen(
     modifier: Modifier = Modifier,
     onAppClick: (AuditedApp) -> Unit = {},
+    /** Lien « Que puis-je désactiver ? » vers Gérer › Préinstallées. */
+    onOpenPreinstalled: () -> Unit = {},
     viewModel: ScanViewModel = viewModel(factory = ScanViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -123,6 +130,8 @@ fun ScanScreen(
         categoryFilter = categoryFilter,
         onCategoryFilter = { categoryFilter = it },
         onFilterSelected = viewModel::selectFilter,
+        onRiskSelected = viewModel::selectRisk,
+        onOpenPreinstalled = onOpenPreinstalled,
         onRefresh = viewModel::refresh,
         onAppClick = onAppClick,
     )
@@ -143,11 +152,14 @@ fun ScanContent(
     onBadgeFilter: (String?) -> Unit = {},
     categoryFilter: String? = null,
     onCategoryFilter: (String?) -> Unit = {},
-    onFilterSelected: (AppFilter) -> Unit,
+    onFilterSelected: (ScanFilter) -> Unit,
+    onRiskSelected: (DisableRisk?) -> Unit = {},
+    onOpenPreinstalled: () -> Unit = {},
     onRefresh: () -> Unit,
     onAppClick: (AuditedApp) -> Unit = {},
 ) {
     // La barre d'en-tête (logotype, bouclier, recherche globale) est celle de l'écran principal.
+    CompositionLocalProvider(LocalPreinstalled provides state.preinstalled) {
     Column(modifier = modifier) {
         PrimaryTabRow(selectedTabIndex = scanTab.ordinal) {
             ScanTab.entries.forEach { tab ->
@@ -175,26 +187,53 @@ fun ScanContent(
             modifier = Modifier.padding(start = 16.dp, end = 4.dp),
         )
 
-        // Mode Avancé : choix entre apps utilisateur et apps système.
+        // Mode Avancé : apps utilisateur, apps préinstallées (avec leur niveau de risque) ou composants d'Android.
         if (state.advancedMode) {
             Row(
-                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp),
+                modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp).horizontalScroll(rememberScrollState()),
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Tabs.forEach { filter ->
+                ScanFilter.entries.forEach { filter ->
                     FilterChip(
                         selected = filter == state.selectedFilter,
                         onClick = { onFilterSelected(filter) },
                         label = {
                             Text(
                                 when (filter) {
-                                    AppFilter.SYSTEM -> stringResource(R.string.tab_system_apps, state.systemAppCount)
-                                    else -> stringResource(R.string.tab_user_apps, state.userAppCount)
+                                    ScanFilter.USER -> stringResource(R.string.tab_user_apps, state.userAppCount)
+                                    ScanFilter.PREINSTALLED -> stringResource(R.string.tab_preinstalled_apps, state.preinstalledCount)
+                                    ScanFilter.SYSTEM -> stringResource(R.string.tab_system_apps, state.coreSystemCount)
                                 }
                             )
                         },
                     )
                 }
+            }
+            if (state.selectedFilter == ScanFilter.PREINSTALLED && state.riskCounts.isNotEmpty()) {
+                Row(
+                    modifier = Modifier.padding(horizontal = 16.dp).horizontalScroll(rememberScrollState()),
+                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                ) {
+                    DisableRisk.entries.filter { it in state.riskCounts }.forEach { risk ->
+                        FilterChip(
+                            selected = state.riskFilter == risk,
+                            onClick = { onRiskSelected(if (state.riskFilter == risk) null else risk) },
+                            leadingIcon = { Box(Modifier.size(8.dp).background(risk.color(), CircleShape)) },
+                            label = { Text("${stringResource(risk.label())} · ${state.riskCounts.getValue(risk)}") },
+                        )
+                    }
+                }
+                TextButton(onClick = onOpenPreinstalled, modifier = Modifier.padding(start = 4.dp)) {
+                    Text(stringResource(R.string.scan_preinstalled_link))
+                }
+            }
+            if (state.selectedFilter == ScanFilter.SYSTEM) {
+                Text(
+                    stringResource(R.string.scan_system_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+                )
             }
         }
 
@@ -211,6 +250,7 @@ fun ScanContent(
             scanTab == ScanTab.CATEGORY -> CategoryTab(state.apps, rules, categoryFilter, onCategoryFilter, onAppClick, contentPadding)
             else -> BadgeTab(state.apps, rules, badgeFilter, onBadgeFilter, onAppClick, contentPadding)
         }
+    }
     }
 }
 

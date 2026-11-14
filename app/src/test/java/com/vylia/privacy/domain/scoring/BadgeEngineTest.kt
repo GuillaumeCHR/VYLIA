@@ -116,6 +116,26 @@ class BadgeEngineTest {
     }
 
     @Test
+    fun `app systeme - ses capacites ne sont pas une alerte, une app connue des indicateurs l est toujours`() {
+        val keyboard = AppScan("com.vendor.keyboard", 35, "CATEGORY_UNDEFINED", emptySet(), emptySet(), emptyList(), setOf("INTERNET", "IME_ENABLED"))
+        assertEquals(listOf("KEYLOGGER_CAPABLE"), scorer.score(keyboard).securityFindings.map { it.id })
+        val system = scorer.score(keyboard.copy(isSystemApp = true))
+        assertTrue(system.securityFindings.isEmpty())
+        assertNull(system.securityScoreCap)
+        val hidden = AppScan(
+            "com.vendor.agent", 35, "CATEGORY_UNDEFINED",
+            setOf("READ_SMS", "ACCESS_BACKGROUND_LOCATION"), setOf("READ_SMS", "ACCESS_BACKGROUND_LOCATION"), emptyList(),
+            setOf("NO_LAUNCHER_ICON"), isSystemApp = true,
+        )
+        assertTrue(scorer.score(hidden).securityFindings.isEmpty())
+        // Un logiciel espion connu reste signalé, même installé comme app système.
+        val withIoc = PrivacyScorer(TestFixtures.rules, IocDatabase(mapOf("com.spy.app" to "SpyApp"), emptyMap()))
+        val spy = withIoc.score(AppScan("com.spy.app", 35, "CATEGORY_UNDEFINED", emptySet(), emptySet(), emptyList(), isSystemApp = true))
+        assertEquals(listOf("KNOWN_STALKERWARE"), spy.securityFindings.map { it.id })
+        assertEquals(0, spy.score)
+    }
+
+    @Test
     fun `base d Echap embarquee - reconnait un stalkerware renomme par son certificat`() {
         val loaded = com.vylia.privacy.domain.security.StalkerwareDatabase.parse(
             java.io.File("src/main/assets/stalkerware_iocs.json").readText()

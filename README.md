@@ -89,7 +89,9 @@ Et aussi :
   puis le bon interlocuteur selon qui pourrait être à l'origine de la surveillance. Le bouclier bloque aussi les
   domaines de ces campagnes.
 - **Des capacités d'espionnage repérées** : clavier ou service d'accessibilité capable de lire la saisie, icône cachée
-  avec accès sensibles, lecture d'écran avec superposition. Elles plafonnent le score.
+  avec accès sensibles, lecture d'écran avec superposition. Elles plafonnent le score. Pas pour les apps système
+  (composants d'Android et apps préinstallées) : installées avec le téléphone, ces capacités sont les siennes ; seule une
+  app reconnue par les bases d'Echap ou de MVT y reste signalée.
 - **Des badges qui qualifient, sans alarmer** : bonnes pratiques (« Poids plume », « Bio », « Sait se faire oublier »)
   autant que points d'attention (« Fouineuse », « Réseau de pistage », « Moteur, ça tourne ! »).
 - **Une aide pédagogique**, la même depuis chaque écran, avec des mots simples et accessibles à tous : comment

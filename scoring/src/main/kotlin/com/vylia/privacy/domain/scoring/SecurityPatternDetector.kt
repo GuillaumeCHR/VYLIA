@@ -34,6 +34,9 @@ class SecurityPatternDetector(private val rules: Rules) {
         }
     }
 
+    /** Patterns qui reposent sur une base d'indicateurs (stalkerware ou logiciel espion connu), pas sur des capacités. */
+    private val indicatorPatterns: Set<String> = compiled.filterValues { PrivacyScorer.SIGNAL_IOC_MATCH in it.atoms() }.keys
+
     private fun knownSignals(): Set<String> =
         rules.security.signals.keys + PrivacyScorer.SIGNAL_IOC_MATCH
 
@@ -54,6 +57,10 @@ class SecurityPatternDetector(private val rules: Rules) {
         }
         return rules.security.patterns.mapNotNull { (id, p) ->
             if (scan.packageName in p.exemptPackages || categoryId in p.exemptCategories) return@mapNotNull null
+            // App système : installée avec le téléphone, sur une partition en lecture seule ; ses capacités (clavier,
+            // accessibilité, enregistrement…) sont celles du système, pas un signe d'espionnage. Seule une app reconnue
+            // dans une base d'indicateurs reste signalée.
+            if (scan.isSystemApp && id !in indicatorPatterns) return@mapNotNull null
             if (!compiled.getValue(id).eval(resolver)) return@mapNotNull null
             SecurityFinding(id, p.label, p.severity, p.description)
         }.sortedBy { severityRank(it.severity) }
@@ -68,6 +75,15 @@ class SecurityPatternDetector(private val rules: Rules) {
 // ---------------------------------------------------------------------------
 
 fun interface AtomResolver { fun resolve(atom: String): Boolean }
+
+/** Atomes d'une condition, à toute profondeur. */
+fun Cond.atoms(): Set<String> = when (this) {
+    is Cond.Atom -> setOf(name)
+    is Cond.Not -> c.atoms()
+    is Cond.And -> cs.flatMapTo(HashSet()) { it.atoms() }
+    is Cond.Or -> cs.flatMapTo(HashSet()) { it.atoms() }
+    is Cond.AtLeast -> cs.flatMapTo(HashSet()) { it.atoms() }
+}
 
 sealed interface Cond {
     fun eval(r: AtomResolver): Boolean

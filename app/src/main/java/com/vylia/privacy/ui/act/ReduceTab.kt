@@ -21,6 +21,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.SecondaryTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.items
@@ -101,7 +102,7 @@ internal fun ReduceTab(
     val sections = ManageSection.visible(BuildConfig.SHIELD_ENABLED, advanced)
     val current = section.takeIf { it in sections } ?: ManageSection.PERMISSIONS
     Column {
-        SecondaryTabRow(selectedTabIndex = sections.indexOf(current)) {
+        val tabs: @Composable () -> Unit = {
             sections.forEach { entry ->
                 Tab(
                     selected = current == entry,
@@ -117,6 +118,9 @@ internal fun ReduceTab(
                 )
             }
         }
+        // Cinq sous-onglets (mode Avancé avec le bouclier) ne tiennent pas en largeur : la barre défile.
+        if (sections.size > 4) SecondaryScrollableTabRow(selectedTabIndex = sections.indexOf(current), edgePadding = 8.dp, tabs = tabs)
+        else SecondaryTabRow(selectedTabIndex = sections.indexOf(current), tabs = tabs)
         when (current) {
             ManageSection.PERMISSIONS -> RevocationsList(revocations)
             ManageSection.REMOVALS -> RemovalsList(removals, usage)

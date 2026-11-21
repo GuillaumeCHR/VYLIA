@@ -119,14 +119,13 @@ téléphone avec la version de développement (`adb logcat -s VyliaScores`, une 
 ## Catégories des apps d'après Google Play
 
 ```
-python3 tools/categories/play_categories.py fetch     # classements France d'AppInsider -> tools/categories/play_charts.json
-python3 tools/categories/play_categories.py check 20  # sondage : catégorie du classement = catégorie de la fiche Play ?
-python3 tools/categories/play_categories.py build     # écrit "play_categories" dans app/src/main/assets/vylia_rules_v3.json
+python3 tools/categories/play_categories.py fetch              # classements France d'AppInsider -> tools/categories/play_charts.json
+python3 tools/categories/play_categories.py check 20           # sondage : catégorie du classement = catégorie de la fiche Play ?
+python3 tools/categories/play_categories.py propose 30 [--games]  # apps populaires absentes de package_overrides
 ```
 
-Les 100 apps gratuites les plus téléchargées en France de chaque catégorie Google Play, traduites vers les catégories
-VYLIA (table `MAPPING` du script). Le moteur s'en sert après `package_overrides` (choisi à la main) et avant
-`ApplicationInfo.category`. Une app déjà dans `package_overrides` est ignorée. Une catégorie Play trop large (Outils,
-Communication, Style de vie…) n'est pas traduite, et aucune ne mène à une catégorie VYLIA qui autorise un accès très
-sensible (`SENSITIVE` : position en arrière-plan, micro, contacts, SMS, santé, accessibilité…), car la catégorie Play
-est choisie par l'éditeur. À relancer à chaque revue trimestrielle de l'annuaire, puis `./gradlew testDebugUnitTest`.
+Aide à tenir `package_overrides` à jour : `propose` liste, pour chaque catégorie Google Play, les apps des 100 plus
+téléchargées en France qui n'y figurent pas encore, avec une catégorie VYLIA suggérée (table `MAPPING`). Rien n'est
+écrit dans les règles : chaque app est vérifiée puis ajoutée à la main. La suggestion n'autorise jamais un accès très
+sensible (`SENSITIVE`), car la catégorie Play est choisie par l'éditeur. À relancer à chaque revue trimestrielle de
+l'annuaire.

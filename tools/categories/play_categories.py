@@ -4,21 +4,22 @@
 Usage (depuis la racine du dépôt, poste de dev uniquement) :
   python3 tools/categories/play_categories.py fetch     # classements AppInsider France -> tools/categories/play_charts.json
   python3 tools/categories/play_categories.py check 20  # compare 20 apps tirées au hasard à leur fiche Google Play
-  python3 tools/categories/play_categories.py build     # écrit "play_categories" dans app/src/main/assets/vylia_rules_v3.json
+  python3 tools/categories/play_categories.py propose 30 [--games]  # apps populaires absentes de package_overrides
 
-Pourquoi : ApplicationInfo.category, lue sur le téléphone, n'a que 8 valeurs et la plupart des apps ne la renseignent
-pas. La catégorie Google Play est plus précise, mais le téléphone ne peut pas la demander à Google sans lui envoyer la
-liste des apps installées. Ce script la relève donc sur le poste de dev, pour les 100 apps gratuites les plus
-téléchargées en France de chaque catégorie Play (classements publics d'AppInsider, tirés de Google Play), et la
-traduit vers les catégories de VYLIA.
+Pourquoi : la catégorie d'une app décide des accès jugés normaux. Le téléphone ne peut pas demander à Google la
+catégorie Play d'une app sans lui envoyer la liste des apps installées, et ApplicationInfo.category n'a que 8 valeurs,
+rarement renseignées. Les apps connues sont donc classées à la main dans package_overrides. Ce script aide à tenir
+cette liste à jour : il relève les 100 apps gratuites les plus téléchargées en France de chaque catégorie Play
+(classements publics d'AppInsider, tirés de Google Play) et propose celles qui manquent, avec une catégorie VYLIA
+suggérée. Rien n'est écrit dans les règles : chaque proposition est vérifiée avant d'être ajoutée à la main.
 
-Précautions :
-- package_overrides (choisi à la main) et excluded_packages restent prioritaires : une app qui y figure est ignorée ;
-- la catégorie Play est choisie par l'éditeur. Une catégorie Play ne donne donc jamais une catégorie VYLIA qui autorise
-  un accès très sensible (SENSITIVE, vérifié par build) : l'app garde alors la catégorie qu'Android lui donne, ou la
-  catégorie par défaut. Les catégories Play trop larges (Outils, Communication, Style de vie…) ne sont pas traduites ;
-- une app classée dans deux catégories Play qui ne mènent pas à la même catégorie VYLIA est écartée (les classements
-  Famille, Wear OS et Cadrans, qui s'ajoutent à la catégorie de la fiche, sont ignorés).
+Une première version écrivait ces catégories dans les règles (2026-11-21) : abandonnée, car les apps populaires sont
+déjà presque toutes dans package_overrides et les catégories Play sont trop larges (Divertissement, Cuisine et
+boissons…) pour donner seules une bonne catégorie VYLIA.
+
+Précautions pour la catégorie suggérée : elle n'autorise jamais un accès très sensible (SENSITIVE, vérifié par propose),
+car la catégorie Play est choisie par l'éditeur ; les catégories Play trop larges (Outils, Communication…) n'en
+suggèrent pas. Les classements Famille, Wear OS et Cadrans, qui s'ajoutent à la catégorie de la fiche, sont ignorés.
 Une requête à la fois, avec une pause, comme une visite ordinaire des pages.
 """
 import json
@@ -146,44 +147,28 @@ def check(count: int):
     print(f"{ok}/{count} identiques")
 
 
-def build():
+def propose(top: int, games: bool):
+    """Les apps des classements absentes de package_overrides, pour les y ajouter à la main après vérification."""
     rules = json.loads(RULES.read_text(encoding="utf-8"))
     charts = json.loads(CHARTS.read_text(encoding="utf-8"))["charts"]
     for slug, (_, target, _) in MAPPING.items():
-        if target is None:
-            continue
-        category = rules["categories"][target]
-        risky = SENSITIVE & set(category.get("allowed", []))
-        assert not risky, f"{slug} -> {target} autoriserait {sorted(risky)}"
+        if target is not None:
+            risky = SENSITIVE & set(rules["categories"][target].get("allowed", []))
+            assert not risky, f"{slug} -> {target} autoriserait {sorted(risky)}"
     known = set(rules["package_overrides"]) | set(rules["excluded_packages"])
-    seen: dict[str, set[str]] = {}
+    shown = 0
     for slug, packages in charts.items():
-        if slug in SECONDARY:
+        if slug in SECONDARY or (not games and slug.startswith("games")):
             continue
-        target = MAPPING.get(slug, (None, None, None))[1]
-        for p in packages:
-            if p not in known:
-                seen.setdefault(p, set()).add(target)
-    result, conflicts, untranslated = {}, 0, 0
-    for p, targets in seen.items():
-        mapped = targets - {None}
-        if len(mapped) > 1:
-            conflicts += 1
-        elif mapped and None not in targets:
-            result[p] = mapped.pop()
-        else:
-            untranslated += 1
-    rules["play_categories"] = dict(sorted(result.items()))
-    order = rules["category_resolution"]["order"]
-    if "play_categories" not in order:
-        order.insert(order.index("app_info_category"), "play_categories")
-    RULES.write_text(json.dumps(rules, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    by_target: dict[str, int] = {}
-    for t in result.values():
-        by_target[t] = by_target.get(t, 0) + 1
-    print(f"{len(result)} apps classées, {len(known & set().union(*charts.values()))} déjà choisies à la main, "
-          f"{untranslated} dans une catégorie Play non traduite, {conflicts} écartées (catégories contradictoires)")
-    print(", ".join(f"{t} {n}" for t, n in sorted(by_target.items(), key=lambda x: -x[1])))
+        play, target, why = MAPPING[slug]
+        missing = [(rank, p) for rank, p in enumerate(packages[:top], 1) if p not in known]
+        if not missing:
+            continue
+        print(f"\n## {play} -> {target or '? (' + why + ')'}")
+        for rank, p in missing:
+            print(f"  {rank:3}  {p}")
+        shown += len(missing)
+    print(f"\n{shown} apps à vérifier (les {top} premières de chaque classement, absentes de package_overrides)")
 
 
 if __name__ == "__main__":
@@ -192,7 +177,8 @@ if __name__ == "__main__":
         fetch()
     elif command == "check":
         check(int(sys.argv[2]) if len(sys.argv) > 2 else 20)
-    elif command == "build":
-        build()
+    elif command == "propose":
+        args = sys.argv[2:]
+        propose(int(next((a for a in args if a.isdigit()), "30")), "--games" in args)
     else:
         sys.exit(__doc__)

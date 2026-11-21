@@ -137,9 +137,11 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 7. ~~**Bug Analyse en mode avancé :**~~ (corrigé en 0.6.4) deux scores de confidentialité s'affichent (apps utilisateur et apps système).
    N'en garder qu'un seul, qui fusionne les résultats des apps installées par l'utilisateur et des apps système.
 8. ~~§9~~ (fait en 0.7.0). §9 À propos › Crédits avec une touche d'humour, comme dans Molkky Board (voir §9).
-9. ~~**Catégories des apps d'après Google Play**~~ (fait le 2026-11-21 : `play_categories` dans les règles, 3465 apps,
-   produites par `tools/categories/play_categories.py` depuis les classements France d'AppInsider ; voir `tools/README.md`).
-   Les tags Play ne sont pas lisibles sur la page web publique : seule la catégorie Play est utilisée. Idée d'origine
+9. **Catégories des apps d'après Google Play** (essai du 2026-11-21) : écrire automatiquement la catégorie Play dans
+   les règles n'apportait presque rien (5 apps sur 105 sur le Fairphone, dont 2 mal classées) : les apps populaires
+   sont déjà dans `package_overrides`, et les catégories Play sont trop larges (Divertissement, Cuisine et boissons).
+   `tools/categories/play_categories.py propose` sert désormais à repérer les apps populaires absentes de
+   `package_overrides`, à classer à la main. Les tags Play ne sont pas lisibles sur la page web publique. Idée d'origine
    (2026-11-08) : les
    catégories et les tags Play (Banque mobile, Transports publics, Météo, Moniteur d'activité…) sont bien plus précis
    que `ApplicationInfo.category` (8 valeurs), mais illisibles depuis le téléphone, et les demander à Google pendant

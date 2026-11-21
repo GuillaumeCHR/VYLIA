@@ -129,10 +129,7 @@
    "lite": "com.google.android.apps.mapslite",
    "lite_name": "Maps Go",
    "category": "NAVIGATION",
-   "loss": {
-    "en": "No built-in turn-by-turn navigation (it needs a separate app) and no offline maps. Made for entry-level phones: Google Play does not offer it on every phone.",
-    "fr": "Pas de navigation guidée intégrée (elle demande une app à part) ni de cartes hors connexion. Conçue pour les téléphones d'entrée de gamme : Google Play ne la propose pas sur tous les téléphones."
-   }
+   "skip": "incompatible avec le Fairphone 6 d'après Google Play (réservée aux téléphones d'entrée de gamme)"
   },
   {
    "replaces": [
@@ -140,7 +137,7 @@
    ],
    "original_name": "Google Photos",
    "lite": "com.google.android.apps.photosgo",
-   "lite_name": "Gallery Go",
+   "lite_name": "Galerie (Gallery Go)",
    "category": "PHOTO_VIDEO",
    "loss": {
     "en": "A gallery of the photos on the phone only: no online backup, no shared albums, fewer editing tools.",

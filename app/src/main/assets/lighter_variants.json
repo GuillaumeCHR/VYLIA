@@ -54,26 +54,10 @@
     },
     {
       "replaces": [
-        "com.google.android.apps.maps"
-      ],
-      "package": "com.google.android.apps.mapslite",
-      "name": "Maps Go",
-      "grade": "A",
-      "score": 92,
-      "trackers": 0,
-      "exodus_report": 744424,
-      "exodus_date": "2026-05-27",
-      "loss": {
-        "en": "No built-in turn-by-turn navigation (it needs a separate app) and no offline maps. Made for entry-level phones: Google Play does not offer it on every phone.",
-        "fr": "Pas de navigation guidée intégrée (elle demande une app à part) ni de cartes hors connexion. Conçue pour les téléphones d'entrée de gamme : Google Play ne la propose pas sur tous les téléphones."
-      }
-    },
-    {
-      "replaces": [
         "com.google.android.apps.photos"
       ],
       "package": "com.google.android.apps.photosgo",
-      "name": "Gallery Go",
+      "name": "Galerie (Gallery Go)",
       "grade": "A",
       "score": 90,
       "trackers": 0,

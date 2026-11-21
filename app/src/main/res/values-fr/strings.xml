@@ -361,6 +361,13 @@
     <string name="alt_free">Gratuite</string>
     <string name="alt_rating">%1$s ★ sur Google Play</string>
     <string name="alt_rating_description">Note Google Play : %1$s sur 5</string>
+    <string name="lite_title">Versions allégées</string>
+    <string name="lite_intro">Certaines de vos apps existent en version allégée, du même éditeur et mieux notée par VYLIA : le même service, avec moins de fonctions.</string>
+    <string name="lite_swap">%1$s → %2$s</string>
+    <string name="lite_score">Note %1$s (%2$d) d\'après son rapport Exodus du %3$s, contre %4$s (%5$d) pour %6$s sur ce téléphone.</string>
+    <string name="lite_loss">Ce que vous perdez : %1$s</string>
+    <string name="lite_report">Rapport Exodus</string>
+    <string name="lite_note">La note de la version allégée compte toutes les permissions qu\'elle déclare : sur votre téléphone, elle est souvent meilleure encore. Installez-la, puis désinstallez l\'autre : VYLIA lui donne alors son propre score.</string>
     <string name="alt_method_title">Comment cette liste est construite</string>
     <string name="alt_method_text">Ces apps viennent d\'AlternativeTo, un site où les internautes se recommandent des alternatives. Dans chaque catégorie, VYLIA retient les apps gratuites qu\'ils apprécient le plus, disponibles sur Android, et ouvre leur fiche Play Store (ou F-Droid à défaut). Quelques apps que le classement oublie sont ajoutées à la main (Bluesky, Signal, Olvid, DuckDuckGo). C\'est un reflet de leur popularité, pas un audit : leur score apparaît dans VYLIA une fois qu\'elles sont installées. La note affichée est celle de Google Play, quand l\'app y est.</string>
     <string name="adtrack_intro_title">Deux façons de réduire le traçage</string>
@@ -378,6 +385,13 @@
     <string name="shield_blocked_total">%1$s bloquées au total</string>
     <string name="shield_recent_title">Derniers blocages</string>
     <string name="shield_recent_easyprivacy">Serveur de traçage</string>
+    <string name="shield_except">Ne plus bloquer</string>
+    <string name="shield_except_description">Ne plus bloquer %1$s</string>
+    <string name="shield_exceptions_title">Vos exceptions</string>
+    <string name="shield_exceptions_hint">Ces domaines et leurs sous-domaines ne sont plus bloqués, et le bouclier ne les compte plus dans le score. Les serveurs de logiciels espions restent toujours bloqués. Après « Bloquer de nouveau », une app peut encore joindre le domaine pendant une ou deux minutes : Android garde un court moment les réponses DNS récentes.</string>
+    <string name="shield_recent_new">Afficher les nouveaux blocages</string>
+    <string name="shield_exception_remove">Bloquer de nouveau</string>
+    <string name="shield_exception_remove_description">Bloquer de nouveau %1$s</string>
     <string name="shield_how">Comment ça marche : VYLIA crée un VPN sur le téléphone lui-même. Seules les requêtes DNS (l\'annuaire d\'Internet) y passent : celles qui visent des serveurs de traçage connus sont refusées, les autres continuent vers le DNS habituel de votre réseau. Rien n\'est envoyé à un serveur de VYLIA, et le reste de votre trafic ne passe pas par VYLIA.</string>
     <string name="shield_private_dns_conflict">Le DNS privé est réglé sur %1$s : Android envoie alors ses requêtes directement à ce service, et le bouclier n\'en voit aucune. Choisissez l\'un ou l\'autre : pour utiliser le bouclier, repassez le DNS privé sur Automatique.</string>
     <string name="shield_other_vpn">Un autre VPN est actif : activer le bouclier le remplacera.</string>
@@ -440,6 +454,16 @@
     <string name="celebrate_progress_none">Votre évolution s\'affichera après quelques jours de scans.</string>
     <string name="celebrate_progress_stable_month">Stable depuis 30 jours</string>
     <string name="celebrate_progress_stable_start">Stable depuis votre premier scan</string>
+    <plurals name="shield_recent_count">
+        <item quantity="one">%1$s · %2$d fois</item>
+        <item quantity="many">%1$s · %2$d fois</item>
+        <item quantity="other">%1$s · %2$d fois</item>
+    </plurals>
+    <plurals name="lite_trackers">
+        <item quantity="one">%1$d traqueur au lieu de %2$d</item>
+        <item quantity="many">%1$d traqueurs au lieu de %2$d</item>
+        <item quantity="other">%1$d traqueurs au lieu de %2$d</item>
+    </plurals>
     <plurals name="reduce_revoke_title">
         <item quantity="one">Retirer %1$d permission</item>
         <item quantity="many">Retirer %1$d permissions</item>
@@ -1015,6 +1039,7 @@
     <string name="db_name_exodus_categories">Catégories Exodus (VYLIA)</string>
     <string name="db_name_alternatives">Alternatives VYLIA</string>
     <string name="db_name_web_services">Services web VYLIA</string>
+    <string name="db_name_lighter_variants">Versions allégées VYLIA</string>
     <string name="db_name_private_dns">Liste DNS privés VYLIA</string>
     <string name="db_name_support_resources">Ressources d\'aide VYLIA</string>
     <string name="db_row_updated">Mise à jour du %1$s</string>
@@ -1302,8 +1327,6 @@
     <string name="notif_channel_security_description">Notifications discrètes : elles ne nomment jamais l\'app concernée.</string>
     <string name="notif_install_public">VYLIA a analysé une nouvelle app.</string>
     <string name="notif_threshold_sensitive">Score de l\'appareil : %1$d, sous votre seuil de %2$d. Un point à vérifier : ouvrez VYLIA.</string>
-
-    <!-- Apps préinstallées (UAD-ng) -->
     <string name="tab_preinstalled_apps">Préinstallées (%1$d)</string>
     <string name="scan_preinstalled_link">Que puis-je désactiver ?</string>
     <string name="scan_system_hint">Des morceaux d\'Android lui-même. N\'y touchez pas : le téléphone en a besoin.</string>
@@ -1369,8 +1392,6 @@
         <item quantity="one">Copier la commande (%1$d app)</item>
         <item quantity="other">Copier les commandes (%1$d apps)</item>
     </plurals>
-
-    <!-- Widget d'écran d'accueil -->
     <string name="widget_description">Score du téléphone et Bouclier VYLIA, sans aucun nom d\'app</string>
     <string name="widget_grade">Note %1$s</string>
     <string name="widget_no_score">Ouvrir VYLIA</string>

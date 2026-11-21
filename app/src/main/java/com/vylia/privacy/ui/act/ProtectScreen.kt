@@ -96,6 +96,8 @@ private fun DnsFiltering(actViewModel: ActViewModel) {
                 onPauseMinutes = actViewModel::setShieldPauseMinutes,
                 onFilter = actViewModel::setShieldFilter,
                 company = actViewModel::company,
+                onAddException = actViewModel::addShieldException,
+                onRemoveException = actViewModel::removeShieldException,
             )
         }
     }

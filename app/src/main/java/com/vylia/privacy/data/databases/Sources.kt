@@ -79,6 +79,18 @@ class AlternativesSource(private val repository: com.vylia.privacy.data.alternat
     override suspend fun update(fetch: Fetch): Outcome = repository.update(fetch)
 }
 
+/** Versions allégées mieux notées, dépôt VYLIA. */
+class LighterVariantsSource(private val repository: com.vylia.privacy.data.alternatives.LighterVariantsRepository) : DatabaseSource {
+    override val id = "lighter_variants"
+    override val group = DatabaseGroup.ALTERNATIVES
+    override val name = "Versions allégées VYLIA"
+    override val attribution = "VYLIA · Exodus Privacy · ODbL 1.0"
+    override val checkUrl = com.vylia.privacy.data.alternatives.LighterVariantsRepository.REMOTE_URL
+    override val affectsScore = false
+    override fun entries(): Int = repository.size
+    override suspend fun update(fetch: Fetch): Outcome = repository.update(fetch)
+}
+
 /** Services utilisables en version web, dépôt VYLIA. */
 class WebServicesSource(private val repository: com.vylia.privacy.data.web.WebServicesRepository) : DatabaseSource {
     override val id = "web_services"

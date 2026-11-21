@@ -71,6 +71,7 @@ class AppContainer(context: Context) {
     val badgesManager = BadgesManager(PrefsRewardsStore(context))
     val packageRemovalMonitor = PackageRemovalMonitor(context)
     val alternativesRepository = AlternativesRepository(context)
+    val lighterVariantsRepository = com.vylia.privacy.data.alternatives.LighterVariantsRepository(context)
     val privateDnsRepository = PrivateDnsRepository(context)
     val shieldController = ShieldController(context, onFirstBlock = badgesManager::onShieldBlocked).apply {
         // Indicateurs MVT mis à jour depuis les Paramètres : leurs domaines remplacent ceux de la liste embarquée.
@@ -151,6 +152,7 @@ class AppContainer(context: Context) {
                 RulesSource(ruleMatrixRepository),
             ) + shieldBridge.sources() + listOf(
                 AlternativesSource(alternativesRepository),
+                com.vylia.privacy.data.databases.LighterVariantsSource(lighterVariantsRepository),
                 WebServicesSource(webServicesRepository),
                 PrivateDnsSource(privateDnsRepository),
                 SupportResourcesSource(supportResourcesRepository),

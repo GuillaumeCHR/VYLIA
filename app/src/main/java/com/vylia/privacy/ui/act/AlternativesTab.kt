@@ -50,6 +50,13 @@ import com.vylia.privacy.R
 import com.vylia.privacy.domain.act.Alternative
 import com.vylia.privacy.domain.act.AlternativeCatalogue
 import com.vylia.privacy.domain.act.AlternativeGroup
+import com.vylia.privacy.domain.act.LighterSuggestion
+import com.vylia.privacy.domain.act.LighterVariants
+import com.vylia.privacy.domain.model.TrackerAnalysis
+import androidx.compose.ui.res.pluralStringResource
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import com.vylia.privacy.domain.act.localized
 import com.vylia.privacy.domain.model.AuditedApp
 import com.vylia.privacy.ui.components.VyliaCard
@@ -63,14 +70,23 @@ import java.text.NumberFormat
  * Les alternatives déjà installées sont repérées.
  */
 @Composable
-internal fun AlternativesTab(allApps: List<AuditedApp>, catalogue: AlternativeCatalogue, onOpenWebApk: () -> Unit) {
+internal fun AlternativesTab(allApps: List<AuditedApp>, catalogue: AlternativeCatalogue, lighter: LighterVariants, onOpenWebApk: () -> Unit) {
     val language = currentLocale().language
     val installed = remember(allApps) { allApps.map { it.app.packageName }.toSet() }
+    val suggestions = remember(allApps, lighter) { lighter.suggestions(allApps) }
     var selectedId by rememberSaveable { mutableStateOf(catalogue.groups.firstOrNull()?.id) }
     val selected = catalogue.groups.firstOrNull { it.id == selectedId } ?: catalogue.groups.firstOrNull()
 
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         item { Intro(onOpenWebApk) }
+        // Versions allégées : seulement quand une app installée en a une mieux notée.
+        if (suggestions.isNotEmpty()) {
+            item(key = "lite-intro") { LighterIntro() }
+            items(suggestions, key = { "lite-${it.app.app.packageName}" }) { LighterCard(it, language) }
+            item(key = "lite-note") {
+                Text(stringResource(R.string.lite_note), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+        }
         item(key = "menu") { CategoryMenu(catalogue.groups, selected, language) { selectedId = it.id } }
         if (selected != null) {
             items(selected.alternatives, key = { "${selected.id}-${it.packageName}" }) { alt ->
@@ -160,6 +176,51 @@ private fun AlternativeCard(alt: Alternative, isInstalled: Boolean, language: St
     }
 }
 
+@Composable
+private fun LighterIntro() {
+    Column(Modifier.padding(top = 6.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        Text(stringResource(R.string.lite_title), style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+        Text(stringResource(R.string.lite_intro), style = MaterialTheme.typography.bodyMedium)
+    }
+}
+
+/** Une app installée et sa version allégée : la note de chacune, les traqueurs, ce qu'on perd. */
+@Composable
+private fun LighterCard(suggestion: LighterSuggestion, language: String) {
+    val context = LocalContext.current
+    val (app, variant) = suggestion
+    val locale = currentLocale()
+    val date = remember(variant.exodusDate, locale) {
+        LocalDate.parse(variant.exodusDate).format(DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM).withLocale(locale))
+    }
+    VyliaCard(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text(
+                stringResource(R.string.lite_swap, app.app.label, variant.name),
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                stringResource(R.string.lite_score, variant.grade, variant.score, date, app.result.grade, app.result.score, app.app.label),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            if (app.trackerAnalysis is TrackerAnalysis.Analyzed) {
+                val here = app.result.trackerFindings.size
+                if (variant.trackers < here) {
+                    Text(pluralStringResource(R.plurals.lite_trackers, variant.trackers, variant.trackers, here), style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+            Text(stringResource(R.string.lite_loss, variant.loss.localized(language)), style = MaterialTheme.typography.bodySmall)
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                OutlinedButton(onClick = {
+                    openUris(context, listOf("market://details?id=${variant.packageName}", "https://play.google.com/store/apps/details?id=${variant.packageName}"))
+                }) { Text(stringResource(R.string.alt_get_play)) }
+                TextButton(onClick = { openUris(context, listOf(variant.reportUrl(language))) }) { Text(stringResource(R.string.lite_report)) }
+            }
+        }
+    }
+}
+
 /** Comment la liste est construite, en quelques mots. */
 @Composable
 private fun MethodNote() {
@@ -198,6 +259,11 @@ private fun openStore(context: Context, alt: Alternative) {
         alt.fdroid != null -> listOf("https://f-droid.org/packages/${alt.fdroid}/")
         else -> listOfNotNull(alt.web)
     }
+    openUris(context, uris)
+}
+
+/** Ouvre le premier lien qu'une app sait ouvrir. */
+private fun openUris(context: Context, uris: List<String>) {
     for (uri in uris) {
         try {
             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))

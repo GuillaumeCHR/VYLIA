@@ -1,0 +1,35 @@
+{
+  "version": "1.0",
+  "last_update": "2026-11-17",
+  "description": "Versions allégées mieux notées qu'une app répandue (même éditeur, même service). Notes calculées comme dans l'annuaire du site (module :scoring, rapport Exodus Privacy, toutes les permissions déclarées comptées), vérifiées à la main. Données Exodus sous ODbL 1.0.",
+  "variants": [
+    {
+      "replaces": ["com.facebook.katana"],
+      "package": "com.facebook.lite",
+      "name": "Facebook Lite",
+      "grade": "C",
+      "score": 50,
+      "trackers": 0,
+      "exodus_report": 797509,
+      "exodus_date": "2026-11-04",
+      "loss": {
+        "en": "Simpler interface, photos and videos in lower quality. Messages are built in, without Messenger.",
+        "fr": "Interface plus simple, photos et vidéos en qualité réduite. Les messages sont intégrés, sans Messenger."
+      }
+    },
+    {
+      "replaces": ["com.zhiliaoapp.musically", "com.ss.android.ugc.trill"],
+      "package": "com.zhiliaoapp.musically.go",
+      "name": "TikTok Lite",
+      "grade": "B",
+      "score": 78,
+      "trackers": 1,
+      "exodus_report": 755360,
+      "exodus_date": "2026-06-30",
+      "loss": {
+        "en": "Fewer creation tools and effects, videos in lower quality. Not offered in every country.",
+        "fr": "Moins d'outils de création et d'effets, vidéos en qualité réduite. Pas proposée dans tous les pays."
+      }
+    }
+  ]
+}

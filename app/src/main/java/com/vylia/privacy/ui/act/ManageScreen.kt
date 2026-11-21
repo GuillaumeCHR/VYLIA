@@ -120,7 +120,7 @@ fun ManageScreen(
             userApps.isEmpty() -> ActPlaceholder(stringResource(R.string.act_empty_scan))
             else -> ReduceTab(
                 revocations, removals, usage, section, onSection,
-                alternatives = { AlternativesTab(state.scannedApps, actViewModel.catalogue, onOpenWebApk) },
+                alternatives = { AlternativesTab(state.scannedApps, actViewModel.catalogue, actViewModel.lighter, onOpenWebApk) },
                 trackers = {
                     LeaksList(
                         leaks,

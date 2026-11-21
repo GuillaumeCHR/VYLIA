@@ -15,6 +15,7 @@ import com.vylia.privacy.domain.shield.BlockedRequest
 import com.vylia.privacy.domain.shield.ExodusNetworkTracker
 import com.vylia.privacy.domain.shield.Blocklist
 import com.vylia.privacy.domain.shield.ShieldBypass
+import com.vylia.privacy.domain.shield.ShieldExceptions
 import com.vylia.privacy.domain.shield.ShieldFilter
 import com.vylia.privacy.domain.shield.ShieldIndicator
 import com.vylia.privacy.domain.shield.ShieldState
@@ -69,6 +70,7 @@ class ShieldController(
                 .ifEmpty { ShieldFilter.AVAILABLE },
             pauseMinutes = prefs.getInt(KEY_PAUSE_MINUTES, ShieldState.PAUSE_STEPS.first())
                 .takeIf { it in ShieldState.PAUSE_STEPS } ?: ShieldState.PAUSE_STEPS.first(),
+            exceptions = ShieldExceptions.of(prefs.getStringSet(KEY_EXCEPTIONS, null).orEmpty()),
         ),
     )
     val state: StateFlow<ShieldState> = _state.asStateFlow()
@@ -246,7 +248,7 @@ class ShieldController(
      * pas la liste en mémoire si le bouclier ne tourne pas. Appel bloquant.
      */
     fun coverage(trackers: List<ExodusNetworkTracker>): Map<String, TrackerCoverage> =
-        TrackerCoverages.of(trackers, blocklist ?: base(), filters())
+        TrackerCoverages.of(trackers, blocklist ?: base(), filters(), exceptions())
 
     /** Nombre de domaines de la liste en vigueur, sans la garder en mémoire si le bouclier ne tourne pas. */
     fun domainCount(): Int {
@@ -310,6 +312,27 @@ class ShieldController(
     /** Filtrages appliqués par le VPN, lus à chaque requête. */
     internal fun filters(): Set<ShieldFilter> = _state.value.filters
 
+    /** Exceptions de l'utilisateur, lues par le VPN à chaque requête bloquée. */
+    internal fun exceptions(): ShieldExceptions = _state.value.exceptions
+
+    /**
+     * « Ne plus bloquer » : [domain] et ses sous-domaines passent dès la requête suivante, même bouclier actif, et
+     * sortent des derniers blocages. La couverture des traqueurs (score avec le bouclier) est recalculée.
+     */
+    fun addException(domain: String) = setExceptions { it + domain }
+
+    /** « Bloquer de nouveau ». */
+    fun removeException(domain: String) = setExceptions { it - domain }
+
+    private fun setExceptions(change: (ShieldExceptions) -> ShieldExceptions) {
+        val next = _state.updateAndGet { s ->
+            val exceptions = change(s.exceptions)
+            s.copy(exceptions = exceptions, recent = s.recent.filterNot { !it.spyware && exceptions.covers(it.domain) })
+        }
+        prefs.edit().putStringSet(KEY_EXCEPTIONS, HashSet(next.exceptions.domains)).apply()
+        _listVersion.update { it + 1 }
+    }
+
     fun resume() {
         _state.update { it.copy(pausedUntil = null) }
     }
@@ -335,7 +358,7 @@ class ShieldController(
     /** Appelé par le fil de lecture du VPN, un seul à la fois. */
     internal fun onBlocked(domain: String, match: BlockMatch) {
         val now = System.currentTimeMillis()
-        val next = _state.updateAndGet { it.onBlocked(BlockedRequest(domain, match.trackerName, now), today()) }
+        val next = _state.updateAndGet { it.onBlocked(BlockedRequest(domain, match.trackerName, now, spyware = match.filter == null), today()) }
         if (next.blockedSession == 1L) onFirstBlock()
         if (++unsaved >= SAVE_EVERY) flush()
     }
@@ -371,6 +394,7 @@ class ShieldController(
         private const val KEY_FILTER = "filter_"
         private const val KEY_PAUSE_MINUTES = "pause_minutes"
         private const val KEY_LIST = "list_"
+        private const val KEY_EXCEPTIONS = "exceptions"
         private const val KEY_SIZE = "domain_count"
         /** Le total est écrit toutes les [SAVE_EVERY] requêtes bloquées, et à l'arrêt du bouclier. */
         private const val SAVE_EVERY = 25

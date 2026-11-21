@@ -37,4 +37,32 @@ class ShieldStateTest {
         assertEquals(1L, day2.blockedOn(101))
         assertEquals(3L, day2.blockedTotal)
     }
+
+    @Test
+    fun `un domaine bloque plusieurs fois tient sur une ligne, remontee en tete`() {
+        val state = ShieldState()
+            .onBlocked(BlockedRequest("a.example", "A", 1L), day = 100)
+            .onBlocked(BlockedRequest("b.example", "B", 2L), day = 100)
+            .onBlocked(BlockedRequest("a.example", "A", 3L), day = 100)
+        assertEquals(listOf("a.example", "b.example"), state.recent.map { it.domain })
+        assertEquals(2, state.recent.first().count)
+        assertEquals(3L, state.recent.first().at)
+        assertEquals(1, state.recent.last().count)
+        assertEquals(3L, state.blockedSession)
+    }
+
+    @Test
+    fun `l'ordre fige de l'ecran ne bouge pas quand un nouveau domaine est bloque`() {
+        val state = ShieldState()
+            .onBlocked(BlockedRequest("a.example", null, 1L), day = 100)
+            .onBlocked(BlockedRequest("b.example", null, 2L), day = 100)
+        val order = state.recent.map { it.domain }
+        val next = state.onBlocked(BlockedRequest("c.example", null, 3L), day = 100)
+            .onBlocked(BlockedRequest("a.example", null, 4L), day = 100)
+        assertEquals(listOf("b.example", "a.example"), next.recentIn(order).map { it.domain })
+        assertEquals(2, next.recentIn(order).last().count)
+        // Une ligne retirée (exception) disparaît sans décaler les autres.
+        val excepted = next.copy(recent = next.recent.filterNot { it.domain == "b.example" })
+        assertEquals(listOf("a.example"), excepted.recentIn(order).map { it.domain })
+    }
 }

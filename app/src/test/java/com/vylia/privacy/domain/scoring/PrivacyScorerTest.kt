@@ -113,6 +113,20 @@ class PrivacyScorerTest {
     }
 
     @Test
+    fun `categorie Google Play - apres le choix a la main, avant la categorie Android`() {
+        val rules = TestFixtures.rules
+        val chosen = rules.packageOverrides.entries.first()
+        val withPlay = PrivacyScorer(
+            rules.copy(playCategories = mapOf("org.example.weather" to "WEATHER", chosen.key to "GAME")),
+        )
+        assertEquals("WEATHER", withPlay.resolveCategory(scan("org.example.weather", emptySet(), null, category = "CATEGORY_GAME")))
+        assertEquals(chosen.value, withPlay.resolveCategory(scan(chosen.key, emptySet(), null)))
+        // La liste embarquée ne reprend aucune app choisie à la main.
+        assertTrue(rules.playCategories.size > 1000)
+        assertTrue(rules.playCategories.keys.none { it in rules.packageOverrides })
+    }
+
+    @Test
     fun `VYLIA se note elle-meme avec la meme grille et assume QUERY_ALL_PACKAGES`() {
         // Permissions réelles du manifeste ; l'accès aux données d'utilisation reste à accorder par l'utilisateur.
         val declared = setOf(

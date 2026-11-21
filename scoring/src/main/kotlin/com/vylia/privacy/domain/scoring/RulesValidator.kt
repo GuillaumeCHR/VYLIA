@@ -87,6 +87,7 @@ object RulesValidator {
 
         val sizes = listOf(
             rules.permissionWeights.size, rules.categories.size, rules.packageExceptions.size, rules.packageOverrides.size,
+            rules.playCategories.size,
             rules.permissionRules.groups.size, rules.permissionSets.size, rules.permissionRequires.size,
             rules.consentEachTime.size, rules.neutralPermissions.size, rules.security.patterns.size,
             rules.security.signals.size, rules.badges.definitions.size, rules.categoryResolution.appInfoCategoryMap.size,
@@ -140,6 +141,7 @@ object RulesValidator {
             addAll(rules.excludedPackages)
             addAll(rules.packageExceptions.keys)
             addAll(rules.packageOverrides.keys)
+            addAll(rules.playCategories.keys)
             rules.security.patterns.values.forEach { addAll(it.exemptPackages) }
         }
         packages.firstOrNull { !PACKAGE.matches(it) }?.let { throw IllegalArgumentException("nom de paquet invalide : ${it.take(40)}") }
@@ -147,7 +149,7 @@ object RulesValidator {
         rules.categories.keys.firstOrNull { !CATEGORY.matches(it) }?.let {
             throw IllegalArgumentException("nom de catégorie invalide : ${it.take(40)}")
         }
-        val cited = rules.packageOverrides.values + rules.categoryResolution.appInfoCategoryMap.values +
+        val cited = rules.packageOverrides.values + rules.playCategories.values + rules.categoryResolution.appInfoCategoryMap.values +
             rules.security.patterns.values.flatMap { it.exemptCategories }
         cited.firstOrNull { it !in rules.categories }?.let { throw IllegalArgumentException("catégorie inconnue : ${it.take(40)}") }
         rules.categoryResolution.appInfoCategoryMap.keys.firstOrNull { !CATEGORY.matches(it) }?.let {

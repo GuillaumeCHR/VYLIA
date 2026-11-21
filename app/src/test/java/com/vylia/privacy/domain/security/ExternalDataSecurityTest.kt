@@ -118,6 +118,7 @@ class ExternalDataSecurityTest {
         refused(rules.copy(scoring = rules.scoring.copy(grades = rules.scoring.grades + rules.scoring.grades.first())))
         refused(rules.copy(scoring = rules.scoring.copy(grades = rules.scoring.grades.map { it.copy(grade = "=1") })))
         refused(rules.copy(packageOverrides = rules.packageOverrides + ("com.example.app" to "NO_SUCH_CATEGORY")))
+        refused(rules.copy(playCategories = rules.playCategories + ("com.example.app" to "NO_SUCH_CATEGORY")))
     }
 
     @Test
@@ -146,6 +147,7 @@ class ExternalDataSecurityTest {
             assertThrows(IllegalArgumentException::class.java) { RulesValidator.validate(r, rules) }
         refused(rules.copy(permissionWeights = rules.permissionWeights + ("CAMERA; DROP" to 5)))
         refused(rules.copy(packageOverrides = rules.packageOverrides + ("not a package" to "DEFAULT")))
+        refused(rules.copy(playCategories = rules.playCategories + ("not a package" to "DEFAULT")))
         refused(rules.copy(categories = rules.categories + ("../evil" to rules.categories.getValue("DEFAULT"))))
         refused(rules.copy(badges = rules.badges.copy(definitions = listOf(rules.badges.definitions.first().copy(icon = "../../x")))))
     }

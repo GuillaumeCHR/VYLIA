@@ -24,6 +24,11 @@ data class Rules(
     @SerialName("excluded_packages") val excludedPackages: Set<String> = emptySet(),
     @SerialName("package_exceptions") val packageExceptions: Map<String, PackageException> = emptyMap(),
     @SerialName("package_overrides") val packageOverrides: Map<String, String> = emptyMap(),
+    /**
+     * Catégorie des apps populaires en France d'après leur catégorie Google Play (tools/categories/play_categories.py) :
+     * après package_overrides, choisi à la main, et avant ApplicationInfo.category, moins précise.
+     */
+    @SerialName("play_categories") val playCategories: Map<String, String> = emptyMap(),
     val security: SecurityRules = SecurityRules(),
     val badges: BadgeRules = BadgeRules(),
     /**
@@ -382,6 +387,7 @@ class PrivacyScorer(
     fun resolveCategory(scan: AppScan): String =
         rules.packageOverrides[scan.packageName]
             ?: scan.webCategory?.takeIf { it in rules.categories }
+            ?: rules.playCategories[scan.packageName]
             ?: rules.categoryResolution.appInfoCategoryMap[scan.appInfoCategory]
             ?: "DEFAULT"
 

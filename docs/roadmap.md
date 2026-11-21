@@ -137,7 +137,10 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 7. ~~**Bug Analyse en mode avancé :**~~ (corrigé en 0.6.4) deux scores de confidentialité s'affichent (apps utilisateur et apps système).
    N'en garder qu'un seul, qui fusionne les résultats des apps installées par l'utilisateur et des apps système.
 8. ~~§9~~ (fait en 0.7.0). §9 À propos › Crédits avec une touche d'humour, comme dans Molkky Board (voir §9).
-9. **Catégories des apps d'après Google Play** (à étudier après la publication sur Play, idée du 2026-11-08) : les
+9. ~~**Catégories des apps d'après Google Play**~~ (fait le 2026-11-21 : `play_categories` dans les règles, 3465 apps,
+   produites par `tools/categories/play_categories.py` depuis les classements France d'AppInsider ; voir `tools/README.md`).
+   Les tags Play ne sont pas lisibles sur la page web publique : seule la catégorie Play est utilisée. Idée d'origine
+   (2026-11-08) : les
    catégories et les tags Play (Banque mobile, Transports publics, Météo, Moniteur d'activité…) sont bien plus précis
    que `ApplicationInfo.category` (8 valeurs), mais illisibles depuis le téléphone, et les demander à Google pendant
    le scan enverrait la liste des apps installées. Piste : un script de poste de dev, sur le modèle de
@@ -149,7 +152,9 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
    grille pendant le test fermé.
 10. ~~**Conseil « version allégée »**~~ (fait le 2026-11-21, PR #38 : Gérer › Alternatives › Versions allégées, 4 versions
    produites par `tools/directory/lighter_variants.py`, versions écartées et raisons dans
-   `tools/directory/lighter_candidates.json`). Reste à faire : **l'alerte sur les rapports anciens** (fin du point).
+   `tools/directory/lighter_candidates.json`). L'alerte sur les rapports anciens est abandonnée : sur le téléphone, les traqueurs sont
+   cherchés dans le code de la version installée, pas dans un rapport Exodus ; seules les versions allégées sont notées
+   d'après leur rapport, et le script écarte ceux de plus de 18 mois.
    Idée d'origine, **conseil « version allégée » et rapports anciens** (idée du 2026-11-09, issue du classement des apps les plus
    téléchargées, `directory/top-google-play.md` et page Classement du site) : une même app existe souvent sous
    plusieurs paquets (« Lite », « Go », « Business », version régionale), avec des notes très différentes : TikTok

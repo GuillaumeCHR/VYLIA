@@ -803,14 +803,6 @@
     <string name="notif_channel_updates_description">What an update changes in an app\'s trackers and permissions</string>
     <string name="notif_update_title">%1$s update: %2$d → %3$d/100</string>
     <string name="notif_update_title_score">%1$s update: %2$d/100</string>
-    <plurals name="notif_update_trackers_added">
-        <item quantity="one">Adds %1$d tracker: %2$s</item>
-        <item quantity="other">Adds %1$d trackers: %2$s</item>
-    </plurals>
-    <plurals name="notif_update_trackers_removed">
-        <item quantity="one">Removes %1$d tracker: %2$s</item>
-        <item quantity="other">Removes %1$d trackers: %2$s</item>
-    </plurals>
     <string name="notif_update_permissions_added">Now asks for: %1$s</string>
     <string name="notif_update_permissions_removed">No longer asks for: %1$s</string>
     <string name="notif_update_public">VYLIA has analysed an app update.</string>
@@ -1035,6 +1027,14 @@
     <string name="automation_update_wifi">Only on Wi-Fi</string>
     <string name="automation_update_wifi_hint">On mobile data, VYLIA only checks whether updates exist, without downloading them.</string>
     <string name="automation_update_off_hint">Turn on scheduled scans to update the databases automatically.</string>
+    <plurals name="notif_update_trackers_added">
+        <item quantity="one">Adds %1$d tracker: %2$s</item>
+        <item quantity="other">Adds %1$d trackers: %2$s</item>
+    </plurals>
+    <plurals name="notif_update_trackers_removed">
+        <item quantity="one">Removes %1$d tracker: %2$s</item>
+        <item quantity="other">Removes %1$d trackers: %2$s</item>
+    </plurals>
     <plurals name="data_restore_snapshots">
         <item quantity="one">%1$d Tracking point</item>
         <item quantity="other">%1$d Tracking points</item>
@@ -1277,6 +1277,8 @@
     <string name="notif_channel_security_description">Discreet notifications: they never name the app concerned.</string>
     <string name="notif_install_public">VYLIA has analysed a new app.</string>
     <string name="notif_threshold_sensitive">Device score: %1$d, below your threshold of %2$d. Something to check: open VYLIA.</string>
+
+    <!-- Apps préinstallées (UAD-ng) -->
     <string name="tab_preinstalled_apps">Preinstalled (%1$d)</string>
     <string name="scan_preinstalled_link">What can I disable?</string>
     <string name="scan_system_hint">Parts of Android itself. Leave them alone: the phone needs them.</string>
@@ -1342,6 +1344,8 @@
         <item quantity="one">Copy the command (%1$d app)</item>
         <item quantity="other">Copy the commands (%1$d apps)</item>
     </plurals>
+
+    <!-- Widget d'écran d'accueil -->
     <string name="widget_description">Phone score and VYLIA Shield, without any app name</string>
     <string name="widget_grade">Grade %1$s</string>
     <string name="widget_no_score">Open VYLIA</string>
@@ -1352,10 +1356,6 @@
     <string name="widget_shield_starting">Shield starting…</string>
     <string name="widget_shield_off">Shield off</string>
     <string name="widget_shield_bypassed">Shield bypassed</string>
-    <plurals name="widget_blocked_today">
-        <item quantity="one">%1$d request blocked today</item>
-        <item quantity="other">%1$d requests blocked today</item>
-    </plurals>
     <string name="widget_action_pause">Pause</string>
     <string name="widget_action_resume">Resume</string>
     <string name="widget_action_activate">Turn on</string>
@@ -1363,4 +1363,8 @@
     <string name="widget_preview_score" translatable="false">72</string>
     <string name="widget_preview_grade">Grade B</string>
     <string name="widget_preview_blocked">48 requests blocked today</string>
+    <plurals name="widget_blocked_today">
+        <item quantity="one">%1$d request blocked today</item>
+        <item quantity="other">%1$d requests blocked today</item>
+    </plurals>
 </resources>

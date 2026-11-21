@@ -41,6 +41,8 @@ SCREENS = [
     ("Badges et sécurité", "ui_badges"),
     ("Partage", "ui_share"),
     ("Aide en cas de surveillance", "ui_safety"),
+    ("Apps préinstallées (UAD-ng)", "ui_preinstalled"),
+    ("Widget d'écran d'accueil", "ui_widget"),
 ]
 ARG = re.compile(r"%\d+\$")
 
@@ -64,9 +66,14 @@ def screens_xml(lang):
     for title, module in SCREENS:
         mod = importlib.import_module(module)
         out.append(f"\n    <!-- {title} -->")
+        untranslatable = getattr(mod, "UNTRANSLATABLE", set())
         for row in mod.S:
             assert row[0] not in seen, f"clé en double : {row[0]}"
             seen.add(row[0])
+            if row[0] in untranslatable:
+                if lang == "en":
+                    out.append(entry(row[0], row[i]).replace(f'name="{row[0]}"', f'name="{row[0]}" translatable="false"', 1))
+                continue
             out.append(entry(row[0], row[i]))
         for name, en, fr in mod.P:
             assert name not in seen, f"clé en double : {name}"

@@ -833,14 +833,6 @@
     <string name="notif_channel_updates_description">Ce qu\'une mise à jour change dans les traqueurs et les permissions d\'une app</string>
     <string name="notif_update_title">Mise à jour de %1$s : %2$d → %3$d/100</string>
     <string name="notif_update_title_score">Mise à jour de %1$s : %2$d/100</string>
-    <plurals name="notif_update_trackers_added">
-        <item quantity="one">Ajoute %1$d traqueur : %2$s</item>
-        <item quantity="other">Ajoute %1$d traqueurs : %2$s</item>
-    </plurals>
-    <plurals name="notif_update_trackers_removed">
-        <item quantity="one">Retire %1$d traqueur : %2$s</item>
-        <item quantity="other">Retire %1$d traqueurs : %2$s</item>
-    </plurals>
     <string name="notif_update_permissions_added">Demande en plus : %1$s</string>
     <string name="notif_update_permissions_removed">Ne demande plus : %1$s</string>
     <string name="notif_update_public">VYLIA a analysé une mise à jour.</string>
@@ -1065,6 +1057,16 @@
     <string name="automation_update_wifi">Uniquement en Wi-Fi</string>
     <string name="automation_update_wifi_hint">En données mobiles, VYLIA vérifie seulement s\'il y a des mises à jour, sans les télécharger.</string>
     <string name="automation_update_off_hint">Activez les scans programmés pour mettre à jour les bases automatiquement.</string>
+    <plurals name="notif_update_trackers_added">
+        <item quantity="one">Ajoute %1$d traqueur : %2$s</item>
+        <item quantity="many">Ajoute %1$d traqueurs : %2$s</item>
+        <item quantity="other">Ajoute %1$d traqueurs : %2$s</item>
+    </plurals>
+    <plurals name="notif_update_trackers_removed">
+        <item quantity="one">Retire %1$d traqueur : %2$s</item>
+        <item quantity="many">Retire %1$d traqueurs : %2$s</item>
+        <item quantity="other">Retire %1$d traqueurs : %2$s</item>
+    </plurals>
     <plurals name="data_restore_snapshots">
         <item quantity="one">%1$d point de suivi</item>
         <item quantity="many">%1$d points de suivi</item>
@@ -1327,6 +1329,8 @@
     <string name="notif_channel_security_description">Notifications discrètes : elles ne nomment jamais l\'app concernée.</string>
     <string name="notif_install_public">VYLIA a analysé une nouvelle app.</string>
     <string name="notif_threshold_sensitive">Score de l\'appareil : %1$d, sous votre seuil de %2$d. Un point à vérifier : ouvrez VYLIA.</string>
+
+    <!-- Apps préinstallées (UAD-ng) -->
     <string name="tab_preinstalled_apps">Préinstallées (%1$d)</string>
     <string name="scan_preinstalled_link">Que puis-je désactiver ?</string>
     <string name="scan_system_hint">Des morceaux d\'Android lui-même. N\'y touchez pas : le téléphone en a besoin.</string>
@@ -1390,8 +1394,11 @@
     <string name="credits_debloat_note">Ont classé des milliers d\'apps préinstallées, de « sans risque » à « surtout pas ». VYLIA lit leur liste, sur votre téléphone.</string>
     <plurals name="pre_select_copy">
         <item quantity="one">Copier la commande (%1$d app)</item>
+        <item quantity="many">Copier les commandes (%1$d apps)</item>
         <item quantity="other">Copier les commandes (%1$d apps)</item>
     </plurals>
+
+    <!-- Widget d'écran d'accueil -->
     <string name="widget_description">Score du téléphone et Bouclier VYLIA, sans aucun nom d\'app</string>
     <string name="widget_grade">Note %1$s</string>
     <string name="widget_no_score">Ouvrir VYLIA</string>
@@ -1402,15 +1409,15 @@
     <string name="widget_shield_starting">Activation du bouclier…</string>
     <string name="widget_shield_off">Bouclier arrêté</string>
     <string name="widget_shield_bypassed">Bouclier contourné</string>
-    <plurals name="widget_blocked_today">
-        <item quantity="one">%1$d requête bloquée aujourd\'hui</item>
-        <item quantity="many">%1$d requêtes bloquées aujourd\'hui</item>
-        <item quantity="other">%1$d requêtes bloquées aujourd\'hui</item>
-    </plurals>
     <string name="widget_action_pause">Pause</string>
     <string name="widget_action_resume">Reprendre</string>
     <string name="widget_action_activate">Activer</string>
     <string name="widget_action_open">Voir</string>
     <string name="widget_preview_grade">Note B</string>
     <string name="widget_preview_blocked">48 requêtes bloquées aujourd\'hui</string>
+    <plurals name="widget_blocked_today">
+        <item quantity="one">%1$d requête bloquée aujourd\'hui</item>
+        <item quantity="many">%1$d requêtes bloquées aujourd\'hui</item>
+        <item quantity="other">%1$d requêtes bloquées aujourd\'hui</item>
+    </plurals>
 </resources>

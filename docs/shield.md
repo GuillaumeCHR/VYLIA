@@ -190,7 +190,9 @@ tests unitaires (liste, paquets, badge), essai sur téléphone (accord VPN, dém
 1. ~~Validation sur téléphone~~ (fait le 2026-11-01, après correction de la transmission : le réseau par défaut
    renvoyait le tunnel lui-même) : blocage, résolution, State.io et Mr Autofire OK. Reste : consommation sur une
    journée, passage Wi-Fi ↔ 4G, `app-measurement.com` (Firebase Analytics) absent des listes.
-2. Liste d'exceptions par l'utilisateur (« ne plus bloquer ce domaine ») depuis les derniers blocages.
+2. ~~Liste d'exceptions par l'utilisateur~~ (fait le 2026-11-21, PR #38) : « Ne plus bloquer » depuis les derniers
+   blocages, section « Vos exceptions », sous-domaines compris, jamais pour un domaine de logiciel espion ; Android garde
+   une à deux minutes les réponses DNS récentes, d'où un court délai après « Bloquer de nouveau ».
 3. ~~Crédits~~ (faits). Politique de confidentialité (vylia-site) : dire que le bouclier télécharge ses listes.
 4. ~~EasyList~~, ~~régies mobiles~~, ~~pause~~, ~~mise à jour des listes depuis l'app~~ (faits, 0.9.5). EasyList, les
    filtres AdGuard de publicité et les régies retirés le 2026-11-14 (Google Play).

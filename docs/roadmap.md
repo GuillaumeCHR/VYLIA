@@ -98,7 +98,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 
 ---
 
-## Avancement (mis à jour le 2026-11-01)
+## Avancement (mis à jour le 2026-11-21)
 
 | § | Chantier | État |
 |---|---|---|
@@ -108,7 +108,7 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 | 4 | Écran Scan en 3 onglets | Fait : par risque, par catégorie, par badge ; icône → fiche Android |
 | 5 | Suivi longitudinal | Fait : onglet Analyse › Suivi (courbe moyenne ± écart-type, apps qui pèsent le plus, historique) |
 | 6 | Agir en 3 sous-onglets | Fait : Réduire (gain exact, apps inutilisées), Alternatives (catalogue), Récompenses et partage |
-| 7 | Notifications et scans programmés | Fait, à valider sur téléphone : Paramètres › Automatisations (alerte d'installation toutes les ~15 min, scan de fond hebdomadaire ou mensuel), JobScheduler sans bibliothèque |
+| 7 | Notifications et scans programmés | Fait : Paramètres › Automatisations (alerte d'installation toutes les ~15 min, scan de fond hebdomadaire ou mensuel), JobScheduler sans bibliothèque |
 | 8 | Gestion des données (export, import, suppression) | Fait (0.6.0) : Paramètres › Gestion des données, sauvegarde JSON versionnée, import sans écraser avec bilan, suppression confirmée ; export CSV du scan conservé |
 | 9 | À propos › Crédits avec humour | Fait (0.7.0) : générique façon Molkky Board (faux terminal, rôles, statistiques de production) ; VYLIA se note elle-même, QUERY_ALL_PACKAGES comprise |
 |   | Grille de score v3 | Faite et visible dans Paramètres › Règles de score › Voir la grille |
@@ -147,7 +147,10 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
    donc les `package_overrides` vérifiés à la main restent prioritaires et aucun tag ne donne seul une catégorie qui
    justifie des accès très sensibles ; le grattage des pages Play casse si Google change leur HTML. Ne pas changer la
    grille pendant le test fermé.
-10. **Conseil « version allégée » et rapports anciens** (idée du 2026-11-09, issue du classement des apps les plus
+10. ~~**Conseil « version allégée »**~~ (fait le 2026-11-21, PR #38 : Gérer › Alternatives › Versions allégées, 4 versions
+   produites par `tools/directory/lighter_variants.py`, versions écartées et raisons dans
+   `tools/directory/lighter_candidates.json`). Reste à faire : **l'alerte sur les rapports anciens** (fin du point).
+   Idée d'origine, **conseil « version allégée » et rapports anciens** (idée du 2026-11-09, issue du classement des apps les plus
    téléchargées, `directory/top-google-play.md` et page Classement du site) : une même app existe souvent sous
    plusieurs paquets (« Lite », « Go », « Business », version régionale), avec des notes très différentes : TikTok
    D (30, 7 traqueurs) contre TikTok Lite B (78, 1 traqueur), Facebook E (0, 8 traqueurs) contre Facebook Lite
@@ -161,4 +164,4 @@ L'UX est orientée **action à fort impact** ("victoires faciles") en guidant l'
 ### Versions
 
 Une version par lot livré (versionName et versionCode dans `app/build.gradle.kts`, tag `vX.Y.0`) :
-0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées), 0.6.3 = recherche dans Badges et Traqueurs, 0.6.4 = un seul score dans Analyse en mode Avancé, 0.7.0 = Crédits et VYLIA notée comme les autres (première release publiée), 0.7.1 = accès rapide par catégorie dans Scan, 0.7.2 = apps de finance reconnues, 0.8.0 = guide DNS privé, 0.8.1 = Réduire › Traçage pub, 0.8.2 = NextDNS recommandé ; la suite continue à 0.9.0.
+0.5.0 = §7 Automatisations, 0.6.0 = §8 Gestion des données, 0.6.1 = sécurité des données externes, 0.6.2 = Comprendre › Permissions (loupe, apps concernées), 0.6.3 = recherche dans Badges et Traqueurs, 0.6.4 = un seul score dans Analyse en mode Avancé, 0.7.0 = Crédits et VYLIA notée comme les autres (première release publiée), 0.7.1 = accès rapide par catégorie dans Scan, 0.7.2 = apps de finance reconnues, 0.8.0 = guide DNS privé, 0.8.1 = Réduire › Traçage pub, 0.8.2 = NextDNS recommandé, 0.9.0 = README et captures, 0.9.1 = indicateurs de logiciels espions (MVT), 0.9.2 = lien vers la politique de confidentialité, 0.9.3 = captures Play Store, 0.9.4 = largeur lisible sur grand écran, 0.9.5 = écran Bases de données et listes du Bouclier mises à jour dans l'app, 0.9.6 = que faire après une détection de surveillance, 0.9.7 = catégories partagées avec le classement public, 0.9.8 = le Bouclier dans le score, 0.9.9 = le Bouclier bloque les traqueurs, pas la publicité, 0.10.0 = alerte de mise à jour ; la suite continue à 0.10.1.

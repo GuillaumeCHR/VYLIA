@@ -1,6 +1,6 @@
 {
   "format": "vylia-private-dns",
-  "version": 4,
+  "version": 5,
   "updated": "2026-11-21",
   "resolvers": [
     {
@@ -21,12 +21,12 @@
         "en": [
           "Encrypts your DNS requests (DNS-over-TLS and DNS-over-HTTPS).",
           "Blocks known malicious domains (malware, phishing).",
-          "Does not block trackers: it hides your requests from your Internet provider, but lets trackers through."
+          "Does not block trackers: it hides your requests from your Internet provider, but lets trackers through. To block them, turn on the VYLIA Shield instead: the two do not add up, the Shield sees nothing while a private DNS is set."
         ],
         "fr": [
           "Chiffre vos requêtes DNS (DNS-over-TLS et DNS-over-HTTPS).",
           "Bloque les domaines malveillants connus (virus, hameçonnage).",
-          "Ne bloque pas les traqueurs : il cache vos requêtes à votre fournisseur d'accès, mais laisse passer les traqueurs."
+          "Ne bloque pas les traqueurs : il cache vos requêtes à votre fournisseur d'accès, mais laisse passer les traqueurs. Pour les bloquer, activez plutôt le Bouclier VYLIA : les deux ne se cumulent pas, le Bouclier ne voit rien quand un DNS privé est réglé."
         ]
       }
     },

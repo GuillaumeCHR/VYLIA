@@ -343,6 +343,8 @@
     <string name="category_finance_accounts_rationale">Scan a cheque or an ID document. Reading your SMS is unnecessary: Android passes on verification codes without giving access to them.</string>
     <string name="category_health_admin">Health (admin, appointments, insurance)</string>
     <string name="category_health_admin_rationale">Send a prescription or a receipt as a photo. Calendar and location are tolerated for appointments.</string>
+    <string name="category_public_services">Public services</string>
+    <string name="category_public_services_rationale">Taxes, employment, safety: send a document as a photo. Location is tolerated to find the nearest office, the calendar for appointments.</string>
     <string name="category_wearable_companion">Watch / wearable companion</string>
     <string name="category_wearable_companion_rationale">Pair and sync the watch: Bluetooth, sensors, activity, location. SMS and calls are tolerated to show them on your wrist.</string>
     <string name="category_fitness">Sport &amp; fitness</string>

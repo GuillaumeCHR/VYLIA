@@ -282,6 +282,8 @@ CATEGORIES = {
   ("Scan a cheque or an ID document. Reading your SMS is unnecessary: Android passes on verification codes without giving access to them.", "Scanner un chèque ou une pièce d'identité. Lire vos SMS est inutile : Android transmet les codes de validation sans y donner accès.")),
  "HEALTH_ADMIN": (("Health (admin, appointments, insurance)", "Santé (administratif, RDV, assurance)"),
   ("Send a prescription or a receipt as a photo. Calendar and location are tolerated for appointments.", "Envoyer une ordonnance ou un justificatif en photo. Agenda et position sont tolérés pour les rendez-vous.")),
+ "PUBLIC_SERVICES": (("Public services", "Services publics"),
+  ("Taxes, employment, safety: send a document as a photo. Location is tolerated to find the nearest office, the calendar for appointments.", "Impôts, emploi, sécurité : envoyer un justificatif en photo. La position est tolérée pour trouver le service le plus proche, l'agenda pour les rendez-vous.")),
  "WEARABLE_COMPANION": (("Watch / wearable companion", "Compagnon de montre / objet connecté"),
   ("Pair and sync the watch: Bluetooth, sensors, activity, location. SMS and calls are tolerated to show them on your wrist.", "Relier et synchroniser la montre : Bluetooth, capteurs, activité, position. SMS et appels sont tolérés pour les afficher au poignet.")),
  "FITNESS": (("Sport & fitness", "Sport & Fitness"),

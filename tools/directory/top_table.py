@@ -19,7 +19,7 @@ CATEGORIES = {
     "PRODUCTIVITY_CLOUD": "Bureautique, stockage", "AI_ASSISTANT": "Assistant IA", "EDUCATION_FAMILY": "Éducation",
     "NEWS_READING": "Actualités", "TRANSPORT": "Transport", "PHOTO_VIDEO": "Photo, montage", "ECOMMERCE": "Achats",
     "TRAVEL_LEISURE": "Voyage", "UTILITY": "Utilitaire", "FINANCE_ACCOUNTS": "Paiement", "NAVIGATION": "Navigation",
-    "BROWSER": "Navigateur", "SECURITY_AUTH": "Sécurité", "HEALTH_ADMIN": "Santé, démarches", "DEFAULT": "Autre", "KEYBOARD": "Clavier", "EMAIL": "E-mail",
+    "BROWSER": "Navigateur", "SECURITY_AUTH": "Sécurité", "HEALTH_ADMIN": "Santé, démarches", "PUBLIC_SERVICES": "Services publics", "DEFAULT": "Autre", "KEYBOARD": "Clavier", "EMAIL": "E-mail",
 }
 
 

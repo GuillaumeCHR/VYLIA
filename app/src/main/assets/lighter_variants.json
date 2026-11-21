@@ -1,24 +1,45 @@
 {
-  "version": "1.0",
-  "last_update": "2026-11-17",
-  "description": "Versions allégées mieux notées qu'une app répandue (même éditeur, même service). Notes calculées comme dans l'annuaire du site (module :scoring, rapport Exodus Privacy, toutes les permissions déclarées comptées), vérifiées à la main. Données Exodus sous ODbL 1.0.",
+  "version": "1.1",
+  "last_update": "2026-11-21",
+  "description": "Versions allégées mieux notées qu'une app répandue (même éditeur, même service). Notes calculées comme dans l'annuaire du site (module :scoring, rapport Exodus Privacy, toutes les permissions déclarées comptées), produites par tools/directory/lighter_variants.py et relues à la main. Données Exodus sous ODbL 1.0.",
   "variants": [
     {
-      "replaces": ["com.facebook.katana"],
+      "replaces": [
+        "com.facebook.katana"
+      ],
       "package": "com.facebook.lite",
       "name": "Facebook Lite",
       "grade": "C",
       "score": 50,
       "trackers": 0,
-      "exodus_report": 797509,
-      "exodus_date": "2026-11-04",
+      "exodus_report": 798237,
+      "exodus_date": "2026-11-10",
       "loss": {
         "en": "Simpler interface, photos and videos in lower quality. Messages are built in, without Messenger.",
         "fr": "Interface plus simple, photos et vidéos en qualité réduite. Les messages sont intégrés, sans Messenger."
       }
     },
     {
-      "replaces": ["com.zhiliaoapp.musically", "com.ss.android.ugc.trill"],
+      "replaces": [
+        "com.instagram.android"
+      ],
+      "package": "com.instagram.lite",
+      "name": "Instagram Lite",
+      "grade": "C",
+      "score": 50,
+      "trackers": 0,
+      "exodus_report": 758100,
+      "exodus_date": "2026-07-10",
+      "loss": {
+        "en": "Simpler interface, fewer editing tools for Reels and Stories, photos and videos in lower quality. Not offered in every country.",
+        "fr": "Interface plus simple, moins d'outils de montage pour les Reels et les Stories, photos et vidéos en qualité réduite. Pas proposée dans tous les pays."
+      }
+    },
+    {
+      "replaces": [
+        "com.zhiliaoapp.musically",
+        "com.ss.android.ugc.trill"
+      ],
       "package": "com.zhiliaoapp.musically.go",
       "name": "TikTok Lite",
       "grade": "B",
@@ -29,6 +50,38 @@
       "loss": {
         "en": "Fewer creation tools and effects, videos in lower quality. Not offered in every country.",
         "fr": "Moins d'outils de création et d'effets, vidéos en qualité réduite. Pas proposée dans tous les pays."
+      }
+    },
+    {
+      "replaces": [
+        "com.google.android.apps.maps"
+      ],
+      "package": "com.google.android.apps.mapslite",
+      "name": "Maps Go",
+      "grade": "A",
+      "score": 92,
+      "trackers": 0,
+      "exodus_report": 744424,
+      "exodus_date": "2026-05-27",
+      "loss": {
+        "en": "No built-in turn-by-turn navigation (it needs a separate app) and no offline maps. Made for entry-level phones: Google Play does not offer it on every phone.",
+        "fr": "Pas de navigation guidée intégrée (elle demande une app à part) ni de cartes hors connexion. Conçue pour les téléphones d'entrée de gamme : Google Play ne la propose pas sur tous les téléphones."
+      }
+    },
+    {
+      "replaces": [
+        "com.google.android.apps.photos"
+      ],
+      "package": "com.google.android.apps.photosgo",
+      "name": "Gallery Go",
+      "grade": "A",
+      "score": 90,
+      "trackers": 0,
+      "exodus_report": 758033,
+      "exodus_date": "2026-07-10",
+      "loss": {
+        "en": "A gallery of the photos on the phone only: no online backup, no shared albums, fewer editing tools.",
+        "fr": "Une galerie des photos du téléphone seulement : pas de sauvegarde en ligne, pas d'albums partagés, moins d'outils de retouche."
       }
     }
   ]

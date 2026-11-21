@@ -49,8 +49,10 @@ class LighterVariantsTest {
     )
 
     @Test
-    fun `liste embarquee - lisible, Facebook Lite et TikTok Lite`() {
-        assertEquals(listOf("com.facebook.lite", "com.zhiliaoapp.musically.go"), embedded.variants.map { it.packageName })
+    fun `liste embarquee - aucune entree ecartee par la validation`() {
+        val raw = Regex("\"package\"").findAll(File("src/main/assets/lighter_variants.json").readText()).count()
+        assertEquals(raw, embedded.variants.size)
+        assertTrue("com.facebook.lite" in embedded.variants.map { it.packageName })
         assertTrue(embedded.variants.all { it.loss.containsKey("en") && it.loss.containsKey("fr") })
     }
 

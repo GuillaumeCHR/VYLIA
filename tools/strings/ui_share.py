@@ -25,7 +25,7 @@ S = [
  ("share_clip_failed", "Could not create the clip", "Création du clip impossible"),
 
  ("card_report_title", "My phone, put under the microscope", "Mon téléphone passé au crible"),
- ("card_score_label", "Privacy exposure score", "Score d'exposition de vie privée"),
+ ("card_score_label", "Exposure risk score", "Score de risque d'exposition"),
  ("card_trackers_sub", "hidden in %1$d of my %2$d apps", "cachés dans %1$d de mes %2$d apps"),
  ("card_trackers_top", "What they do", "Ce qu'ils font"),
  ("card_shield_title", "VYLIA Shield", "Bouclier VYLIA"),
@@ -42,7 +42,7 @@ S = [
  ("share_text_report", "My phone scores %1$d/100 for privacy with VYLIA. What about yours?", "Mon téléphone obtient %1$d/100 en confidentialité avec VYLIA. Et le vôtre ?"),
  ("share_text_trackers", "VYLIA found %1$d trackers in %2$d of my apps. What about yours?", "VYLIA a trouvé %1$d traqueurs dans %2$d de mes apps. Et chez vous ?"),
  ("share_text_shield", "The VYLIA Shield has already blocked %1$s tracking requests on my phone.", "Le Bouclier VYLIA a déjà bloqué %1$s requêtes de pistage sur mon téléphone."),
- ("share_text_progress", "My privacy exposure score went from %1$d to %2$d with VYLIA.", "Mon score d'exposition de vie privée est passé de %1$d à %2$d avec VYLIA."),
+ ("share_text_progress", "My exposure risk score went from %1$d to %2$d with VYLIA.", "Mon score de risque d'exposition est passé de %1$d à %2$d avec VYLIA."),
  ("share_text_trophies", "%1$d VYLIA trophies unlocked to take back control of my data.", "%1$d trophées VYLIA débloqués pour reprendre la main sur mes données."),
 ]
 

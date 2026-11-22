@@ -18,7 +18,7 @@
     <string name="tab_user_apps">My apps (%1$d)</string>
     <string name="tab_system_apps">System (%1$d)</string>
     <string name="score_out_of">/100</string>
-    <string name="header_title">Privacy exposure score</string>
+    <string name="header_title">Exposure risk score</string>
     <string name="header_subtitle_user">Average of your %1$d apps</string>
     <string name="header_shield_active">🧿 Shield on · without it: %1$d/100</string>
     <string name="header_shield_inactive">🧿 If you turn on the Shield: %1$d/100</string>
@@ -523,7 +523,7 @@
     <string name="learn_search_empty_badges">No badge matches “%1$s”.</string>
     <string name="learn_search_empty_trackers">No tracker matches “%1$s”.</string>
     <string name="learn_search_empty">No permission matches “%1$s”.</string>
-    <string name="learn_overview_title">The privacy exposure score at a glance</string>
+    <string name="learn_overview_title">The exposure risk score at a glance</string>
     <string name="learn_overview_intro">Every app starts with %1$d points. It loses points for the permissions it requests and the trackers it embeds, and spying capabilities can cap its score. Everything is computed on your phone, offline.</string>
     <string name="learn_overview_rules">The algorithm is open source and the rules it applies are in Settings › Scoring rules: you can export them, edit them and import them back.</string>
     <string name="learn_overview_formula">Score = %1$d − permissions (max %2$d) − trackers (max %3$d)</string>
@@ -1186,7 +1186,7 @@
     <string name="share_clip_share">Share the clip</string>
     <string name="share_clip_failed">Could not create the clip</string>
     <string name="card_report_title">My phone, put under the microscope</string>
-    <string name="card_score_label">Privacy exposure score</string>
+    <string name="card_score_label">Exposure risk score</string>
     <string name="card_trackers_sub">hidden in %1$d of my %2$d apps</string>
     <string name="card_trackers_top">What they do</string>
     <string name="card_shield_title">VYLIA Shield</string>
@@ -1202,7 +1202,7 @@
     <string name="share_text_report">My phone scores %1$d/100 for privacy with VYLIA. What about yours?</string>
     <string name="share_text_trackers">VYLIA found %1$d trackers in %2$d of my apps. What about yours?</string>
     <string name="share_text_shield">The VYLIA Shield has already blocked %1$s tracking requests on my phone.</string>
-    <string name="share_text_progress">My privacy exposure score went from %1$d to %2$d with VYLIA.</string>
+    <string name="share_text_progress">My exposure risk score went from %1$d to %2$d with VYLIA.</string>
     <string name="share_text_trophies">%1$d VYLIA trophies unlocked to take back control of my data.</string>
     <plurals name="card_stat_trackers">
         <item quantity="one">tracker detected</item>

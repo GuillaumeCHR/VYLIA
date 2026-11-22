@@ -915,6 +915,10 @@
     <string name="csv_tracker_count">Nombre de traqueurs</string>
     <string name="csv_trackers">Traqueurs détectés</string>
     <string name="csv_permissions">Permissions à risque accordées</string>
+    <string name="csv_category">Catégorie VYLIA</string>
+    <string name="csv_penalized_permissions">Permissions pénalisées</string>
+    <string name="csv_requested_permissions">Toutes les permissions demandées</string>
+    <string name="csv_granted_permissions">Toutes les permissions accordées</string>
     <string name="csv_user_app">Utilisateur</string>
     <string name="csv_system_app">Système</string>
     <string name="csv_not_analyzed">Non analysé</string>

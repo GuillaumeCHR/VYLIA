@@ -173,6 +173,7 @@ private fun csvLabels(resources: Resources) = CsvExporter.Labels(
     header = listOf(
         R.string.csv_app_name, R.string.csv_package, R.string.csv_type, R.string.csv_score, R.string.csv_grade,
         R.string.csv_confidence, R.string.csv_tracker_count, R.string.csv_trackers, R.string.csv_permissions,
+        R.string.csv_category, R.string.csv_penalized_permissions, R.string.csv_requested_permissions, R.string.csv_granted_permissions,
     ).map(resources::getString),
     userApp = resources.getString(R.string.csv_user_app),
     systemApp = resources.getString(R.string.csv_system_app),

@@ -63,7 +63,7 @@ class LighterVariants(val variants: List<LighterVariant>) {
         private data class File(val variants: List<LighterVariant> = emptyList())
 
         fun parse(content: String): LighterVariants =
-            LighterVariants(json.decodeFromString<File>(content.removePrefix("﻿")).variants.take(MAX_VARIANTS).mapNotNull(::checked))
+            LighterVariants(json.decodeFromString<File>(content.removePrefix("\uFEFF")).variants.take(MAX_VARIANTS).mapNotNull(::checked))
 
         private fun checked(v: LighterVariant): LighterVariant? = when {
             v.replaces.isEmpty() || !v.replaces.all(Untrusted::isPackage) || !Untrusted.isPackage(v.packageName) -> null

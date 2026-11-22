@@ -331,7 +331,6 @@ private fun ScoreOverview(rules: Rules) {
         Formula(stringResource(R.string.learn_overview_formula, scoring.base, scoring.permissionCap, scoring.trackerCap))
         Paragraph(stringResource(R.string.learn_overview_weighting))
         Paragraph(stringResource(R.string.learn_overview_caps, scoring.permissionCap, scoring.trackerCap))
-        MathDetail(rules)
         Subtitle(stringResource(R.string.learn_overview_grades))
         val bands = GradeBands.from(scoring)
         GradeScale(bands, base = scoring.base, modifier = Modifier.padding(vertical = 4.dp))
@@ -342,6 +341,8 @@ private fun ScoreOverview(rules: Rules) {
         BulletLine(stringResource(R.string.learn_zone_green))
         BulletLine(stringResource(R.string.learn_zone_orange))
         BulletLine(stringResource(R.string.learn_zone_red))
+        // Le calcul détaillé après la note, le risque et les couleurs : on lit d'abord ce que le score veut dire.
+        MathDetail(rules)
         Paragraph(stringResource(R.string.learn_overview_rules))
     }
 }

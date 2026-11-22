@@ -2,7 +2,7 @@ package com.vylia.privacy.domain.model
 
 import kotlin.math.roundToInt
 
-/** Score de confidentialité de 0 (très intrusif) à 100 (irréprochable). */
+/** Score d'exposition de vie privée de 0 (très intrusif) à 100 (irréprochable). */
 @JvmInline
 value class PrivacyScore(val value: Int) {
     init {

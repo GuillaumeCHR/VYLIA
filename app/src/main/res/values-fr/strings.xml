@@ -16,7 +16,7 @@
     <string name="tab_user_apps">Mes apps (%1$d)</string>
     <string name="tab_system_apps">Système (%1$d)</string>
     <string name="score_out_of">/100</string>
-    <string name="header_title">Score de confidentialité</string>
+    <string name="header_title">Score d\'exposition de vie privée</string>
     <string name="header_subtitle_user">Moyenne de vos %1$d applications</string>
     <string name="header_shield_active">🧿 Bouclier actif · sans lui : %1$d/100</string>
     <string name="header_shield_inactive">🧿 Si vous activez le bouclier : %1$d/100</string>
@@ -544,7 +544,7 @@
     <string name="learn_search_empty_badges">Aucun badge ne correspond à « %1$s ».</string>
     <string name="learn_search_empty_trackers">Aucun traqueur ne correspond à « %1$s ».</string>
     <string name="learn_search_empty">Aucune permission ne correspond à « %1$s ».</string>
-    <string name="learn_overview_title">Le Privacy Score en bref</string>
+    <string name="learn_overview_title">Le score d\'exposition de vie privée en bref</string>
     <string name="learn_overview_intro">Chaque application part de %1$d points. Elle en perd selon les autorisations qu\'elle demande et les traqueurs qu\'elle embarque, et des capacités d\'espionnage peuvent plafonner son score. Tout est calculé sur votre téléphone, sans connexion.</string>
     <string name="learn_overview_rules">L\'algorithme est open source et les règles qu\'il applique sont dans Paramètres › Règles de score : vous pouvez les exporter, les modifier et les réimporter.</string>
     <string name="learn_overview_formula">Score = %1$d − permissions (max %2$d) − traqueurs (max %3$d)</string>
@@ -1234,7 +1234,7 @@
     <string name="share_clip_share">Partager le clip</string>
     <string name="share_clip_failed">Création du clip impossible</string>
     <string name="card_report_title">Mon téléphone passé au crible</string>
-    <string name="card_score_label">Score de confidentialité</string>
+    <string name="card_score_label">Score d\'exposition de vie privée</string>
     <string name="card_trackers_sub">cachés dans %1$d de mes %2$d apps</string>
     <string name="card_trackers_top">Ce qu\'ils font</string>
     <string name="card_shield_title">Bouclier VYLIA</string>
@@ -1250,7 +1250,7 @@
     <string name="share_text_report">Mon téléphone obtient %1$d/100 en confidentialité avec VYLIA. Et le vôtre ?</string>
     <string name="share_text_trackers">VYLIA a trouvé %1$d traqueurs dans %2$d de mes apps. Et chez vous ?</string>
     <string name="share_text_shield">Le Bouclier VYLIA a déjà bloqué %1$s requêtes de pistage sur mon téléphone.</string>
-    <string name="share_text_progress">Mon score de confidentialité est passé de %1$d à %2$d avec VYLIA.</string>
+    <string name="share_text_progress">Mon score d\'exposition de vie privée est passé de %1$d à %2$d avec VYLIA.</string>
     <string name="share_text_trophies">%1$d trophées VYLIA débloqués pour reprendre la main sur mes données.</string>
     <plurals name="card_stat_trackers" tools:ignore="ImpliedQuantity">
         <item quantity="one">traqueur détecté</item>

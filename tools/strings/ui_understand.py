@@ -14,7 +14,7 @@ S = [
  ("learn_search_empty_badges", "No badge matches “%1$s”.", "Aucun badge ne correspond à « %1$s »."),
  ("learn_search_empty_trackers", "No tracker matches “%1$s”.", "Aucun traqueur ne correspond à « %1$s »."),
  ("learn_search_empty", "No permission matches “%1$s”.", "Aucune permission ne correspond à « %1$s »."),
- ("learn_overview_title", "The Privacy Score at a glance", "Le Privacy Score en bref"),
+ ("learn_overview_title", "The privacy exposure score at a glance", "Le score d'exposition de vie privée en bref"),
  ("learn_overview_intro", 'Every app starts with %1$d points. It loses points for the permissions it requests and the trackers it embeds, and spying capabilities can cap its score. Everything is computed on your phone, offline.', "Chaque application part de %1$d points. Elle en perd selon les autorisations qu'elle demande et les traqueurs qu'elle embarque, et des capacités d'espionnage peuvent plafonner son score. Tout est calculé sur votre téléphone, sans connexion."),
  ("learn_overview_rules", "The algorithm is open source and the rules it applies are in Settings › Scoring rules: you can export them, edit them and import them back.", "L'algorithme est open source et les règles qu'il applique sont dans Paramètres › Règles de score : vous pouvez les exporter, les modifier et les réimporter."),
  ("learn_overview_formula", "Score = %1$d − permissions (max %2$d) − trackers (max %3$d)", "Score = %1$d − permissions (max %2$d) − traqueurs (max %3$d)"),

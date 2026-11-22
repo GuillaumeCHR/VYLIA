@@ -107,7 +107,7 @@ fun AnalysisScreen(
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
 
-        // Un seul score de confidentialité pour l'appareil : en mode Avancé, il fusionne apps utilisateur et système,
+        // Un seul score d'exposition de vie privée pour l'appareil : en mode Avancé, il fusionne apps utilisateur et système,
         // comme le reste de l'analyse (zones, traqueurs, anomalies).
         item {
             if (homeState.advancedMode) {

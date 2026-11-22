@@ -15,7 +15,7 @@ Comprendre, avec des mots simples
 • Chaque score est expliqué : vous apprenez à juger une app par vous-même.
 • Les bonnes pratiques sont mises en avant autant que les dérives : comprendre, sans faire peur.
 
-Un score de vie privée pour chaque app
+Un score d'exposition de vie privée pour chaque app
 • Chaque app installée reçoit un score de 0 à 100 et une note de A à E, selon les permissions qu'elle demande et les traqueurs qu'elle embarque.
 • Les permissions sont jugées selon la fonction de l'app : le GPS ne coûte rien à une app de navigation, il coûte cher à un jeu. 28 catégories (navigation, messagerie, banque, jeux, santé…) disent ce que chacune justifie, tolère ou interdit.
 • Les traqueurs sont repérés dans le code de chaque app, sur le téléphone, grâce à la base publique d'Exodus Privacy.

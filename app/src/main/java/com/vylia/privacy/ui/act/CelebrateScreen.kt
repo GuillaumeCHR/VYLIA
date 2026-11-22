@@ -6,11 +6,19 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.PrimaryTabRow
+import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalResources
@@ -30,9 +38,13 @@ import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.trackerCategoryName
 import com.vylia.privacy.ui.scan.ScanViewModel
 import com.vylia.privacy.ui.share.ShareContent
+import com.vylia.privacy.ui.share.SharePanel
 import kotlin.math.abs
 
-/** Célébrer : le score de l'appareil et son évolution, les trophées, puis le partage (score et progrès seulement). */
+/**
+ * Célébrer, en deux onglets comme Analyser : Récompenses (score de l'appareil et son évolution, points, trophées) et
+ * Partager (images et clip faits sur le téléphone : score et progrès seulement, jamais un nom d'app).
+ */
 @Composable
 fun CelebrateScreen(
     modifier: Modifier = Modifier,
@@ -46,21 +58,32 @@ fun CelebrateScreen(
     val shield by actViewModel.shield.collectAsStateWithLifecycle()
     val userApps = remember(state.scannedApps) { state.scannedApps.filter { AppFilter.USER.matches(it.app) } }
     val resources = LocalResources.current
+    var sharing by rememberSaveable { mutableStateOf(false) }
 
     Column(modifier = modifier.fillMaxSize()) {
         ActHeader(R.string.celebrate_title, null)
+        PrimaryTabRow(selectedTabIndex = if (sharing) 1 else 0) {
+            Tab(selected = !sharing, onClick = { sharing = false }, text = { Text(stringResource(R.string.celebrate_tab_rewards)) })
+            Tab(
+                selected = sharing,
+                onClick = { sharing = true },
+                text = { Text(stringResource(R.string.share_title)) },
+                icon = { Icon(Icons.Default.Share, contentDescription = null) },
+            )
+        }
+        val score = state.userAverageScore?.value
         when {
             state.isLoading -> ActPlaceholder(null)
+            !sharing -> RewardsTab(rewards, recentRewards, viewModel::dismissRecentRewards) {
+                DeviceScoreCard(state.userAverageScore, history)
+            }
+            score == null -> ActPlaceholder(stringResource(R.string.act_empty_scan))
             else -> {
-                // Calculé à l'ouverture du partage seulement (analyse des traqueurs de toutes les apps).
-                val shareContent = {
-                    state.userAverageScore?.value?.let { score ->
-                        ShareContent.from(score, userApps, history, rewards, shield.blockedTotal) { resources.trackerCategoryName(it) }
-                    }
+                // Calculé seulement quand l'onglet Partager est ouvert (analyse des traqueurs de toutes les apps).
+                val content = remember(score, userApps, history, rewards, shield.blockedTotal) {
+                    ShareContent.from(score, userApps, history, rewards, shield.blockedTotal) { resources.trackerCategoryName(it) }
                 }
-                RewardsTab(shareContent, rewards, recentRewards, viewModel::dismissRecentRewards) {
-                    DeviceScoreCard(state.userAverageScore, history)
-                }
+                SharePanel(content)
             }
         }
     }

@@ -1,9 +1,5 @@
 S = [
- ("share_open_title", "Share my report", "Partager mon bilan"),
- ("share_open_text", "Images and an animated clip made on your phone, ready for a story or a conversation. No app name and no personal data on them: only your figures.", "Des images et un clip animé créés sur votre téléphone, prêts pour une story ou une conversation. Aucun nom d'app ni donnée personnelle dessus : seulement vos chiffres."),
- ("share_open_button", "Create my image", "Créer mon image"),
  ("share_title", "Share", "Partager"),
- ("share_back", "Back", "Retour"),
  ("share_template_hint", "Swipe to change the design", "Glissez pour changer de modèle"),
  ("share_template_report", "Report", "Bilan"),
  ("share_template_trackers", "Trackers", "Traqueurs"),

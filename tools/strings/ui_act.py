@@ -203,6 +203,7 @@ S = [
  ("manage_title", "Manage", "Gérer"),
  ("protect_title", "Filter", "Filtrer"),
  ("celebrate_title", "Celebrate and share", "Célébrer et partager"),
+ ("celebrate_tab_rewards", "Rewards", "Récompenses"),
  ("shield_pill_active", "On", "Actif"),
  ("shield_pill_inactive", "Off", "Inactif"),
  ("shield_pill_starting", "Starting", "Activation"),

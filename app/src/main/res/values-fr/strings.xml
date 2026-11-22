@@ -424,6 +424,7 @@
     <string name="manage_title">Gérer</string>
     <string name="protect_title">Filtrer</string>
     <string name="celebrate_title">Célébrer et partager</string>
+    <string name="celebrate_tab_rewards">Récompenses</string>
     <string name="shield_pill_active">Actif</string>
     <string name="shield_pill_inactive">Inactif</string>
     <string name="shield_pill_starting">Activation</string>
@@ -1205,11 +1206,7 @@
     <string name="app_icon_manage">Gérer %1$s dans les paramètres d\'Android</string>
 
     <!-- Partage -->
-    <string name="share_open_title">Partager mon bilan</string>
-    <string name="share_open_text">Des images et un clip animé créés sur votre téléphone, prêts pour une story ou une conversation. Aucun nom d\'app ni donnée personnelle dessus : seulement vos chiffres.</string>
-    <string name="share_open_button">Créer mon image</string>
     <string name="share_title">Partager</string>
-    <string name="share_back">Retour</string>
     <string name="share_template_hint">Glissez pour changer de modèle</string>
     <string name="share_template_report">Bilan</string>
     <string name="share_template_trackers">Traqueurs</string>

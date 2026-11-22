@@ -12,35 +12,28 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -55,8 +48,6 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import com.vylia.privacy.R
 import com.vylia.privacy.ui.components.currentLocale
 import kotlinx.coroutines.Job
@@ -67,21 +58,12 @@ import java.io.File
 import java.text.NumberFormat
 
 /**
- * Écran de partage, sur le modèle de Molkky Board : un modèle d'image par page (glisser pour changer), trois
- * formats, un texte d'accompagnement modifiable, partage direct, WhatsApp ou galerie ; et un clip animé (GIF) créé
- * sur le téléphone. Rien ne part vers un serveur ; aucun nom d'app ni métadonnée dans les fichiers.
+ * Partage, onglet de Célébrer, sur le modèle de Molkky Board : un modèle d'image par page (glisser pour changer),
+ * trois formats, un texte d'accompagnement modifiable, partage direct, WhatsApp ou galerie ; et un clip animé (GIF)
+ * créé sur le téléphone. Rien ne part vers un serveur ; aucun nom d'app ni métadonnée dans les fichiers.
  */
 @Composable
-fun ShareSheet(content: ShareContent, onDismiss: () -> Unit) {
-    Dialog(onDismissRequest = onDismiss, properties = DialogProperties(usePlatformDefaultWidth = false, decorFitsSystemWindows = false)) {
-        Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            ShareSheetContent(content, onDismiss)
-        }
-    }
-}
-
-@Composable
-private fun ShareSheetContent(content: ShareContent, onDismiss: () -> Unit) {
+internal fun SharePanel(content: ShareContent, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val templates = remember(content) { content.templates }
     var templateIndex by rememberSaveable { mutableIntStateOf(0) }
@@ -92,36 +74,30 @@ private fun ShareSheetContent(content: ShareContent, onDismiss: () -> Unit) {
     val text = editedText ?: defaultText
     val layer = rememberGraphicsLayer()
 
-    Column(Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding()) {
-        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(4.dp)) {
-            IconButton(onClick = onDismiss) { Icon(Icons.AutoMirrored.Filled.ArrowBack, stringResource(R.string.share_back)) }
-            Text(stringResource(R.string.share_title), style = MaterialTheme.typography.headlineSmall)
-        }
-        Column(
-            Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-        ) {
-            ChipRow {
-                templates.forEachIndexed { index, t ->
-                    FilterChip(index == templateIndex, { templateIndex = index }, label = { Text(stringResource(t.label)) })
-                }
+    Column(
+        modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        ChipRow {
+            templates.forEachIndexed { index, t ->
+                FilterChip(index == templateIndex, { templateIndex = index }, label = { Text(stringResource(t.label)) })
             }
-            TemplatePager(content, templates, templateIndex, format, layer) { templateIndex = it }
-            ChipRow {
-                ShareFormat.entries.forEach { f ->
-                    FilterChip(format == f, { format = f }, label = { Text(stringResource(f.label)) })
-                }
-            }
-            OutlinedTextField(
-                value = text,
-                onValueChange = { editedText = it },
-                label = { Text(stringResource(R.string.share_text_label)) },
-                modifier = Modifier.fillMaxWidth(),
-            )
-            Text(stringResource(R.string.share_privacy_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            ImageButtons(context, layer, text)
-            ClipSection(content, text)
         }
+        TemplatePager(content, templates, templateIndex, format, layer) { templateIndex = it }
+        ChipRow {
+            ShareFormat.entries.forEach { f ->
+                FilterChip(format == f, { format = f }, label = { Text(stringResource(f.label)) })
+            }
+        }
+        OutlinedTextField(
+            value = text,
+            onValueChange = { editedText = it },
+            label = { Text(stringResource(R.string.share_text_label)) },
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Text(stringResource(R.string.share_privacy_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        ImageButtons(context, layer, text)
+        ClipSection(content, text)
     }
 }
 

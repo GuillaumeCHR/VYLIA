@@ -417,6 +417,7 @@
     <string name="manage_title">Manage</string>
     <string name="protect_title">Filter</string>
     <string name="celebrate_title">Celebrate and share</string>
+    <string name="celebrate_tab_rewards">Rewards</string>
     <string name="shield_pill_active">On</string>
     <string name="shield_pill_inactive">Off</string>
     <string name="shield_pill_starting">Starting</string>
@@ -1160,11 +1161,7 @@
     <string name="app_icon_manage">Manage %1$s in Android settings</string>
 
     <!-- Partage -->
-    <string name="share_open_title">Share my report</string>
-    <string name="share_open_text">Images and an animated clip made on your phone, ready for a story or a conversation. No app name and no personal data on them: only your figures.</string>
-    <string name="share_open_button">Create my image</string>
     <string name="share_title">Share</string>
-    <string name="share_back">Back</string>
     <string name="share_template_hint">Swipe to change the design</string>
     <string name="share_template_report">Report</string>
     <string name="share_template_trackers">Trackers</string>

@@ -35,8 +35,19 @@ object CsvExporter {
             trackerCount(analysis, labels),
             (analysis as? TrackerAnalysis.Analyzed)?.trackers?.joinToString(" | ") { it.name }.orEmpty(),
             app.permissions.filter { it.isGranted }.joinToString(" | ") { labels.permissionTitle(it.risk.title) },
+            audited.result.categoryId,
+            penalizedPermissions(audited),
+            app.declaredPermissions.sorted().joinToString(" | "),
+            app.grantedPermissions.sorted().joinToString(" | "),
         )
     }
+
+    /** Permissions qui comptent dans le score (noms courts), de la plus à la moins pénalisante. */
+    internal fun penalizedPermissions(audited: AuditedApp): String =
+        audited.result.permissionFindings
+            .filter { it.counted > 0.0 }
+            .sortedByDescending { it.counted }
+            .joinToString(" | ") { it.permission }
 
     /** Taille réelle de la liste des traqueurs ; distingue "0 traqueur" de "pas (encore) analysé". */
     internal fun trackerCount(analysis: TrackerAnalysis, labels: Labels): String = when (analysis) {

@@ -7,6 +7,8 @@ import com.vylia.privacy.domain.model.PrivacyScore
 import com.vylia.privacy.domain.model.Tracker
 import com.vylia.privacy.domain.model.TrackerAnalysis
 import com.vylia.privacy.domain.scoring.Confidence
+import com.vylia.privacy.domain.scoring.Context
+import com.vylia.privacy.domain.scoring.PermissionFinding
 import com.vylia.privacy.domain.scoring.ScoreResult
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -14,7 +16,14 @@ import org.junit.Test
 
 class CsvExporterTest {
 
-    private fun audited(label: String, analysis: TrackerAnalysis, isSystemApp: Boolean = false) = AuditedApp(
+    private fun audited(
+        label: String,
+        analysis: TrackerAnalysis,
+        isSystemApp: Boolean = false,
+        declared: Set<String> = emptySet(),
+        granted: Set<String> = emptySet(),
+        findings: List<PermissionFinding> = emptyList(),
+    ) = AuditedApp(
         app = InstalledApp(
             label = label,
             packageName = "com.example.app",
@@ -30,12 +39,14 @@ class CsvExporterTest {
             category = null,
             apkPaths = emptyList(),
             lastUpdateTime = 0L,
+            declaredPermissions = declared,
+            grantedPermissions = granted,
             requestedPermissions = emptyList(),
             permissions = emptyList(),
         ),
         score = PrivacyScore(42),
         trackerAnalysis = analysis,
-        result = ScoreResult(42, "C", Confidence.FULL, "DEFAULT", 0.0, 0, emptyList(), emptyList()),
+        result = ScoreResult(42, "C", Confidence.FULL, "DEFAULT", 0.0, 0, findings, emptyList()),
     )
 
     private val labels = CsvExporter.Labels(
@@ -55,7 +66,7 @@ class CsvExporterTest {
         val row = rows(CsvExporter.export(listOf(audited("App", TrackerAnalysis.Analyzed(trackers))), labels))[1]
 
         assertEquals(
-            "\"App\",\"com.example.app\",\"Utilisateur\",\"42\",\"C\",\"FULL\",\"3\",\"Tracker 0 | Tracker 1 | Tracker 2\",\"\"",
+            "\"App\",\"com.example.app\",\"Utilisateur\",\"42\",\"C\",\"FULL\",\"3\",\"Tracker 0 | Tracker 1 | Tracker 2\",\"\",\"DEFAULT\",\"\",\"\",\"\"",
             row,
         )
     }
@@ -73,5 +84,29 @@ class CsvExporterTest {
 
         assertTrue(csv.startsWith("\uFEFF\"Nom de l'application\""))
         assertTrue(rows(csv)[1].startsWith("\"Super \"\"App\"\", v2\",\"com.example.app\",\"Système\""))
+    }
+
+    @Test
+    fun `exporte la categorie, les permissions penalisees et toutes les permissions demandees et accordees`() {
+        val findings = listOf(
+            PermissionFinding("ACCESS_COARSE_LOCATION", granted = false, context = Context.UNEXPECTED, penalty = 2.0, counted = 0.0),
+            PermissionFinding("CAMERA", granted = true, context = Context.UNEXPECTED, penalty = 3.0),
+            PermissionFinding("ACCESS_FINE_LOCATION", granted = false, context = Context.UNEXPECTED, penalty = 5.0),
+        )
+        val app = audited(
+            "App", TrackerAnalysis.Analyzed(emptyList()),
+            declared = setOf("INTERNET", "CAMERA", "ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"),
+            granted = setOf("INTERNET", "CAMERA"),
+            findings = findings,
+        )
+        val row = rows(CsvExporter.export(listOf(app), labels))[1]
+
+        assertTrue(
+            row,
+            row.endsWith(
+                "\"DEFAULT\",\"ACCESS_FINE_LOCATION | CAMERA\"," +
+                    "\"ACCESS_COARSE_LOCATION | ACCESS_FINE_LOCATION | CAMERA | INTERNET\",\"CAMERA | INTERNET\"",
+            ),
+        )
     }
 }

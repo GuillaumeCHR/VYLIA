@@ -616,6 +616,7 @@
     <string name="learn_category_title">4. La catégorie de l\'app</string>
     <string name="learn_category_text">Ce qui est « justifié » dépend de ce que fait l\'app : le micro est normal pour Shazam, pas pour une calculatrice. VYLIA classe chaque app dans l\'une de %1$d catégories, d\'après une liste d\'apps connues ou, à défaut, la catégorie déclarée par l\'éditeur.</string>
     <string name="learn_category_default">Une app « Non catégorisée » n\'a aucun passe-droit : chaque permission sensible y est considérée comme inattendue.</string>
+    <string name="learn_category_limits">Ces grilles sont génériques et gardent donc une part d\'incertitude : une même catégorie regroupe des apps aux besoins différents. Pokémon GO est un jeu, mais il a vraiment besoin de votre position ; « Outils simples » est un fourre-tout où des apps très différentes se côtoient. C\'est pourquoi chaque grille a trois niveaux et non deux : entre justifiées et interdites, « tolérées » couvre les permissions qui peuvent servir selon l\'app sans être indispensables, et ne coûte qu\'une partie de leur poids.</string>
     <string name="learn_category_grid_title">La grille, catégorie par catégorie</string>
     <string name="learn_category_grid_hint">Choisissez l\'une des %1$d catégories pour voir ce que sa finalité justifie (×%2$s), tolère (×%3$s) ou interdit (×%4$s). Toute autre permission comptée y est inattendue (×%5$s).</string>
     <string name="learn_category_allowed">Justifiées (%1$d)</string>

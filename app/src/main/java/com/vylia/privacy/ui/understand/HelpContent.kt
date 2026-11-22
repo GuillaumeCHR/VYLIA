@@ -526,6 +526,7 @@ private fun CategoryResolution(rules: Rules) {
     LearnCard(stringResource(R.string.learn_category_title)) {
         Paragraph(stringResource(R.string.learn_category_text, rules.categories.size))
         Paragraph(stringResource(R.string.learn_category_default))
+        Paragraph(stringResource(R.string.learn_category_limits))
         if (categories.isEmpty()) return@LearnCard
         Subtitle(stringResource(R.string.learn_category_grid_title))
         Paragraph(

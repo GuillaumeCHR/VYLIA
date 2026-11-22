@@ -594,6 +594,7 @@
     <string name="learn_category_title">4. The app\'s category</string>
     <string name="learn_category_text">What is “justified” depends on what the app does: the microphone is normal for Shazam, not for a calculator. VYLIA puts each app into one of %1$d categories, based on a list of known apps or, failing that, the category declared by the publisher.</string>
     <string name="learn_category_default">An “Uncategorised” app gets no special treatment: every sensitive permission is considered unexpected.</string>
+    <string name="learn_category_limits">These grids are generic, so they carry some uncertainty: one category groups apps with different needs. Pokémon GO is a game, yet it really needs your location; “Simple tools” is a catch-all where very different apps sit together. That is why each grid has three levels rather than two: between justified and forbidden, “tolerated” covers permissions that can be useful depending on the app without being essential, and costs only part of their weight.</string>
     <string name="learn_category_grid_title">The grid, category by category</string>
     <string name="learn_category_grid_hint">Choose one of the %1$d categories to see what its purpose justifies (×%2$s), tolerates (×%3$s) or forbids (×%4$s). Any other counted permission is unexpected for it (×%5$s).</string>
     <string name="learn_category_allowed">Justified (%1$d)</string>

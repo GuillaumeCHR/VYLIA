@@ -1734,6 +1734,7 @@
     "com.google.android.safetycore": "UTILITY",
     "com.google.android.apps.carrier.carrierwifi": "UTILITY",
     "com.masecuriteapp": "PUBLIC_SERVICES",
+    "org.eenfance.android.app3018": "PUBLIC_SERVICES",
     "com.hellomerlin": "EDUCATION_FAMILY"
   },
   "security": {

@@ -205,7 +205,11 @@ class ShieldVpnService : VpnService() {
             val query = DnsQuery.parse(buffer, length) ?: continue
             // En pause : tout est transmis, rien n'est compté.
             // La liste peut changer en cours de route (indicateurs MVT mis à jour) : la plus récente.
-            val match = if (controller.isPaused()) null else (controller.activeBlocklist() ?: blocklist).match(query.name, controller.filters())
+            val match = if (controller.isPaused()) {
+                null
+            } else {
+                controller.exceptions().cover(query.name, (controller.activeBlocklist() ?: blocklist).match(query.name, controller.filters()))
+            }
             if (match != null) {
                 write(output, query.reply(query.blockedResponse()))
                 controller.onBlocked(query.name, match)

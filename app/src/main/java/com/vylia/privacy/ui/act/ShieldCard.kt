@@ -81,6 +81,9 @@ internal fun ShieldCard(
     onFilter: (ShieldFilter, Boolean) -> Unit,
     /** Entreprise derrière un domaine (AdGuard companiesdb), pour nommer les blocages sans traqueur connu. */
     company: (String) -> Company? = { null },
+    /** « Ne plus bloquer » un domaine des derniers blocages, et « Bloquer de nouveau ». */
+    onAddException: (String) -> Unit = {},
+    onRemoveException: (String) -> Unit = {},
 ) {
     val context = LocalContext.current
     val format = NumberFormat.getIntegerInstance(currentLocale())
@@ -170,19 +173,59 @@ internal fun ShieldCard(
                 Text(stringResource(R.string.shield_other_vpn), style = MaterialTheme.typography.bodySmall, color = Amber)
             }
 
-            if (state.recent.isNotEmpty()) {
+            // Ordre des lignes figé tant que l'écran est ouvert : un nouveau blocage ne décale pas un bouton sous le
+            // doigt. Les nouveaux domaines attendent « Afficher les nouveaux blocages », placé sous la liste.
+            val latest = state.recent.take(RECENT_SHOWN).map { it.domain }
+            var order by remember { mutableStateOf(latest) }
+            val shown = state.recentIn(order)
+            LaunchedEffect(shown.isEmpty(), latest.isEmpty()) {
+                if (shown.isEmpty() && latest.isNotEmpty()) order = latest
+            }
+            if (shown.isNotEmpty()) {
                 HorizontalDivider(Modifier.padding(vertical = 4.dp))
                 Text(stringResource(R.string.shield_recent_title), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
-                state.recent.take(RECENT_SHOWN).forEach { blocked ->
-                    Column {
-                        Text(blocked.domain, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        Text(
-                            blocked.trackerName
+                shown.forEach { blocked ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Column(Modifier.weight(1f)) {
+                            Text(blocked.domain, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                            val source = blocked.trackerName
                                 ?: company(blocked.domain)?.let { stringResource(R.string.shield_company, it.name, stringResource(it.category.label())) }
-                                ?: stringResource(R.string.shield_recent_easyprivacy),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
+                                ?: stringResource(R.string.shield_recent_easyprivacy)
+                            Text(
+                                if (blocked.count > 1) pluralStringResource(R.plurals.shield_recent_count, blocked.count, source, blocked.count) else source,
+                                style = MaterialTheme.typography.labelSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
+                        // Logiciel espion : toujours bloqué, aucune exception proposée.
+                        if (!blocked.spyware) {
+                            val description = stringResource(R.string.shield_except_description, blocked.domain)
+                            TextButton(
+                                onClick = { onAddException(blocked.domain) },
+                                modifier = Modifier.semantics { contentDescription = description },
+                            ) { Text(stringResource(R.string.shield_except), style = MaterialTheme.typography.labelMedium) }
+                        }
+                    }
+                }
+                if (latest.any { it !in order }) {
+                    TextButton(onClick = { order = latest }) {
+                        Text(stringResource(R.string.shield_recent_new), style = MaterialTheme.typography.labelMedium)
+                    }
+                }
+            }
+
+            if (state.exceptions.domains.isNotEmpty()) {
+                HorizontalDivider(Modifier.padding(vertical = 4.dp))
+                Text(stringResource(R.string.shield_exceptions_title), style = MaterialTheme.typography.labelLarge, fontWeight = FontWeight.Bold)
+                Text(stringResource(R.string.shield_exceptions_hint), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                state.exceptions.domains.sorted().forEach { domain ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(domain, style = MaterialTheme.typography.bodySmall, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f))
+                        val description = stringResource(R.string.shield_exception_remove_description, domain)
+                        TextButton(
+                            onClick = { onRemoveException(domain) },
+                            modifier = Modifier.semantics { contentDescription = description },
+                        ) { Text(stringResource(R.string.shield_exception_remove), style = MaterialTheme.typography.labelMedium) }
                     }
                 }
             }

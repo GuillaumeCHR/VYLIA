@@ -36,6 +36,7 @@ class ActViewModel(
     private val shieldController: ShieldController,
     private val databases: com.vylia.privacy.data.databases.DatabaseCenter,
     private val companies: com.vylia.privacy.data.databases.CompaniesRepository,
+    private val lighterVariants: com.vylia.privacy.data.alternatives.LighterVariantsRepository,
 ) : ViewModel() {
 
     /** Entreprise derrière un domaine bloqué (AdGuard companiesdb), si la base a été téléchargée. */
@@ -67,6 +68,10 @@ class ActViewModel(
     fun resumeShield() = shieldController.resume()
 
     fun setShieldPauseMinutes(minutes: Int) = shieldController.setPauseMinutes(minutes)
+
+    fun addShieldException(domain: String) = shieldController.addException(domain)
+
+    fun removeShieldException(domain: String) = shieldController.removeException(domain)
 
     fun setShieldFilter(filter: ShieldFilter, enabled: Boolean) = shieldController.setFilter(filter, enabled)
 
@@ -105,6 +110,9 @@ class ActViewModel(
 
     val catalogue: AlternativeCatalogue get() = alternatives.catalogue
 
+    /** Versions allégées mieux notées (Gérer › Alternatives). */
+    val lighter: com.vylia.privacy.domain.act.LighterVariants get() = lighterVariants.variants
+
     /** À chaque retour sur l'écran : l'utilisateur vient peut-être d'accorder l'accès dans les réglages. */
     fun refreshUsage() {
         viewModelScope.launch {
@@ -126,6 +134,7 @@ class ActViewModel(
                     container.shieldController,
                     container.databaseCenter,
                     container.companiesRepository,
+                    container.lighterVariantsRepository,
                 )
             }
         }

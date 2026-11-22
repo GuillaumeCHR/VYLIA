@@ -125,6 +125,14 @@ S = [
  ("alt_free", "Free", "Gratuite"),
  ("alt_rating", "%1$s ★ on Google Play", "%1$s ★ sur Google Play"),
  ("alt_rating_description", "Google Play rating: %1$s out of 5", "Note Google Play : %1$s sur 5"),
+ # Alternatives › Versions allégées
+ ("lite_title", "Lighter versions", "Versions allégées"),
+ ("lite_intro", "Some of your apps exist in a lighter version from the same publisher, better rated by VYLIA: the same service, with fewer features.", "Certaines de vos apps existent en version allégée, du même éditeur et mieux notée par VYLIA : le même service, avec moins de fonctions."),
+ ("lite_swap", "%1$s → %2$s", "%1$s → %2$s"),
+ ("lite_score", "Grade %1$s (%2$d) from its Exodus report of %3$s, against %4$s (%5$d) for %6$s on this phone.", "Note %1$s (%2$d) d'après son rapport Exodus du %3$s, contre %4$s (%5$d) pour %6$s sur ce téléphone."),
+ ("lite_loss", "What you lose: %1$s", "Ce que vous perdez : %1$s"),
+ ("lite_report", "Exodus report", "Rapport Exodus"),
+ ("lite_note", "The grade of the lighter version counts every permission it declares: on your phone, it is often better still. Install it, then uninstall the other one: VYLIA gives it its own score.", "La note de la version allégée compte toutes les permissions qu'elle déclare : sur votre téléphone, elle est souvent meilleure encore. Installez-la, puis désinstallez l'autre : VYLIA lui donne alors son propre score."),
  ("alt_method_title", "How this list is built", "Comment cette liste est construite"),
  ("alt_method_text", "These apps come from AlternativeTo, a site where people recommend alternatives to one another. In each category, VYLIA keeps the free apps that users like most, available on Android, and opens their Google Play page (or F-Droid if there is none). A few apps that the ranking misses are added by hand (Bluesky, Signal, Olvid, DuckDuckGo). It reflects popularity, not an audit: their score appears in VYLIA once you install them. The rating shown is the one on Google Play, when the app is there.", "Ces apps viennent d'AlternativeTo, un site où les internautes se recommandent des alternatives. Dans chaque catégorie, VYLIA retient les apps gratuites qu'ils apprécient le plus, disponibles sur Android, et ouvre leur fiche Play Store (ou F-Droid à défaut). Quelques apps que le classement oublie sont ajoutées à la main (Bluesky, Signal, Olvid, DuckDuckGo). C'est un reflet de leur popularité, pas un audit : leur score apparaît dans VYLIA une fois qu'elles sont installées. La note affichée est celle de Google Play, quand l'app y est."),
  # Réduire › Traçage : introduction, bouclier ou DNS privé
@@ -148,6 +156,13 @@ S = [
  ("shield_blocked_total", "%1$s blocked in total", "%1$s bloquées au total"),
  ("shield_recent_title", "Latest blocks", "Derniers blocages"),
  ("shield_recent_easyprivacy", "Tracking server", "Serveur de traçage"),
+ ("shield_except", "Stop blocking", "Ne plus bloquer"),
+ ("shield_except_description", "Stop blocking %1$s", "Ne plus bloquer %1$s"),
+ ("shield_exceptions_title", "Your exceptions", "Vos exceptions"),
+ ("shield_exceptions_hint", "These domains and their subdomains are no longer blocked, and the Shield no longer counts them in the score. Spyware servers always stay blocked. After “Block again”, an app may still reach the domain for a minute or two: Android keeps recent DNS answers for a short while.", "Ces domaines et leurs sous-domaines ne sont plus bloqués, et le bouclier ne les compte plus dans le score. Les serveurs de logiciels espions restent toujours bloqués. Après « Bloquer de nouveau », une app peut encore joindre le domaine pendant une ou deux minutes : Android garde un court moment les réponses DNS récentes."),
+ ("shield_recent_new", "Show the new blocks", "Afficher les nouveaux blocages"),
+ ("shield_exception_remove", "Block again", "Bloquer de nouveau"),
+ ("shield_exception_remove_description", "Block %1$s again", "Bloquer de nouveau %1$s"),
  ("shield_how", "How it works: VYLIA creates a VPN on the phone itself. Only DNS requests (the Internet's directory) go through it: those for known tracking servers are refused, the others go on to your network's usual DNS. Nothing is sent to a VYLIA server, and the rest of your traffic does not go through VYLIA.",
   "Comment ça marche : VYLIA crée un VPN sur le téléphone lui-même. Seules les requêtes DNS (l'annuaire d'Internet) y passent : celles qui visent des serveurs de traçage connus sont refusées, les autres continuent vers le DNS habituel de votre réseau. Rien n'est envoyé à un serveur de VYLIA, et le reste de votre trafic ne passe pas par VYLIA."),
  ("shield_private_dns_conflict", "Private DNS is set to %1$s: Android then sends its requests straight to that service and the Shield sees none of them. Choose one or the other: to use the Shield, set private DNS back to Automatic.",
@@ -188,6 +203,7 @@ S = [
  ("manage_title", "Manage", "Gérer"),
  ("protect_title", "Filter", "Filtrer"),
  ("celebrate_title", "Celebrate and share", "Célébrer et partager"),
+ ("celebrate_tab_rewards", "Rewards", "Récompenses"),
  ("shield_pill_active", "On", "Actif"),
  ("shield_pill_inactive", "Off", "Inactif"),
  ("shield_pill_starting", "Starting", "Activation"),
@@ -224,6 +240,8 @@ S = [
 ]
 
 P = [
+ ("shield_recent_count", ("%1$s · %2$d time", "%1$s · %2$d times"), ("%1$s · %2$d fois", "%1$s · %2$d fois")),
+ ("lite_trackers", ("%1$d tracker instead of %2$d", "%1$d trackers instead of %2$d"), ("%1$d traqueur au lieu de %2$d", "%1$d traqueurs au lieu de %2$d")),
  ("reduce_revoke_title", ("Revoke %1$d permission", "Revoke %1$d permissions"), ("Retirer %1$d permission", "Retirer %1$d permissions")),
  ("webapk_candidate_gain", ("%1$d tracker and %2$s would go away", "%1$d trackers and %2$s would go away"), ("%1$d traqueur et %2$s disparaîtraient", "%1$d traqueurs et %2$s disparaîtraient")),
  ("webapk_sensitive", ("%1$d sensitive permission", "%1$d sensitive permissions"), ("%1$d permission sensible", "%1$d permissions sensibles")),

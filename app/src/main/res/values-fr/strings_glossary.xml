@@ -343,6 +343,8 @@
     <string name="category_finance_accounts_rationale">Scanner un chèque ou une pièce d\'identité. Lire vos SMS est inutile : Android transmet les codes de validation sans y donner accès.</string>
     <string name="category_health_admin">Santé (administratif, RDV, assurance)</string>
     <string name="category_health_admin_rationale">Envoyer une ordonnance ou un justificatif en photo. Agenda et position sont tolérés pour les rendez-vous.</string>
+    <string name="category_public_services">Services publics</string>
+    <string name="category_public_services_rationale">Impôts, emploi, sécurité : envoyer un justificatif en photo. La position est tolérée pour trouver le service le plus proche, l\'agenda pour les rendez-vous.</string>
     <string name="category_wearable_companion">Compagnon de montre / objet connecté</string>
     <string name="category_wearable_companion_rationale">Relier et synchroniser la montre : Bluetooth, capteurs, activité, position. SMS et appels sont tolérés pour les afficher au poignet.</string>
     <string name="category_fitness">Sport &amp; Fitness</string>

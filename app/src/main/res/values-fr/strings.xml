@@ -16,7 +16,7 @@
     <string name="tab_user_apps">Mes apps (%1$d)</string>
     <string name="tab_system_apps">Système (%1$d)</string>
     <string name="score_out_of">/100</string>
-    <string name="header_title">Score de confidentialité</string>
+    <string name="header_title">Score de risque d\'exposition</string>
     <string name="header_subtitle_user">Moyenne de vos %1$d applications</string>
     <string name="header_shield_active">🧿 Bouclier actif · sans lui : %1$d/100</string>
     <string name="header_shield_inactive">🧿 Si vous activez le bouclier : %1$d/100</string>
@@ -361,6 +361,13 @@
     <string name="alt_free">Gratuite</string>
     <string name="alt_rating">%1$s ★ sur Google Play</string>
     <string name="alt_rating_description">Note Google Play : %1$s sur 5</string>
+    <string name="lite_title">Versions allégées</string>
+    <string name="lite_intro">Certaines de vos apps existent en version allégée, du même éditeur et mieux notée par VYLIA : le même service, avec moins de fonctions.</string>
+    <string name="lite_swap">%1$s → %2$s</string>
+    <string name="lite_score">Note %1$s (%2$d) d\'après son rapport Exodus du %3$s, contre %4$s (%5$d) pour %6$s sur ce téléphone.</string>
+    <string name="lite_loss">Ce que vous perdez : %1$s</string>
+    <string name="lite_report">Rapport Exodus</string>
+    <string name="lite_note">La note de la version allégée compte toutes les permissions qu\'elle déclare : sur votre téléphone, elle est souvent meilleure encore. Installez-la, puis désinstallez l\'autre : VYLIA lui donne alors son propre score.</string>
     <string name="alt_method_title">Comment cette liste est construite</string>
     <string name="alt_method_text">Ces apps viennent d\'AlternativeTo, un site où les internautes se recommandent des alternatives. Dans chaque catégorie, VYLIA retient les apps gratuites qu\'ils apprécient le plus, disponibles sur Android, et ouvre leur fiche Play Store (ou F-Droid à défaut). Quelques apps que le classement oublie sont ajoutées à la main (Bluesky, Signal, Olvid, DuckDuckGo). C\'est un reflet de leur popularité, pas un audit : leur score apparaît dans VYLIA une fois qu\'elles sont installées. La note affichée est celle de Google Play, quand l\'app y est.</string>
     <string name="adtrack_intro_title">Deux façons de réduire le traçage</string>
@@ -378,6 +385,13 @@
     <string name="shield_blocked_total">%1$s bloquées au total</string>
     <string name="shield_recent_title">Derniers blocages</string>
     <string name="shield_recent_easyprivacy">Serveur de traçage</string>
+    <string name="shield_except">Ne plus bloquer</string>
+    <string name="shield_except_description">Ne plus bloquer %1$s</string>
+    <string name="shield_exceptions_title">Vos exceptions</string>
+    <string name="shield_exceptions_hint">Ces domaines et leurs sous-domaines ne sont plus bloqués, et le bouclier ne les compte plus dans le score. Les serveurs de logiciels espions restent toujours bloqués. Après « Bloquer de nouveau », une app peut encore joindre le domaine pendant une ou deux minutes : Android garde un court moment les réponses DNS récentes.</string>
+    <string name="shield_recent_new">Afficher les nouveaux blocages</string>
+    <string name="shield_exception_remove">Bloquer de nouveau</string>
+    <string name="shield_exception_remove_description">Bloquer de nouveau %1$s</string>
     <string name="shield_how">Comment ça marche : VYLIA crée un VPN sur le téléphone lui-même. Seules les requêtes DNS (l\'annuaire d\'Internet) y passent : celles qui visent des serveurs de traçage connus sont refusées, les autres continuent vers le DNS habituel de votre réseau. Rien n\'est envoyé à un serveur de VYLIA, et le reste de votre trafic ne passe pas par VYLIA.</string>
     <string name="shield_private_dns_conflict">Le DNS privé est réglé sur %1$s : Android envoie alors ses requêtes directement à ce service, et le bouclier n\'en voit aucune. Choisissez l\'un ou l\'autre : pour utiliser le bouclier, repassez le DNS privé sur Automatique.</string>
     <string name="shield_other_vpn">Un autre VPN est actif : activer le bouclier le remplacera.</string>
@@ -410,6 +424,7 @@
     <string name="manage_title">Gérer</string>
     <string name="protect_title">Filtrer</string>
     <string name="celebrate_title">Célébrer et partager</string>
+    <string name="celebrate_tab_rewards">Récompenses</string>
     <string name="shield_pill_active">Actif</string>
     <string name="shield_pill_inactive">Inactif</string>
     <string name="shield_pill_starting">Activation</string>
@@ -440,6 +455,16 @@
     <string name="celebrate_progress_none">Votre évolution s\'affichera après quelques jours de scans.</string>
     <string name="celebrate_progress_stable_month">Stable depuis 30 jours</string>
     <string name="celebrate_progress_stable_start">Stable depuis votre premier scan</string>
+    <plurals name="shield_recent_count">
+        <item quantity="one">%1$s · %2$d fois</item>
+        <item quantity="many">%1$s · %2$d fois</item>
+        <item quantity="other">%1$s · %2$d fois</item>
+    </plurals>
+    <plurals name="lite_trackers">
+        <item quantity="one">%1$d traqueur au lieu de %2$d</item>
+        <item quantity="many">%1$d traqueurs au lieu de %2$d</item>
+        <item quantity="other">%1$d traqueurs au lieu de %2$d</item>
+    </plurals>
     <plurals name="reduce_revoke_title">
         <item quantity="one">Retirer %1$d permission</item>
         <item quantity="many">Retirer %1$d permissions</item>
@@ -520,7 +545,7 @@
     <string name="learn_search_empty_badges">Aucun badge ne correspond à « %1$s ».</string>
     <string name="learn_search_empty_trackers">Aucun traqueur ne correspond à « %1$s ».</string>
     <string name="learn_search_empty">Aucune permission ne correspond à « %1$s ».</string>
-    <string name="learn_overview_title">Le Privacy Score en bref</string>
+    <string name="learn_overview_title">Le score de risque d\'exposition en bref</string>
     <string name="learn_overview_intro">Chaque application part de %1$d points. Elle en perd selon les autorisations qu\'elle demande et les traqueurs qu\'elle embarque, et des capacités d\'espionnage peuvent plafonner son score. Tout est calculé sur votre téléphone, sans connexion.</string>
     <string name="learn_overview_rules">L\'algorithme est open source et les règles qu\'il applique sont dans Paramètres › Règles de score : vous pouvez les exporter, les modifier et les réimporter.</string>
     <string name="learn_overview_formula">Score = %1$d − permissions (max %2$d) − traqueurs (max %3$d)</string>
@@ -591,6 +616,7 @@
     <string name="learn_category_title">4. La catégorie de l\'app</string>
     <string name="learn_category_text">Ce qui est « justifié » dépend de ce que fait l\'app : le micro est normal pour Shazam, pas pour une calculatrice. VYLIA classe chaque app dans l\'une de %1$d catégories, d\'après une liste d\'apps connues ou, à défaut, la catégorie déclarée par l\'éditeur.</string>
     <string name="learn_category_default">Une app « Non catégorisée » n\'a aucun passe-droit : chaque permission sensible y est considérée comme inattendue.</string>
+    <string name="learn_category_limits">Ces grilles sont génériques et gardent donc une part d\'incertitude : une même catégorie regroupe des apps aux besoins différents. Pokémon GO est un jeu, mais il a vraiment besoin de votre position ; « Outils simples » est un fourre-tout où des apps très différentes se côtoient. C\'est pourquoi chaque grille a trois niveaux et non deux : entre justifiées et interdites, « tolérées » couvre les permissions qui peuvent servir selon l\'app sans être indispensables, et ne coûte qu\'une partie de leur poids.</string>
     <string name="learn_category_grid_title">La grille, catégorie par catégorie</string>
     <string name="learn_category_grid_hint">Choisissez l\'une des %1$d catégories pour voir ce que sa finalité justifie (×%2$s), tolère (×%3$s) ou interdit (×%4$s). Toute autre permission comptée y est inattendue (×%5$s).</string>
     <string name="learn_category_allowed">Justifiées (%1$d)</string>
@@ -809,14 +835,6 @@
     <string name="notif_channel_updates_description">Ce qu\'une mise à jour change dans les traqueurs et les permissions d\'une app</string>
     <string name="notif_update_title">Mise à jour de %1$s : %2$d → %3$d/100</string>
     <string name="notif_update_title_score">Mise à jour de %1$s : %2$d/100</string>
-    <plurals name="notif_update_trackers_added">
-        <item quantity="one">Ajoute %1$d traqueur : %2$s</item>
-        <item quantity="other">Ajoute %1$d traqueurs : %2$s</item>
-    </plurals>
-    <plurals name="notif_update_trackers_removed">
-        <item quantity="one">Retire %1$d traqueur : %2$s</item>
-        <item quantity="other">Retire %1$d traqueurs : %2$s</item>
-    </plurals>
     <string name="notif_update_permissions_added">Demande en plus : %1$s</string>
     <string name="notif_update_permissions_removed">Ne demande plus : %1$s</string>
     <string name="notif_update_public">VYLIA a analysé une mise à jour.</string>
@@ -1015,6 +1033,7 @@
     <string name="db_name_exodus_categories">Catégories Exodus (VYLIA)</string>
     <string name="db_name_alternatives">Alternatives VYLIA</string>
     <string name="db_name_web_services">Services web VYLIA</string>
+    <string name="db_name_lighter_variants">Versions allégées VYLIA</string>
     <string name="db_name_private_dns">Liste DNS privés VYLIA</string>
     <string name="db_name_support_resources">Ressources d\'aide VYLIA</string>
     <string name="db_row_updated">Mise à jour du %1$s</string>
@@ -1040,6 +1059,16 @@
     <string name="automation_update_wifi">Uniquement en Wi-Fi</string>
     <string name="automation_update_wifi_hint">En données mobiles, VYLIA vérifie seulement s\'il y a des mises à jour, sans les télécharger.</string>
     <string name="automation_update_off_hint">Activez les scans programmés pour mettre à jour les bases automatiquement.</string>
+    <plurals name="notif_update_trackers_added">
+        <item quantity="one">Ajoute %1$d traqueur : %2$s</item>
+        <item quantity="many">Ajoute %1$d traqueurs : %2$s</item>
+        <item quantity="other">Ajoute %1$d traqueurs : %2$s</item>
+    </plurals>
+    <plurals name="notif_update_trackers_removed">
+        <item quantity="one">Retire %1$d traqueur : %2$s</item>
+        <item quantity="many">Retire %1$d traqueurs : %2$s</item>
+        <item quantity="other">Retire %1$d traqueurs : %2$s</item>
+    </plurals>
     <plurals name="data_restore_snapshots">
         <item quantity="one">%1$d point de suivi</item>
         <item quantity="many">%1$d points de suivi</item>
@@ -1178,11 +1207,7 @@
     <string name="app_icon_manage">Gérer %1$s dans les paramètres d\'Android</string>
 
     <!-- Partage -->
-    <string name="share_open_title">Partager mon bilan</string>
-    <string name="share_open_text">Des images et un clip animé créés sur votre téléphone, prêts pour une story ou une conversation. Aucun nom d\'app ni donnée personnelle dessus : seulement vos chiffres.</string>
-    <string name="share_open_button">Créer mon image</string>
     <string name="share_title">Partager</string>
-    <string name="share_back">Retour</string>
     <string name="share_template_hint">Glissez pour changer de modèle</string>
     <string name="share_template_report">Bilan</string>
     <string name="share_template_trackers">Traqueurs</string>
@@ -1207,7 +1232,7 @@
     <string name="share_clip_share">Partager le clip</string>
     <string name="share_clip_failed">Création du clip impossible</string>
     <string name="card_report_title">Mon téléphone passé au crible</string>
-    <string name="card_score_label">Score de confidentialité</string>
+    <string name="card_score_label">Score de risque d\'exposition</string>
     <string name="card_trackers_sub">cachés dans %1$d de mes %2$d apps</string>
     <string name="card_trackers_top">Ce qu\'ils font</string>
     <string name="card_shield_title">Bouclier VYLIA</string>
@@ -1223,7 +1248,7 @@
     <string name="share_text_report">Mon téléphone obtient %1$d/100 en confidentialité avec VYLIA. Et le vôtre ?</string>
     <string name="share_text_trackers">VYLIA a trouvé %1$d traqueurs dans %2$d de mes apps. Et chez vous ?</string>
     <string name="share_text_shield">Le Bouclier VYLIA a déjà bloqué %1$s requêtes de pistage sur mon téléphone.</string>
-    <string name="share_text_progress">Mon score de confidentialité est passé de %1$d à %2$d avec VYLIA.</string>
+    <string name="share_text_progress">Mon score de risque d\'exposition est passé de %1$d à %2$d avec VYLIA.</string>
     <string name="share_text_trophies">%1$d trophées VYLIA débloqués pour reprendre la main sur mes données.</string>
     <plurals name="card_stat_trackers" tools:ignore="ImpliedQuantity">
         <item quantity="one">traqueur détecté</item>
@@ -1367,6 +1392,7 @@
     <string name="credits_debloat_note">Ont classé des milliers d\'apps préinstallées, de « sans risque » à « surtout pas ». VYLIA lit leur liste, sur votre téléphone.</string>
     <plurals name="pre_select_copy">
         <item quantity="one">Copier la commande (%1$d app)</item>
+        <item quantity="many">Copier les commandes (%1$d apps)</item>
         <item quantity="other">Copier les commandes (%1$d apps)</item>
     </plurals>
 
@@ -1381,15 +1407,15 @@
     <string name="widget_shield_starting">Activation du bouclier…</string>
     <string name="widget_shield_off">Bouclier arrêté</string>
     <string name="widget_shield_bypassed">Bouclier contourné</string>
-    <plurals name="widget_blocked_today">
-        <item quantity="one">%1$d requête bloquée aujourd\'hui</item>
-        <item quantity="many">%1$d requêtes bloquées aujourd\'hui</item>
-        <item quantity="other">%1$d requêtes bloquées aujourd\'hui</item>
-    </plurals>
     <string name="widget_action_pause">Pause</string>
     <string name="widget_action_resume">Reprendre</string>
     <string name="widget_action_activate">Activer</string>
     <string name="widget_action_open">Voir</string>
     <string name="widget_preview_grade">Note B</string>
     <string name="widget_preview_blocked">48 requêtes bloquées aujourd\'hui</string>
+    <plurals name="widget_blocked_today">
+        <item quantity="one">%1$d requête bloquée aujourd\'hui</item>
+        <item quantity="many">%1$d requêtes bloquées aujourd\'hui</item>
+        <item quantity="other">%1$d requêtes bloquées aujourd\'hui</item>
+    </plurals>
 </resources>

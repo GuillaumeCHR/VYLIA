@@ -1,39 +1,18 @@
 package com.vylia.privacy.ui.act
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toArgb
-import com.vylia.privacy.ui.theme.Emerald
-import com.vylia.privacy.ui.theme.Slate300
-import com.vylia.privacy.ui.theme.Slate400
-import com.vylia.privacy.ui.theme.Slate900
 import com.vylia.privacy.ui.components.VyliaCard
 import com.vylia.privacy.ui.components.ScoreBadge
-import com.vylia.privacy.ui.components.openAppSettings
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -45,10 +24,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import com.vylia.privacy.ui.share.ShareContent
-import com.vylia.privacy.ui.share.ShareSheet
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import com.vylia.privacy.domain.model.PrivacyScore
@@ -58,23 +33,14 @@ import com.vylia.privacy.domain.rewards.RewardsState
 import com.vylia.privacy.ui.components.ScoreAnimationMillis
 import com.vylia.privacy.ui.theme.CyanAccent
 import java.text.DateFormat
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.io.File
-import java.io.FileOutputStream
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import com.vylia.privacy.R
 import com.vylia.privacy.ui.components.currentLocale
 
-/**
- * Récompenses et partage : points gagnés en supprimant des apps intrusives, trophées, historique des suppressions,
- * et bilan à partager (image générée sur le téléphone).
- */
+/** Récompenses : points gagnés en supprimant des apps intrusives, trophées et historique des suppressions. */
 @Composable
 internal fun RewardsTab(
-    shareContent: () -> ShareContent?,
     rewards: RewardsState,
     recentRewards: List<RemovedApp>,
     onDismissRecent: () -> Unit,
@@ -86,28 +52,7 @@ internal fun RewardsTab(
     ) {
         top()
         RewardsSection(rewards, recentRewards, onDismissRecent, Modifier.fillMaxWidth())
-        ShareEntry(shareContent)
     }
-}
-
-/** Partager son bilan : ouvre l'écran de partage (modèles d'image, formats, clip animé), tout sur le téléphone. */
-@Composable
-private fun ShareEntry(shareContent: () -> ShareContent?) {
-    var open by remember { mutableStateOf<ShareContent?>(null) }
-    VyliaCard(modifier = Modifier.fillMaxWidth()) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(stringResource(R.string.share_open_title), style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(stringResource(R.string.share_open_text), style = MaterialTheme.typography.bodyMedium)
-            Spacer(modifier = Modifier.height(12.dp))
-            Button(onClick = { open = shareContent() }) {
-                Icon(Icons.Default.Share, contentDescription = null)
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(stringResource(R.string.share_open_button))
-            }
-        }
-    }
-    open?.let { ShareSheet(it) { open = null } }
 }
 
 @OptIn(ExperimentalLayoutApi::class)

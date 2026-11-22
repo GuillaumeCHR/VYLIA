@@ -1,9 +1,5 @@
 S = [
- ("share_open_title", "Share my report", "Partager mon bilan"),
- ("share_open_text", "Images and an animated clip made on your phone, ready for a story or a conversation. No app name and no personal data on them: only your figures.", "Des images et un clip animé créés sur votre téléphone, prêts pour une story ou une conversation. Aucun nom d'app ni donnée personnelle dessus : seulement vos chiffres."),
- ("share_open_button", "Create my image", "Créer mon image"),
  ("share_title", "Share", "Partager"),
- ("share_back", "Back", "Retour"),
  ("share_template_hint", "Swipe to change the design", "Glissez pour changer de modèle"),
  ("share_template_report", "Report", "Bilan"),
  ("share_template_trackers", "Trackers", "Traqueurs"),
@@ -29,7 +25,7 @@ S = [
  ("share_clip_failed", "Could not create the clip", "Création du clip impossible"),
 
  ("card_report_title", "My phone, put under the microscope", "Mon téléphone passé au crible"),
- ("card_score_label", "Privacy score", "Score de confidentialité"),
+ ("card_score_label", "Exposure risk score", "Score de risque d'exposition"),
  ("card_trackers_sub", "hidden in %1$d of my %2$d apps", "cachés dans %1$d de mes %2$d apps"),
  ("card_trackers_top", "What they do", "Ce qu'ils font"),
  ("card_shield_title", "VYLIA Shield", "Bouclier VYLIA"),
@@ -46,7 +42,7 @@ S = [
  ("share_text_report", "My phone scores %1$d/100 for privacy with VYLIA. What about yours?", "Mon téléphone obtient %1$d/100 en confidentialité avec VYLIA. Et le vôtre ?"),
  ("share_text_trackers", "VYLIA found %1$d trackers in %2$d of my apps. What about yours?", "VYLIA a trouvé %1$d traqueurs dans %2$d de mes apps. Et chez vous ?"),
  ("share_text_shield", "The VYLIA Shield has already blocked %1$s tracking requests on my phone.", "Le Bouclier VYLIA a déjà bloqué %1$s requêtes de pistage sur mon téléphone."),
- ("share_text_progress", "My privacy score went from %1$d to %2$d with VYLIA.", "Mon score de confidentialité est passé de %1$d à %2$d avec VYLIA."),
+ ("share_text_progress", "My exposure risk score went from %1$d to %2$d with VYLIA.", "Mon score de risque d'exposition est passé de %1$d à %2$d avec VYLIA."),
  ("share_text_trophies", "%1$d VYLIA trophies unlocked to take back control of my data.", "%1$d trophées VYLIA débloqués pour reprendre la main sur mes données."),
 ]
 

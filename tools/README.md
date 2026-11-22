@@ -115,3 +115,17 @@ Génère `app/src/main/assets/vylia_rules_v3.json` et la page de relecture `docs
 règles v2.1 archivées et des ajouts v3 décrits dans le script (poids, contextes par catégorie, groupes, badges).
 Pour faire évoluer la grille : modifier le script, le relancer, puis comparer les scores avant / après sur un
 téléphone avec la version de développement (`adb logcat -s VyliaScores`, une ligne par app).
+
+## Catégories des apps d'après Google Play
+
+```
+python3 tools/categories/play_categories.py fetch              # classements France d'AppInsider -> tools/categories/play_charts.json
+python3 tools/categories/play_categories.py check 20           # sondage : catégorie du classement = catégorie de la fiche Play ?
+python3 tools/categories/play_categories.py propose 30 [--games]  # apps populaires absentes de package_overrides
+```
+
+Aide à tenir `package_overrides` à jour : `propose` liste, pour chaque catégorie Google Play, les apps des 100 plus
+téléchargées en France qui n'y figurent pas encore, avec une catégorie VYLIA suggérée (table `MAPPING`). Rien n'est
+écrit dans les règles : chaque app est vérifiée puis ajoutée à la main. La suggestion n'autorise jamais un accès très
+sensible (`SENSITIVE`), car la catégorie Play est choisie par l'éditeur. À relancer à chaque revue trimestrielle de
+l'annuaire.

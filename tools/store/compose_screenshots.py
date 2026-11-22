@@ -38,7 +38,7 @@ SHOTS = ["01-help", "02-scan", "03-detail", "04-permission", "05-trackers", "06-
 CAPTIONS = {
     "en": [
         ("Understand your apps,", "in simple words."),
-        ("A privacy score", "for every app."),
+        ("An exposure risk score", "for every app."),
         ("Every point", "is explained."),
         ("What each permission", "really allows."),
         ("What trackers do", "with your data."),
@@ -48,7 +48,7 @@ CAPTIONS = {
     ],
     "fr": [
         ("Comprenez vos apps,", "avec des mots simples."),
-        ("Un score de vie privée", "pour chaque app."),
+        ("Un score de risque", "d'exposition par app."),
         ("Chaque point", "est expliqué."),
         ("Ce que chaque permission", "permet vraiment."),
         ("Ce que les traqueurs", "font de vos données."),

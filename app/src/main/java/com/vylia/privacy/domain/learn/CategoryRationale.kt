@@ -28,6 +28,7 @@ object CategoryRationale {
         "ECOMMERCE" to Texts(R.string.category_ecommerce, R.string.category_ecommerce_rationale),
         "FINANCE_ACCOUNTS" to Texts(R.string.category_finance_accounts, R.string.category_finance_accounts_rationale),
         "HEALTH_ADMIN" to Texts(R.string.category_health_admin, R.string.category_health_admin_rationale),
+        "PUBLIC_SERVICES" to Texts(R.string.category_public_services, R.string.category_public_services_rationale),
         "WEARABLE_COMPANION" to Texts(R.string.category_wearable_companion, R.string.category_wearable_companion_rationale),
         "FITNESS" to Texts(R.string.category_fitness, R.string.category_fitness_rationale),
         "SECURITY_AUTH" to Texts(R.string.category_security_auth, R.string.category_security_auth_rationale),

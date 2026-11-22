@@ -31,8 +31,8 @@ EMERALD = (0x10, 0xB9, 0x81)
 SS = 4  # suréchantillonnage, pour des bords lisses
 
 TEXTS = {
-    "en": ("What do your apps", "know about you?", "Privacy score  ·  Trackers & spyware  ·  Anti-tracker VPN"),
-    "fr": ("Que savent vos apps", "de vous ?", "Score de vie privée  ·  Traqueurs et espions  ·  VPN anti-traqueurs"),
+    "en": ("What do your apps", "know about you?", "Exposure risk score  ·  Trackers & spyware  ·  Anti-tracker VPN"),
+    "fr": ("Que savent vos apps", "de vous ?", "Score de risque d'exposition  ·  Traqueurs et espions  ·  VPN anti-traqueurs"),
 }
 
 

@@ -15,7 +15,7 @@ Understand, in simple words
 • Every score comes with its reasons, so you learn to judge an app by yourself.
 • Good practices are highlighted as much as abuses: the aim is to understand, not to frighten.
 
-A privacy score for each app
+An exposure risk score for each app
 • Each installed app gets a score from 0 to 100 and a grade from A to E, based on the permissions it asks for and the trackers it embeds.
 • Permissions are judged by what the app is for: GPS costs nothing to a navigation app, but a lot to a game. 28 categories (navigation, messaging, banking, games, health…) say what each one justifies, tolerates or forbids.
 • Trackers are found in each app's code, on the phone, using the public Exodus Privacy database.

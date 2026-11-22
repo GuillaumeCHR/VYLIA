@@ -1,12 +1,39 @@
 {
   "format": "vylia-private-dns",
-  "version": 3,
-  "updated": "2026-11-08",
+  "version": 5,
+  "updated": "2026-11-21",
   "resolvers": [
+    {
+      "id": "quad9",
+      "name": "Quad9",
+      "recommended": true,
+      "available": true,
+      "hostname": "dns.quad9.net",
+      "requires_account": false,
+      "website": "https://quad9.net/",
+      "privacy_policy": "https://quad9.net/privacy/policy/",
+      "unavailable_countries": [],
+      "summary": {
+        "en": "Free, run by a non-profit foundation, no account or sign-up.",
+        "fr": "Gratuit, géré par une fondation à but non lucratif, sans compte ni inscription."
+      },
+      "points": {
+        "en": [
+          "Encrypts your DNS requests (DNS-over-TLS and DNS-over-HTTPS).",
+          "Blocks known malicious domains (malware, phishing).",
+          "Does not block trackers: it hides your requests from your Internet provider, but lets trackers through. To block them, turn on the VYLIA Shield instead: the two do not add up, the Shield sees nothing while a private DNS is set."
+        ],
+        "fr": [
+          "Chiffre vos requêtes DNS (DNS-over-TLS et DNS-over-HTTPS).",
+          "Bloque les domaines malveillants connus (virus, hameçonnage).",
+          "Ne bloque pas les traqueurs : il cache vos requêtes à votre fournisseur d'accès, mais laisse passer les traqueurs. Pour les bloquer, activez plutôt le Bouclier VYLIA : les deux ne se cumulent pas, le Bouclier ne voit rien quand un DNS privé est réglé."
+        ]
+      }
+    },
     {
       "id": "nextdns",
       "name": "NextDNS",
-      "recommended": true,
+      "recommended": false,
       "available": true,
       "hostname_template": "{id}.dns.nextdns.io",
       "id_pattern": "[a-f0-9]{6}",
@@ -29,33 +56,6 @@
           "Peut bloquer les traqueurs : dans votre configuration, activez une liste de blocage des traqueurs.",
           "Vous choisissez ce qui est filtré (traqueurs, domaines malveillants…).",
           "Des statistiques sur les requêtes de vos appareils, dans votre compte."
-        ]
-      }
-    },
-    {
-      "id": "quad9",
-      "name": "Quad9",
-      "recommended": false,
-      "available": true,
-      "hostname": "dns.quad9.net",
-      "requires_account": false,
-      "website": "https://quad9.net/",
-      "privacy_policy": "https://quad9.net/privacy/policy/",
-      "unavailable_countries": [],
-      "summary": {
-        "en": "Free, run by a non-profit foundation, no account or sign-up.",
-        "fr": "Gratuit, géré par une fondation à but non lucratif, sans compte ni inscription."
-      },
-      "points": {
-        "en": [
-          "Encrypts your DNS requests (DNS-over-TLS and DNS-over-HTTPS).",
-          "Blocks known malicious domains (malware, phishing).",
-          "Does not block trackers: it hides your requests from your Internet provider, but lets trackers through."
-        ],
-        "fr": [
-          "Chiffre vos requêtes DNS (DNS-over-TLS et DNS-over-HTTPS).",
-          "Bloque les domaines malveillants connus (virus, hameçonnage).",
-          "Ne bloque pas les traqueurs : il cache vos requêtes à votre fournisseur d'accès, mais laisse passer les traqueurs."
         ]
       }
     }

@@ -1,6 +1,6 @@
 {
   "version": "3.0",
-  "last_update": "2026-11-01",
+  "last_update": "2026-11-21",
   "scoring": {
     "base": 100,
     "permission_cap": 50,
@@ -621,6 +621,40 @@
         "FOREGROUND_SERVICE_MICROPHONE",
         "FOREGROUND_SERVICE_CAMERA",
         "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_BACKGROUND"
+      ]
+    },
+    "PUBLIC_SERVICES": {
+      "display_name": "Services publics",
+      "description": "Démarches administratives (impôts, emploi, sécurité) : envoyer un justificatif en photo ; position et agenda tolérés pour trouver un service et prendre rendez-vous.",
+      "allowed": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "READ_MEDIA_IMAGES",
+        "READ_MEDIA_VISUAL_USER_SELECTED"
+      ],
+      "tolerated": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "READ_CALENDAR",
+        "WRITE_CALENDAR",
+        "USE_FULL_SCREEN_INTENT",
+        "SCHEDULE_EXACT_ALARM"
+      ],
+      "forbidden": [
+        "READ_CONTACTS",
+        "READ_SMS",
+        "RECEIVE_SMS",
+        "SEND_SMS",
+        "READ_CALL_LOG",
+        "RECORD_AUDIO",
+        "ACCESS_BACKGROUND_LOCATION",
+        "FOREGROUND_SERVICE_MICROPHONE",
+        "FOREGROUND_SERVICE_CAMERA",
+        "FOREGROUND_SERVICE_LOCATION",
+        "@HEALTH_INTIMATE",
+        "@HEALTH_VITALS",
+        "@HEALTH_ACTIVITY",
         "@HEALTH_BACKGROUND"
       ]
     },
@@ -1473,7 +1507,7 @@
     "air.com.unit9.bkFrApp": "ECOMMERCE",
     "com.md.mcdonalds.gomcdo": "ECOMMERCE",
     "com.ringtonestudio.wallpaper": "MEDIA_PLAYER",
-    "com.poleemploi.poleemploietmoi": "PRODUCTIVITY_CLOUD",
+    "com.poleemploi.poleemploietmoi": "PUBLIC_SERVICES",
     "com.baobab.app": "EDUCATION_FAMILY",
     "com.crunchyroll.crunchyroid": "MEDIA_PLAYER",
     "co.hinge.app": "DATING",
@@ -1680,7 +1714,27 @@
     "com.transsion.phoenix": "BROWSER",
     "com.apple.movetoios": "UTILITY",
     "com.apple.android.music": "MEDIA_PLAYER",
-    "com.apple.atve.androidtv.appletv": "MEDIA_PLAYER"
+    "com.apple.atve.androidtv.appletv": "MEDIA_PLAYER",
+    "com.yf.smart.coros.dist": "WEARABLE_COMPANION",
+    "com.synology.DSaudio": "MEDIA_PLAYER",
+    "com.synology.DSfile": "PRODUCTIVITY_CLOUD",
+    "com.synology.DSdownload": "PRODUCTIVITY_CLOUD",
+    "com.synology.projectkailash": "PHOTO_VIDEO",
+    "fr.laposte.lapostemobile": "ECOMMERCE",
+    "com.google.android.apps.kids.familylink": "EDUCATION_FAMILY",
+    "de.mini.connected.mobile20.row": "VEHICLE",
+    "com.IndexEducation.Pronote": "EDUCATION_FAMILY",
+    "volumio.browser.Volumio": "MEDIA_PLAYER",
+    "fr.free.moncomptefree": "FINANCE_ACCOUNTS",
+    "fr.gouv.finances.smartphone.android": "PUBLIC_SERVICES",
+    "com.aufeminin.marmiton.activities": "NEWS_READING",
+    "app.passculture.webapp": "TRAVEL_LEISURE",
+    "com.keolisrennes.starmobilites": "TRANSPORT",
+    "com.google.android.contactkeys": "SECURITY_AUTH",
+    "com.google.android.safetycore": "UTILITY",
+    "com.google.android.apps.carrier.carrierwifi": "UTILITY",
+    "com.masecuriteapp": "PUBLIC_SERVICES",
+    "com.hellomerlin": "EDUCATION_FAMILY"
   },
   "security": {
     "description": "Patterns de capacités typiques des logiciels espions. Ils décrivent ce qu'une app PEUT faire, pas ce qu'elle fait : VYLIA ne voit pas le trafic réseau des autres apps.",

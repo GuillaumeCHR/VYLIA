@@ -12,7 +12,7 @@ S = [
  ("tab_user_apps", "My apps (%1$d)", "Mes apps (%1$d)"),
  ("tab_system_apps", "System (%1$d)", "Système (%1$d)"),
  ("score_out_of", "/100", "/100"),
- ("header_title", "Privacy score", "Score de confidentialité"),
+ ("header_title", "Exposure risk score", "Score de risque d'exposition"),
  ("header_subtitle_user", "Average of your %1$d apps", "Moyenne de vos %1$d applications"),
  ("header_shield_active", "🧿 Shield on · without it: %1$d/100", "🧿 Bouclier actif · sans lui : %1$d/100"),
  ("header_shield_inactive", "🧿 If you turn on the Shield: %1$d/100", "🧿 Si vous activez le bouclier : %1$d/100"),

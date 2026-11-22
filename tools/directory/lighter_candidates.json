@@ -1,0 +1,188 @@
+{
+ "comment": "Couples app répandue -> version allégée du même éditeur. tools/directory/lighter_variants.py en tire app/src/main/assets/lighter_variants.json : seules les versions sans « skip », mieux notées que l'app d'origine d'après Exodus et avec un rapport récent sont retenues. « loss » : ce qu'on perd, écrit à la main. Revue du 2026-11-21 (Exodus et Google Play France).",
+ "pairs": [
+  {
+   "replaces": [
+    "com.facebook.katana"
+   ],
+   "original_name": "Facebook",
+   "lite": "com.facebook.lite",
+   "lite_name": "Facebook Lite",
+   "category": "SOCIAL",
+   "loss": {
+    "en": "Simpler interface, photos and videos in lower quality. Messages are built in, without Messenger.",
+    "fr": "Interface plus simple, photos et vidéos en qualité réduite. Les messages sont intégrés, sans Messenger."
+   }
+  },
+  {
+   "replaces": [
+    "com.instagram.android"
+   ],
+   "original_name": "Instagram",
+   "lite": "com.instagram.lite",
+   "lite_name": "Instagram Lite",
+   "category": "SOCIAL",
+   "loss": {
+    "en": "Simpler interface, fewer editing tools for Reels and Stories, photos and videos in lower quality. Not offered in every country.",
+    "fr": "Interface plus simple, moins d'outils de montage pour les Reels et les Stories, photos et vidéos en qualité réduite. Pas proposée dans tous les pays."
+   }
+  },
+  {
+   "replaces": [
+    "com.facebook.orca"
+   ],
+   "original_name": "Messenger",
+   "lite": "com.facebook.mlite",
+   "lite_name": "Messenger Lite",
+   "category": "MESSAGING",
+   "skip": "retirée de Google Play ; moins bien notée que Messenger"
+  },
+  {
+   "replaces": [
+    "com.zhiliaoapp.musically",
+    "com.ss.android.ugc.trill"
+   ],
+   "original_name": "TikTok",
+   "lite": "com.zhiliaoapp.musically.go",
+   "lite_name": "TikTok Lite",
+   "category": "SOCIAL",
+   "loss": {
+    "en": "Fewer creation tools and effects, videos in lower quality. Not offered in every country.",
+    "fr": "Moins d'outils de création et d'effets, vidéos en qualité réduite. Pas proposée dans tous les pays."
+   }
+  },
+  {
+   "replaces": [
+    "com.twitter.android"
+   ],
+   "original_name": "X",
+   "lite": "com.twitter.android.lite",
+   "lite_name": "X Lite",
+   "category": "SOCIAL",
+   "skip": "retirée de Google Play (dernier rapport Exodus 2021)"
+  },
+  {
+   "replaces": [
+    "com.linkedin.android"
+   ],
+   "original_name": "LinkedIn",
+   "lite": "com.linkedin.android.lite",
+   "lite_name": "LinkedIn Lite",
+   "category": "SOCIAL",
+   "skip": "retirée de Google Play (dernier rapport Exodus 2021)"
+  },
+  {
+   "replaces": [
+    "com.pinterest"
+   ],
+   "original_name": "Pinterest",
+   "lite": "com.pinterest.twa",
+   "lite_name": "Pinterest Lite",
+   "category": "SOCIAL",
+   "skip": "retirée de Google Play (dernier rapport Exodus 2023)"
+  },
+  {
+   "replaces": [
+    "com.spotify.music"
+   ],
+   "original_name": "Spotify",
+   "lite": "com.spotify.lite",
+   "lite_name": "Spotify Lite",
+   "category": "MEDIA_PLAYER",
+   "skip": "retirée de Google Play (dernier rapport Exodus 2024)"
+  },
+  {
+   "replaces": [
+    "com.google.android.youtube"
+   ],
+   "original_name": "YouTube",
+   "lite": "com.google.android.apps.youtube.mango",
+   "lite_name": "YouTube Go",
+   "category": "MEDIA_PLAYER",
+   "skip": "arrêtée, retirée de Google Play"
+  },
+  {
+   "replaces": [
+    "com.google.android.googlequicksearchbox"
+   ],
+   "original_name": "Google",
+   "lite": "com.google.android.apps.searchlite",
+   "lite_name": "Google Go",
+   "category": "UTILITY",
+   "skip": "moins bien notée que l'app Google"
+  },
+  {
+   "replaces": [
+    "com.google.android.gm"
+   ],
+   "original_name": "Gmail",
+   "lite": "com.google.android.gm.lite",
+   "lite_name": "Gmail Go",
+   "category": "EMAIL",
+   "skip": "pas de rapport Exodus ; fiche Google Play non mise à jour depuis 2022"
+  },
+  {
+   "replaces": [
+    "com.google.android.apps.maps"
+   ],
+   "original_name": "Google Maps",
+   "lite": "com.google.android.apps.mapslite",
+   "lite_name": "Maps Go",
+   "category": "NAVIGATION",
+   "skip": "incompatible avec le Fairphone 6 d'après Google Play (réservée aux téléphones d'entrée de gamme)"
+  },
+  {
+   "replaces": [
+    "com.google.android.apps.photos"
+   ],
+   "original_name": "Google Photos",
+   "lite": "com.google.android.apps.photosgo",
+   "lite_name": "Galerie (Gallery Go)",
+   "category": "PHOTO_VIDEO",
+   "loss": {
+    "en": "A gallery of the photos on the phone only: no online backup, no shared albums, fewer editing tools.",
+    "fr": "Une galerie des photos du téléphone seulement : pas de sauvegarde en ligne, pas d'albums partagés, moins d'outils de retouche."
+   }
+  },
+  {
+   "replaces": [
+    "org.mozilla.firefox"
+   ],
+   "original_name": "Firefox",
+   "lite": "org.mozilla.focus",
+   "lite_name": "Firefox Focus",
+   "category": "BROWSER",
+   "skip": "moins bien notée que Firefox"
+  },
+  {
+   "replaces": [
+    "com.opera.browser"
+   ],
+   "original_name": "Opera",
+   "lite": "com.opera.mini.native",
+   "lite_name": "Opera Mini",
+   "category": "BROWSER",
+   "skip": "moins bien notée qu'Opera"
+  },
+  {
+   "replaces": [
+    "com.ubercab"
+   ],
+   "original_name": "Uber",
+   "lite": "com.ubercab.uberlite",
+   "lite_name": "Uber Lite",
+   "category": "TRANSPORT",
+   "skip": "dernier rapport Exodus de décembre 2024 : à revoir quand un rapport récent existera"
+  },
+  {
+   "replaces": [
+    "com.skype.raider"
+   ],
+   "original_name": "Skype",
+   "lite": "com.skype.m2",
+   "lite_name": "Skype Lite",
+   "category": "MESSAGING",
+   "skip": "Skype arrêté, retirée de Google Play"
+  }
+ ]
+}

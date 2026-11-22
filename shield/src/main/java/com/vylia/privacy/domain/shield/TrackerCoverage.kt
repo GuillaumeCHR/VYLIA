@@ -26,7 +26,13 @@ object TrackerCoverages {
      * @return la couverture de chaque traqueur de [trackers] (et de ceux du complément maison), par nom. Un traqueur
      *   absent du résultat n'a aucun domaine connu : [TrackerCoverage.UNKNOWN].
      */
-    fun of(trackers: List<ExodusNetworkTracker>, blocklist: Blocklist, filters: Set<ShieldFilter>): Map<String, TrackerCoverage> {
+    fun of(
+        trackers: List<ExodusNetworkTracker>,
+        blocklist: Blocklist,
+        filters: Set<ShieldFilter>,
+        /** Domaines que l'utilisateur ne veut plus bloquer : ils passent, et comptent comme tels. */
+        exceptions: ShieldExceptions = ShieldExceptions.EMPTY,
+    ): Map<String, TrackerCoverage> {
         // Domaines de chaque traqueur ; null : une partie de signature qui n'est pas un domaine.
         val parts = LinkedHashMap<String, MutableSet<String?>>()
         trackers.forEach { tracker ->
@@ -39,7 +45,7 @@ object TrackerCoverages {
             parts.getOrPut(name) { LinkedHashSet() }.apply { remove(null); addAll(domains) }
         }
         return parts.filterValues { it.isNotEmpty() }.mapValues { (_, domains) ->
-            val blocked = domains.count { it != null && blocklist.match(it, filters) != null }
+            val blocked = domains.count { it != null && exceptions.cover(it, blocklist.match(it, filters)) != null }
             when (blocked) {
                 domains.size -> TrackerCoverage.BLOCKED
                 0 -> TrackerCoverage.NONE

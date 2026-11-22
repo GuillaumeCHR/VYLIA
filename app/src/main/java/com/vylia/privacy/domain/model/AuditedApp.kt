@@ -2,7 +2,7 @@ package com.vylia.privacy.domain.model
 
 import com.vylia.privacy.domain.scoring.ScoreResult
 
-/** Application accompagnée de son score de confidentialité calculé. */
+/** Application accompagnée de son score de risque d'exposition calculé. */
 data class AuditedApp(
     val app: InstalledApp,
     val score: PrivacyScore,

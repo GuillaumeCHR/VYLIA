@@ -1,0 +1,1 @@
+Lighter versions: Manage › Alternatives suggests the Lite version of an installed app when it scores better (Facebook Lite, Instagram Lite, TikTok Lite, Gallery Go). Shield exceptions: stop blocking a domain from the recent blocks. Celebrate has two tabs, Rewards and Share. The score is now called the exposure risk score. Private DNS: Quad9 first.

@@ -144,7 +144,7 @@ Politique complète : [confidentialité](https://guillaumechr.github.io/vylia-si
 
 - Aucun traqueur, aucun outil de mesure d'audience, aucune donnée revendue.
 - Internet ne sert qu'à mettre à jour les bases, à votre demande ou avant le scan de fond si vous l'avez activé : Exodus
-  Privacy, Echap, MVT, les listes du bouclier (EasyPrivacy, traqueurs CNAME d'AdGuard si vous l'ajoutez), AdGuard companiesdb, la liste des apps préinstallées
+  Privacy, Echap, MVT, les listes du bouclier (EasyPrivacy, traqueurs CNAME d'AdGuard), AdGuard companiesdb, la liste des apps préinstallées
   d'UAD-ng et les fichiers publiés dans ce dépôt (règles, alternatives, DNS privés, ressources d'aide). Ce sont des fichiers publics, téléchargés
   en HTTPS depuis leur source officielle : rien n'est envoyé sur vous ni sur vos applications.
 - Le bouclier filtre sur le téléphone. Les requêtes qu'il laisse passer vont directement au DNS de votre réseau, comme
@@ -230,8 +230,8 @@ Outils du dépôt : voir [`tools/README.md`](tools/README.md). Feuille de route 
   (licence MIT), avec les indicateurs publiés par Amnesty International, Citizen Lab, Google, Lookout et d'autres
   chercheurs (extrait : noms de paquet, certificats et domaines, voir [`tools/update_mvt_iocs.py`](tools/update_mvt_iocs.py)).
 - **Listes du bouclier** : [EasyPrivacy](https://easylist.to/) (GPL v3), liste des
-  [traqueurs CNAME](https://github.com/AdguardTeam/cname-trackers) d'AdGuard (MIT, à ajouter dans l'app) ; noms des domaines bloqués d'après [AdGuard companiesdb](https://github.com/AdguardTeam/companiesdb)
-  (CC BY-SA 4.0, téléchargée seulement). VYLIA n'est affiliée à aucun de ces projets.
+  [traqueurs CNAME](https://github.com/AdguardTeam/cname-trackers) d'AdGuard (MIT) ; noms des domaines bloqués et régies écartées d'après [AdGuard companiesdb](https://github.com/AdguardTeam/companiesdb)
+  (CC BY-SA 4.0 ; seules les catégories des régies sont embarquées). VYLIA n'est affiliée à aucun de ces projets.
 - **Apps préinstallées** : [Universal Android Debloater Next Generation](https://github.com/Universal-Debloater-Alliance/universal-android-debloater-next-generation)
   (UAD-ng, GPL v3), fichier `uad_lists.json` embarqué tel quel (voir [`tools/update_uad_list.py`](tools/update_uad_list.py))
   et mis à jour depuis l'app ; marque des apps de constructeur déduite du nom du paquet par VYLIA. Descriptions

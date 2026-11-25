@@ -10,8 +10,11 @@ Sources, téléchargées sur le poste de dev (l'app peut les mettre à jour depu
     traçage, avec le nom du traqueur, affiché dans l'app à chaque blocage ;
   - EasyPrivacy (pistage, https://easylist.to, GPL v3 ou CC BY-SA 3.0, au choix ; VYLIA étant sous GPL v3, c'est elle
     qui s'applique) : seules les règles qui visent un domaine entier ont un sens au niveau DNS (« ||domaine^ »,
-    « ||domaine^$important », lignes hosts) ; « $badfilter » annule la règle qu'il vise ; les exceptions
-    « @@||domaine^ », « @@||domaine^| » et « @@|domaine^| » sont respectées.
+    « ||domaine^$important », « ||domaine^$third-party » ou « $3p », lignes hosts ; $third-party vise des domaines de
+    traqueurs que personne n'ouvre comme un site, retenu depuis le 2026-11-25) ; « $badfilter » annule la règle qu'il vise ; les exceptions
+    « @@||domaine^ », « @@||domaine^| » et « @@|domaine^| » sont respectées ;
+  - AdGuard CNAME trackers (combined_disguised_trackers.txt, MIT) : traqueurs déguisés en sous-domaine du site
+    (CNAME), embarqués et actifs d'office depuis le 2026-11-25 (proposés à l'ajout avant).
     L'app refait la même fusion quand elle télécharge les listes (shield/…/BlocklistBuilder.kt).
   Aucune liste de contrôle parental : VYLIA bloque des traqueurs, jamais un site pour son contenu (légal).
   - EXTRA : complément maison, domaine par domaine, pour ce qu'aucune liste ne couvre (avec la raison).
@@ -21,7 +24,8 @@ Groupes :
   - « mobile » : vide. Les traqueurs Exodus de catégorie Advertisement (régies des apps et des jeux) n'y sont pas
     écrits, et ni eux ni leurs sous-domaines ne restent dans « web », même si EasyPrivacy les cite. Le format garde
     le groupe pour un futur filtrage des régies, en option désactivée d'office (ShieldFilter.AVAILABLE dans l'app) ;
-  - « allow » : exceptions des listes, et NEVER_BLOCK_ADS (Google AdMob, DoubleClick), jamais bloqués.
+  - « allow » : exceptions des listes, NEVER_BLOCK_ADS (Google AdMob, DoubleClick) et NEVER_BLOCK_SERVICES (rapport de
+    plantage, configuration à distance), jamais bloqués.
 
 Prudence, pour ne pas casser d'apps :
   - côté Exodus, seuls les traqueurs de catégorie Advertisement, Analytics, Profiling ou Identification sont
@@ -51,6 +55,23 @@ import urllib.request
 
 EXODUS_URL = "https://reports.exodus-privacy.eu.org/api/trackers"
 EASYPRIVACY_URL = "https://easylist.to/easylist/easyprivacy.txt"
+CNAME_URL = "https://raw.githubusercontent.com/AdguardTeam/cname-trackers/master/data/combined_disguised_trackers.txt"
+COMPANIES_URL = "https://raw.githubusercontent.com/AdguardTeam/companiesdb/main/dist/trackers.json"
+# Catégories companiesdb des régies : une règle $third-party qui vise l'un de leurs domaines est écartée (groupe « ads »).
+COMPANIES_AD_CATEGORIES = {"advertising", "pornvertising"}
+
+# Serveurs de régies que la base Exodus ne donne pas sous forme de domaine (signature en expression régulière) : une
+# règle $third-party qui vise l'un d'eux ou un domaine parent (« singular.net ») est écartée. Mêmes domaines que les
+# régies de KNOWN_SERVERS dans shield/…/ExodusShieldDomains.kt ; écrits dans le groupe « ads », que l'app relit.
+KNOWN_AD_SERVERS = {
+    "Amazon Advertisement": ["amazon-adsystem.com"],
+    "Pangle": ["pangle.io"],
+    "Appodeal Stack": ["appodeal.com"],
+    "BidMachine": ["bidmachine.io"],
+    "ironSource": ["supersonicads.com"],
+    "Singular": ["sdk-api-v1.singular.net"],
+    "Facebook Ads": ["an.facebook.com"],
+}
 
 # Complément maison : domaines de traçage qu'aucune liste ne couvre, avec leur groupe (même liste que EXTRA dans
 # shield/…/ExodusShieldDomains.kt, qui l'applique à la base Exodus téléchargée par l'app). Chaque entrée est
@@ -73,6 +94,11 @@ NEVER_BLOCK_ADS = {
     "admob.com", "googletagservices.com",
 }
 
+# Services utiles à l'app qui l'appelle : rapport de plantage (comme les SDK Exodus seulement Crash reporting, non
+# retenus) et configuration à distance. EasyPrivacy les cite en $third-party ; jamais bloqués, ni eux ni leurs
+# sous-domaines (groupe « allow »). Même liste que NEVER_BLOCK_SERVICES dans shield/…/BlocklistBuilder.kt.
+NEVER_BLOCK_SERVICES = {"sentry.io", "bugsnag.com", "crashlytics.com", "rollbar.com", "statsigapi.net"}
+
 BLOCKED_CATEGORIES = {"Advertisement", "Analytics", "Profiling", "Identification"}
 
 # Domaines (et leurs sous-domaines déclarés en entier) qui ne sont jamais bloqués : bloquer l'un d'eux casserait des
@@ -87,9 +113,15 @@ NEVER_BLOCK = {
 }
 
 DOMAIN = re.compile(r"^(?=.{4,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$")
-EASY_RULE = re.compile(r"^\|\|([a-z0-9.-]+)\^(\$important)?$")
-EASY_BADFILTER = re.compile(r"^\|\|([a-z0-9.-]+)\^\$(important,)?badfilter$")
-EASY_EXCEPTION = re.compile(r"^@@\|\|?([a-z0-9.-]+)\^\|?(\$important)?$")
+# Modificateurs retenus au niveau DNS (même liste que DNS_MODIFIERS dans shield/…/AdblockListParser.kt).
+DNS_MODIFIERS = r"(?:important|third-party|3p)"
+EASY_RULE = re.compile(rf"^\|\|([a-z0-9.-]+)\^(?:\$({DNS_MODIFIERS}(?:,{DNS_MODIFIERS})*))?$")
+THIRD_PARTY = {"third-party", "3p"}
+# Nom de régie (libellé en « ad… », SSP, DSP, RTB, enchères) : une règle $third-party qui vise un tel domaine est écartée,
+# même si aucune base ne le classe (adsmoloco.com, genieessp.jp). Même motif que AD_NAME dans shield/…/BlocklistBuilder.kt.
+AD_NAME = re.compile(r"(^|[.-])ad[a-z0-9-]*\.|ssp|dsp|rtb|bid|programmatic")
+EASY_BADFILTER = re.compile(rf"^\|\|([a-z0-9.-]+)\^\$(?:{DNS_MODIFIERS},)*badfilter(?:,{DNS_MODIFIERS})*$")
+EASY_EXCEPTION = re.compile(rf"^@@\|\|?([a-z0-9.-]+)\^\|?(?:\${DNS_MODIFIERS}(?:,{DNS_MODIFIERS})*)?$")
 HOSTS_RULE = re.compile(r"^(?:0\.0\.0\.0|127\.0\.0\.1|::|::1)\s+([a-z0-9.-]+)\s*(?:#.*)?$")
 
 
@@ -140,12 +172,13 @@ def exodus_domains(api, mapping):
 
 
 def adblock_domains(text):
-    """Règles de domaine entier d'une liste au format Adblock Plus : (domaines, exceptions, version)."""
-    rules, exceptions, cancelled = set(), set(), set()
+    """Règles de domaine entier d'une liste au format Adblock Plus : (domaines, domaines des seules règles
+    $third-party, exceptions, version)."""
+    rules, third, exceptions, cancelled = set(), set(), set(), set()
     for raw in text.splitlines():
         line = raw.strip().lower()
         if m := EASY_RULE.match(line):
-            rules.add(m.group(1))
+            (third if THIRD_PARTY & set((m.group(2) or "").split(",")) else rules).add(m.group(1))
         elif m := EASY_BADFILTER.match(line):
             cancelled.add(m.group(1))
         elif m := EASY_EXCEPTION.match(line):
@@ -154,7 +187,24 @@ def adblock_domains(text):
             rules.add(m.group(1))
     version = next((l.split(":", 1)[1].strip() for l in text.splitlines()[:10] if l.startswith("! Version:")), "?")
     kept = {d for d in rules - cancelled if DOMAIN.match(d) and not is_protected(d)}
-    return kept, exceptions, version
+    third_kept = {d for d in third - cancelled - rules if DOMAIN.match(d) and not is_protected(d)}
+    return kept, third_kept, exceptions, version
+
+
+def companies_ad_domains(data):
+    """Domaines des traqueurs companiesdb de catégorie advertising ou pornvertising (régies)."""
+    categories = {k for k, v in data["categories"].items() if v in COMPANIES_AD_CATEGORIES}
+    trackers = {k for k, v in data["trackers"].items() if str(v.get("categoryId")) in categories}
+    return {d for d, t in data["trackerDomains"].items() if t in trackers and DOMAIN.match(d) and not is_protected(d)}
+
+
+def third_party_kept(domains, ad_domains):
+    """Domaines des règles $third-party qui ne visent ni une régie, ni un de ses sous-domaines, ni un domaine parent,
+    ni un domaine au nom de régie ([AD_NAME]).
+    Même règle que BlocklistBuilder.thirdPartyKept (shield/…/BlocklistBuilder.kt)."""
+    ad_parents = {p for d in ad_domains for p in parents(d)}
+    return {d for d in domains if d not in ad_parents and d not in ad_domains and not AD_NAME.search(d)
+            and not any(p in ad_domains for p in parents(d))}
 
 
 def parents(domain):
@@ -171,6 +221,8 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--exodus", help="réponse de l'API Exodus déjà téléchargée")
     parser.add_argument("--easyprivacy", help="easyprivacy.txt déjà téléchargé")
+    parser.add_argument("--cname", help="combined_disguised_trackers.txt d'AdGuard déjà téléchargé")
+    parser.add_argument("--companies", help="trackers.json d'AdGuard companiesdb déjà téléchargé")
     parser.add_argument("--spyware-only", action="store_true", help="ne refait que le groupe spyware (MVT)")
     args = parser.parse_args()
     if args.spyware_only:
@@ -185,20 +237,29 @@ def main():
 
     api = json.loads(pathlib.Path(args.exodus).read_text(encoding="utf-8") if args.exodus else fetch(EXODUS_URL, "application/json"))
     privacy_text = pathlib.Path(args.easyprivacy).read_text(encoding="utf-8") if args.easyprivacy else fetch(EASYPRIVACY_URL, "text/plain")
+    cname_text = pathlib.Path(args.cname).read_text(encoding="utf-8") if args.cname else fetch(CNAME_URL, "text/plain")
+    companies = json.loads(pathlib.Path(args.companies).read_text(encoding="utf-8") if args.companies else fetch(COMPANIES_URL, "application/json"))
 
     spyware, spyware_source = spyware_group()
     exodus, skipped = exodus_domains(api, overrides())
-    easyprivacy, privacy_exceptions, privacy_version = adblock_domains(privacy_text)
+    privacy_plain, privacy_third, privacy_exceptions, privacy_version = adblock_domains(privacy_text)
+    cname, cname_third, cname_exceptions, _ = adblock_domains(cname_text)
+    cname_time = next((l.split(":", 1)[1].strip() for l in cname_text.splitlines()[:10] if l.startswith("! TimeUpdated:")), "?")
     for name, (group, domains) in EXTRA.items():
         for domain in domains:
             assert group == "web" and DOMAIN.match(domain) and not is_protected(domain), domain
             exodus.setdefault(domain, (name, group))  # même place que les domaines Exodus : le nom est affiché
-    exceptions = privacy_exceptions | NEVER_BLOCK_ADS
+    exceptions = privacy_exceptions | cname_exceptions | NEVER_BLOCK_ADS | NEVER_BLOCK_SERVICES
     named = {d: v for d, v in exodus.items() if d not in exceptions}
 
     # Régies publicitaires (traqueurs Exodus Advertisement) : ni elles ni leurs sous-domaines ne sont bloqués.
     ads = {d for d, (_, g) in named.items() if g == "mobile"}
-    web_all = ({d for d, (_, g) in named.items() if g == "web"} | easyprivacy) - exceptions - ads
+    # Règles $third-party : elles visent des domaines entiers d'entreprises, régies comprises. Écartées si elles visent
+    # une régie connue (Exodus, serveurs connus, companiesdb advertising), un de ses sous-domaines ou un domaine parent.
+    ad_servers = companies_ad_domains(companies) | {d for ds in KNOWN_AD_SERVERS.values() for d in ds}
+    third_ok = third_party_kept(privacy_third | cname_third, ads | ad_servers)
+    easyprivacy = privacy_plain | third_ok
+    web_all = ({d for d, (_, g) in named.items() if g == "web"} | easyprivacy | cname) - exceptions - ads
     web = drop_redundant(web_all, also_covered_by=ads)
     web = {d for d in web if not any(p in exceptions for p in parents(d))}
 
@@ -220,18 +281,24 @@ def main():
         "sources": [
             {"name": "Exodus Privacy", "url": EXODUS_URL, "license": "ODbL 1.0"},
             {"name": "EasyPrivacy", "url": EASYPRIVACY_URL, "license": "GPL v3", "version": privacy_version},
+            {"name": "AdGuard CNAME trackers", "url": CNAME_URL, "license": "MIT", "version": cname_time},
             {"name": "VYLIA (complément maison)", "license": "GPL v3"},
+            {"name": "AdGuard companiesdb (régies écartées des règles $third-party)", "url": COMPANIES_URL, "license": "CC BY-SA 4.0"},
             spyware_source,
         ],
         # « allow » : exceptions ; ni ces domaines ni leurs sous-domaines ne sont bloqués (logiciels espions exceptés),
         # même si un domaine parent est listé.
         "groups": {"web": group_file(web), "mobile": group_file(set()), "spyware": spyware,
+                   # « ads » : régies hors Exodus, jamais bloquées ; sert à écarter les règles $third-party qui les visent
+                   # quand l'app recompile les listes téléchargées.
+                   "ads": {"trackers": {}, "domains": sorted(ad_servers)},
                    "allow": {"trackers": {}, "domains": sorted(d for d in exceptions if DOMAIN.match(d))}},
     }
     OUTPUT.write_text(json.dumps(snapshot, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8")
-    print(f"Exodus : {len(exodus)} domaines ({len(skipped)} signatures écartées, {len(ads)} de régies non bloqués) ; "
-          f"EasyPrivacy {privacy_version} : {len(easyprivacy)} domaines ; maison : {sum(len(d) for _, d in EXTRA.values())} ; "
+    print(f"Exodus : {len(exodus)} domaines ({len(skipped)} signatures écartées, {sum(1 for _, g in exodus.values() if g == "mobile")} de régies non bloquées) ; "
+          f"EasyPrivacy {privacy_version} : {len(easyprivacy)} domaines ; CNAME {cname_time} : {len(cname)} ; maison : {sum(len(d) for _, d in EXTRA.values())} ; "
           f"{len(exceptions)} exceptions.")
+    print(f"EasyPrivacy $third-party : {len(privacy_third)} domaines, {len(third_ok)} retenus ({len(ad_servers)} régies connues)")
     print(f"web : {len(web)} domaines -> {OUTPUT.relative_to(ROOT)} ({OUTPUT.stat().st_size // 1024} Ko)")
     for line in skipped:
         print("  écartée :", line)

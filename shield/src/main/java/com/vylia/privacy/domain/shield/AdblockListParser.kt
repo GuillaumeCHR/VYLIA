@@ -7,14 +7,20 @@ import java.util.Base64
  * Ce qu'une liste au format Adblock Plus / AdGuard (ou hosts) apporte à un filtrage DNS, et ce qui en est écarté.
  *
  * Un filtrage DNS ne voit qu'un nom de domaine : seules les règles qui visent un domaine entier ont un sens. Retenues :
- * `||domaine^`, `||domaine^$important`, `0.0.0.0 domaine` (hosts) et un domaine seul. Exceptions : `@@||domaine^`, et
- * `@@||domaine^|` ou `@@|domaine^|` (forme du DNS filter).
- * Écartées et comptées : les règles cosmétiques (masquage d'éléments, scripts), celles à modificateurs (`$third-party`
- * bloquerait au niveau DNS le site lui-même, `$script` ou `$popup` n'y ont pas de sens), et celles à chemin ou en
- * expression régulière. `$badfilter` annule la règle qu'il désigne (AdGuard French annule ainsi `||stripchat.com^`).
+ * `||domaine^`, `||domaine^$important`, `||domaine^$third-party` (ou `$3p`), `0.0.0.0 domaine` (hosts) et un domaine
+ * seul. `$third-party` est pris comme une règle entière depuis le 2026-11-25 : il vise des domaines de traqueurs que
+ * personne n'ouvre comme un site (`scorecardresearch.com`, `segment.io`) ; seul le site du traqueur devient
+ * injoignable. Exceptions : `@@||domaine^`, et `@@||domaine^|` ou `@@|domaine^|` (forme du DNS filter).
+ * Écartées et comptées : les règles cosmétiques (masquage d'éléments, scripts), celles aux autres modificateurs
+ * (`$script`, `$popup` ou `$domain=` n'ont pas de sens au niveau DNS), et celles à chemin ou en expression régulière. `$badfilter` annule la règle qu'il désigne (AdGuard French annule ainsi `||stripchat.com^`).
  */
 data class ParsedList(
     val domains: Set<String>,
+    /**
+     * Domaines de [domains] retenus seulement par une règle `$third-party` : [BlocklistBuilder] écarte ceux qui visent
+     * une régie ([BlocklistBuilder.thirdPartyKept]).
+     */
+    val thirdParty: Set<String> = emptySet(),
     val exceptions: Set<String>,
     val ignoredCosmetic: Int,
     val ignoredModifiers: Int,
@@ -34,12 +40,14 @@ object AdblockListParser {
     private val CHECKSUM = Regex("^! Checksum:\\s*(\\S+)\\s*$")
     private val VERSION = Regex("^! Version:\\s*(.+)$")
 
-    /** Modificateurs sans effet sur le domaine visé : la règle reste valable au niveau DNS. */
-    private val DNS_MODIFIERS = setOf("important")
+    /** Modificateurs retenus au niveau DNS : la règle vaut pour le domaine entier. */
+    private val DNS_MODIFIERS = setOf("important", "third-party", "3p")
+    private val THIRD_PARTY = setOf("third-party", "3p")
 
     /** Analyse la liste ligne par ligne, sans la garder en mémoire (certaines font 10 Mo). */
     fun parse(lines: Sequence<String>): ParsedList {
         val domains = HashSet<String>()
+        val third = HashSet<String>()
         val exceptions = HashSet<String>()
         val cancelled = HashSet<String>()
         var cosmetic = 0
@@ -76,7 +84,7 @@ object AdblockListParser {
                 val mods = m.groupValues[2].split(',').filter { it.isNotEmpty() }.map { it.substringBefore('=').removePrefix("~") }
                 when {
                     "badfilter" in mods -> if (mods.all { it == "badfilter" || it in DNS_MODIFIERS }) cancelled += m.groupValues[1]
-                    mods.all { it in DNS_MODIFIERS } -> domains += m.groupValues[1]
+                    mods.all { it in DNS_MODIFIERS } -> if (mods.any { it in THIRD_PARTY }) third += m.groupValues[1] else domains += m.groupValues[1]
                     else -> modifiers++
                 }
                 continue
@@ -87,13 +95,15 @@ object AdblockListParser {
         }
 
         val valid = domains.filterTo(HashSet()) { Blocklist.DOMAIN.matches(it) && it !in cancelled }
+        val thirdParty = third.filterTo(HashSet()) { Blocklist.DOMAIN.matches(it) && it !in cancelled && it !in valid }
         val checksumValid = checksum?.let { want ->
             val withoutTrailing = (md5.clone() as MessageDigest).digest()
             val withTrailing = md5.apply { update('\n'.code.toByte()) }.digest()
             want == base64(withoutTrailing) || want == base64(withTrailing)
         }
         return ParsedList(
-            domains = valid,
+            domains = valid + thirdParty,
+            thirdParty = thirdParty,
             exceptions = exceptions.filterTo(HashSet()) { Blocklist.DOMAIN.matches(it) },
             ignoredCosmetic = cosmetic,
             ignoredModifiers = modifiers,

@@ -188,11 +188,14 @@ class ShieldController(
         if (it.dropRetired()) prefs.edit().remove(KEY_SIZE).apply()
     }
 
-    /** Listes actives : celles de base, sauf retirées, et les listes proposées que l'utilisateur a ajoutées. */
-    fun enabledLists(): List<ShieldList> =
-        ShieldListStore.LISTS.filter { prefs.getBoolean(KEY_LIST + it.id, !it.proposed) }
+    /**
+     * Listes actives : toutes celles de base, et les listes proposées que l'utilisateur a ajoutées. Une liste de base
+     * ignore le réglage gardé : la liste CNAME, proposée avant le 2026-11-25, a pu être retirée, et ne peut plus être
+     * ajoutée depuis l'app.
+     */
+    fun enabledLists(): List<ShieldList> = ShieldListStore.LISTS.filter(::isListEnabled)
 
-    fun isListEnabled(list: ShieldList): Boolean = prefs.getBoolean(KEY_LIST + list.id, !list.proposed)
+    fun isListEnabled(list: ShieldList): Boolean = !list.proposed || prefs.getBoolean(KEY_LIST + list.id, false)
 
     /** Ajoute ou retire une liste ; la liste du bouclier est à recompiler ensuite ([rebuild]). */
     fun setListEnabled(list: ShieldList, enabled: Boolean) {

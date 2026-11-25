@@ -65,6 +65,47 @@ class BlocklistBuilderTest {
     }
 
     @Test
+    fun `une regle third-party qui vise une regie est ecartee`() {
+        val withAds = embedded.copy(ads = setOf("sdk.regie.example.com", "regie2.example.net", "regie3.example.net"))
+        val list = BlocklistBuilder.build(
+            withAds,
+            listOf(
+                BlocklistBuilder.Source(
+                    ShieldFilter.WEB,
+                    parsed(
+                        "||regie.example.com^\$third-party", // parent d'un serveur de régie
+                        "||x.regie3.example.net^\$third-party", // sous-domaine d'une régie
+                        "||admob.example.com^\$third-party", // régie Exodus (mobile)
+                        "||adsmoloco.example^\$third-party", "||genieessp.example^\$3p", // noms de régie
+                        "||metrics.example.org^\$third-party",
+                        "||regie2.example.net^", // règle entière : gardée
+                    ),
+                ),
+            ),
+            fallback = false,
+        ).blocklist
+        assertNull(list.match("regie.example.com"))
+        assertNull(list.match("x.regie3.example.net"))
+        assertNull(list.match("adsmoloco.example"))
+        assertNull(list.match("genieessp.example"))
+        assertEquals(ShieldFilter.WEB, list.match("metrics.example.org")?.filter)
+        assertEquals(ShieldFilter.WEB, list.match("regie2.example.net")?.filter)
+    }
+
+    @Test
+    fun `rapport de plantage et configuration ne sont jamais bloques`() {
+        val services = BlocklistBuilder.Source(
+            ShieldFilter.WEB,
+            parsed("||sentry.io^\$third-party", "||bugsnag.com^\$third-party", "||statsigapi.net^\$3p", "||segment.io^\$third-party"),
+        )
+        val list = BlocklistBuilder.build(embedded, listOf(services), fallback = false).blocklist
+        assertNull(list.match("o123.ingest.sentry.io"))
+        assertNull(list.match("notify.bugsnag.com"))
+        assertNull(list.match("api.statsigapi.net"))
+        assertEquals(ShieldFilter.WEB, list.match("api.segment.io")?.filter)
+    }
+
+    @Test
     fun `la liste embarquee ne complete que si une liste manque`() {
         val without = BlocklistBuilder.build(embedded, listOf(web, mobile), fallback = false).blocklist
         assertNull(without.match("old-web.example.com"))

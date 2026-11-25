@@ -9,9 +9,13 @@ package com.vylia.privacy.domain.shield
  * - Groupe mobile : les listes de rôle [ShieldFilter.MOBILE] et les traqueurs nommés mobiles ; un domaine des deux
  *   groupes est mobile (c'est le réglage mobile qui décide pour lui). Tant que le filtrage mobile n'est pas proposé
  *   ([ShieldFilter.AVAILABLE]), le groupe reste vide : ses domaines et leurs sous-domaines ne sont pas bloqués.
- * - [NEVER_BLOCK_ADS] (Google AdMob, DoubleClick) : toujours en exception, même si une liste de traqueurs les cite.
+ * - [NEVER_BLOCK_ADS] (Google AdMob, DoubleClick) et [NEVER_BLOCK_SERVICES] (rapport de plantage, configuration) :
+ *   toujours en exception, même si une liste de traqueurs les cite.
  * - Les exceptions `@@||domaine^` de chaque liste s'appliquent à toutes les sources, sous-domaines compris, même si un
  *   domaine parent est listé ; [NEVER_BLOCK] retire aussi ses domaines des listes.
+ * - Une règle `$third-party` vise le domaine entier d'une entreprise, régies comprises : elle est écartée si elle vise
+ *   une régie connue (traqueur Exodus Advertisement, groupe « ads » de la liste embarquée), un de ses sous-domaines ou
+ *   un domaine parent, ou un domaine au nom de régie ([thirdPartyKept]).
  * - Un sous-domaine d'un domaine déjà présent est retiré (la recherche se fait par suffixe).
  * - Les domaines non nommés de la liste embarquée ne servent que si une liste active n'a pas encore été téléchargée
  *   ([fallback]) : ils viennent des mêmes listes, dans une version plus ancienne.
@@ -43,6 +47,35 @@ object BlocklistBuilder {
         "admob.com", "googletagservices.com",
     )
 
+    /**
+     * Services utiles à l'app qui l'appelle, jamais bloqués, ni eux ni leurs sous-domaines : rapport de plantage (le
+     * bouclier ne bloque pas les SDK Exodus seulement Crash reporting) et configuration à distance. EasyPrivacy les cite
+     * en `$third-party`. Même liste que NEVER_BLOCK_SERVICES dans tools/update_shield_blocklist.py.
+     */
+    val NEVER_BLOCK_SERVICES = setOf(
+        "sentry.io", "bugsnag.com", "crashlytics.com", "rollbar.com", "statsigapi.net",
+    )
+
+    /**
+     * Nom de régie (libellé en « ad… », SSP, DSP, RTB, enchères) : une règle `$third-party` qui vise un tel domaine est
+     * écartée, même si aucune base ne le classe (`adsmoloco.com`, `genieessp.jp`). Même motif que AD_NAME dans
+     * tools/update_shield_blocklist.py.
+     */
+    private val AD_NAME = Regex("(^|[.-])ad[a-z0-9-]*\\.|ssp|dsp|rtb|bid|programmatic")
+
+    /**
+     * Domaines des règles `$third-party` gardés : ni une régie de [adDomains], ni un de ses sous-domaines, ni un domaine
+     * parent (`singular.net` pour `sdk-api-v1.singular.net`), ni un nom de régie ([AD_NAME]). Même règle que
+     * third_party_kept dans tools/update_shield_blocklist.py.
+     */
+    fun thirdPartyKept(domains: Set<String>, adDomains: Set<String>): Set<String> {
+        val adParents = HashSet<String>()
+        adDomains.forEach { domain -> parents(domain).forEach { adParents += it } }
+        return domains.filterTo(HashSet()) { d ->
+            d !in adParents && d !in adDomains && !AD_NAME.containsMatchIn(d) && parents(d).none { it in adDomains }
+        }
+    }
+
     data class Result(val blocklist: Blocklist, val web: Int, val mobile: Int, val exceptions: Int)
 
     fun build(
@@ -55,6 +88,7 @@ object BlocklistBuilder {
         sources.forEach { exceptions += it.list.exceptions }
         if (fallback) exceptions += embedded.allow
         exceptions += NEVER_BLOCK_ADS
+        exceptions += NEVER_BLOCK_SERVICES
         fun allowed(domain: String) = domain !in exceptions && domain !in NEVER_BLOCK
 
         val named = (exodus ?: embedded.named).filterKeys(::allowed)
@@ -65,9 +99,12 @@ object BlocklistBuilder {
             embedded.mobile.filterTo(mobileAll, ::allowed)
             embedded.web.filterTo(webAll, ::allowed)
         }
+        val adDomains = embedded.ads + mobileAll
         sources.forEach { source ->
             val target = if (source.filter == ShieldFilter.MOBILE) mobileAll else webAll
-            source.list.domains.filterTo(target, ::allowed)
+            val third = source.list.thirdParty
+            val keptThird = if (third.isEmpty()) third else thirdPartyKept(third, adDomains)
+            source.list.domains.filterTo(target) { allowed(it) && (it !in third || it in keptThird) }
         }
         webAll.removeAll(mobileAll)
 

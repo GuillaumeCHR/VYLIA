@@ -54,7 +54,8 @@ class ShieldListStore(private val context: Context) {
         val tmp = File(dir, "${list.id}.gz.tmp")
         try {
             GZIPOutputStream(tmp.outputStream().buffered()).bufferedWriter().use { out ->
-                parsed.domains.sorted().forEach { out.write("+"); out.write(it); out.write("\n") }
+                // « * » : domaine d'une seule règle $third-party (écarté à la fusion s'il vise une régie).
+                parsed.domains.sorted().forEach { out.write(if (it in parsed.thirdParty) "*" else "+"); out.write(it); out.write("\n") }
                 parsed.exceptions.sorted().forEach { out.write("-"); out.write(it); out.write("\n") }
             }
             check(tmp.renameTo(extract(list.id))) { "installation de la liste impossible" }
@@ -131,20 +132,23 @@ class ShieldListStore(private val context: Context) {
         if (!file.exists()) return null
         return try {
             val domains = HashSet<String>()
+            val third = HashSet<String>()
             val exceptions = HashSet<String>()
             GZIPInputStream(file.inputStream().buffered()).bufferedReader().useLines { lines ->
                 lines.forEach { line ->
                     when {
                         line.startsWith("+") -> domains += line.substring(1)
+                        line.startsWith("*") -> line.substring(1).let { domains += it; third += it }
                         line.startsWith("-") -> exceptions += line.substring(1)
                     }
                 }
             }
             // Revalidé : l'extrait a pu être écrit par une version moins stricte.
             com.vylia.privacy.domain.shield.ParsedList(
-                domains.filterTo(HashSet()) { Blocklist.DOMAIN.matches(it) },
-                exceptions.filterTo(HashSet()) { Blocklist.DOMAIN.matches(it) },
-                0, 0, 0, null, null,
+                domains = domains.filterTo(HashSet()) { Blocklist.DOMAIN.matches(it) },
+                thirdParty = third.filterTo(HashSet()) { Blocklist.DOMAIN.matches(it) },
+                exceptions = exceptions.filterTo(HashSet()) { Blocklist.DOMAIN.matches(it) },
+                ignoredCosmetic = 0, ignoredModifiers = 0, ignoredOther = 0, version = null, checksumValid = null,
             )
         } catch (e: Exception) {
             Log.w(TAG, "Extrait ${list.id} illisible, ignoré", e)
@@ -175,8 +179,9 @@ class ShieldListStore(private val context: Context) {
             ShieldList(
                 "adguard_cname", "AdGuard CNAME trackers",
                 "https://raw.githubusercontent.com/AdguardTeam/cname-trackers/master/data/combined_disguised_trackers.txt",
-                "MIT", ShieldFilter.WEB, maxBytes = 40 * MB, minDomains = 50_000, proposed = true,
-                downloadBytes = 2_360_000, rawBytes = 10_670_000,
+                // Active d'office et embarquée depuis le 2026-11-25 (proposée à l'ajout avant).
+                "MIT", ShieldFilter.WEB, maxBytes = 40 * MB, minDomains = 50_000,
+                downloadBytes = 2_850_000, rawBytes = 13_040_000,
             ),
         )
     }

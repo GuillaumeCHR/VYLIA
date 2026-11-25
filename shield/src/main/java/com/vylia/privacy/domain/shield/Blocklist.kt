@@ -120,6 +120,11 @@ class Blocklist(
         val spyware: Map<String, String?>,
         /** Exceptions des listes (groupe « allow ») : protègent aussi les sous-domaines. */
         val allow: Set<String> = emptySet(),
+        /**
+         * Régies hors Exodus (groupe « ads » : companiesdb advertising, serveurs de régies connus) : jamais bloquées
+         * par une règle `$third-party` ([BlocklistBuilder.thirdPartyKept]). Pas une liste de blocage.
+         */
+        val ads: Set<String> = emptySet(),
     )
 
     companion object {
@@ -165,7 +170,8 @@ class Blocklist(
             val mobile = rules(file.groups["mobile"], ShieldFilter.MOBILE)
             val web = rules(file.groups["web"], ShieldFilter.WEB)
             val allow = file.groups["allow"]?.domains.orEmpty().asSequence().filter { DOMAIN.matches(it) }.take(MAX_SPYWARE).toSet()
-            return Snapshot(named, web.keys, mobile.keys, spyware, allow)
+            val ads = file.groups["ads"]?.domains.orEmpty().asSequence().filter { DOMAIN.matches(it) }.take(MAX_SPYWARE).toSet()
+            return Snapshot(named, web.keys, mobile.keys, spyware, allow, ads)
         }
 
         /** Relit une liste écrite par [write] ; un fichier abîmé lève une exception (la liste embarquée prend le relais). */

@@ -18,6 +18,8 @@ class AdblockListParserTest {
         ||tracker.example.com^
         ||Important.example.net^${'$'}important
         ||site.example.org^${'$'}third-party
+        ||short.example.org^${'$'}3p,important
+        ||scoped.example.org^${'$'}third-party,domain=example.com
         ||popup.example.org^${'$'}popup
         ||cancelled.example.com^
         ||cancelled.example.com^${'$'}badfilter
@@ -40,9 +42,17 @@ class AdblockListParserTest {
     @Test
     fun `retient les regles de domaine entier`() {
         assertEquals(
-            setOf("tracker.example.com", "important.example.net", "hosts.example.com", "bare.example.io"),
+            setOf(
+                "tracker.example.com", "important.example.net", "site.example.org", "short.example.org",
+                "hosts.example.com", "bare.example.io",
+            ),
             list.domains,
         )
+    }
+
+    @Test
+    fun `les domaines des seules regles third-party sont marques`() {
+        assertEquals(setOf("site.example.org", "short.example.org"), list.thirdParty)
     }
 
     @Test
@@ -51,9 +61,9 @@ class AdblockListParserTest {
     }
 
     @Test
-    fun `third-party et les autres modificateurs sont ecartes et comptes`() {
-        assertFalse("site.example.org" in list.domains)
-        // $third-party, $popup, et l'exception $script
+    fun `les autres modificateurs sont ecartes et comptes`() {
+        assertFalse("scoped.example.org" in list.domains)
+        // $third-party,domain=, $popup, et l'exception $script
         assertEquals(3, list.ignoredModifiers)
     }
 

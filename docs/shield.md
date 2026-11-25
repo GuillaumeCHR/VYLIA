@@ -71,27 +71,47 @@ Sources :
 | Liste | Licence | Domaines DNS | Rôle |
 |---|---|---|---|
 | Exodus Privacy (`network_signature`) | ODbL | ~540 | traqueurs nommés ; depuis la base Exodus téléchargée par l'app (`ExodusShieldDomains`), catégories complétées par `exodus_category_overrides.json` |
-| EasyPrivacy | GPL v3 / CC BY-SA 3.0 | 43 351 | pistage des sites et des apps |
-| AdGuard CNAME trackers | MIT | 306 600 | **proposée** (2,4 Mo compressés) : traqueurs déguisés en sous-domaine, +10 000 domaines |
+| EasyPrivacy | GPL v3 / CC BY-SA 3.0 | 46 750 | pistage des sites et des apps, règles `$third-party` comprises (depuis le 2026-11-25) |
+| AdGuard companiesdb (catégories advertising, pornvertising) | CC BY-SA 4.0 | 2 600 | **ne bloque rien** : groupe « ads », écarte les règles `$third-party` qui visent une régie |
+| AdGuard CNAME trackers | MIT | 367 000 | traqueurs déguisés en sous-domaine du site ; embarquée et active d'office depuis le 2026-11-25 (proposée à l'ajout avant), +96 900 domaines après dédoublonnage (2,85 Mo à télécharger, +770 Ko dans l'APK) |
 
 Retirées le 2026-11-14 (listes de publicité) : AdGuard DNS filter (189 910 domaines, qui reprend EasyList), EasyList,
 AdGuard Mobile Ads et AdGuard French. Mesure sur un téléphone de 108 apps : score de l'appareil avec bouclier 83 → 79
 (74 sans), traqueurs bloqués 253 → 142 sur 442 ; la perte vient des régies (groupe mobile : −3 points), EasyList et
 le DNS filter ne changeaient rien au score. Les jeux et les apps d'info perdent le plus (State.io 75 → 42).
 
+Écartées pour leur licence CC BY-NC-SA 4.0 (non commerciale, incompatible avec la GPL et F-Droid), comme la liste
+d'apps de DuckDuckGo : Disconnect (y compris sa copie Mozilla shavar-prod-lists), Ghostery TrackerDB / WhoTracks.me et
+DuckDuckGo Tracker Radar. Mesure du 2026-11-25 : leurs catégories utiles (analytics, fingerprinting, cryptomining)
+apportaient de 300 à 900 domaines, dont près de la moitié couverts par les règles `$third-party` d'EasyPrivacy.
+
 Écartées : Tracking Protection et Base (déjà compilées dans le DNS filter : 103 et 19 domaines en plus), URL
 Tracking (paramètres d'URL, rien au niveau DNS), Social Media et Fanboy Social (cosmétiques), Annoyances / Cookies
 (cosmétiques), Liste FR (doublon d'AdGuard French). Aucune liste de contrôle parental : le bouclier bloque des
 traqueurs, jamais un site pour son contenu (légal).
 
-Règles retenues : `||domaine^`, `||domaine^$important`, hosts, domaine seul ; `$badfilter` annule la règle visée ;
-`$third-party` et les autres modificateurs sont écartés (au niveau DNS, ils bloqueraient le site lui-même). Les
+Règles retenues : `||domaine^`, `||domaine^$important`, `||domaine^$third-party` (ou `$3p`), hosts, domaine seul ;
+`$badfilter` annule la règle visée ; les autres modificateurs sont écartés (`$script`, `$domain=`… n'ont pas de sens au
+niveau DNS).
+
+`$third-party` (depuis le 2026-11-25, +3 200 domaines : `hotjar.com`, `scorecardresearch.com`, `segment.io`) : au
+niveau DNS, la règle bloque le domaine entier, donc aussi le site du traqueur, que personne n'ouvre comme un site. Elle
+vise des domaines d'entreprises entiers, régies comprises : une règle `$third-party` est écartée
+(`BlocklistBuilder.thirdPartyKept`, `third_party_kept` dans le script) si elle vise une régie connue (traqueur Exodus
+Advertisement, groupe « ads » : companiesdb advertising et serveurs de régies de `KNOWN_SERVERS`), un de ses
+sous-domaines ou un domaine parent (`singular.net` pour `sdk-api-v1.singular.net`), ou un nom de régie (libellé en
+« ad… », ssp, dsp, rtb, bid, programmatic : `adsmoloco.com`, `genieessp.jp`). companiesdb ne sert qu'à ces règles : elle
+classe des domaines d'entreprise entiers (`adobe.com`, `bing.com`) en advertising, et libérerait sinon 405 domaines
+bloqués aujourd'hui. Les extraits téléchargés marquent ces domaines d'un `*`. Un extrait d'avant le 2026-11-25 n'a pas
+ces règles : il les reçoit à la mise à jour suivante d'EasyPrivacy (plusieurs fois par jour). Les
 exceptions (`@@||d^`, `@@||d^|`, `@@|d^|`) de toutes les listes protègent le domaine et ses sous-domaines, même si un
 parent est listé ; `NEVER_BLOCK` protège les plateformes ; `NEVER_BLOCK_ADS` (AdMob, DoubleClick) est toujours en
-exception, sous-domaines compris, même si EasyPrivacy les cite.
+exception, sous-domaines compris, même si EasyPrivacy les cite ; `NEVER_BLOCK_SERVICES` aussi (rapport de plantage :
+Sentry, Bugsnag, Crashlytics, Rollbar ; configuration à distance : Statsig), comme les SDK Exodus seulement Crash
+reporting, non retenus.
 
 Mémoire : `DomainHashSet` (empreintes FNV-1a 64 bits triées) : 215 000 domaines en 1,9 Mo au lieu d'environ 25 Mo,
-libérés à l'arrêt du bouclier. Total au 2026-11-14 : 43 540 domaines web, aucun mobile.
+libérés à l'arrêt du bouclier. Total au 2026-11-25 : 143 515 domaines web (dont 96 900 de la liste CNAME), aucun mobile, environ 1,2 Mo en mémoire.
 
 Les domaines bloqués sans traqueur nommé sont nommés dans l'app grâce à AdGuard companiesdb (CC BY-SA 4.0,
 téléchargée seulement) : « Criteo · ciblage ».

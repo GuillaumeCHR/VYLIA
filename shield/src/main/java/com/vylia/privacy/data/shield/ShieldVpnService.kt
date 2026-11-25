@@ -212,6 +212,8 @@ class ShieldVpnService : VpnService() {
             }
             if (match != null) {
                 write(output, query.reply(query.blockedResponse()))
+                // Version de développement seulement : la règle qui bloque, pour mesurer l'apport de chaque liste.
+                if (BuildConfig.DEBUG) Log.d(TAG, "Bloqué ${query.name} (${match.rule})")
                 controller.onBlocked(query.name, match)
             } else {
                 // Version de développement seulement : ce qui passe, pour repérer les régies que la liste oublie.

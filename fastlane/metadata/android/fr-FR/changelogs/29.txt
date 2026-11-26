@@ -1,0 +1,1 @@
+Export CSV de l'audit : quatre nouvelles colonnes (catégorie VYLIA, permissions qui comptent dans le score, permissions demandées et accordées). 3018 (e-Enfance) rejoint les Services publics.

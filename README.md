@@ -15,7 +15,8 @@ comment fonctionnent les apps derrière l'écran : ce qu'une permission donne vr
 vos données partent chez des entreprises que vous ne connaissez pas. Chaque score est justifié, chaque permission et
 chaque traqueur a sa fiche sans jargon : on apprend à juger une app par soi-même, sans avoir peur.
 
-> Version actuelle : **0.11.0** ([télécharger l'APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest)) ·
+> Version actuelle : **0.11.1**, sur [Google Play](https://play.google.com/store/apps/details?id=com.vylia.privacy)
+> ou en [APK](https://github.com/GuillaumeCHR/VYLIA/releases/latest) ·
 > site : [guillaumechr.github.io/vylia-site](https://guillaumechr.github.io/vylia-site/).
 > Identifiant : `com.vylia.privacy`. Android 8.0 (API 26) et plus. Anglais par défaut, français disponible dans
 > Paramètres › Langue.
@@ -71,7 +72,7 @@ dans l'ordre de la barre du bas :
 Et aussi :
 
 - **Des permissions jugées selon la finalité de l'app** : le GPS ne coûte rien à une app de navigation, il coûte cher à
-  un jeu. Chacune des 28 catégories (navigation, messagerie, banque, jeux, santé…) dit ce qu'elle justifie, tolère ou
+  un jeu. Chacune des 29 catégories (navigation, messagerie, banque, jeux, santé…) dit ce qu'elle justifie, tolère ou
   interdit.
 - **Des traqueurs détectés localement** : VYLIA cherche dans le code de chaque app les signatures de la base publique
   [Exodus Privacy](https://exodus-privacy.eu.org/), sans rien envoyer.
@@ -157,7 +158,10 @@ Politique complète : [confidentialité](https://guillaumechr.github.io/vylia-si
 
 ## Installer
 
-Téléchargez le fichier `vylia-X.Y.Z.apk` de la dernière version depuis la [page des versions](https://github.com/GuillaumeCHR/VYLIA/releases/latest),
+VYLIA est sur [Google Play](https://play.google.com/store/apps/details?id=com.vylia.privacy) : c'est le plus simple,
+et les mises à jour arrivent toutes seules.
+
+Sans le Play Store, téléchargez le fichier `vylia-X.Y.Z.apk` de la dernière version depuis la [page des versions](https://github.com/GuillaumeCHR/VYLIA/releases/latest),
 puis ouvrez-le sur le téléphone (Android demande d'autoriser l'installation depuis cette source). Empreinte SHA-256 du
 certificat de signature, pour vérifier l'APK avec `apksigner verify --print-certs` :
 

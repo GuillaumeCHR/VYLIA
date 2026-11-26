@@ -1,0 +1,1 @@
+Audit CSV export: four new columns (VYLIA category, permissions that count in the score, requested and granted permissions). 3018 (e-Enfance) is now in Public services.

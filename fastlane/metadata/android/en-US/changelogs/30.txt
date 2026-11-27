@@ -1,0 +1,1 @@
+Maintenance update, same features as 0.11.1: fuller audit CSV export, 3018 (e-Enfance) in Public services.
